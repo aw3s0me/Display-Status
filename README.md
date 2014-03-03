@@ -1,4 +1,4 @@
-kit-cube-status
+Kitcube-Status
 ===============
 
 One page display to summarize the status of KIT CUBE
