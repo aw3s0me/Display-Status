@@ -25,6 +25,9 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Site information
+TITLE = 'Kitcube Status'
+DESCRIPTION = 'Summary of Kitcube Experiment'
 
 # Application definition
 
@@ -35,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mainscreen'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -80,12 +84,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Additional locations of static files
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
+#STATICFILES_DIRS = (
+#    os.path.join(BASE_DIR, "assets"),
+#)
 
 # List of finder classes that know how to find static files in
 # various locations.

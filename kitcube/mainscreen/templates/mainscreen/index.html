@@ -1,1 +1,23 @@
-This is from the index.html from mainscreen app
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+ 
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <meta name="description" 
+          content="{{ description }}">
+  <link href={% static "mainscreen/css/main.css" %} rel="stylesheet">
+  <!--[if IE]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+ 
+<body>
+  Success
+  <!-- java script -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+</body>
+</html>
+
