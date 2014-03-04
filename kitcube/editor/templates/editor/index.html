@@ -10,6 +10,7 @@
           content="{{ description }}">
   <link href={% static "editor/css/bootstrap.min.css" %} rel="stylesheet">
   <link href={% static "editor/css/flat-ui.css" %} rel="stylesheet">
+  <link href={% static "editor/css/jquery.gridster.css" %} rel="stylesheet">
   <link href={% static "editor/css/main.css" %} rel="stylesheet">
   <!--[if IE]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -42,10 +43,47 @@
       </div> <!-- /toggles col-xs-3 -->
 
       <div id="kitcube-container">
-        <div id="kitcube-canvas">
+        <div id="kitcube-canvas" class="demo">
+	    <div class="gridster">
+	      <ul>
+		<li data-row="1" data-col="1" data-sizex="1" data-sizey="1"><h5>HELLO</h5></li>
+		<li data-row="2" data-col="1" data-sizex="1" data-sizey="1"><h5>WORLD</h5></li>
+		<li data-row="3" data-col="1" data-sizex="1" data-sizey="1"><h5>OR ELSE<h5></li>
+
+		<li data-row="1" data-col="2" data-sizex="2" data-sizey="1"></li>
+		<li data-row="2" data-col="2" data-sizex="2" data-sizey="2"></li>
+
+		<li data-row="1" data-col="4" data-sizex="1" data-sizey="1"></li>
+		<li data-row="2" data-col="4" data-sizex="2" data-sizey="1"></li>
+		<li data-row="3" data-col="4" data-sizex="1" data-sizey="1"></li>				
+
+		<li data-row="1" data-col="5" data-sizex="1" data-sizey="1"></li>
+		<li data-row="3" data-col="5" data-sizex="1" data-sizey="1"></li>
+
+		<li data-row="1" data-col="6" data-sizex="1" data-sizey="1"></li>
+		<li data-row="2" data-col="6" data-sizex="1" data-sizey="2"></li>				
+	      </ul>
+	    </div>
         </div>
 
-        <div id="kitcube-console">
+        <div id="kitcube-console">tab1:
+    element0:
+        name: circle
+        xcoord: 1
+        ycoord: 5
+    element1:
+        name: square
+        xcoord: 5
+        ycoord: 10    
+tab2:
+    element0:
+        name: circle
+        xcoord: 1
+        ycoord: 5
+    element1:
+        name: square
+        xcoord: 5
+        ycoord: 10
         </div>
       </div><!-- #kitcube-container -->
 
@@ -68,12 +106,26 @@
   <script src={% static "editor/js/jquery.tagsinput.js" %}></script>
   <script src={% static "editor/js/jquery.placeholder.js" %}></script>
   <script src={% static "editor/js/application.js" %}></script>
+  <script src={% static "editor/js/ace.js" %}></script>
+  <script src={% static "editor/js/jquery.gridster.js" %}></script>
   <script>
       $(document).ready(function() {
           // Init
           $("#kitcube-canvas").show();
           $("#kitcube-console").hide();
-          $("#toggle-view>div").removeClass("switch-off").addClass("switch-on switch-animate");    
+          $("#toggle-view>div").removeClass("switch-off").addClass("switch-on switch-animate");
+          
+          var editor = ace.edit("kitcube-console");
+          editor.resize();
+          document.getElementById('kitcube-console').style.fontSize='14px';
+          editor.setTheme("ace/theme/monokai");
+          editor.getSession().setMode("ace/mode/yaml");
+
+          var gridster;
+          gridtster = $(".gridster > ul").gridster({
+              widget_margins: [10, 10], 
+              widget_base_dimensions: [140, 140],
+              min_cols: 6}).data('gridster');
       });
 
       $("#toggle-view").change(function () {

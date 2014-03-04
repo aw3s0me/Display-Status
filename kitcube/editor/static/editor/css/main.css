@@ -48,7 +48,39 @@ footer {
 
 #kitcube-console {
   background: black;
+  color: white;
   border: 1px solid #ddd;
   width: 100%;
   min-height: 600px;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* Gridster styles */
+.demo {
+  background: #fff;
+}
+
+.demo:hover .gridster {
+  opacity: 1;
+}
+
+.gridster {
+  width: 940px;
+  margin: 0 auto;
+  opacity: .8;
+  -webkit-transition: opacity .6s;
+  -moz-transition: opacity .6s;
+  -o-transition: opacity .6s;
+  -ms-transition: opacity .6s;
+  transition: opacity .6s;
+}
+
+.gs-w {
+  background: #fff;
+  cursor: pointer;
+  -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
