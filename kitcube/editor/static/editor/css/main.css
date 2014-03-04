@@ -36,14 +36,17 @@ footer {
   color: #ccc;
 }
 
-#ui-canvas {
+#kitcube-container {
   margin-top: 100px;
+}
+
+#kitcube-canvas {
   border: 1px solid #ddd;
   width: 100%;
   min-height: 600px;
 }
 
-#console {
+#kitcube-console {
   background: black;
   border: 1px solid #ddd;
   width: 100%;

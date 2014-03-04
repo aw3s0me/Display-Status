@@ -36,18 +36,18 @@
       </div> <!-- /demo-headline -->
 
       <div class="col-xs-3">
-        <div class="switch switch-square" data-on-label="<i class='fui-eye'></i>" data-off-label="<i class='fui-new'></i>">
-          <input type="checkbox" />
+        <div id="toggle-view" class="switch switch-square" data-on-label="<i class='fui-eye'></i>" data-off-label="<i class='fui-new'></i>">
+          <input type="checkbox" name="toggle-input"/>
 	</div>
       </div> <!-- /toggles col-xs-3 -->
 
-   
-      <div id="ui-canvas">
-      </div>
+      <div id="kitcube-container">
+        <div id="kitcube-canvas">
+        </div>
 
-      <div id="console">
-      </div>
-
+        <div id="kitcube-console">
+        </div>
+      </div><!-- #kitcube-container -->
 
     </div><!-- #content -->
 		
@@ -68,7 +68,26 @@
   <script src={% static "editor/js/jquery.tagsinput.js" %}></script>
   <script src={% static "editor/js/jquery.placeholder.js" %}></script>
   <script src={% static "editor/js/application.js" %}></script>
+  <script>
+      $(document).ready(function() {
+          // Init
+          $("#kitcube-canvas").show();
+          $("#kitcube-console").hide();
+          $("#toggle-view>div").removeClass("switch-off").addClass("switch-on switch-animate");    
+      });
 
+      $("#toggle-view").change(function () {
+          if($("#kitcube-console").is(':hidden')){
+              $("#kitcube-console").show();
+              $("#kitcube-canvas").hide();
+              $("#toggle-view>div").removeClass("switch-on").addClass("switch-off switch-animate");    
+          } else {
+              $("#kitcube-console").hide();
+              $("#kitcube-canvas").show();
+              $("#toggle-view>div").removeClass("switch-off").addClass("switch-on switch-animate");    
+          }
+      });
+  </script>
 </body>
 </html>
 
