@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'kitcube.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', include('mainscreen.urls')),
+    url(r'^editor/', include('editor.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
 
