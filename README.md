@@ -18,3 +18,18 @@ $ source ~/.virtualenv/kitcube/bin/activate
 ```
 
 Now you should see a success page.
+
+Before getting started, it's best to work on the develop branch.
+
+```sh
+$ git fetch origin
+$ git checkout -b develop origin/develop
+```
+
+Now you're at develop branch. To double check this, you can:
+
+```sh
+$ git branch
+```
+
+You should see that you're currently at develop branch.
