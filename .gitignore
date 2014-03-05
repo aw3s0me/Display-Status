@@ -1,5 +1,6 @@
 *.py[cod]
 *.swp
+*.sqlite3
 
 # C extensions
 *.so

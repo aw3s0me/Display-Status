@@ -7,7 +7,8 @@ from django.conf import settings
 def index(request):
     data = {
         'title': getattr(settings, 'TITLE'),
-        'description': getattr(settings, 'DESCRIPTION')
+        'description': getattr(settings, 'DESCRIPTION'),
+        'sensors': 'DATA'
     }
     return render_to_response('mainscreen/index.html',
         data,
