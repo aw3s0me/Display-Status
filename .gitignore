@@ -1,6 +1,10 @@
 *.py[cod]
 *.swp
+<<<<<<< HEAD
 *~
+=======
+*.sqlite3
+>>>>>>> 6aa8bc625aedca6abd845d04f04783de88ae7d45
 
 # C extensions
 *.so
