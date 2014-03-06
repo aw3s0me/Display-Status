@@ -46,8 +46,6 @@ There's a tool that simplify this, called virtualenvwrapper
 
 ```sh
 $ pip install virtualenvwrapper
-$ export WORKON_HOME=~/Envs
-$ mkdir -p $WORKON_HOME
 ```
 
 Add the following in your bashrc file
