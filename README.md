@@ -48,18 +48,18 @@ There's a tool that simplify this, called virtualenvwrapper
 $ pip install virtualenvwrapper
 $ export WORKON_HOME=~/Envs
 $ mkdir -p $WORKON_HOME
+```
+
+Add the following in your bashrc file
+
+```sh
 $ source /usr/bin/virtualenvwrapper.sh
 ```
 
-Now you can create a new virtual environment by
+Relaunch your console, so that it will source properly. Now you can create a new virtual environment by
 
 ```sh
 $ mkvirtualenv kitcube
-```
-add the following in your bashrc file
-
-```sh
-$ source /usr/bin/virtualenvwrapper.sh
 ```
 
 Next time you can just run the following command to enter your virtualenv.
