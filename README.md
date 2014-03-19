@@ -154,7 +154,9 @@ bower uninstall <package-name>
 
 ###Why to use:
 some sort of #include/import/require (if you like C, python style)
+
 ability to load nested dependencies (jquery ui won't work without jquery)
+
 ease of use for developer but then backed by an optimization tool that helps deployment
 
 ###Installation
