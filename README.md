@@ -138,5 +138,17 @@ touch .bowerrc
 	"directory" : "scripts/vendor"
 }
 ```
+####Installation of the new version
+
+1) Just do again bower install with null parameter in component.json
+
+####Removing of library
+
+1) In terminal
+
+```sh
+bower uninstall <package-name>
+```
+
 
 
