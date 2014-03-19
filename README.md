@@ -150,5 +150,82 @@ touch .bowerrc
 bower uninstall <package-name>
 ```
 
+##Backbone-Require.js
+
+###Why to use:
+some sort of #include/import/require (if you like C, python style)
+ability to load nested dependencies (jquery ui won't work without jquery)
+ease of use for developer but then backed by an optimization tool that helps deployment
+
+###Installation
+
+1) Search repo by using bower search
+
+```sh
+bower search require.js
+bower search backbone-amd
+```
+2) Put needed name into component.json, like:
+```sh
+requirejs: null,
+backbone-amd: null //do not forget about amd version. To support asynchronous downloading it should be with -amd
+```
+3) bower install
+
+4) structure of js folders should be like:
+
+```sh
+/* File Structure
+├── imgs
+├── css
+│   └── style.css
+├── templates
+│   ├── projects
+│   │   ├── list.html
+│   │   └── edit.html
+│   └── users
+│       ├── list.html
+│       └── edit.html
+├── js
+├──── build //files for configuration of building js files
+├─────── dist  //folder for all minified files. 1 main file is called main.js (contatins all info)
+├─────tests //test files
+├─────scripts
+│	├─ vendor //Vendor libraries. Here we put installed libraries with bower
+│       ├──  jquery
+│       │     ├── jquery.min.js
+│       ├──  backbone
+│       │     ├── backbone.min.js
+│       ├──  underscore
+│       │     ├── underscore.min.js
+│       ├── dev // for our created libs
+│	│    myParser
+│	│     ├── myparser.js
+│	│    myLib
+│       ├── models
+│   	│   ├── users.js
+│      	│   └── projects.js
+│       ├── collections
+│       │    ├── users.js
+│       │    └── projects.js
+│   	├── views
+│      	│   ├── projects
+│       │   │     ├── list.js
+│       │   │     └── edit.js
+│   	│   └── users
+│       │  	  ├── list.js
+│       │         └── edit.js
+│       ├── router.js //Router file. Do url routing
+│       ├── app.js //Create application object here
+│       ├── main.js  // Bootstrap. Just template for creating modules
+│       ├── order.js //Require.js plugin
+│       └── text.js  //Require.js plugin
+└── index.html
+
+```
+
+
+
+
 
 
