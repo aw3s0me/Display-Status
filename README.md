@@ -223,9 +223,53 @@ backbone-amd: null //do not forget about amd version. To support asynchronous do
 └── index.html
 
 ```
+5) main.js should contatin information about paths and dependencies order, like:
 
+```sh
+require.config({
+  paths: {
+  	"jquery": "vendor/jquery/jquery.min", //DO NOT SPECIFY EXTENSION 
+    	"jqueryui": "vendor/jquery-ui/ui/jquery-ui", //Don't forget to comment your parts
+    	//MVC part
+    	"underscore": "vendor/underscore-amd/underscore",
+    	"backbone": "vendor/backbone-amd/backbone"
+  },
+  shim: { //json object to set dependency order
+  	backbone: {
+      		deps: [
+        		'underscore',
+        		'jquery'
+      		],
+      	exports: 'Backbone'
+  	},
+  	jqueryui: { //if jqueryui dependent of jquery, download it firstly
+		deps: [
+        		'jquery'
+      		]
+	}
+  }
+```
 
+6) app.js just to initialize router and do $(document).ready stuff
 
+```sh
+define([
+  'jquery',
+  'underscore',
+  'backbone',
+  router
+], function($, _, Backbone, Router) {
+	var initialize = function() {
+		Router.initialize();
+		$(document).ready(funnction($) {
+		
+		};
+	}
+	return {
+		initialize: initialize
+	};
+});
+```
 
 
 
