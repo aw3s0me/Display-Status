@@ -273,5 +273,8 @@ define([
 });
 ```
 
+7) put in your one-page site index.html your single script tag:
 
-
+```sh
+<script data-main="/js/scripts/main.js" src={% static "/js/scripts/vendor/requirejs/require.js" %}></script>
+```
