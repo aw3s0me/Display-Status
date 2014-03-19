@@ -152,12 +152,16 @@ bower uninstall <package-name>
 
 ##Backbone-Require.js
 
-###Why to use:
+###Why to use Reqjs:
 some sort of #include/import/require (if you like C, python style)
 
 ability to load nested dependencies (jquery ui won't work without jquery)
 
 ease of use for developer but then backed by an optimization tool that helps deployment
+
+###Backbonejs
+
+It's bad to have all logic in dom -> better to divide it into parts.
 
 ###Installation
 
@@ -278,3 +282,78 @@ define([
 ```sh
 <script data-main="/js/scripts/main.js" src={% static "/js/scripts/vendor/requirejs/require.js" %}></script>
 ```
+
+#####Model
+
+Model - contains interactive data with logic:
+
+1) Conversions of data
+
+2) Validation of data
+
+3) Get;Set; properties
+
+Example:
+```sh
+Person = Backbone.Model.extend({
+        defaults: { //Defailt values
+            name: 'Alex',
+            age: -20,
+            child: ''
+        },
+        initialize: function(){
+            alert("You're newborn");
+        }
+    });
+    
+    var person = new Person({ name: "Nicholas", age: 67, child: 'Chuan'});
+    
+    var age = person.get("age"); // 67
+    var name = person.get("name"); // "Nicholas"
+    var child = person.get("child"); // 'Chuan'
+    
+```
+
+
+#####View
+
+View - contains logic to encapsulate DOM element functionality. You can think about this that it's a widget on the screen (like menuLeft or gridster). Can contain logic like:
+
+1) rendering a dom element (using underscore library to compile template)
+
+2) initialize dom events to interact with users
+
+3) Bind to event of changing the model
+
+Simple view:
+
+```sh
+GridView = Backbone.View.extend({
+  tagName : "div",
+  className : "grid",
+ 
+  render : function() {
+    this.el.innerHTML = this.model.get('name');
+ 
+    return this;
+  }
+  this.model.bind('change:name', this.render); 
+});
+```
+
+#####Router
+
+Routing by using app url
+
+```sh
+var MyRouter = Backbone.Router.extend({
+  routes : {
+    "say/:something" : "say"
+  },
+ 
+  say : function(something) {
+    alert(something);
+  }
+});
+```
+
