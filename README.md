@@ -65,3 +65,78 @@ Next time you can just run the following command to enter your virtualenv.
 ```sh
 $ workon kitcube
 ```
+
+##### Bower
+
+Package manager for control front-end packages
+
+1) Install npm:
+
+2) Install node js (do not forget about version of OpenSUSE.)
+
+```sh
+```
+
+```sh
+$sudo zypper ar http://download.opensuse.org/repositories/devel:/languages:/nodejs/openSUSE_13.1/ NodeJSBuildService 
+$sudo zypper in nodejs nodejs-devel
+```
+3) Install bower
+
+```sh
+npm install -g bower
+```
+####Installing library with bower
+
+1) Find library in terminal
+
+```sh
+bower search [<name>]
+```
+2)  open/create component.json file in main js folder 
+
+```sh
+#Basic structure of component.json
+{
+  "name": "Name of your project",
+  "version": "Version of your project",
+  "dependencies" : {
+    "vendor_lib_name1" : version1,
+    "vendor_lib_name2" : version2
+  }
+}
+
+#Kitcube example for installation of jquery
+{
+  "name": "Kitcube status",
+  "version": "0.0.1",
+  "dependencies" : {
+    "jquery" : null //null to install latest version (1.9 to install 1.9 version),
+    "vendor_lib_name" :
+  }
+}
+
+```
+3) cd to folder where lies your component.json
+
+```sh
+bower install
+```
+5) No 5 step, sorry. 
+
+####Configuration of bower
+
+1) CAUTION. WILL BE HARD TO MERGE. If you wanna to configure bower (Installation path etc, just create .bowerrc file in one folder with)
+
+```sh
+touch .bowerrc
+```
+2) Put configuration like:
+
+```sh
+{
+	"directory" : "scripts/vendor"
+}
+```
+
+
