@@ -66,7 +66,7 @@ Next time you can just run the following command to enter your virtualenv.
 $ workon kitcube
 ```
 
-##### Bower
+## Bower
 
 Package manager for control front-end packages
 
@@ -86,7 +86,7 @@ $sudo zypper in nodejs nodejs-devel
 ```sh
 npm install -g bower
 ```
-####Installing library with bower
+###Installing library with bower
 
 1) Find library in terminal
 
@@ -124,7 +124,7 @@ bower install
 ```
 5) No 5 step, sorry. 
 
-####Configuration of bower
+###Configuration of bower
 
 1) CAUTION. WILL BE HARD TO MERGE. If you wanna to configure bower (Installation path etc, just create .bowerrc file in one folder with)
 
@@ -138,11 +138,11 @@ touch .bowerrc
 	"directory" : "scripts/vendor"
 }
 ```
-####Installation of the new version
+###Installation of the new version
 
 1) Just do again bower install with null parameter in component.json
 
-####Removing of library
+###Removing of library
 
 1) In terminal
 
