@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./nix.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./nix.snippets"),t.scope="nix"});

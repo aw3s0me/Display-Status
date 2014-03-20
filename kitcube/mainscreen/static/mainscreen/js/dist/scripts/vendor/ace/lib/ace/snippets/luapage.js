@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./luapage.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./luapage.snippets"),t.scope="luapage"});

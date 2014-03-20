@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./assembly_x86.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./assembly_x86.snippets"),t.scope="assembly_x86"});

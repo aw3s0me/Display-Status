@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./logiql.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./logiql.snippets"),t.scope="logiql"});

@@ -1,0 +1,1 @@
+ace.require("ace/lib/net").get(document.baseURI,function(e){editor.setValue(e,1)});

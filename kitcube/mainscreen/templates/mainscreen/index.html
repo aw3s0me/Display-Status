@@ -8,6 +8,9 @@
   <title>{{ title }}</title>
   <meta name="description" 
           content="{{ description }}">
+  <link href={% static "mainscreen/css/bootstrap.min.css" %} rel="stylesheet">
+  <link href={% static "mainscreen/css/flat-ui.css" %} rel="stylesheet">
+  <link href={% static "mainscreen/css/jquery.gridsterdustmoo.css" %} rel="stylesheet">
   <link href={% static "mainscreen/css/main.css" %} rel="stylesheet">
   <!--[if IE]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -18,26 +21,27 @@
 </head>
  
 <body>
-<<<<<<< HEAD
   <div id="wrapper">
-
-    <header>
-    </header><!-- #header -->
-	
     <div id="content">
-      <p>Success</p>
+      <div id="banner" class="demo-headline">
+        <h1 class="demo-logo">
+          <div class="logo"></div>
+          Kitcube Status
+          <small>template editor</small>
+        </h1>
+      </div> <!-- /demo-headline -->
+      <div id="kitcube-container">
+      </div><!-- #kitcube-container -->
     </div><!-- #content -->
 		
-    <footer>
+    <footer id="footer" class="shadow">
+        <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
     </footer><!-- #footer -->
 
   </div>
-=======
-  Success<br>
-  {{ sensors }}
->>>>>>> 6aa8bc625aedca6abd845d04f04783de88ae7d45
   <!-- java script -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script data-main="../static/mainscreen/js/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}></script> 
+  
 </body>
 </html>
 

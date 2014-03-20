@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./groovy.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./groovy.snippets"),t.scope="groovy"});

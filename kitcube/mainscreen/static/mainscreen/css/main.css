@@ -1,29 +1,250 @@
 html,
 body {
-  margin:0;
-  padding:0;
-  height:100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 #wrapper {
-  min-height:100%;
-  position:relative;
+  min-height: 100%;
+  position: relative;
 }
 
 header {
-  background:#ededed;
-  padding:10px;
+  background: #fff;
+  padding: 0px;
 }
 
 #content {
-  padding-bottom:100px; /* Height of the footer element */
+  padding-bottom: 0px; /* Height of the footer element */
+  width: 1080px;
+  margin: 0 auto;
 }
 
 footer {
-  background:#ffab62;
-  width:100%;
-  height:25px;
-  position:absolute;
-  bottom:0;
-  left:0;
+  background: #666;
+  width: 100%;
+  height: 50px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: center;
 }
+
+.shadow {
+  font-size: 12px;
+  color: #ccc;
+}
+
+#kitcube-container {
+  margin-top: 100px;
+}
+
+#kitcube-canvas {
+  border: 1px solid #ddd;
+  width: 100%;
+  /*min-height: 100px; */
+}
+
+#kitcube-console {
+  background: black;
+  color: white;
+  border: 1px solid #ddd;
+  width: 100%;
+  /*min-height: 100px; */
+}
+
+ul, ol {
+  list-style: none;
+}
+
+/* Gridster styles */
+.demo {
+  background: #fff;
+}
+
+.demo:hover .gridster {
+  opacity: 1;
+}
+
+/*.gridster {
+  margin: 0 auto;
+  opacity: .8;
+  -webkit-transition: opacity .6s;
+  -moz-transition: opacity .6s;
+  -o-transition: opacity .6s;
+  -ms-transition: opacity .6s;
+  transition: opacity .6s;
+}
+
+.gs-w {
+  background: #fff;
+  cursor: pointer;
+  -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+} */
+.gridster ul {
+    background-color: #EFEFEF;
+}
+
+.gridster li {
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 100%;
+}
+
+.gridster {
+    margin: 0 auto;
+
+    opacity: .8;
+
+    -webkit-transition: opacity .6s;
+    -moz-transition: opacity .6s;
+    -o-transition: opacity .6s;
+    -ms-transition: opacity .6s;
+    transition: opacity .6s;
+}
+
+.gridster .gs-w {
+    background: #DDD; 
+    cursor: pointer;
+}
+
+.gridster .player {
+    background: #BBB; 
+} 
+
+/*.gridster li {
+    background-color: white;
+    border: solid 2px black;
+} */
+
+.gridster .preview-holder {
+    border: none!important;
+    background: red!important;
+} 
+
+/*.gridster li div ul li {
+    background-color: transparent!!important;
+}
+.gridster li div {
+    background-color: transparent!!important;
+}
+.gridster li div ul {
+    background-color: transparent!!important;
+} 
+.sensor ul {
+    color: black!important;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background: #338FFF!important;
+    border: 3px solid white;
+    padding: 0px;
+    margin: 0px;
+}*/
+
+.testLi {
+    background-color: white;
+    border: solid 2px black;
+    font-size: 20%;
+}
+
+.sensorLi {
+    background-color: white;
+    border: solid 2px black;
+}
+
+.sensorDiv {
+    color: black!important;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background: #338FFF!important;
+    border: 3px solid white;
+    padding: 0px;
+    margin: 0px;
+}
+
+.sensorName {
+    width: 100%;
+    background: black;
+    color: white;
+    height: 25%;
+    font-size: 70%;
+    /*-margin-top: 1%;
+    margin-bottom: 1%;
+    margin-left: 1%;
+    margin-right: 1%;
+    webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px; */
+    text-align: center;
+    vertical-align: middle;
+}
+
+.sensorValue {
+    width: 35%;
+    height: 30%;
+    text-align: center;
+    vertical-align: middle;
+    /*float: left; */
+}
+
+.sensorStatus {
+    width: 35%;
+    height: 45%;
+    color: green;
+    text-align: center;
+    vertical-align: middle;
+    /*float: left; */
+}
+
+.sensorChartStatus {
+    width: 60%;
+    height: 65%;
+    float: right; 
+}
+
+.sensorChartImg {
+  width: 100%;
+  height: 100%;
+
+}
+
+.chartLi {
+    background-color: white;
+    border: solid 2px black;
+}
+
+.chartDiv {
+    width: 100%;
+    height: 100%;
+}
+
+.chartName {
+    width: 100%;
+    background: black;
+    color: white;
+    height: 20%;
+    font-size: 90%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.chartImg {
+    width: 100%; 
+    height: 80%;
+}
+
+.spacer {
+    width: 100%;
+    height: 100%;
+    background-color: #BBB!important;
+    border: 0px solid white!important;
+}
+
+
+
+
+

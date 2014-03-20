@@ -1,0 +1,1 @@
+function setupDisqus(e){var t="aceapi",n=e.substring(2);(function(){if(document.getElementById("disqusScript")===null){var e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="http://"+t+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(e)}})()};

@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./haxe.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./haxe.snippets"),t.scope="haxe"});

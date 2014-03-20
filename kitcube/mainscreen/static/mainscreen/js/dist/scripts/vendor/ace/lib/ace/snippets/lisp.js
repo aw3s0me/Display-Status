@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./lisp.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./lisp.snippets"),t.scope="lisp"});

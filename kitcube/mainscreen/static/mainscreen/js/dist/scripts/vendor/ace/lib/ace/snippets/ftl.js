@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./ftl.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./ftl.snippets"),t.scope="ftl"});

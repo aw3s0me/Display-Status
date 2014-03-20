@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./mysql.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./mysql.snippets"),t.scope="mysql"});

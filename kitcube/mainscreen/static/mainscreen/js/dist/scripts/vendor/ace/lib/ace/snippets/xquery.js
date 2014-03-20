@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./xquery.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./xquery.snippets"),t.scope="xquery"});

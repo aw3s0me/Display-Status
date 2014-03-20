@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./mushcode_high_rules.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./mushcode_high_rules.snippets"),t.scope="mushcode_high_rules"});

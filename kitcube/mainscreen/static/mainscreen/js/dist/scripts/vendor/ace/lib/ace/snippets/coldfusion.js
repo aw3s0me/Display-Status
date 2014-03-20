@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./coldfusion.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./coldfusion.snippets"),t.scope="coldfusion"});

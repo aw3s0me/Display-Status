@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./prolog.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./prolog.snippets"),t.scope="prolog"});

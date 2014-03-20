@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./liquid.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./liquid.snippets"),t.scope="liquid"});

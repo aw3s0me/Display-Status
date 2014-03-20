@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./rdoc.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./rdoc.snippets"),t.scope="rdoc"});

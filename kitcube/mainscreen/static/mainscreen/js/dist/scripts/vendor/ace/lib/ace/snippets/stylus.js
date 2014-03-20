@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./stylus.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./stylus.snippets"),t.scope="stylus"});

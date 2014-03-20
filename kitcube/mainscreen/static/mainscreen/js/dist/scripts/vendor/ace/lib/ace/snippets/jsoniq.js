@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./jsoniq.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./jsoniq.snippets"),t.scope="jsoniq"});

@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./clojure.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./clojure.snippets"),t.scope="clojure"});

@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./diff.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./diff.snippets"),t.scope="diff"});

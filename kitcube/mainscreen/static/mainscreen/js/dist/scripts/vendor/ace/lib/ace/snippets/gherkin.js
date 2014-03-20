@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./gherkin.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./gherkin.snippets"),t.scope="gherkin"});

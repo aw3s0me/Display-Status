@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./haskell.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./haskell.snippets"),t.scope="haskell"});

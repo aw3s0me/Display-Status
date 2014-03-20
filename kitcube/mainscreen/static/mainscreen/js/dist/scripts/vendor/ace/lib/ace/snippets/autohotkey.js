@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./autohotkey.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./autohotkey.snippets"),t.scope="autohotkey"});

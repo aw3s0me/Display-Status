@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./scad.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./scad.snippets"),t.scope="scad"});

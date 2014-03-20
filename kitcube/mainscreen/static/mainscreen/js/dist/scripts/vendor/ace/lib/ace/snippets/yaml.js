@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./yaml.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./yaml.snippets"),t.scope="yaml"});

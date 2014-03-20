@@ -1,0 +1,1 @@
+define(["require","exports","module","../requirejs/text!./vbscript.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./vbscript.snippets"),t.scope="vbscript"});
