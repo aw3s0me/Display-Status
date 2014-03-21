@@ -47,7 +47,13 @@ body {
   color: white;
   border: 1px solid #ddd;
   width: 100%;
+  margin: 0 auto;
   /*min-height: 100px; */
+}
+
+#board-container {
+  width: 100%;
+
 }
 
 .canvas {
@@ -77,5 +83,18 @@ body {
     border: 1px solid black;
     background-color: gray;
 }
+
+#btnLogin {
+  float: right;
+}
+
+#btnText {
+  float: right;
+}
+
+#btnBoard {
+  float: right;
+}
+
 
 

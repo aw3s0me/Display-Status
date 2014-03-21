@@ -8,7 +8,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html'], functi
 		};
 	}
 	var BoardView = Backbone.View.extend({
-		container: $('#kitcube-container'),
+		container: $('#board-container'),
 		maxSizeX: 0,
 		maxSizeY: 0,
 		nowCoordX: 0,
@@ -41,7 +41,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html'], functi
 			$('.canvas').css('margin-top', marginTop + 'px');
 			$('.canvas').css('height', this.viewSizeDetector.boardSizeMax.height + 'px');
 			$('.canvas').css('width', this.viewSizeDetector.boardSizeMax.width + 'px');
-
 			$('.canvas').data('height', this.viewSizeDetector.boardSizeMax.height);
 			$('.canvas').data('width', this.viewSizeDetector.boardSizeMax.width);
 			$('.canvas').data('height-fullscreen', this.viewSizeDetector.boardSizeFullscreen.height);
