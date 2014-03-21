@@ -22,8 +22,22 @@ define([
     $(document).ready(function($) {
 
       Router.initialize();
-      
+
       document.location.href = '#board';
+
+      $("#btnBoard").click(function(){
+          document.location.href = '#board';
+      });
+
+      $("#btnTxt").click(function(){
+          document.location.href = '#editor';
+      });
+      
+      $("#btnLogin").click(function(){
+          document.location.href = '#login';
+      });
+
+
 
     });
   }
