@@ -9,9 +9,8 @@
   <meta name="description" 
           content="{{ description }}">
   <link href={% static "mainscreen/css/bootstrap.min.css" %} rel="stylesheet">
-  <link href={% static "mainscreen/css/flat-ui.css" %} rel="stylesheet">
-  <link href={% static "mainscreen/css/jquery.gridsterdustmoo.css" %} rel="stylesheet">
   <link href={% static "mainscreen/css/main.css" %} rel="stylesheet">
+<!--   <link href={% static "mainscreen/css/grid.css" %} rel="stylesheet"> -->
   <!--[if IE]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
@@ -29,14 +28,17 @@
           Kitcube Status
           <small>template editor</small>
         </h1>
+        <button id="login" type="button">Login</button>
+        <button id="switch" type="button">Switch</button>
       </div> <!-- /demo-headline -->
       <div id="kitcube-container">
       </div><!-- #kitcube-container -->
+      <div id="footer" class="shadow">
+        <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
+      </div>
     </div><!-- #content -->
 		
-    <footer id="footer" class="shadow">
-        <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
-    </footer><!-- #footer -->
+    <!-- #footer -->
 
   </div>
   <!-- java script -->

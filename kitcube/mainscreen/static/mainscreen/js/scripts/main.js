@@ -24,7 +24,7 @@ require.config({
     "kit.parser": "dev/kit.parser/kit.cfgParser",
     "kit.dataDownloader" : "dev/kit.dataDownloader/kit.dataDownloader",
     //chuan grid part
-    //"grid": "vendor/gridster/dist/jquery.gridster.with-extras.min",
+    "kitgrid": "dev/kit.grid/grid",
     "text" : "vendor/requirejs-text/text",
     //yaml part
     "yaml": "vendor/js-yaml/js-yaml.min"
@@ -81,11 +81,10 @@ require.config({
         "vendor/flat-ui-official/js/jquery.tagsinput"
       ]
     },
-    gridster: {
+    kitgrid: {
       deps: [
-        "jquery"
-        //"vendor/dustmo-gridster.js/dist/jquery.gridster.with-extras.min"
-        //"vendor/gridster/dist/jquery.gridster.with-extras.min"
+        "jquery",
+        "dev/kit.grid/widget"
       ]
     },
     ace: {

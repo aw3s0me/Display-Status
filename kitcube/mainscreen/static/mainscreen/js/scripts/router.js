@@ -3,11 +3,12 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'kit.sizeDetector',
 	'views/board',
 	'views/userPanel',
 	'views/menuRight',
 	'views/txtEditor'
-], function($, _, Backbone, BoardView, UserPanelView, MenuRightView, TextEditorView /*TxtBrdView*/ ) {
+], function($, _, Backbone, sizeDetector ,BoardView, UserPanelView, MenuRightView, TextEditorView /*TxtBrdView*/ ) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -37,28 +38,15 @@ define([
 		showBoardView: function() {
 			// Call render on the module we loaded in via the dependency array
 			// 'views/projects/list'
-			var text = this.myTextEditorView.externEditor.getValue();
+			//var text = this.myTextEditorView.externEditor.getValue();
 			//console.log('showBoard text: ' + text);
 			if ($("#kitcube-canvas").val() !== undefined) {
 				$("#kitcube-canvas").remove();
 			}
-			var urlSrv ='http://katrin.kit.edu/adei/services/getdata.php?db_server=orca&db_name=orca_process&db_group=Data_001_PAC_dat&db_mask=0,1,2,3,4,5,6,7&window=-1';
-			var urlImg = "../static/backbone/data/images.csv";
-			var urlJson = "../static/backbone/cfg/hatpro.json";
-			var urlYaml = "../static/backbone/cfg/hatpro.yml";
-			var typeCsv = 'csv';
-			var typeJson = 'json';
-			var typeImg = 'img';
-			var typeAll = 'all';
-			var typeTxt = 'txt';
-			var typeYml = 'yml';
-			var myDownloader = new dataDownloader();
-			//var text = myDownloader.getDataFromAdei(urlYaml);
-			console.log(text);
-			//var myBoardView = new BoardView({aceText : text, type: typeCsv});
-			//var myBoardView = new BoardView({aceText : text, type: typeYml});
-			self.boardView = new BoardView({aceText : text, type: typeTxt});
-			self.boardView.initialize(text);
+
+
+			self.boardView = new BoardView(/*{aceText : text, type: typeTxt}*/);
+			//self.boardView.initialize(text);
 			if ($("#kitcube-console").val() !== undefined)
 				$("#kitcube-console").hide();
 			if ($("#kitcube-canvas").val() !== undefined) {
@@ -91,8 +79,8 @@ define([
 
 	var initialize = function() {
 		var app_router = new AppRouter;
-		app_router.myTextEditorView = new TextEditorView();
-		app_router.myTextEditorView.initialize();
+		//app_router.myTextEditorView = new TextEditorView();
+		//app_router.myTextEditorView.initialize();
 		// As above, call render on our loaded module
 		// 'views/users/list'
 

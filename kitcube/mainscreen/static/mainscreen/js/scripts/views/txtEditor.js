@@ -3,13 +3,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'],fun
 		el: 'kitcube-console',
 		appendElem: $('#kitcube-container'), 
 		externEditor: null,
-		//template: _.template('#txtEditorTemplate'),
-		render: function(){
-			//this.externEditor.resize();
-    		//$('#kitcube-console').style.fontSize = '14px';
-    		this.externEditor.setTheme("ace/theme/monokai");
-    		this.externEditor.getSession().setMode("ace/mode/yaml");
-		},
 		initialize: function() {
 			//console.log(_.template(textEditorTemplate, {}));
 			//console.log(this.appendElem);
