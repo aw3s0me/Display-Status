@@ -23,8 +23,8 @@ require.config({
     "kit.sizeDetector": "dev/kit.sizedetector/sizedetector",
     "kit.parser": "dev/kit.parser/kit.cfgParser",
     "kit.dataDownloader" : "dev/kit.dataDownloader/kit.dataDownloader",
-    //chuan grid part
-    "kitgrid": "dev/kit.grid/grid",
+    //my grid part
+    "kitgrid": "dev/kit.grid/kitGrid",
     "text" : "vendor/requirejs-text/text",
     //yaml part
     "yaml": "vendor/js-yaml/js-yaml.min"
@@ -83,8 +83,8 @@ require.config({
     },
     kitgrid: {
       deps: [
-        "jquery",
-        "dev/kit.grid/widget"
+        "jquery"//,
+       // "dev/kit.grid/widget"
       ]
     },
     ace: {

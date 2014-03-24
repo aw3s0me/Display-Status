@@ -26,7 +26,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 				console.log(this.viewSizeDetector.detectFooterSize());
 				console.log(this.viewSizeDetector.detectBoardSize());
 
-				var marginTop = ($(window).height() - $('#banner').css('height').toNum() - $('#footer').css('height').toNum() - this.viewSizeDetector.boardSizeMax.height) / 2;
+				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
 
 				$('#kitcube-console').css('margin-top', marginTop + 'px');
 				$('#kitcube-console').css('height', this.viewSizeDetector.boardSizeMax.height + 'px');

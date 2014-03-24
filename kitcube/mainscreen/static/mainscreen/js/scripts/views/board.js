@@ -7,6 +7,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html'], functi
 			});
 		};
 	}
+
+
+
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
 		maxSizeX: 0,
@@ -15,6 +18,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html'], functi
 		nowCoordY: 0,
 		grid: null,
 		viewSizeDetector: null,
+		tabs: [],
 		render: function() {
 
 		},
@@ -28,16 +32,18 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html'], functi
 			console.log(this.viewSizeDetector.detectFooterSize());
 			console.log(this.viewSizeDetector.detectBoardSize());
 			//console.log('options: ' + options);
-			//this.grid = 
+			
 
 			//var textToParse = options.aceText;
 			var data = {};
 			var compiledTemplate = _.template(boardViewTemplate, data);
 			console.log(this.container);
 			this.container.append(compiledTemplate);
+			$('.canvas').attr("id", "tab1");
+			this.grid = new kitGrid("#tab1");
 
-			var marginTop = ($(window).height() - $('#banner').css('height').toNum() - $('#footer').css('height').toNum() - this.viewSizeDetector.boardSizeMax.height) / 2;
 
+			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
 			$('.canvas').css('margin-top', marginTop + 'px');
 			$('.canvas').css('height', this.viewSizeDetector.boardSizeMax.height + 'px');
 			$('.canvas').css('width', this.viewSizeDetector.boardSizeMax.width + 'px');
