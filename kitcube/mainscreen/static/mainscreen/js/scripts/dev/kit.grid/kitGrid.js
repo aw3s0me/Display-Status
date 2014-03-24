@@ -1,11 +1,16 @@
 var kitGrid = (function($) {
+	//helpers
+	function defaultFor(arg, val) {
+		return typeof arg !== 'undefined' ? arg : val;
+	}
+
 	// private properties.
 
 	//DRAG FEATURE
 	var _dragElem = null;
 	var _grid = null;
 	var _elementsArr = [];
-	
+
 	//DROP FEATURE
 	var _dropElem = null;
 	var _dropzones = []; //alowed dropzones
@@ -179,6 +184,10 @@ var kitGrid = (function($) {
 		];
 	};
 
+	kitGrid.prototype.getScale = function() {
+		return _scale;
+	}
+
 	kitGrid.prototype.makeDraggable = function(elem) {
 		console.log('elem is draggable ' + elem);
 		elem.onmousedown = (mouseDown);
@@ -288,15 +297,15 @@ var kitGrid = (function($) {
 	function getTotalOffset() {
 		var tempElem = _grid[0];
 		var offset = {
-			x : 0,
-			y : 0
+			x: 0,
+			y: 0
 		};
-		while(tempElem !== null) {
-    		offset.x = parseInt(offset.x) + parseInt(tempElem.offsetLeft);
-    		offset.y = parseInt(offset.y) + parseInt(tempElem.offsetTop);
-    		tempElem = tempElem.offsetParent;
-  		}
-  		return offset;
+		while (tempElem !== null) {
+			offset.x = parseInt(offset.x) + parseInt(tempElem.offsetLeft);
+			offset.y = parseInt(offset.y) + parseInt(tempElem.offsetTop);
+			tempElem = tempElem.offsetParent;
+		}
+		return offset;
 	}
 
 	function _onclick(e) {
@@ -314,12 +323,11 @@ var kitGrid = (function($) {
 		console.log("finalX: " + finalX + " finalY: " + finalY);
 		if (isOutOfBorder(finalX, finalY, dropElem.offsetWidth, dropElem.offsetHeight)) {
 			alert("Elem is out of border");
-		}
-		else {
+		} else {
 			_self.addByClick(_tempdx, _tempdy, finalX, finalY, _scale, dropElem);
 		}
 		_grid[0].onclick = null;
-		
+
 		return false;
 	}
 
@@ -330,7 +338,7 @@ var kitGrid = (function($) {
 		console.log(_dropElem);
 		_tempdx = dx;
 		_tempdy = dy;
-			//dropElem.dropDown = new Function();
+		//dropElem.dropDown = new Function();
 		_grid[0].onclick = _onclick;
 
 		return _dropElem;
