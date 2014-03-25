@@ -62,10 +62,43 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 			this.grid = new kitGrid("#tab1");
 			console.log(this.grid.getScale());
 			this.addSensor(4, 2, this.grid.getScale());
-
+			var self = this;
+			$('#canvasButton').click(function(e) {
+				self.submitTest();
+			})
 		},
-		addSensor: function(px, py, scale) {
+		submitTest: function() {
+			fncstring = $('#testfunction').val();
+			var self = this;
+			var fncname = /^[a-zA-Z0-9]+/.exec(fncstring);
+			var args = /\(([^)]+)/.exec(fncstring);
+			fncname = fncname[0];
+			if (args !== null)
+				args = args[1].split(/\s*,\s*/);
 
+			switch (fncname) {
+				case "drawText":
+					args[4] = /[^'"]+/.exec(args[4]);
+					var e = self.drawText(args[0], args[1], args[2], args[3], args[4], args[5]);
+					break;
+				case "drawSensor":
+					var e = self.addSensor(args[0], args[1], args[2], args[3]);
+					break;
+				case "addSensor":
+					args[2] = /[^'"]+/.exec(args[2]);
+					var e = self.addSensor(args[0], args[1], args[2], args[3]);
+					//console.log("" + args[0] + args[1] + args[2] + args[3]);
+					break;
+				case "updatePage":
+					//self.updatePage();
+					break;
+				default:
+					alert('function "' + fncname + '" not defined');
+			}
+		},
+		addSensor: function(px, py, sensorId) {
+			var self = this;
+			var scale = self.grid.getScale();
 			var newSensor = new Sensor({
 				id: "sensor1",
 				name: "bright",
@@ -126,7 +159,14 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 					arrayOfData[arrayOfData.length - 1]);
 				sensor.value = value;
 			});
+		},
+		/*events: {
+			'click #canvasButton': 'alert'
+		}, */
+		alert: function(e) {
+			console.log(e);
 		}
+
 
 
 	});
