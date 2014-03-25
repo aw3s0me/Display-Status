@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models/sensorModel', 'text!templates/sensor.html'], function($, _, Backbone, boardTemplate, Sensor, sensorTemplate) {
+define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html', 'models/sensorModel', 'text!templates/sensor.html'], function($, _, Backbone, jqGrid, boardTemplate, Sensor, sensorTemplate) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -28,16 +28,15 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 		change: function(NumX, NumY) {},
 		initialize: function(options) {
 			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
-			console.log(this.viewSizeDetector.detectBannerSize());
-			console.log(this.viewSizeDetector.detectFooterSize());
-			console.log(this.viewSizeDetector.detectBoardSize());
+			this.viewSizeDetector.detectBannerSize();
+			this.viewSizeDetector.detectFooterSize();
+			this.viewSizeDetector.detectBoardSize();
 			//console.log('options: ' + options);
 
 
 			//var textToParse = options.aceText;
 			var data = {};
 			var compiledTemplate = _.template(boardTemplate, data);
-			console.log(this.container);
 			this.container.append(compiledTemplate);
 			$('.canvas').attr("id", "tab1");
 
@@ -60,8 +59,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 			$('.canvas').data('scale', this.viewSizeDetector.scale);
 
 			this.grid = new kitGrid("#tab1");
-			console.log(this.grid.getScale());
 			this.addSensor(4, 2, this.grid.getScale());
+			this.addAlarmList(10, 10, 2, "alarmList1");
 			var self = this;
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
@@ -87,6 +86,11 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 				case "addSensor":
 					args[2] = /[^'"]+/.exec(args[2]);
 					var e = self.addSensor(args[0], args[1], args[2], args[3]);
+					//console.log("" + args[0] + args[1] + args[2] + args[3]);
+					break;
+				case "addAlarmList":
+					args[2] = /[^'"]+/.exec(args[2]);
+					var e = self.addAlarmList(args[0], args[1], args[2], args[3]);
 					//console.log("" + args[0] + args[1] + args[2] + args[3]);
 					break;
 				case "updatePage":
@@ -125,7 +129,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 			s1.style.fontSize = 50 * scale + 'px';
 			s1.style.right = 6 * scale + 'px';
 			s1.style.bottom = 0 * scale + 'px';
-			console.log(newSensor.get('value'));
 			s1.innerHTML = (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1);
 
 			var s2 = document.createElement('div');
@@ -150,6 +153,138 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 
 			//console.log($(compiledTemplate));
 		},
+		addAlarmList: function(px, py, cols, name) {
+			var self = this;
+			var scale = self.grid.getScale();
+			var unitHeight = self.grid.getUnitSizes().height;
+			var unitWidth = self.grid.getUnitSizes().width;	
+			var newElement = $("<div></div>");
+			var dx = 12;
+			var dy = 6;
+			var totalHeight = dy * unitHeight * scale - 40 + 'px';
+			var elemWidth = (dx * unitWidth * scale / 6) - 1 + 'px';
+
+			var newTable = $("<table></table>");
+			var newPager = $("<div></div>");
+			newPager.attr("id", "pager");
+			newTable.attr("id", name);
+			newElement.append(newTable);
+			//$('#wrapper').append(newElement);
+			//$('#wrapper').append(newPager);
+			newElement.append(newPager);
+			var testData = [
+				{no: 1,module: "T02",group: "DAS",app: "Reader",lastDate: "24.05.2012",delayedBy: "11 days"},
+				{no: 2,module: "T02",group: "",app: "sync",lastDate: "24.05.2012", delayedBy: "11 days"},
+				{no: 3,module: "T03",group: "",app: "sync",lastDate: "24.05.2012",delayedBy: "11 days"},
+				{no: 4,module: "T04",group: "DAS",app: "Reader",lastDate: "31.05.2012",delayedBy: "3 days"},
+				{no: 4,module: "T04",group: "",app: "sync",lastDate: "31.05.2012",delayedBy: "3 days"}
+			];
+			newTable.jqGrid({
+				datatype: 'local',
+				height: totalHeight,
+				data: testData,
+				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
+				colModel: [{
+					name: 'no',
+					index: 'no',
+					width: elemWidth,
+					sorttype: 'int'
+				},{
+					name: 'module',
+					index: 'module',
+					width: elemWidth
+				},{
+					name: 'group',
+					index: 'group',
+					width: elemWidth
+				},{
+					name: 'app',
+					index: 'app',
+					width: elemWidth
+				},{
+					name: 'lastDate',
+					index: 'lastDate',
+					width: elemWidth
+					//sorttype: 'date'
+				},
+				{
+					name: 'delayedBy',
+					index: 'delayedBy',
+					width: elemWidth
+					//sorttype: 'date'
+				}],
+				rowNum: cols,
+				pager: "#pager",
+				caption: name
+			});
+			//$('.canvas').append(newElement);
+			this.grid.addUnit(dx, dy, px, py, scale, newElement);
+
+
+		},
+		addMeasurementList: function(px, py, cols, name) {
+			var self = this;
+			var scale = self.grid.getScale();
+			var unitHeight = self.grid.getUnitSizes().height;
+			var newElement = $("<div></div>");
+
+			var newTable = $("<table></table>");
+			var newPager = $("<div></div>");
+			newPager.attr("id", "pager");
+			newTable.attr("id", name);
+			newElement.append(newDiv);
+			//$('#wrapper').append(newElement);
+			//$('#wrapper').append(newPager);
+			newElement.append(newPager);
+			var testData = [
+				{no: 1,module: "T02",group: "DAS",app: "Reader",lastDate: "24.05.2012",delayedBy: "11 days"},
+				{no: 2,module: "T02",group: "",app: "sync",lastDate: "24.05.2012", delayedBy: "11 days"},
+				{no: 3,module: "T03",group: "",app: "sync",lastDate: "24.05.2012",delayedBy: "11 days"},
+				{no: 4,module: "T04",group: "DAS",app: "Reader",lastDate: "31.05.2012",delayedBy: "3 days"},
+				{no: 4,module: "T04",group: "",app: "sync",lastDate: "31.05.2012",delayedBy: "3 days"}
+			];
+			//$('.canvas').append(newElement);
+			this.grid.addUnit(20, 10, px, py, scale, newElement);
+			console.log($(name));
+			$(name).jqGrid({
+				datatype: 'local',
+				height: cols * (unitHeight/4) * scale,
+				data: testData,
+				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
+				colModel: [{
+					name: 'no',
+					index: 'no',
+					width: 50*scale,
+					sorttype: 'int'
+				},{
+					name: 'module',
+					index: 'module',
+					width: 50*scale
+				},{
+					name: 'group',
+					index: 'group',
+					width: 50*scale
+				},{
+					name: 'app',
+					index: 'app',
+					width: 50*scale
+				},{
+					name: 'lastDate',
+					index: 'lastDate',
+					width: 50*scale
+					//sorttype: 'date'
+				},
+				{
+					name: 'delayedBy',
+					index: 'delayedBy',
+					width: 40*scale
+					//sorttype: 'date'
+				}],
+				rowNum: cols,
+				pager: "#pager",
+				caption: name
+			});
+		},	
 		updateSensor: function(sensor) {
 			var data = {};
 			var sensor = this;

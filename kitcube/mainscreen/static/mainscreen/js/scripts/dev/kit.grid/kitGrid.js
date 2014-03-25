@@ -20,6 +20,12 @@ var kitGrid = (function($) {
 	var _scale = 0;
 	var _self = null;
 
+	//CANVAS SIZE
+	var _unitHeight = 0;
+	var _unitWidth = 0;
+
+
+
 	// public method. Attach drag handler to an element.
 	function attach(dragElem) {
 		dragElem.onmousedown = _dragBegin;
@@ -143,6 +149,9 @@ var kitGrid = (function($) {
 		}, properties);
 		_grid = $(initDivClass);
 		_scale = _grid.data('scale');
+		_unitHeight = _grid.data('gridUnitY');
+		_unitWidth = _grid.data('gridUnitX');
+
 		console.log("scale init: " +  _grid.data('scale'));
 		console.log(_grid);
 		//init();
@@ -188,6 +197,13 @@ var kitGrid = (function($) {
 
 	kitGrid.prototype.getScale = function() {
 		return _scale;
+	}
+
+	kitGrid.prototype.getUnitSizes = function() {
+		return {
+			height: _unitHeight,
+			width: _unitWidth
+		};
 	}
 
 	kitGrid.prototype.makeDraggable = function(elem) {

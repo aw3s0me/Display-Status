@@ -27,7 +27,8 @@ require.config({
     "kitgrid": "dev/kit.grid/kitGrid",
     "text" : "vendor/requirejs-text/text",
     //yaml part
-    "yaml": "vendor/js-yaml/js-yaml.min"
+    "yaml": "vendor/js-yaml/js-yaml.min",
+    "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min"
   },
   shim: {
     //jqueryui: "jquery",
@@ -41,6 +42,12 @@ require.config({
     jqueryui: {
       deps: [
         'jquery'
+      ]
+    },
+    jqgrid: {
+      deps: [
+        'jquery',
+        'vendor/jqgrid/js/i18n/grid.locale-en'
       ]
     },
     bootstrap: {
