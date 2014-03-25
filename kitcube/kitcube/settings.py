@@ -32,10 +32,12 @@ DESCRIPTION = 'Summary of Kitcube Experiment'
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'django.contrib.admin', 
+    'django.contrib.admindocs',
+    'django.contrib.auth', #access to auth system
+    'django.contrib.contenttypes', #to track models in db
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainscreen'

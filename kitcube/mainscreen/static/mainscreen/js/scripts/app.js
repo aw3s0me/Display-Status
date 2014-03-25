@@ -10,11 +10,11 @@ define([
   "kit.sizeDetector",
   "kit.parser",
   "kit.dataDownloader",
-  'views/board',
+  'views/boardView',
   //'views/menuLeft',
   //'views/userPanel',
   //'views/menuRight',
-  'views/txtEditor',
+  'views/txtEditorView',
   'router', // Request router.js
 ], function($, _, Backbone, FlatUi, ace, kitgrid, YAML, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
   var initialize = function() {
@@ -32,7 +32,7 @@ define([
       $("#btnTxt").click(function(){
           document.location.href = '#editor';
       });
-      
+
       $("#btnLogin").click(function(){
           document.location.href = '#login';
       });

@@ -32,7 +32,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 			console.log(this.viewSizeDetector.detectFooterSize());
 			console.log(this.viewSizeDetector.detectBoardSize());
 			//console.log('options: ' + options);
-			
+
 
 			//var textToParse = options.aceText;
 			var data = {};
@@ -40,9 +40,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 			console.log(this.container);
 			this.container.append(compiledTemplate);
 			$('.canvas').attr("id", "tab1");
-			this.grid = new kitGrid("#tab1");
-			console.log(this.grid.getScale());
-			this.addSensor(4, 2, this.grid.getScale());
+
 			//console.log(this.grid);
 
 			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
@@ -58,45 +56,76 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/board.html', 'models
 			$('.canvas').data('gridUnitY', this.viewSizeDetector.unitSize.height);
 			$('.canvas').data('gridSizeX', this.viewSizeDetector.gridSize.width);
 			$('.canvas').data('gridSizeY', this.viewSizeDetector.gridSize.height);
+			//console.log("sizedet: " + this.viewSizeDetector.scale);
 			$('.canvas').data('scale', this.viewSizeDetector.scale);
+
+			this.grid = new kitGrid("#tab1");
+			console.log(this.grid.getScale());
+			this.addSensor(4, 2, this.grid.getScale());
+
 		},
 		addSensor: function(px, py, scale) {
-			
+
 			var newSensor = new Sensor({
-				name: "bright", 
+				id: "sensor1",
+				name: "bright",
 				comment: "doesnt work",
 				unit: "km/h",
-				value: "85",
-				max: "100",
-				min: "15",
-				alarm: "4"});
-			var compiledTemplate = _.template(sensorTemplate, { sensor: newSensor.toJSON() });
-			var jqDivTemplate = $(compiledTemplate);
-			var sensMain = jqDivTemplate.find(".sensMain")[0];
-                sensMain.style.position = 'absolute';
-                sensMain.style.fontSize = 13*scale + 'px';
-                sensMain.style.left = 5*scale + 'px';
-            var sensVal = jqDivTemplate.find(".sensVal")[0]; 
-                //sensVal.id = this.id;
-                sensVal.style.position = 'absolute';
-                sensVal.style.fontSize = 50*scale + 'px';
-                sensVal.style.right = 6*scale + 'px';
-                sensVal.style.bottom = 0*scale + 'px';
-            var sensUnit = jqDivTemplate.find(".sensUnit")[0];
-                sensUnit.style.position = 'absolute';
-                sensUnit.style.fontSize = 12*scale + 'px';
-                sensUnit.style.right = 5*scale + 'px';
-                sensUnit.style.top = 20*scale + 'px';
-                sensUnit.innerHTML = this.unit;
-            var sensClose = jqDivTemplate.find('.sensClose')[0];
-                sensClose.style.position = 'absolute';
-                sensClose.style.fontSize = 12*scale + 'px';
-                sensClose.style.right = 5*scale + 'px';
-                sensClose.style.top = 4*scale + 'px';
+				value: 85,
+				max: 100,
+				min: 15,
+				alarm: 4
+			});
+			//var compiledTemplate = _.template(sensorTemplate, { sensor: newSensor.toJSON() });
+			//var jqDivTemplate = $(compiledTemplate);
+			var myDiv = $('<div></div>');
+			var s0 = document.createElement('div');
+			s0.style.position = 'absolute';
+			s0.style.fontSize = 13 * scale + 'px';
+			s0.style.left = 5 * scale + 'px';
+			s0.innerHTML = newSensor.get('name');
+			s0.innerHTML += '<br>' + newSensor.get('comment');
 
-			this.grid.addUnit(4, 2, px, py, scale, compiledTemplate);
+			var s1 = document.createElement('div');
+			s1.id = newSensor.get('id');
+			s1.style.position = 'absolute';
+			s1.style.fontSize = 50 * scale + 'px';
+			s1.style.right = 6 * scale + 'px';
+			s1.style.bottom = 0 * scale + 'px';
+			console.log(newSensor.get('value'));
+			s1.innerHTML = (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1);
 
-			console.log($(compiledTemplate));
+			var s2 = document.createElement('div');
+			s2.style.position = 'absolute';
+			s2.style.fontSize = 12 * scale + 'px';
+			s2.style.right = 5 * scale + 'px';
+			s2.style.top = 20 * scale + 'px';
+			s2.innerHTML = newSensor.get('unit');
+			var s3 = document.createElement('div');
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 12 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 4 * scale + 'px';
+			s3.innerHTML = "<b>x</b>";
+			s3.className = "close";
+			myDiv.append(s0);
+			myDiv.append(s1);
+			myDiv.append(s2);
+			myDiv.append(s3);
+
+			this.grid.addUnit(4, 2, px, py, scale, myDiv);
+
+			//console.log($(compiledTemplate));
+		},
+		updateSensor: function(sensor) {
+			var data = {};
+			var sensor = this;
+			$.get(sensor.url, function(data) {
+				var arrayOfData = data.split(',');
+				var value = parseFloat(
+					arrayOfData[arrayOfData.length - 1]);
+				sensor.value = value;
+			});
 		}
 
 

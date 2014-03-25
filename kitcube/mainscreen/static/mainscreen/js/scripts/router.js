@@ -4,16 +4,20 @@ define([
 	'underscore',
 	'backbone',
 	'kit.sizeDetector',
-	'views/board',
-	'views/userPanel',
-	'views/menuRight',
-	'views/txtEditor'
-], function($, _, Backbone, sizeDetector, BoardView, UserPanelView, MenuRightView, TextEditorView /*TxtBrdView*/ ) {
+	'views/boardView',
+	'views/loginView',
+	'views/controlPanelView',
+	'views/txtEditorView',
+	'views/settingsView'
+], function($, _, Backbone, sizeDetector, BoardView, LoginView, ControlPanelView, TextEditorView, SettingsView ) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
 			'editor': 'showTextEditorView',
 			'board': 'showBoardView',
+			'settings': 'showSettingsView',
+			'control': 'showControlPanelView',
+			'login': 'showLoginView',
 			'onresize/:x/ycoord:y': 'resizeBoard',
 			'onchange/:x/ycoord:y': 'changeUnitNumber',
 			// Default
@@ -21,16 +25,18 @@ define([
 		},
 		myTextEditorView: undefined,
 		self: this,
-		boardView : null,
+		boardView: undefined,
+		loginView: undefined,
+		controlPanelView: undefined,
+		settingsView: undefined,
 		showTextEditorView: function() {
 			if ($("#board-container").val() !== undefined)
 				$("#board-container").hide();
 			if ($("#kitcube-console").val() !== undefined)
 				$("#kitcube-console").show();
 		},
-		showMenuLeftView: function() {
-			var myMenuLeftView = new MenuLeftView();
-			myMenuLeftView.render();
+		showSettingsView: function() {
+			//show it
 		},
 		showBoardView: function() {
 			if (self.boardView) {
@@ -42,14 +48,6 @@ define([
 			if ($("#board-container").val() !== undefined) {
 				$("#board-container").show();
 			}
-		},
-		showMenuRightView: function() {
-			var myMenuRightView = new MenuRightView();
-			myMenuRightView.render();
-		},
-		showMenuLeftView: function() {
-			var myMenuLeftView = new MenuLeftView();
-			myMenuLeftView.render();
 		},
 		changeUnitNumber: function(x, y) {
 			if (self.boardView !== undefined)
@@ -73,8 +71,9 @@ define([
 		//app_router.myTextEditorView.initialize();
 		app_router.boardView = new BoardView(/*{aceText : text, type: typeTxt}*/);
 		//app_router.boardView.initialize(); //2times creates board SHIIT
-		// As above, call render on our loaded module
-		// 'views/users/list'
+		/*app_router.loginView = new LoginView();
+		app_router.controlPanelView = new ControlPanelView();
+		app_router.settingsView = new SettingsView(); */
 
 		Backbone.history.start();
 	};

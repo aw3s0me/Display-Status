@@ -61,27 +61,30 @@ body {
     font-family: arial;
     background: #cccccc;
     border: 5px solid #bbbbbb;
-    margin: 0 auto;
-
+    margin: 0 auto; 
 }
 
 .tile {
     color: white;
-    position: absolute;
+    /*position: relative; */
+    position: absolute; 
+    z-index: 2;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background: #338FFF;
+    /*background: #338FFF; */
     border: 3px solid white;
     padding: 0px;
     margin: 0px;
+    background-color: rgba(51, 143, 255, 0.6);
 }
 
 .grid {
+    /*position: absolute; */
     position: absolute;
+    z-index: 1;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid black;
-    background-color: gray;
 }
 
 #btnLogin {

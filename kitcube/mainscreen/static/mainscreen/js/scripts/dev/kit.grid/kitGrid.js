@@ -143,6 +143,8 @@ var kitGrid = (function($) {
 		}, properties);
 		_grid = $(initDivClass);
 		_scale = _grid.data('scale');
+		console.log("scale init: " +  _grid.data('scale'));
+		console.log(_grid);
 		//init();
 		if (!_grid.hasClass('canvas')) {
 			_grid.addClass('canvas');
