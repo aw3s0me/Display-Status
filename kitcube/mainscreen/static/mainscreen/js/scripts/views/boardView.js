@@ -157,134 +157,134 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			var self = this;
 			var scale = self.grid.getScale();
 			var unitHeight = self.grid.getUnitSizes().height;
-			var unitWidth = self.grid.getUnitSizes().width;	
+			var unitWidth = self.grid.getUnitSizes().width;
 			var newElement = $("<div></div>");
+
 			var dx = 12;
 			var dy = 6;
-			var totalHeight = dy * unitHeight * scale - 40 + 'px';
-			var elemWidth = (dx * unitWidth * scale / 6) - 1 + 'px';
+			newElement.css('width', dx * unitHeight * scale + 'px');
+			newElement.css('height', dy * unitWidth * scale + 'px');
+			newElement.css('position', 'relative');
 
+			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
+			var noWidth = (dx * unitWidth * scale / 6) - 4 + 'px';
 			var newTable = $("<table></table>");
-			var newPager = $("<div></div>");
-			newPager.attr("id", "pager");
+			var newPager = $("<div id='pager'></div>");
 			newTable.attr("id", name);
 			newElement.append(newTable);
-			//$('#wrapper').append(newElement);
-			//$('#wrapper').append(newPager);
-			newElement.append(newPager);
-			var testData = [
-				{no: 1,module: "T02",group: "DAS",app: "Reader",lastDate: "24.05.2012",delayedBy: "11 days"},
-				{no: 2,module: "T02",group: "",app: "sync",lastDate: "24.05.2012", delayedBy: "11 days"},
-				{no: 3,module: "T03",group: "",app: "sync",lastDate: "24.05.2012",delayedBy: "11 days"},
-				{no: 4,module: "T04",group: "DAS",app: "Reader",lastDate: "31.05.2012",delayedBy: "3 days"},
-				{no: 4,module: "T04",group: "",app: "sync",lastDate: "31.05.2012",delayedBy: "3 days"}
-			];
+			//newElement.append(newPager);
+			var testData = [{
+				no: 1,
+				module: "T02",
+				group: "DAS",
+				app: "Reader",
+				lastDate: "24.05.2012",
+				delayedBy: "11 days"
+			}, {
+				no: 2,
+				module: "T02",
+				group: "",
+				app: "sync",
+				lastDate: "24.05.2012",
+				delayedBy: "11 days"
+			}, {
+				no: 3,
+				module: "T03",
+				group: "",
+				app: "sync",
+				lastDate: "24.05.2012",
+				delayedBy: "11 days"
+			}, {
+				no: 4,
+				module: "T04",
+				group: "DAS",
+				app: "Reader",
+				lastDate: "31.05.2012",
+				delayedBy: "3 days"
+			}, {
+				no: 4,
+				module: "T04",
+				group: "",
+				app: "sync",
+				lastDate: "31.05.2012",
+				delayedBy: "3 days"
+			}];
 			newTable.jqGrid({
 				datatype: 'local',
-				height: totalHeight,
 				data: testData,
 				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
+				shrinkToFit: false,
+				autowidth: true,
+				height: 'auto',
+				hidegrid: false,
 				colModel: [{
 					name: 'no',
 					index: 'no',
-					width: elemWidth,
+					width: noWidth,
 					sorttype: 'int'
-				},{
+				}, {
 					name: 'module',
 					index: 'module',
 					width: elemWidth
-				},{
+				}, {
 					name: 'group',
 					index: 'group',
 					width: elemWidth
-				},{
+				}, {
 					name: 'app',
 					index: 'app',
 					width: elemWidth
-				},{
+				}, {
 					name: 'lastDate',
 					index: 'lastDate',
 					width: elemWidth
 					//sorttype: 'date'
-				},
-				{
+				}, {
 					name: 'delayedBy',
 					index: 'delayedBy',
 					width: elemWidth
 					//sorttype: 'date'
 				}],
 				rowNum: cols,
-				pager: "#pager",
-				caption: name
+				//pager: "#pager",
+				caption: name,
+				/*loadComplete: function() {
+					var grid = newTable;
+					var ids = grid.getDataIDs();
+					for (var i = 0; i < ids.length; i++) {
+						grid.setRowData(ids[i], false, {
+							height: 40 + i * 2 // here we set height of elements
+						});
+					}
+					//grid.setGridHeight('auto');
+				}*/
 			});
 			//$('.canvas').append(newElement);
 			this.grid.addUnit(dx, dy, px, py, scale, newElement);
+			newTable.jqGrid('setGridWidth', newElement.width() - 6, true);
+			newTable.parents('div.ui-jqgrid-bdiv').css("max-height",newElement.height());
+			/*function resize_grid(grid) {
+				var container = grid.parents('.ui-layout-content:first');
+				grid.jqGrid('setGridWidth', container.width() - 2); // -2 is border width?
+				var h = grid.parents('.ui-jqgrid:first').height() - grid.parents('.ui-jqgrid-bdiv:first').height();
+				grid.jqGrid('setGridHeight', container.height()- h - 2);
+			} */
 
+			/*function resizeGrid(elem, gridParent) {
+				var $grid = elem,
+					$gbox = $grid.closest(".ui-jqgrid"), // or $("gbox_theTable");
+					outerHeight = $gbox.height() - $grid.jqGrid('getGridParam', 'height');
+				$grid.jqGrid('setGridWidth', gridParent.width());
+				$grid.jqGrid('setGridHeight', gridParent.height() - outerHeight);
+				$grid.trigger('reloadGrid');
+			} */
+
+			//resizeGrid(newTable, newElement);
+			//newTable.jqGrid('setGridHeight', newElement.height(), true);
+			//$('.ui-jqgrid-bdiv').height(newElement.height());
 
 		},
-		addMeasurementList: function(px, py, cols, name) {
-			var self = this;
-			var scale = self.grid.getScale();
-			var unitHeight = self.grid.getUnitSizes().height;
-			var newElement = $("<div></div>");
 
-			var newTable = $("<table></table>");
-			var newPager = $("<div></div>");
-			newPager.attr("id", "pager");
-			newTable.attr("id", name);
-			newElement.append(newDiv);
-			//$('#wrapper').append(newElement);
-			//$('#wrapper').append(newPager);
-			newElement.append(newPager);
-			var testData = [
-				{no: 1,module: "T02",group: "DAS",app: "Reader",lastDate: "24.05.2012",delayedBy: "11 days"},
-				{no: 2,module: "T02",group: "",app: "sync",lastDate: "24.05.2012", delayedBy: "11 days"},
-				{no: 3,module: "T03",group: "",app: "sync",lastDate: "24.05.2012",delayedBy: "11 days"},
-				{no: 4,module: "T04",group: "DAS",app: "Reader",lastDate: "31.05.2012",delayedBy: "3 days"},
-				{no: 4,module: "T04",group: "",app: "sync",lastDate: "31.05.2012",delayedBy: "3 days"}
-			];
-			//$('.canvas').append(newElement);
-			this.grid.addUnit(20, 10, px, py, scale, newElement);
-			console.log($(name));
-			$(name).jqGrid({
-				datatype: 'local',
-				height: cols * (unitHeight/4) * scale,
-				data: testData,
-				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
-				colModel: [{
-					name: 'no',
-					index: 'no',
-					width: 50*scale,
-					sorttype: 'int'
-				},{
-					name: 'module',
-					index: 'module',
-					width: 50*scale
-				},{
-					name: 'group',
-					index: 'group',
-					width: 50*scale
-				},{
-					name: 'app',
-					index: 'app',
-					width: 50*scale
-				},{
-					name: 'lastDate',
-					index: 'lastDate',
-					width: 50*scale
-					//sorttype: 'date'
-				},
-				{
-					name: 'delayedBy',
-					index: 'delayedBy',
-					width: 40*scale
-					//sorttype: 'date'
-				}],
-				rowNum: cols,
-				pager: "#pager",
-				caption: name
-			});
-		},	
 		updateSensor: function(sensor) {
 			var data = {};
 			var sensor = this;
