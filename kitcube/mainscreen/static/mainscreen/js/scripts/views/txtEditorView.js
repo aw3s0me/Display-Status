@@ -14,11 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 				console.log('not inserted yet');
 				this.appendElem.append(compiledTemplate);
 				this.externEditor = ace.edit('kitcube-console');
-				if ($('#kitcube-console').val() === undefined) {
-					console.log($('#kitcube-console'));
-				}
-				else {
-					console.log($('#kitcube-console'));
+				if ($('#kitcube-console').val() !== undefined) {
 					$('#kitcube-console')[0].style.fontSize = '14px';
 				}
 				this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
@@ -36,7 +32,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 				this.externEditor.setTheme("ace/theme/monokai");
 				this.externEditor.getSession().setMode("ace/mode/yaml");
 
-				//this.render(this.externEditor);
 			}
 		}
 	});

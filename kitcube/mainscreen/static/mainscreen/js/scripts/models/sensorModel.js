@@ -9,7 +9,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			max: undefined,
 			min: undefined,
 			alarm: undefined,
-			url: undefined
+			server: undefined,
+			device: undefined,
+			dbname: undefined,
+			dbgroup: undefined,
+			mask: undefined
 		},
 		initialize: function() {
 			console.log("model created");
@@ -21,8 +25,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			return {
 
 			}
+		},
+		getDbUrl: function() {
+			return 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + server +'&db_name=' + dbname + '&db_group='+ dbgroup +'&db_mask='+ mask +'&window=-1';
 		}
-
 	});
 
 	return Sensor;

@@ -68,9 +68,11 @@ define([
 	var initialize = function() {
 		var app_router = new AppRouter;
 		app_router.myTextEditorView = new TextEditorView();
-		//app_router.myTextEditorView.initialize();
-		//console.log("btn: " + { el: $('#canvasButton')});
-		app_router.boardView = new BoardView({ el: $('#canvasButton')}/*{aceText : text, type: typeTxt}*/);
+
+		var text = app_router.myTextEditorView.externEditor.getSession().getValue();
+
+		app_router.boardView = new BoardView({aceText : text});
+
 		//app_router.boardView.initialize(); //2times creates board SHIIT
 		/*app_router.loginView = new LoginView();
 		app_router.controlPanelView = new ControlPanelView();

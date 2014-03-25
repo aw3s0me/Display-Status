@@ -8,8 +8,6 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 		};
 	}
 
-
-
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
 		maxSizeX: 0,
@@ -31,16 +29,11 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			this.viewSizeDetector.detectBannerSize();
 			this.viewSizeDetector.detectFooterSize();
 			this.viewSizeDetector.detectBoardSize();
-			//console.log('options: ' + options);
 
-
-			//var textToParse = options.aceText;
 			var data = {};
 			var compiledTemplate = _.template(boardTemplate, data);
 			this.container.append(compiledTemplate);
 			$('.canvas').attr("id", "tab1");
-
-			//console.log(this.grid);
 
 			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
 			$('.canvas').css('margin-top', marginTop + 'px');
@@ -55,16 +48,51 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			$('.canvas').data('gridUnitY', this.viewSizeDetector.unitSize.height);
 			$('.canvas').data('gridSizeX', this.viewSizeDetector.gridSize.width);
 			$('.canvas').data('gridSizeY', this.viewSizeDetector.gridSize.height);
-			//console.log("sizedet: " + this.viewSizeDetector.scale);
 			$('.canvas').data('scale', this.viewSizeDetector.scale);
 
 			this.grid = new kitGrid("#tab1");
-			this.addSensor(4, 2, this.grid.getScale());
-			this.addAlarmList(10, 10, 2, "alarmList1");
+			//this.addSensor(4, 2, this.grid.getScale());
+			//this.addAlarmList(10, 10, 2, "alarmList1");
 			var self = this;
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			})
+
+			/* board insertion part */
+			var textToParse = options.aceText;
+			var myParser = new cfgParser('1');
+			var prsObj = myParser.parseJson(textToParse);
+			this.insertFromCfg(prsObj);
+		},
+		insertFromCfg: function(prsObj) {
+			for (var _id in prsObj) {
+				var attr = prsObj[_id];
+				switch (attr["type"]) {
+					case "sensor":
+						var newSensor = new Sensor({
+							id: _id,
+							name: attr["name"],
+							comment: attr["comment"],
+							unit: attr["unit"],
+							//value: attr[n],
+							max: attr["max"],
+							min: attr["min"],
+							server: attr["server"],
+							device: attr["device"],
+							dbname: attr["dbname"],
+							dbgroup: attr["group"],
+							mask: attr["mask"]
+						});
+						console.log(newSensor);
+						this.addSensor(attr["size"][0], attr["size"][1], attr["coords"][0], attr["coords"][1], newSensor);
+						break;
+					case "chart":
+
+						break;
+					default:
+						break;
+				}
+			}
 		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
@@ -100,19 +128,9 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 					alert('function "' + fncname + '" not defined');
 			}
 		},
-		addSensor: function(px, py, sensorId) {
+		addSensor: function(dx, dy, px, py, newSensor) {
 			var self = this;
 			var scale = self.grid.getScale();
-			var newSensor = new Sensor({
-				id: "sensor1",
-				name: "bright",
-				comment: "doesnt work",
-				unit: "km/h",
-				value: 85,
-				max: 100,
-				min: 15,
-				alarm: 4
-			});
 			//var compiledTemplate = _.template(sensorTemplate, { sensor: newSensor.toJSON() });
 			//var jqDivTemplate = $(compiledTemplate);
 			var myDiv = $('<div></div>');
@@ -149,7 +167,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			myDiv.append(s2);
 			myDiv.append(s3);
 
-			this.grid.addUnit(4, 2, px, py, scale, myDiv);
+			this.grid.addUnit(dx, dy, 2, px, py, scale, myDiv);
 
 			//console.log($(compiledTemplate));
 		},
@@ -262,7 +280,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			//$('.canvas').append(newElement);
 			this.grid.addUnit(dx, dy, px, py, scale, newElement);
 			newTable.jqGrid('setGridWidth', newElement.width() - 6, true);
-			newTable.parents('div.ui-jqgrid-bdiv').css("max-height",newElement.height());
+			newTable.parents('div.ui-jqgrid-bdiv').css("max-height", newElement.height());
 			/*function resize_grid(grid) {
 				var container = grid.parents('.ui-layout-content:first');
 				grid.jqGrid('setGridWidth', container.width() - 2); // -2 is border width?
