@@ -18,13 +18,6 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 		viewSizeDetector: null,
 		tabs: [],
 		sensors: [],
-		render: function() {
-
-		},
-		resize: function(x, y) {
-
-		},
-		change: function(NumX, NumY) {},
 		initialize: function(options) {
 			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
 			this.viewSizeDetector.detectBannerSize();
@@ -53,17 +46,55 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 
 			this.grid = new kitGrid("#tab1");
 			//this.addSensor(4, 2, this.grid.getScale());
-			//this.addAlarmList(10, 10, 2, "alarmList1");
+			this.addAlarmList(10, 10, 2, "alarmList1");
 			var self = this;
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
-			})
+			});
+			$('#toggleButton').click(function(e) {
+				self.toggleGrid();
+			});
 
 			/* board insertion part */
 			var textToParse = options.aceText;
 			var myParser = new cfgParser('1');
 			var prsObj = myParser.parseJson(textToParse);
 			this.insertFromCfg(prsObj);
+		},
+		toggleGrid: function() {
+			var holder = $("#tab1");
+			var attr = holder.attr('grid');
+
+			if (typeof attr !== 'undefined' && attr !== false) {
+				holder.children('.grid').remove();
+				holder.removeAttr('grid');
+				return;
+			}
+
+			holder.attr('grid', 'grid');
+
+			for (var i = 0; i < holder.data('gridSizeX'); i++)
+				for (var j = 0; j < holder.data('gridSizeY'); j++) {
+					var e = this.newWidget(1, 1, i, j);
+					e.className = 'grid';
+					holder.append(e.outerHTML);
+				}
+			return;
+		},
+		newWidget: function(dx, dy, px, py, scale) {
+			var e = document.createElement('div');
+			var holder = $('#tab1');
+
+			scale = typeof scale !== 'undefined' ? scale : holder.data('scale');
+			e.dataset.scale = scale;
+
+			e.className = 'tile';
+			e.style.left = px * holder.data('gridUnitX') * scale + 'px';
+			e.style.top = py * holder.data('gridUnitY') * scale + 'px';
+			e.style.width = dx * holder.data('gridUnitX') * scale + 'px';
+			e.style.height = dy * holder.data('gridUnitY') * scale + 'px';
+
+			return e;
 		},
 		insertFromCfg: function(prsObj) {
 			var self = this;
@@ -96,7 +127,9 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 						break;
 				}
 			}
-			setInterval(function(){self.updateAllSensors();}, 3000); //the only way to pass param
+			setInterval(function() {
+				self.updateAllSensors();
+			}, 3000); //the only way to pass param
 		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
@@ -117,7 +150,33 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 					break;
 				case "addSensor":
 					args[2] = /[^'"]+/.exec(args[2]);
-					var e = self.addSensor(args[0], args[1], args[2], args[3]);
+					var _name = 0;
+					var comment = 0;
+					var url = 'http://katrin.kit.edu/adei/services/getdata.php?db_server=temp0&db_name=BakeOut2013&db_group=TempMon&db_mask=1&window=-1';
+					$.get(url, function(data) {
+						//console.log("data: " + data);
+						var dataLines = data.split('\n');
+						var arrayOfInfo = dataLines[0].split(',');
+						var arrayOfValues = dataLines[1].split(',');
+						_name = arrayOfInfo[1];
+						//console.log(_name);
+					});
+					//console.log(_name);
+					var newSensor = new Sensor({
+						id: args[4],
+						name: _name,
+						comment: _name,
+						unit: "C",
+						max: 100,
+						min: 0,
+						server: "temp0",
+						device: "HATPRO",
+						dbname: "BakeOut2013",
+						dbgroup: "TempMon",
+						mask: 1
+					});
+					//console.log(newSensor.get('name'));
+					var e = self.addSensor(args[0], args[1], args[2], args[3], newSensor);
 					break;
 				case "addAlarmList":
 					args[2] = /[^'"]+/.exec(args[2]);
@@ -133,7 +192,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 		addSensor: function(dx, dy, px, py, newSensor) {
 			var self = this;
 			var scale = self.grid.getScale();
-			console.log(newSensor);
+			//console.log(newSensor);
 			//var compiledTemplate = _.template(sensorTemplate, { sensor: newSensor.toJSON() });
 			//var jqDivTemplate = $(compiledTemplate);
 			var myDiv = $('<div></div>');
@@ -183,7 +242,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			myDiv.append(s2);
 			myDiv.append(s3);
 			myDiv.append(s4);
-			console.log(myDiv);
+			//console.log(myDiv);
 
 			this.grid.addUnit(dx, dy, px, py, scale, myDiv);
 
@@ -199,8 +258,8 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			var sensorId = sensorModel.get('id');
 			var sensor = $('#' + sensorId);
 			$.get(sensorModel.getDbUrl(), function(data) {
-				console.log("data: " + data);
-				console.log(sensor);
+				//console.log("data: " + data);
+				//console.log(sensor);
 				var arrayOfData = data.split(',');
 				var value = parseFloat(
 					arrayOfData[arrayOfData.length - 1]);
@@ -215,19 +274,19 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			var unitWidth = self.grid.getUnitSizes().width;
 			var newElement = $("<div></div>");
 
-			var dx = 12;
+			var dx = 8;
 			var dy = 6;
 			newElement.css('width', dx * unitHeight * scale + 'px');
 			newElement.css('height', dy * unitWidth * scale + 'px');
 			newElement.css('position', 'relative');
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
-			var noWidth = (dx * unitWidth * scale / 6) - 4 + 'px';
+			var noWidth = (dx * unitWidth * scale / 6) - 12 + 'px';
 			var newTable = $("<table></table>");
 			var newPager = $("<div id='pager'></div>");
 			newTable.attr("id", name);
 			newElement.append(newTable);
-			//newElement.append(newPager);
+			newElement.append(newPager);
 			var testData = [{
 				no: 1,
 				module: "T02",
@@ -264,13 +323,16 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 				lastDate: "31.05.2012",
 				delayedBy: "3 days"
 			}];
+
+			this.grid.addUnit(dx, dy, px, py, scale, newElement);
+
 			newTable.jqGrid({
 				datatype: 'local',
 				data: testData,
 				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
 				shrinkToFit: false,
 				autowidth: true,
-				height: 'auto',
+				//height: '200px',
 				hidegrid: false,
 				colModel: [{
 					name: 'no',
@@ -300,54 +362,56 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 					width: elemWidth
 					//sorttype: 'date'
 				}],
-				rowNum: cols,
-				//pager: "#pager",
+				rowNum: 5,
+				pager: "#pager",
 				caption: name,
-				/*loadComplete: function() {
+				loadComplete: function() {
 					var grid = newTable;
 					var ids = grid.getDataIDs();
 					for (var i = 0; i < ids.length; i++) {
-						grid.setRowData(ids[i], false, {
-							height: 40 + i * 2 // here we set height of elements
+						grid.setRowData(ids[i], false,	 {
+							height: 0*scale + i * 2
 						});
 					}
-					//grid.setGridHeight('auto');
-				}*/
+				}
 			});
-			//$('.canvas').append(newElement);
-			this.grid.addUnit(dx, dy, px, py, scale, newElement);
+
 			newTable.jqGrid('setGridWidth', newElement.width() - 6, true);
-			newTable.parents('div.ui-jqgrid-bdiv').css("max-height", newElement.height());
-			/*function resize_grid(grid) {
-				var container = grid.parents('.ui-layout-content:first');
-				grid.jqGrid('setGridWidth', container.width() - 2); // -2 is border width?
-				var h = grid.parents('.ui-jqgrid:first').height() - grid.parents('.ui-jqgrid-bdiv:first').height();
-				grid.jqGrid('setGridHeight', container.height()- h - 2);
-			} */
+			console.log();
+			
+			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
+			$('#pager_center').css('width', newElement.width() - 6); 
+			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 42*scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('width', newElement.width() - 6);
 
-			/*function resizeGrid(elem, gridParent) {
-				var $grid = elem,
-					$gbox = $grid.closest(".ui-jqgrid"), // or $("gbox_theTable");
-					outerHeight = $gbox.height() - $grid.jqGrid('getGridParam', 'height');
-				$grid.jqGrid('setGridWidth', gridParent.width());
-				$grid.jqGrid('setGridHeight', gridParent.height() - outerHeight);
-				$grid.trigger('reloadGrid');
-			} */
+			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
 
-			//resizeGrid(newTable, newElement);
-			//newTable.jqGrid('setGridHeight', newElement.height(), true);
-			//$('.ui-jqgrid-bdiv').height(newElement.height());
+			newTable.jqGrid('setGridHeight', newElement.height() - gboxHeight);
+			//$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
+			
+			//$('.ui-jqgrid-title').css('height', 20*scale + 'px' );
 
+			//$('.grid .ui-jqgrid-htable th').css('height', 10*scale + 'em !important');
+			//$('.grid .ui-jqgrid-btable .jqgrow td').css('height', 10*scale + 'em !important');
 		},
 		/*events: {
 			'click #canvasButton': 'alert'
 		}, */
 		alert: function(e) {
 			console.log(e);
-		}
+		},
+		render: function() {
 
+		},
+		resize: function(x, y) {
 
-
+		},
+		change: function(NumX, NumY) {}
 	});
 
 	// 'jquery', 'underscore', 'backbone' will not be accessible in the global scope
