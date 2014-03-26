@@ -4,23 +4,19 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 		appendElem: $('#kitcube-container'),
 		externEditor: null,
 		initialize: function() {
-			//console.log(_.template(textEditorTemplate, {}));
-			//console.log(this.appendElem);
 			var elem = $('#kitcube-console').val();
-			console.log('initialize');
 			if (elem === undefined) {
 				var data = {};
 				var compiledTemplate = _.template(textEditorTemplate, data);
-				console.log('not inserted yet');
 				this.appendElem.append(compiledTemplate);
 				this.externEditor = ace.edit('kitcube-console');
 				if ($('#kitcube-console').val() !== undefined) {
 					$('#kitcube-console')[0].style.fontSize = '14px';
 				}
 				this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
-				console.log(this.viewSizeDetector.detectBannerSize());
-				console.log(this.viewSizeDetector.detectFooterSize());
-				console.log(this.viewSizeDetector.detectBoardSize());
+				this.viewSizeDetector.detectBannerSize();
+				this.viewSizeDetector.detectFooterSize();
+				this.viewSizeDetector.detectBoardSize();
 
 				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
 

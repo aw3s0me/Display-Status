@@ -19,6 +19,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 		tabs: [],
 		sensors: [],
 		initialize: function(options) {
+			var self = this; //for refering to this in jquery
 			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
 			this.viewSizeDetector.detectBannerSize();
 			this.viewSizeDetector.detectFooterSize();
@@ -47,11 +48,11 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			this.grid = new kitGrid("#tab1");
 			//this.addSensor(4, 2, this.grid.getScale());
 			this.addAlarmList(10, 10, 2, "alarmList1");
-			var self = this;
+			
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			});
-			$('#toggleButton').click(function(e) {
+			$('#toggleGridButton').click(function(e) {
 				self.toggleGrid();
 			});
 
@@ -122,6 +123,8 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 						break;
 					case "chart":
 
+						break;
+					case "alarmlist":
 						break;
 					default:
 						break;
@@ -278,7 +281,6 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			var dy = 6;
 			newElement.css('width', dx * unitHeight * scale + 'px');
 			newElement.css('height', dy * unitWidth * scale + 'px');
-			newElement.css('position', 'relative');
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
 			var noWidth = (dx * unitWidth * scale / 6) - 12 + 'px';
@@ -324,7 +326,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 				delayedBy: "3 days"
 			}];
 
-			this.grid.addUnit(dx, dy, px, py, scale, newElement);
+			this.grid.addUnit(dx, dy, px, py, scale, newElement, {border:0, transparent:true});
 
 			newTable.jqGrid({
 				datatype: 'local',
@@ -376,8 +378,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 				}
 			});
 
-			newTable.jqGrid('setGridWidth', newElement.width() - 6, true);
-			console.log();
+			newTable.jqGrid('setGridWidth', newElement.width(), true);
 			
 			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');

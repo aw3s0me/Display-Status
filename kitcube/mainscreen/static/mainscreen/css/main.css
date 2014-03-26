@@ -60,7 +60,7 @@ body {
     position: relative;
     font-family: arial;
     background: #cccccc;
-    border: 5px solid #bbbbbb;
+    /*border: 5px solid #bbbbbb; */
     margin: 0 auto; 
 }
 

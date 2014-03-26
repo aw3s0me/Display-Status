@@ -211,7 +211,7 @@ var kitGrid = (function($) {
 		elem.onmousedown = (mouseDown);
 	}
 
-	kitGrid.prototype.addUnit = function(dx, dy, posx, posy, scale, content) {
+	kitGrid.prototype.addUnit = function(dx, dy, posx, posy, scale, content, options) {
 		var divElem = $('<div></div>');
 		scale = defaultFor(scale, _grid.data('scale'));
 		divElem.css('left', posx * _grid.data('gridUnitX') * scale + 'px');
@@ -220,6 +220,20 @@ var kitGrid = (function($) {
 		divElem.css('height', dy * _grid.data('gridUnitY') * scale + 'px');
 
 		divElem.addClass('tile');
+		if (options) {
+			if (options.border === 0) {
+				divElem.css('border', 0);
+				divElem.css('width', dx * _grid.data('gridUnitX') * scale + 'px');
+			}
+			if (options.absolute) {
+				divElem.css('left', posx * scale + 'px');
+				divElem.css('top', posy * scale + 'px');
+			}
+			if (options.transparent) {
+				divElem.css('background-color', 'rgba(204,204,204,0)')
+			}
+		}
+
 		divElem.append(content);
 		var elemObj = {
 			object: divElem,
@@ -229,42 +243,7 @@ var kitGrid = (function($) {
 			dy: dy
 		}
 		this.gridObjects.push(elemObj);
-		//this.makeDraggable(_grid);
 		_grid.append(divElem);
-		//console.log(_grid);
-		//divElem.draggable();
-		//this.makeDraggable(divElem[0]);
-		attach(divElem[0]);
-		var self = this;
-		divElem.find(".close").click(function(event) {
-			self.removeUnit(divElem);
-		});;
-		return divElem;
-	}
-
-	kitGrid.prototype.addUnitByAbsolutePos = function(dx, dy, absPosX, absPosY, scale, content) {
-		var divElem = $('<div></div>');
-		scale = defaultFor(scale, _grid.data('scale'));
-		divElem.css('left', absPosX * scale + 'px');
-		divElem.css('top', absPosY * scale + 'px');
-		divElem.css('width', dx * _grid.data('gridUnitX') * scale + 'px');
-		divElem.css('height', dy * _grid.data('gridUnitY') * scale + 'px');
-
-		divElem.addClass('tile');
-		divElem.append(content);
-		var elemObj = {
-			object: divElem,
-			posx: absPosX,
-			posy: absPosX,
-			dx: dx,
-			dy: dy
-		}
-		this.gridObjects.push(elemObj);
-		//this.makeDraggable(_grid);
-		_grid.append(divElem);
-		console.log(_grid);
-		//divElem.draggable();
-		//this.makeDraggable(divElem[0]);
 		attach(divElem[0]);
 		var self = this;
 		divElem.find(".close").click(function(event) {
