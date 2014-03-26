@@ -16,7 +16,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			mask: undefined
 		},
 		initialize: function() {
-			console.log("model created");
+			//console.log("model created");
 			this.on('change: module', function() {
 				//do smth
 			});
@@ -27,7 +27,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 		},
 		getDbUrl: function() {
-			return 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + server +'&db_name=' + dbname + '&db_group='+ dbgroup +'&db_mask='+ mask +'&window=-1';
+			return 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + this.get('server') +'&db_name=' + this.get('dbname') + '&db_group='+ this.get('dbgroup') +'&db_mask='+ this.get('mask') +'&window=-1';
 		}
 	});
 

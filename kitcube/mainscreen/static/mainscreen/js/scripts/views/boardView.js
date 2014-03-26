@@ -17,6 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 		grid: null,
 		viewSizeDetector: null,
 		tabs: [],
+		sensors: [],
 		render: function() {
 
 		},
@@ -65,6 +66,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			this.insertFromCfg(prsObj);
 		},
 		insertFromCfg: function(prsObj) {
+			var self = this;
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
 				switch (attr["type"]) {
@@ -83,8 +85,9 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 							dbgroup: attr["group"],
 							mask: attr["mask"]
 						});
-						console.log(newSensor);
-						this.addSensor(attr["size"][0], attr["size"][1], attr["coords"][0], attr["coords"][1], newSensor);
+						//console.log(newSensor);
+						self.addSensor(attr["size"][0], attr["size"][1], attr["coords"][0], attr["coords"][1], newSensor);
+						self.sensors.push(newSensor);
 						break;
 					case "chart":
 
@@ -93,6 +96,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 						break;
 				}
 			}
+			setInterval(function(){self.updateAllSensors();}, 3000); //the only way to pass param
 		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
@@ -114,12 +118,10 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 				case "addSensor":
 					args[2] = /[^'"]+/.exec(args[2]);
 					var e = self.addSensor(args[0], args[1], args[2], args[3]);
-					//console.log("" + args[0] + args[1] + args[2] + args[3]);
 					break;
 				case "addAlarmList":
 					args[2] = /[^'"]+/.exec(args[2]);
 					var e = self.addAlarmList(args[0], args[1], args[2], args[3]);
-					//console.log("" + args[0] + args[1] + args[2] + args[3]);
 					break;
 				case "updatePage":
 					//self.updatePage();
@@ -131,23 +133,27 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 		addSensor: function(dx, dy, px, py, newSensor) {
 			var self = this;
 			var scale = self.grid.getScale();
+			console.log(newSensor);
 			//var compiledTemplate = _.template(sensorTemplate, { sensor: newSensor.toJSON() });
 			//var jqDivTemplate = $(compiledTemplate);
 			var myDiv = $('<div></div>');
+			myDiv.attr('id', newSensor.get('id'));
 			var s0 = document.createElement('div');
 			s0.style.position = 'absolute';
 			s0.style.fontSize = 13 * scale + 'px';
 			s0.style.left = 5 * scale + 'px';
 			s0.innerHTML = newSensor.get('name');
 			s0.innerHTML += '<br>' + newSensor.get('comment');
+			s0.className = "sensorName";
 
 			var s1 = document.createElement('div');
-			s1.id = newSensor.get('id');
+			//s1.id = newSensor.get('id');
 			s1.style.position = 'absolute';
 			s1.style.fontSize = 50 * scale + 'px';
 			s1.style.right = 6 * scale + 'px';
 			s1.style.bottom = 0 * scale + 'px';
 			s1.innerHTML = (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1);
+			s1.className = "sensorVal";
 
 			var s2 = document.createElement('div');
 			s2.style.position = 'absolute';
@@ -155,6 +161,16 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			s2.style.right = 5 * scale + 'px';
 			s2.style.top = 20 * scale + 'px';
 			s2.innerHTML = newSensor.get('unit');
+			s2.className = "sensorUnit";
+
+			var s4 = document.createElement('div');
+			s4.style.position = 'absolute';
+			s4.style.fontSize = 10 * scale + 'px';
+			s4.style.left = 5 * scale + 'px';
+			s4.style.bottom = 2 * scale + 'px';
+			s4.innerHTML = "min:" + newSensor.get('min') + "<br>max:" + newSensor.get('max') + "<br>alert:" + newSensor.get('alert');
+			s4.className = "sensorAlarm";
+
 			var s3 = document.createElement('div');
 			s3.style.position = 'absolute';
 			s3.style.fontSize = 12 * scale + 'px';
@@ -166,10 +182,31 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			myDiv.append(s1);
 			myDiv.append(s2);
 			myDiv.append(s3);
+			myDiv.append(s4);
+			console.log(myDiv);
 
-			this.grid.addUnit(dx, dy, 2, px, py, scale, myDiv);
+			this.grid.addUnit(dx, dy, px, py, scale, myDiv);
 
 			//console.log($(compiledTemplate));
+		},
+		updateAllSensors: function() {
+			for (var i = 0; i < this.sensors.length; i++) {
+				this.updateSensor(this.sensors[i]);
+			}
+		},
+		updateSensor: function(sensorModel) {
+			var data = {};
+			var sensorId = sensorModel.get('id');
+			var sensor = $('#' + sensorId);
+			$.get(sensorModel.getDbUrl(), function(data) {
+				console.log("data: " + data);
+				console.log(sensor);
+				var arrayOfData = data.split(',');
+				var value = parseFloat(
+					arrayOfData[arrayOfData.length - 1]);
+				var sensorDiv = sensor.find(".sensorVal")[0];
+				sensorDiv.innerHTML = value.toFixed(1);
+			});
 		},
 		addAlarmList: function(px, py, cols, name) {
 			var self = this;
@@ -301,17 +338,6 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			//newTable.jqGrid('setGridHeight', newElement.height(), true);
 			//$('.ui-jqgrid-bdiv').height(newElement.height());
 
-		},
-
-		updateSensor: function(sensor) {
-			var data = {};
-			var sensor = this;
-			$.get(sensor.url, function(data) {
-				var arrayOfData = data.split(',');
-				var value = parseFloat(
-					arrayOfData[arrayOfData.length - 1]);
-				sensor.value = value;
-			});
 		},
 		/*events: {
 			'click #canvasButton': 'alert'

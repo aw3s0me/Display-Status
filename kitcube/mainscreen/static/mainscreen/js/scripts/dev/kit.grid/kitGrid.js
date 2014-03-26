@@ -152,8 +152,8 @@ var kitGrid = (function($) {
 		_unitHeight = _grid.data('gridUnitY');
 		_unitWidth = _grid.data('gridUnitX');
 
-		console.log("scale init: " +  _grid.data('scale'));
-		console.log(_grid);
+		//console.log("scale init: " +  _grid.data('scale'));
+		//console.log(_grid);
 		//init();
 		if (!_grid.hasClass('canvas')) {
 			_grid.addClass('canvas');
@@ -231,7 +231,7 @@ var kitGrid = (function($) {
 		this.gridObjects.push(elemObj);
 		//this.makeDraggable(_grid);
 		_grid.append(divElem);
-		console.log(_grid);
+		//console.log(_grid);
 		//divElem.draggable();
 		//this.makeDraggable(divElem[0]);
 		attach(divElem[0]);
