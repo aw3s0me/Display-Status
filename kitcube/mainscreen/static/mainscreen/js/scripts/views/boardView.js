@@ -184,7 +184,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			}
 			setInterval(function() {
 				self.updateAllSensors();
-			}, 3000); //the only way to pass param
+			}, 12000); //the only way to pass param
 		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
@@ -318,11 +318,13 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					arrayOfData[arrayOfData.length - 1]);
 				var sensorDiv = sensor.find(".sensorVal")[0];
 				sensorDiv.innerHTML = value.toFixed(1);
-				sensorModel.set({'value': value})
+				sensorModel.set({
+					'value': value
+				})
 				var tempValue = [];
 				var now = new Date;
-				tempValue.push(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(), now.getUTCDate() , 
-      now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
+				tempValue.push(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+					now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
 				tempValue.push(value.toFixed(4));
 				if (sensorModel.get('values').length < 10) {
 					sensorModel.get('values').push(tempValue);
@@ -336,22 +338,34 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				} */
 
 			});
-			
+
 		},
 		updateAllCharts: function() {
 			var allCharts = this.charts;
 			console.log('charts');
 			for (var chart in allCharts) {
 				var chartObject = allCharts[chart];
-				for (var i = 0; i < chartObject.seriesArr; i++) {
+				//console.log(chartObject);
+				for (var i = 0; i < chartObject.seriesArr.length; i++) {
 					var elemId = chartObject.seriesArr[i][0];
-					var value = this.sensors[elemId].get('value');
-					chartObject.chart.series[i].data.addPoint(value, false);
+					console.log(this.sensors[elemId].attributes.value);
+					var val = this.sensors[elemId].attributes.value;
+					if (val === undefined) {
+						continue;
+					}
+					var tempValue = [];
+					var now = new Date;
+					tempValue.push(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+						now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
+					tempValue.push(+val.toFixed(4));
+					//chartObject.chart.series[i].data.push(tempValue);
+					chartObject.chart.series[i].addPoint(tempValue, false, false);
 					console.log(chartObject.chart.series[i].data);
 				}
 
 			}
 			for (var chart in allCharts) {
+				console.log("11");
 				var chartObject = allCharts[chart];
 				chartObject.chart.redraw();
 			}
@@ -542,9 +556,10 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				},
 				xAxis: {
 					type: 'datetime',
-            		dateTimeLabelFormats: {
-                		minute: '%H:%M'
-            		}
+					dateTimeLabelFormats: {
+						minute: '%H:%M'
+					},
+					tickInterval: 600*1000
 				},
 				yAxis: {
 					title: {
@@ -584,7 +599,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				}
 				console.log(self.sensors[elemId]);
 			}*/
-			
+
 
 
 		},
