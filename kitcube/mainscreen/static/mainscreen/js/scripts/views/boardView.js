@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html', 'models/sensorModel', 'text!templates/sensor.html'], function($, _, Backbone, jqGrid, boardTemplate, Sensor, sensorTemplate) {
+define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'text!templates/sensor.html'], function($, _, Backbone, jqGrid, boardTemplate, Sensor, Alarm, sensorTemplate) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -47,8 +47,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 
 			this.grid = new kitGrid("#tab1");
 			//this.addSensor(4, 2, this.grid.getScale());
-			this.addAlarmList(0, 0, 2, "alarmList1");
-
+			
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			});
@@ -125,6 +124,47 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 
 						break;
 					case "alarmlist":
+						var alarmList = []; //collection of alarms
+						var size = {
+							dx: undefined,
+							dy: undefined
+						};
+						var coords = {
+							px: undefined,
+							py: undefined
+						};
+						for (var alarmKey in attr) { //going from alarmlist object through elems
+							if (alarmKey === "type") { //except type
+								continue;
+							}
+							else if (alarmKey === "size") {
+								size.dx = attr[alarmKey][0];
+								size.dy = attr[alarmKey][1];
+								continue;
+							}
+							else if (alarmKey === "coords") {
+								coords.px = attr[alarmKey][0];
+								coords.py = attr[alarmKey][1];
+								continue;
+							}
+							var alarmAttr = attr[alarmKey]; //get alarm element by key
+							var newAlarm = new Alarm({
+								id: alarmKey,
+								no: alarmAttr["no"],
+								module: alarmAttr["module"],
+								group: alarmAttr["group"],
+								app: alarmAttr["app"],
+								server: alarmAttr["server"],
+								dbname: alarmAttr["dbname"],
+								mask: alarmAttr["mask"],
+								lastDate: 'NAN', //not initialized, need to get from adei
+								delayedBy: 'NAN',
+								severity: 'NAN'
+							});
+							alarmList.push(newAlarm); //push to collection
+						}; 
+						console.log(alarmList);
+						self.addAlarmList(size.dx, size.dy, coords.px, coords.py, 2, "alarmList1", alarmList);
 						break;
 					default:
 						break;
@@ -270,26 +310,35 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 				sensorDiv.innerHTML = value.toFixed(1);
 			});
 		},
-		addAlarmList: function(px, py, cols, name) {
-			var self = this;
+		addAlarmList: function(dx, dy, px, py, cols, name, alarmCollection) {
+			var dataToTable = []; //data from collection of alarms
+			var self = this; // to refering to jquery
 			var scale = self.grid.getScale();
 			var unitHeight = self.grid.getUnitSizes().height;
 			var unitWidth = self.grid.getUnitSizes().width;
-			var newElement = $("<div></div>");
+			var newElement = $("<div></div>");	
 
-			var dx = 6;
-			var dy = 4;
 			newElement.css('width', dx * unitHeight * scale + 'px');
 			newElement.css('height', dy * unitWidth * scale + 'px');
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
 			var noWidth = (dx * unitWidth * scale / 6) + 'px';
+
 			var newTable = $("<table></table>");
 			var newPager = $("<div id='pager'></div>");
+
+			//bind id of alarmList
 			newTable.attr("id", name);
 			newElement.append(newTable);
 			newElement.append(newPager);
-			var testData = [{
+
+			//create an array of object from models
+			for (var i = 0; i < alarmCollection.length; i++) { 
+				dataToTable.push(alarmCollection[i].getProperties());
+			}
+			console.log(dataToTable);
+
+			/*var testData = [{
 				no: 1,
 				module: "T02",
 				group: "DAS",
@@ -359,7 +408,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 				app: "sygregreg",
 				lastDate: "31.05.2012",
 				delayedBy: "3 days"
-			}];
+			}]; */
 
 			this.grid.addUnit(dx, dy, px, py, scale, newElement, {
 				border: 0,
@@ -368,11 +417,11 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 
 			newTable.jqGrid({
 				datatype: 'local',
-				data: testData,
+				data: dataToTable,
 				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
 				shrinkToFit: true,
 				autowidth: true,
-				//multiselect: true,
+				//multiselect: true, //Appears checkboxes. Better to have beforeSelectRow
 				//height: '200px',
 				hidegrid: false,
 				colModel: [{

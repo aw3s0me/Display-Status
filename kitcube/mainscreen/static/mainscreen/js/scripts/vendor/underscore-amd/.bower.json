@@ -9,6 +9,6 @@
     "commit": "37a9fb361fe1667c395d6133de40ab29f1d9e461"
   },
   "_source": "git://github.com/amdjs/underscore.git",
-  "_target": "*",
+  "_target": "1.5.2",
   "_originalSource": "underscore-amd"
 }

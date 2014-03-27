@@ -2,20 +2,21 @@
 	"name": "Kitcube status dimension",
 	"version": "0.0.1",
 	"dependencies": {
-		"jquery": null,
+		"jquery": "1.10.2",
 		"jquery-ui": null,
 		"backbone-amd": null,
-		"underscore-amd": null,
-		"requirejs": null,
+		"underscore-amd": "1.5.2",
+		"requirejs": "2.1.11",
 		"bootstrap": null,
 		"modernizr": null,
 		"gridster": null,
 		"dustmo-gridster.js": null,
 		"flat-ui-official": null,
-		"ace": null,
+		//"ace": "1.1.3",
 		"qunit": null,
 		"js-yaml": null,
 		"jqgrid": null,
-		"backgrid": null
+		"backgrid": null,
+		"highcharts.com": "v3.0.9"
 	} 
 }		
