@@ -14,11 +14,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			dbname: undefined,
 			dbgroup: undefined,
 			mask: undefined,
-			values: []
+			values: [],
+			charts: {}
 		},
 		initialize: function() {
 			//console.log("model created");
-			this.on('change: module', function() {
+			this.on('change: value', function() {
 				//do smth
 			});
 		},

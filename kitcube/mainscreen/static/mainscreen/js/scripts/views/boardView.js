@@ -18,6 +18,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 		viewSizeDetector: null,
 		tabs: [],
 		sensors: {},
+		charts: {},
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
@@ -303,6 +304,8 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			for (var sensId in this.sensors) {
 				this.updateSensor(this.sensors[sensId]);
 			}
+			//console.log("charts");
+			this.updateAllCharts();
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};
@@ -315,17 +318,43 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					arrayOfData[arrayOfData.length - 1]);
 				var sensorDiv = sensor.find(".sensorVal")[0];
 				sensorDiv.innerHTML = value.toFixed(1);
+				sensorModel.set({'value': value})
+				var tempValue = [];
+				var now = new Date;
+				tempValue.push(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(), now.getUTCDate() , 
+      now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
+				tempValue.push(value.toFixed(4));
 				if (sensorModel.get('values').length < 10) {
-					sensorModel.get('values').push(parseInt(value).toFixed(4));
+					sensorModel.get('values').push(tempValue);
 				} else {
 					sensorModel.get('values').shift();
-					sensorModel.get('values').push(parseInt(value).toFixed(4));
+					sensorModel.get('values').push(tempValue);
 				}
+				/*var sensorCharts = sensorModel.get('charts');
+				for (var chart in sensorCharts) {
+					sensorCharts[chart].
+				} */
+
 			});
-
-
+			
 		},
 		updateAllCharts: function() {
+			var allCharts = this.charts;
+			console.log('charts');
+			for (var chart in allCharts) {
+				var chartObject = allCharts[chart];
+				for (var i = 0; i < chartObject.seriesArr; i++) {
+					var elemId = chartObject.seriesArr[i][0];
+					var value = this.sensors[elemId].get('value');
+					chartObject.chart.series[i].data.addPoint(value, false);
+					console.log(chartObject.chart.series[i].data);
+				}
+
+			}
+			for (var chart in allCharts) {
+				var chartObject = allCharts[chart];
+				chartObject.chart.redraw();
+			}
 
 		},
 		addAlarmList: function(dx, dy, px, py, cols, name, alarmCollection) {
@@ -473,22 +502,23 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
 			}];
 
-
 			var linkArr = model.get('link');
+
+			var seriesArr = []; // for updating our charts, 
+			//contains index of 1 series model and id of sensor
+
 			//console.log(linkArr);
 			//console.log(self.sensors);
 			if (linkArr) {
 				for (var j = 0; j < linkArr.length; j++) {
 					var linkId = linkArr[j];
-					console.log(linkId);
+					//console.log(linkId);
 					var sensorModel = self.sensors[linkId];
-					if (!sensorModel.get('values').length) {
-						for (var i = 0; i < 10; i++) {
-							sensorModel.get('values').push(i);
-						}
-					}
 					//console.log(sensorModel);
 					dataToChart.push(sensorModel.getChartProperties());
+					seriesArr.push([sensorModel.get('id'), sensorModel.get('name')]);
+
+					sensorModel.get('charts');
 				}
 			}
 			//console.log(dataToChart);
@@ -511,9 +541,10 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					x: -20
 				},
 				xAxis: {
-					categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-						'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-					]
+					type: 'datetime',
+            		dateTimeLabelFormats: {
+                		minute: '%H:%M'
+            		}
 				},
 				yAxis: {
 					title: {
@@ -525,9 +556,9 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 						color: '#808080'
 					}]
 				},
-				tooltip: {
+				/*tooltip: {
 					valueSuffix: '°C'
-				},
+				}, */
 				legend: model.get('legend'),
 				series: //cache data, store it on the server side and pass here
 				dataToChart
@@ -539,6 +570,22 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			var width = dx * unitHeight * scale;
 
 			newChart.setSize(width, height, true);
+
+			this.charts[model.get('id')] = {
+				seriesArr: seriesArr,
+				chart: newChart
+			}
+			//console.log(seriesArr);
+			//link sensor and chart
+			/*for (var i = 0; i < linkArr.length; i++) {
+				var elemId = linkArr[i];
+				if (!self.sensors[elemId].get('charts')[self.sensors[elemId].get('id')]) {
+					self.sensors[elemId].get('charts')[model.get('id')] = newChart;
+				}
+				console.log(self.sensors[elemId]);
+			}*/
+			
+
 
 		},
 		/*events: {
