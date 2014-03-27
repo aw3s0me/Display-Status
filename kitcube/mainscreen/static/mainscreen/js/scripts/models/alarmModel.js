@@ -5,7 +5,8 @@ var Alarm = Backbone.Model.extend({
 		group: undefined,
 		app: undefined,
 		lastDate: undefined,
-		delayedBy: undefined
+		delayedBy: undefined,
+		
 	},
 	initialize: function() {
 		console.log("model created");

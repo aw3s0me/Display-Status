@@ -47,8 +47,8 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 
 			this.grid = new kitGrid("#tab1");
 			//this.addSensor(4, 2, this.grid.getScale());
-			this.addAlarmList(10, 10, 2, "alarmList1");
-			
+			this.addAlarmList(0, 0, 2, "alarmList1");
+
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			});
@@ -277,13 +277,13 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			var unitWidth = self.grid.getUnitSizes().width;
 			var newElement = $("<div></div>");
 
-			var dx = 8;
-			var dy = 6;
+			var dx = 6;
+			var dy = 4;
 			newElement.css('width', dx * unitHeight * scale + 'px');
 			newElement.css('height', dy * unitWidth * scale + 'px');
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
-			var noWidth = (dx * unitWidth * scale / 6) - 12 + 'px';
+			var noWidth = (dx * unitWidth * scale / 6) + 'px';
 			var newTable = $("<table></table>");
 			var newPager = $("<div id='pager'></div>");
 			newTable.attr("id", name);
@@ -324,16 +324,55 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 				app: "sync",
 				lastDate: "31.05.2012",
 				delayedBy: "3 days"
+			}, {
+				no: 1,
+				module: "JFEOPQJF",
+				group: "DAS",
+				app: "Reader",
+				lastDate: "24.05.2012",
+				delayedBy: "11 days"
+			}, {
+				no: 2,
+				module: "T02",
+				group: "",
+				app: "rehh4",
+				lastDate: "24.05.2012",
+				delayedBy: "11 days"
+			}, {
+				no: 3,
+				module: "T43343543",
+				group: "",
+				app: "sync",
+				lastDate: "24.05.2012",
+				delayedBy: "11 days"
+			}, {
+				no: 4,
+				module: "T543543",
+				group: "DAS",
+				app: "Reader",
+				lastDate: "31.05.2012",
+				delayedBy: "3 days"
+			}, {
+				no: 4,
+				module: "T04",
+				group: "",
+				app: "sygregreg",
+				lastDate: "31.05.2012",
+				delayedBy: "3 days"
 			}];
 
-			this.grid.addUnit(dx, dy, px, py, scale, newElement, {border:0, transparent:true});
+			this.grid.addUnit(dx, dy, px, py, scale, newElement, {
+				border: 0,
+				transparent: true
+			});
 
 			newTable.jqGrid({
 				datatype: 'local',
 				data: testData,
 				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
-				shrinkToFit: false,
+				shrinkToFit: true,
 				autowidth: true,
+				//multiselect: true,
 				//height: '200px',
 				hidegrid: false,
 				colModel: [{
@@ -371,34 +410,43 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 					var grid = newTable;
 					var ids = grid.getDataIDs();
 					for (var i = 0; i < ids.length; i++) {
-						grid.setRowData(ids[i], false,	 {
-							height: 0*scale + i * 2
+						grid.setRowData(ids[i], false, {
+							height: 1 * scale + i * 2
 						});
 					}
+				},
+				beforeSelectRow: function(rowid, e) {
+					var $tr;
+					if (e.ctrlKey) {
+						$tr = $(e.target).closest('tr.jqgrow');
+						$tr.toggleClass("ui-state-highlight");
+						return false;
+					}
+					return true;
 				}
 			});
 
-			newTable.jqGrid('setGridWidth', newElement.width(), true);
-			
+
+
 			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
-			$('#pager_center').css('width', newElement.width() - 6); 
-			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 42*scale + 'px');
+			//$('#pager_center').css('width', newElement.width() - 6); 
+			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 40 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('width', newElement.width() - 6);
+			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 40 * scale + 'px');
+			$('th.ui-th-column div').css('height', 'auto !important');
+			$('th.ui-th-column div').css('white-space', 'normal !important');
 
 			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
 
 			newTable.jqGrid('setGridHeight', newElement.height() - gboxHeight);
-			//$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
-			
-			//$('.ui-jqgrid-title').css('height', 20*scale + 'px' );
+			newTable.jqGrid('setGridWidth', newElement.width(), true);
 
-			//$('.grid .ui-jqgrid-htable th').css('height', 10*scale + 'em !important');
-			//$('.grid .ui-jqgrid-btable .jqgrow td').css('height', 10*scale + 'em !important');
 		},
 		/*events: {
 			'click #canvasButton': 'alert'
