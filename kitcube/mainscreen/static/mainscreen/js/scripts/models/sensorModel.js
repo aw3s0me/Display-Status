@@ -13,7 +13,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			device: undefined,
 			dbname: undefined,
 			dbgroup: undefined,
-			mask: undefined
+			mask: undefined,
+			values: []
 		},
 		initialize: function() {
 			//console.log("model created");
@@ -21,9 +22,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				//do smth
 			});
 		},
-		getProperties: function() {
+		getChartProperties: function() {
 			return {
-
+				"name": this.get('name'),
+				"data": this.get('values')
 			}
 		},
 		getDbUrl: function() {

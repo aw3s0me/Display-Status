@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'text!templates/sensor.html'], function($, _, Backbone, jqGrid, boardTemplate, Sensor, Alarm, sensorTemplate) {
+define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'models/chartModel', 'text!templates/sensor.html'], function($, _, Backbone, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, Chart, sensorTemplate) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -17,7 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 		grid: null,
 		viewSizeDetector: null,
 		tabs: [],
-		sensors: [],
+		sensors: {},
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
@@ -47,7 +47,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 
 			this.grid = new kitGrid("#tab1");
 			//this.addSensor(4, 2, this.grid.getScale());
-			
+			//this.addChart(7, 5, 5, 5, 'mytestchart');
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			});
@@ -118,10 +118,8 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 						});
 						//console.log(newSensor);
 						self.addSensor(attr["size"][0], attr["size"][1], attr["coords"][0], attr["coords"][1], newSensor);
-						self.sensors.push(newSensor);
-						break;
-					case "chart":
-
+						//self.sensors.push(newSensor);
+						self.sensors[_id] = newSensor;
 						break;
 					case "alarmlist":
 						var alarmList = []; //collection of alarms
@@ -136,13 +134,11 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 						for (var alarmKey in attr) { //going from alarmlist object through elems
 							if (alarmKey === "type") { //except type
 								continue;
-							}
-							else if (alarmKey === "size") {
+							} else if (alarmKey === "size") {
 								size.dx = attr[alarmKey][0];
 								size.dy = attr[alarmKey][1];
 								continue;
-							}
-							else if (alarmKey === "coords") {
+							} else if (alarmKey === "coords") {
 								coords.px = attr[alarmKey][0];
 								coords.py = attr[alarmKey][1];
 								continue;
@@ -162,9 +158,24 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 								severity: 'NAN'
 							});
 							alarmList.push(newAlarm); //push to collection
-						}; 
-						console.log(alarmList);
+						};
 						self.addAlarmList(size.dx, size.dy, coords.px, coords.py, 2, "alarmList1", alarmList);
+						break;
+					case "chart":
+						var newChart = new Chart({
+							id: _id,
+							caption: attr["caption"],
+							type: attr["charttype"],
+							link: attr["link"],
+							legend: attr["legend"],
+							linewidth: attr["width"],
+							size: attr["size"],
+							coords: attr["coords"],
+							puredata: {}
+						});
+						//console.log(newChart);
+
+						this.addChart(newChart.get('size')[0], newChart.get('size')[1], newChart.get('coords')[0], newChart.get('coords')[1], newChart);
 						break;
 					default:
 						break;
@@ -285,38 +296,49 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			myDiv.append(s2);
 			myDiv.append(s3);
 			myDiv.append(s4);
-			//console.log(myDiv);
 
 			this.grid.addUnit(dx, dy, px, py, scale, myDiv);
-
-			//console.log($(compiledTemplate));
 		},
 		updateAllSensors: function() {
-			for (var i = 0; i < this.sensors.length; i++) {
-				this.updateSensor(this.sensors[i]);
+			for (var sensId in this.sensors) {
+				this.updateSensor(this.sensors[sensId]);
 			}
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};
 			var sensorId = sensorModel.get('id');
+
 			var sensor = $('#' + sensorId);
 			$.get(sensorModel.getDbUrl(), function(data) {
-				//console.log("data: " + data);
-				//console.log(sensor);
 				var arrayOfData = data.split(',');
 				var value = parseFloat(
 					arrayOfData[arrayOfData.length - 1]);
 				var sensorDiv = sensor.find(".sensorVal")[0];
 				sensorDiv.innerHTML = value.toFixed(1);
+				if (sensorModel.get('values').length < 10) {
+					sensorModel.get('values').push(parseInt(value).toFixed(4));
+				} else {
+					sensorModel.get('values').shift();
+					sensorModel.get('values').push(parseInt(value).toFixed(4));
+				}
 			});
+
+
+		},
+		updateAllCharts: function() {
+
 		},
 		addAlarmList: function(dx, dy, px, py, cols, name, alarmCollection) {
+			if (!alarmCollection) {
+				throw "Please init alarm collection";
+				return;
+			}
 			var dataToTable = []; //data from collection of alarms
 			var self = this; // to refering to jquery
 			var scale = self.grid.getScale();
 			var unitHeight = self.grid.getUnitSizes().height;
 			var unitWidth = self.grid.getUnitSizes().width;
-			var newElement = $("<div></div>");	
+			var newElement = $("<div></div>");
 
 			newElement.css('width', dx * unitHeight * scale + 'px');
 			newElement.css('height', dy * unitWidth * scale + 'px');
@@ -333,82 +355,9 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 			newElement.append(newPager);
 
 			//create an array of object from models
-			for (var i = 0; i < alarmCollection.length; i++) { 
+			for (var i = 0; i < alarmCollection.length; i++) {
 				dataToTable.push(alarmCollection[i].getProperties());
 			}
-			console.log(dataToTable);
-
-			/*var testData = [{
-				no: 1,
-				module: "T02",
-				group: "DAS",
-				app: "Reader",
-				lastDate: "24.05.2012",
-				delayedBy: "11 days"
-			}, {
-				no: 2,
-				module: "T02",
-				group: "",
-				app: "sync",
-				lastDate: "24.05.2012",
-				delayedBy: "11 days"
-			}, {
-				no: 3,
-				module: "T03",
-				group: "",
-				app: "sync",
-				lastDate: "24.05.2012",
-				delayedBy: "11 days"
-			}, {
-				no: 4,
-				module: "T04",
-				group: "DAS",
-				app: "Reader",
-				lastDate: "31.05.2012",
-				delayedBy: "3 days"
-			}, {
-				no: 4,
-				module: "T04",
-				group: "",
-				app: "sync",
-				lastDate: "31.05.2012",
-				delayedBy: "3 days"
-			}, {
-				no: 1,
-				module: "JFEOPQJF",
-				group: "DAS",
-				app: "Reader",
-				lastDate: "24.05.2012",
-				delayedBy: "11 days"
-			}, {
-				no: 2,
-				module: "T02",
-				group: "",
-				app: "rehh4",
-				lastDate: "24.05.2012",
-				delayedBy: "11 days"
-			}, {
-				no: 3,
-				module: "T43343543",
-				group: "",
-				app: "sync",
-				lastDate: "24.05.2012",
-				delayedBy: "11 days"
-			}, {
-				no: 4,
-				module: "T543543",
-				group: "DAS",
-				app: "Reader",
-				lastDate: "31.05.2012",
-				delayedBy: "3 days"
-			}, {
-				no: 4,
-				module: "T04",
-				group: "",
-				app: "sygregreg",
-				lastDate: "31.05.2012",
-				delayedBy: "3 days"
-			}]; */
 
 			this.grid.addUnit(dx, dy, px, py, scale, newElement, {
 				border: 0,
@@ -452,7 +401,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 					width: elemWidth
 					//sorttype: 'date'
 				}],
-				rowNum: 5,
+				rowNum: cols,
 				pager: "#pager",
 				caption: name,
 				loadComplete: function() {
@@ -493,8 +442,103 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'text!templates/board.html
 
 			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
 
-			newTable.jqGrid('setGridHeight', newElement.height() - gboxHeight);
-			newTable.jqGrid('setGridWidth', newElement.width(), true);
+			newTable.jqGrid('setGridHeight', newElement.height() - gboxHeight - 2);
+			newTable.jqGrid('setGridWidth', newElement.width() - 1, true);
+
+		},
+		addChart: function(dx, dy, px, py, model) {
+			var self = this;
+			var dataToChart = [];
+			var chartEl = $("<div id='" + model.get('id') + "'></div>")
+			var scale = this.grid.getScale();
+			this.grid.addUnit(dx, dy, px, py, scale, chartEl, {
+				border: 0,
+				transparent: true
+			});
+			if (!model) {
+				throw "Please, init model";
+				return;
+			}
+			var testData = [{
+				name: 'Tokyo',
+				data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+			}, {
+				name: 'New York',
+				data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+			}, {
+				name: 'Berlin',
+				data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+			}, {
+				name: 'London',
+				data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+			}];
+
+
+			var linkArr = model.get('link');
+			//console.log(linkArr);
+			//console.log(self.sensors);
+			if (linkArr) {
+				for (var j = 0; j < linkArr.length; j++) {
+					var linkId = linkArr[j];
+					console.log(linkId);
+					var sensorModel = self.sensors[linkId];
+					if (!sensorModel.get('values').length) {
+						for (var i = 0; i < 10; i++) {
+							sensorModel.get('values').push(i);
+						}
+					}
+					//console.log(sensorModel);
+					dataToChart.push(sensorModel.getChartProperties());
+				}
+			}
+			//console.log(dataToChart);
+			//console.log(model.get('id'));
+
+			var newChart = new Highcharts.Chart({
+				chart: {
+					reflow: false,
+					type: 'line',
+					renderTo: model.get('id'),
+					//marginRight: 130,
+					//marginBottom: 25
+				},
+				title: {
+					text: model.get('caption'),
+					x: -20 //center
+				},
+				subtitle: {
+					text: 'Source: WorldClimate.com',
+					x: -20
+				},
+				xAxis: {
+					categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+						'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+					]
+				},
+				yAxis: {
+					title: {
+						text: 'Values'
+					},
+					plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+					}]
+				},
+				tooltip: {
+					valueSuffix: '°C'
+				},
+				legend: model.get('legend'),
+				series: //cache data, store it on the server side and pass here
+				dataToChart
+				//testData
+			});
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+
+			newChart.setSize(width, height, true);
 
 		},
 		/*events: {

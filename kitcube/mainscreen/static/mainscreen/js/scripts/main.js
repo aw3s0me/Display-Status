@@ -28,7 +28,9 @@ require.config({
     "text" : "vendor/requirejs-text/text",
     //yaml part
     "yaml": "vendor/js-yaml/js-yaml.min",
-    "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min"
+    "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min",
+    //chart part
+    "highcharts": "vendor/highcharts.com/js/highcharts.src"//"vendor/highcharts.com/js/modules/exporting.src"
   },
   shim: {
     //jqueryui: "jquery",
@@ -97,6 +99,12 @@ require.config({
     ace: {
       deps: [
         "jquery",
+      ]
+    },
+    highcharts: {
+      deps: [
+        "jquery"//,
+        //"vendor/highcharts.com/js/highcharts.src"
       ]
     }
   }
