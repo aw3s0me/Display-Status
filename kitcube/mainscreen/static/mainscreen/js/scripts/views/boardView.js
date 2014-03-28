@@ -19,6 +19,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 		tabs: [],
 		sensors: {},
 		charts: {},
+		testChart: null,
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
@@ -177,14 +178,37 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 						//console.log(newChart);
 
 						this.addChart(newChart.get('size')[0], newChart.get('size')[1], newChart.get('coords')[0], newChart.get('coords')[1], newChart);
+
+
+
 						break;
 					default:
 						break;
 				}
 			}
+
+			/*setInterval(function() {
+				console.log(self.testChart);
+				if (self.testChart) {
+					for (var i = 0; i < 4; i++) {
+						var now = new Date;
+						var x = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						var Point = {
+							x: x,
+							y: Math.floor((Math.random() * 10) + 1) //y
+						};
+						console.log(Point);
+						console.log(this.testChart);
+						self.testChart.series[i].addPoint(Point, false, false);
+					}
+					self.testChart.redraw();
+				}
+
+			}, 5000); */
+
 			setInterval(function() {
 				self.updateAllSensors();
-			}, 12000); //the only way to pass param
+			}, 5000); //the only way to pass param */
 		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
@@ -320,18 +344,17 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				sensorDiv.innerHTML = value.toFixed(1);
 				sensorModel.set({
 					'value': value
-				})
+				});
 				var tempValue = [];
 				var now = new Date;
-				tempValue.push(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-					now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
-				tempValue.push(value.toFixed(4));
-				if (sensorModel.get('values').length < 10) {
-					sensorModel.get('values').push(tempValue);
-				} else {
-					sensorModel.get('values').shift();
-					sensorModel.get('values').push(tempValue);
-				}
+				//tempValue.push(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
+				//tempValue.push(value);
+				//if (sensorModel.get('values').length < 10) {
+				//sensorModel.get('values').push(tempValue);
+				//} else {
+				//sensorModel.get('values').shift();
+				//sensorModel.get('values').push(tempValue);
+				//}
 				/*var sensorCharts = sensorModel.get('charts');
 				for (var chart in sensorCharts) {
 					sensorCharts[chart].
@@ -345,27 +368,30 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			console.log('charts');
 			for (var chart in allCharts) {
 				var chartObject = allCharts[chart];
-				//console.log(chartObject);
-				for (var i = 0; i < chartObject.seriesArr.length; i++) {
-					var elemId = chartObject.seriesArr[i][0];
-					console.log(this.sensors[elemId].attributes.value);
-					var val = this.sensors[elemId].attributes.value;
-					if (val === undefined) {
+				for (var z = 0; z < chartObject.seriesArr.length; z++) {
+					var elemId = chartObject.seriesArr[z][0];
+					var sensorValue = this.sensors[elemId].get('value');
+					if (sensorValue === undefined) {
 						continue;
 					}
-					var tempValue = [];
 					var now = new Date;
-					tempValue.push(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-						now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
-					tempValue.push(+val.toFixed(4));
-					//chartObject.chart.series[i].data.push(tempValue);
-					chartObject.chart.series[i].addPoint(tempValue, false, false);
-					console.log(chartObject.chart.series[i].data);
+					var x = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+						now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+					var y = parseFloat(sensorValue);
+					var Point = {
+						x: x,
+						y: Math.floor((Math.random() * 10) + 1) //y
+					};
+					console.log(Point);
+					chartObject.chart.series[z].addPoint(Point, false, false); //last point is for everyone
+					
+					console.log(chartObject.chart.series[z]);
+					//console.log(x, y);
+					//console.log(i, chartObject.chart.series[i].data);
 				}
-
+				chartObject.chart.redraw();
 			}
 			for (var chart in allCharts) {
-				console.log("11");
 				var chartObject = allCharts[chart];
 				chartObject.chart.redraw();
 			}
@@ -497,24 +523,12 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			this.grid.addUnit(dx, dy, px, py, scale, chartEl, {
 				border: 0,
 				transparent: true
-			});
+			}); 
+
 			if (!model) {
 				throw "Please, init model";
 				return;
 			}
-			var testData = [{
-				name: 'Tokyo',
-				data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-			}, {
-				name: 'New York',
-				data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-			}, {
-				name: 'Berlin',
-				data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-			}, {
-				name: 'London',
-				data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-			}];
 
 			var linkArr = model.get('link');
 
@@ -535,9 +549,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					sensorModel.get('charts');
 				}
 			}
-			//console.log(dataToChart);
-			//console.log(model.get('id'));
-
+			console.log(dataToChart);
 			var newChart = new Highcharts.Chart({
 				chart: {
 					reflow: false,
@@ -559,7 +571,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					dateTimeLabelFormats: {
 						minute: '%H:%M'
 					},
-					tickInterval: 600*1000
+					tickInterval: 600 * 1000
 				},
 				yAxis: {
 					title: {
@@ -574,11 +586,13 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				/*tooltip: {
 					valueSuffix: '°C'
 				}, */
-				legend: model.get('legend'),
+				//legend: model.get('legend'),
 				series: //cache data, store it on the server side and pass here
 				dataToChart
 				//testData
 			});
+			this.testChart = newChart;
+			//console.log(model.get('legend'));
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
 			var height = dy * unitWidth * scale;
@@ -590,6 +604,9 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				seriesArr: seriesArr,
 				chart: newChart
 			}
+
+
+			console.log(this.testChart);
 			//console.log(seriesArr);
 			//link sensor and chart
 			/*for (var i = 0; i < linkArr.length; i++) {
