@@ -14,7 +14,7 @@ define([
 		routes: {
 			// Define some URL routes
 			'editor': 'showTextEditorView',
-			'board': 'showBoardView',
+			'board/:id': 'showBoardView',
 			'settings': 'showSettingsView',
 			'control': 'showControlPanelView',
 			'login': 'showLoginView',
@@ -25,7 +25,8 @@ define([
 		},
 		myTextEditorView: undefined,
 		self: this,
-		boardView: undefined,
+		tabCount: 0,
+		boardViewTabs: [],
 		loginView: undefined,
 		controlPanelView: undefined,
 		settingsView: undefined,
@@ -38,16 +39,38 @@ define([
 		showSettingsView: function() {
 			//show it
 		},
-		showBoardView: function() {
-			if (self.boardView) {
-				return;
+		showBoardView: function(id) {
+			var numTab = (id === undefined)? 0 : parseInt(id);
+			var text = this.myTextEditorView.externEditor.getSession().getValue();
+
+			if (!this.boardViewTabs[numTab]) {
+				//if tab doesnt exist so create
+				this.boardViewTabs.push({
+					id: this.tabCount++,
+					board: new BoardView({aceText : text}),
+				});
+
+				var curBoard = this.boardViewTabs[numTab].board; //get board obj
+
+				var container = curBoard.container; //get jquery container
+				if ($("#kitcube-console").val() !== undefined) //if console still opened
+					$("#kitcube-console").hide();
+				if (container.val() !== undefined) { //show container
+					container.show();
+				}
 			}
-			//self.boardView.initialize(text);
-			if ($("#kitcube-console").val() !== undefined)
-				$("#kitcube-console").hide();
-			if ($("#board-container").val() !== undefined) {
-				$("#board-container").show();
-			}
+			else {
+				//show board according to tab
+				var curBoard = this.boardViewTabs[numTab].board;
+				var container = curBoard.container;
+				
+				//curBoard.reinitWithOptions({aceText : text});
+				if ($("#kitcube-console").val() !== undefined)
+					$("#kitcube-console").hide();
+				if (container.val() !== undefined) {
+					container.show();
+				}
+			}	
 		},
 		changeUnitNumber: function(x, y) {
 			if (self.boardView !== undefined)
@@ -68,10 +91,6 @@ define([
 	var initialize = function() {
 		var app_router = new AppRouter;
 		app_router.myTextEditorView = new TextEditorView();
-
-		var text = app_router.myTextEditorView.externEditor.getSession().getValue();
-
-		app_router.boardView = new BoardView({aceText : text});
 
 		//app_router.boardView.initialize(); //2times creates board SHIIT
 		/*app_router.loginView = new LoginView();

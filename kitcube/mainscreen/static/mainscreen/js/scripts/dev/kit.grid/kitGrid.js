@@ -252,6 +252,13 @@ var kitGrid = (function($) {
 		return divElem;
 	}
 
+	kitGrid.prototype.resizeTile = function(dx, dy, tile) {
+		tile.css('left', posx * _grid.data('gridUnitX') * scale + 'px');
+		tile.css('top', posy * _grid.data('gridUnitY') * scale + 'px');
+		tile.css('width', dx * _grid.data('gridUnitX') * scale + 'px');
+		tile.css('height', dy * _grid.data('gridUnitY') * scale + 'px');
+	}
+
 	kitGrid.prototype.addByClick = function(dx, dy, absPosX, absPosY, scale, content) {
 		var divElem = $('<div></div>');
 		scale = defaultFor(scale, _grid.data('scale'));

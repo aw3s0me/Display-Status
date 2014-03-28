@@ -116,10 +116,12 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 							device: attr["device"],
 							dbname: attr["dbname"],
 							dbgroup: attr["group"],
-							mask: attr["mask"]
+							mask: attr["mask"],
+							size: attr["size"],
+							coords: attr["coords"]
 						});
 						//console.log(newSensor);
-						self.addSensor(attr["size"][0], attr["size"][1], attr["coords"][0], attr["coords"][1], newSensor);
+						self.addSensor(newSensor);
 						//self.sensors.push(newSensor);
 						self.sensors[_id] = newSensor;
 						break;
@@ -208,7 +210,119 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 
 			setInterval(function() {
 				self.updateAllSensors();
-			}, 5000); //the only way to pass param */
+			}, 12000); //the only way to pass param */
+		},
+		reinitWithOptions: function(options){
+
+			var textToParse = options.aceText;
+			var myParser = new cfgParser('1');
+			var prsObj = myParser.parseJson(textToParse);
+
+			var self = this;
+			for (var _id in prsObj) {
+				var attr = prsObj[_id];
+				switch (attr["type"]) {
+					case "sensor":
+						var sensorModel = this.sensors[_id];
+						if (sensorModel){
+							sensorModel.set({
+								id: _id,
+								name: attr["name"],
+								comment: attr["comment"],
+								unit: attr["unit"],
+								max: attr["max"],
+								min: attr["min"],
+								server: attr["server"],
+								device: attr["device"],
+								dbname: attr["dbname"],
+								dbgroup: attr["group"],
+								mask: attr["mask"],
+								size: attr["size"],
+								coords: attr["coords"]
+							});
+							this.rerenderSensor(sensorModel);
+						}
+						/*
+						var newSensor = new Sensor({
+							id: _id,
+							name: attr["name"],
+							comment: attr["comment"],
+							unit: attr["unit"],
+							//value: attr[n],
+							max: attr["max"],
+							min: attr["min"],
+							server: attr["server"],
+							device: attr["device"],
+							dbname: attr["dbname"],
+							dbgroup: attr["group"],
+							mask: attr["mask"]
+						});
+						//console.log(newSensor);
+						self.addSensor(attr["size"][0], attr["size"][1], attr["coords"][0], attr["coords"][1], newSensor);
+						//self.sensors.push(newSensor);
+						self.sensors[_id] = newSensor;
+						break; 
+					case "alarmlist":
+						var alarmList = []; //collection of alarms
+						var size = {
+							dx: undefined,
+							dy: undefined
+						};
+						var coords = {
+							px: undefined,
+							py: undefined
+						};
+						for (var alarmKey in attr) { //going from alarmlist object through elems
+							if (alarmKey === "type") { //except type
+								continue;
+							} else if (alarmKey === "size") {
+								size.dx = attr[alarmKey][0];
+								size.dy = attr[alarmKey][1];
+								continue;
+							} else if (alarmKey === "coords") {
+								coords.px = attr[alarmKey][0];
+								coords.py = attr[alarmKey][1];
+								continue;
+							}
+							var alarmAttr = attr[alarmKey]; //get alarm element by key
+							var newAlarm = new Alarm({
+								id: alarmKey,
+								no: alarmAttr["no"],
+								module: alarmAttr["module"],
+								group: alarmAttr["group"],
+								app: alarmAttr["app"],
+								server: alarmAttr["server"],
+								dbname: alarmAttr["dbname"],
+								mask: alarmAttr["mask"],
+								lastDate: 'NAN', //not initialized, need to get from adei
+								delayedBy: 'NAN',
+								severity: 'NAN'
+							});
+							alarmList.push(newAlarm); //push to collection
+						};
+						self.addAlarmList(size.dx, size.dy, coords.px, coords.py, 2, "alarmList1", alarmList);
+						break;
+					case "chart":
+						var newChart = new Chart({
+							id: _id,
+							caption: attr["caption"],
+							type: attr["charttype"],
+							link: attr["link"],
+							legend: attr["legend"],
+							linewidth: attr["width"],
+							size: attr["size"],
+							coords: attr["coords"],
+							puredata: {}
+						});
+						//console.log(newChart);
+
+						this.addChart(newChart.get('size')[0], newChart.get('size')[1], newChart.get('coords')[0], newChart.get('coords')[1], newChart);
+	*/
+						break;
+					default:
+						break;
+				}
+			}
 		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
@@ -268,9 +382,13 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					alert('function "' + fncname + '" not defined');
 			}
 		},
-		addSensor: function(dx, dy, px, py, newSensor) {
+		addSensor: function(newSensor) {
 			var self = this;
 			var scale = self.grid.getScale();
+			var dx = newSensor.get("size")[0];
+			var dy = newSensor.get("size")[1];
+			var px = newSensor.get("coords")[0];
+			var py = newSensor.get("coords")[1];
 			//console.log(newSensor);
 			//var compiledTemplate = _.template(sensorTemplate, { sensor: newSensor.toJSON() });
 			//var jqDivTemplate = $(compiledTemplate);
@@ -324,6 +442,44 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 
 			this.grid.addUnit(dx, dy, px, py, scale, myDiv);
 		},
+		rerenderSensor: function(sensorModel){
+			var sensorDiv = $('#'+sensorModel.get('id'));
+			var scale = this.grid.getScale();
+
+			var s0 = sensorDiv.find('.sensorName')[0];
+			s0.style.fontSize = 13 * scale + 'px';
+			s0.style.left = 5 * scale + 'px';
+			s0.innerHTML = sensorModel.get('name');
+			s0.innerHTML += '<br>' + sensorModel.get('comment');
+
+			var s1 = sensorDiv.find('.sensorVal')[0];
+			s1.style.fontSize = 50 * scale + 'px';
+			s1.style.right = 6 * scale + 'px';
+			s1.style.bottom = 0 * scale + 'px';
+			s1.innerHTML = (sensorModel.get('value') === undefined) ? 'NAN' : (sensorModel.get('value')).toFixed(1);
+
+			var s2 = sensorDiv.find('.sensorUnit')[0];
+			s2.style.fontSize = 12 * scale + 'px';
+			s2.style.right = 5 * scale + 'px';
+			s2.style.top = 20 * scale + 'px';
+			s2.innerHTML = sensorModel.get('unit');
+
+			var s4 = sensorDiv.find('.sensorAlarm')[0];
+			s4.style.fontSize = 10 * scale + 'px';
+			s4.style.left = 5 * scale + 'px';
+			s4.style.bottom = 2 * scale + 'px';
+			s4.innerHTML = "min:" + sensorModel.get('min') + "<br>max:" + sensorModel.get('max') + "<br>alert:" + sensorModel.get('alert');
+
+			var s3 = sensorDiv.find('.close')[0];
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 12 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 4 * scale + 'px';
+			s3.innerHTML = "<b>x</b>";
+
+			console.log('updated');
+
+		},
 		updateAllSensors: function() {
 			for (var sensId in this.sensors) {
 				this.updateSensor(this.sensors[sensId]);
@@ -345,26 +501,13 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				sensorModel.set({
 					'value': value
 				});
-				var tempValue = [];
-				var now = new Date;
-				//tempValue.push(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
-				//tempValue.push(value);
-				//if (sensorModel.get('values').length < 10) {
-				//sensorModel.get('values').push(tempValue);
-				//} else {
-				//sensorModel.get('values').shift();
-				//sensorModel.get('values').push(tempValue);
-				//}
-				/*var sensorCharts = sensorModel.get('charts');
-				for (var chart in sensorCharts) {
-					sensorCharts[chart].
-				} */
 
 			});
 
 		},
 		updateAllCharts: function() {
 			var allCharts = this.charts;
+			var shift = false;
 			console.log('charts');
 			for (var chart in allCharts) {
 				var chartObject = allCharts[chart];
@@ -383,17 +526,26 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 						y: y
 					};
 					console.log(Point);
-					chartObject.chart.series[z].addPoint(Point, true, false); //last point is for everyone
+					/*if (this.sensors[elemId].get('values').length > 10) {
+						shift = true;
+					}
+					else {
+						shift = false;
+					}*/
+
+					chartObject.chart.series[z].addPoint(Point, true, shift); //last point is for everyone
 					//NO EQUAL POINTS ONLY IF REDRAW EVERYTIME. SHIIT
 					console.log(chartObject.chart.series[z]);
 					//console.log(x, y);
 					//console.log(i, chartObject.chart.series[i].data);
 				}
+				//chartObject.chart.yAxis[0].isDirty = true;
 				//chartObject.chart.redraw();
 			}
-			/*
-			for (var chart in allCharts) {
+			
+			/*for (var chart in allCharts) {
 				var chartObject = allCharts[chart];
+				chartObject.chart.yAxis[0].isDirty = true;
 				chartObject.chart.redraw();
 			} */
 
@@ -563,10 +715,10 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					text: model.get('caption'),
 					x: -20 //center
 				},
-				subtitle: {
+				/*subtitle: {
 					text: 'Source: WorldClimate.com',
 					x: -20
-				},
+				},*/
 				xAxis: {
 					type: 'datetime',
 					dateTimeLabelFormats: {
@@ -633,7 +785,47 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 		resize: function(x, y) {
 
 		},
-		change: function(NumX, NumY) {}
+		change: function(NumX, NumY) {},
+		clear: function(){
+			this.container.empty();
+			this.maxSizeX = 0;
+			this.maxSizeY = 0;
+			this.nowCoordX = 0;
+			this.nowCoordY = 0;
+			delete(this.grid);
+			delete(this.viewSizeDetector);
+			this.tabs = [];
+			delete(this.sensors);
+			this.sensors = {};
+			for (var chartId in this.charts) {
+				var chart = this.charts[chartId].chart;
+				for (var i = 0; i < chart.series.length; i++) {
+					chart.series[i].setData([]);
+					//for(var j=0; j < chart.series[i].points.length; j++){
+    					//chart.series[i].points[j].remove()
+    					
+					//}	
+					
+				}
+				
+				//chart.destroy();
+				//while(chart.series.length > 0) {
+ 					//chart.series[0].remove();
+				//}
+
+				//while(chart.series.length > 0)
+    				
+				//chart.redraw();
+			}
+			delete(this.charts);
+
+			//this.container.remove();
+
+		},
+		reinitialize: function(options) {
+			this.clear();
+			this.initialize(options);
+		}
 	});
 
 	// 'jquery', 'underscore', 'backbone' will not be accessible in the global scope

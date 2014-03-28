@@ -26,7 +26,7 @@ define([
       document.location.href = '#board';
 
       $("#btnBoard").click(function(){
-          document.location.href = '#board';
+          document.location.href = '#board/0';
       });
 
       $("#btnTxt").click(function(){

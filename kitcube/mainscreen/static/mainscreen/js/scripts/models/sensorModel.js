@@ -15,7 +15,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			dbgroup: undefined,
 			mask: undefined,
 			values: [],
-			charts: {}
+			charts: {},
+			size: [],
+			coords: []
 		},
 		initialize: function() {
 			//console.log("model created");
