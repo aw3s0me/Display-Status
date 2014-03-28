@@ -380,21 +380,22 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					var y = parseFloat(sensorValue);
 					var Point = {
 						x: x,
-						y: Math.floor((Math.random() * 10) + 1) //y
+						y: y
 					};
 					console.log(Point);
-					chartObject.chart.series[z].addPoint(Point, false, false); //last point is for everyone
-					
+					chartObject.chart.series[z].addPoint(Point, true, false); //last point is for everyone
+					//NO EQUAL POINTS ONLY IF REDRAW EVERYTIME. SHIIT
 					console.log(chartObject.chart.series[z]);
 					//console.log(x, y);
 					//console.log(i, chartObject.chart.series[i].data);
 				}
-				chartObject.chart.redraw();
+				//chartObject.chart.redraw();
 			}
+			/*
 			for (var chart in allCharts) {
 				var chartObject = allCharts[chart];
 				chartObject.chart.redraw();
-			}
+			} */
 
 		},
 		addAlarmList: function(dx, dy, px, py, cols, name, alarmCollection) {
