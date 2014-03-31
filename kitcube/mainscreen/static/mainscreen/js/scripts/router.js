@@ -27,12 +27,15 @@ define([
 		self: this,
 		tabCount: 0,
 		boardViewTabs: [],
+		curTab: undefined,
 		loginView: undefined,
 		controlPanelView: undefined,
 		settingsView: undefined,
 		showTextEditorView: function() {
-			if ($("#board-container").val() !== undefined)
+			if ($("#board-container").val() !== undefined) {
 				$("#board-container").hide();
+				this.curTab.serializeToJson();
+			}
 			if ($("#kitcube-console").val() !== undefined)
 				$("#kitcube-console").show();
 		},
@@ -50,9 +53,9 @@ define([
 					board: new BoardView({aceText : text}),
 				});
 
-				var curBoard = this.boardViewTabs[numTab].board; //get board obj
+				this.curTab = this.boardViewTabs[numTab].board; //get board obj
 
-				var container = curBoard.container; //get jquery container
+				var container = this.curTab.container; //get jquery container
 				if ($("#kitcube-console").val() !== undefined) //if console still opened
 					$("#kitcube-console").hide();
 				if (container.val() !== undefined) { //show container

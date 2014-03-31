@@ -5,6 +5,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			caption: undefined,
 			type: undefined,
 			link: [],
+			seriesArr: [],
 			legend: undefined,
 			linewidth: undefined,
 			size: [],
@@ -16,6 +17,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.on('change: module', function() {
 				//do smth
 			});
+		},
+		serToJSON: function() {
+			return _.clone(this.attributes);
 		}
 	});
 

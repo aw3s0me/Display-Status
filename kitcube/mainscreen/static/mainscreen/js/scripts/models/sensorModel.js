@@ -15,7 +15,6 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			dbgroup: undefined,
 			mask: undefined,
 			values: [],
-			charts: {},
 			size: [],
 			coords: []
 		},
@@ -33,6 +32,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		},
 		getDbUrl: function() {
 			return 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + this.get('server') +'&db_name=' + this.get('dbname') + '&db_group='+ this.get('dbgroup') +'&db_mask='+ this.get('mask') +'&window=-1';
+		},
+		serToJSON: function() {
+			return _.clone(this.attributes);
 		}
 	});
 

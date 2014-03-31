@@ -28,6 +28,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				lastDate: this.get('lastDate'),
 				delayedBy: this.get('delayedBy')
 			};
+		},
+		serToJSON: function() {
+			return _.clone(this.attributes);
 		}
 
 	});
