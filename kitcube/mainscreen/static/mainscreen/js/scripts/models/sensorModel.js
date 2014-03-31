@@ -6,6 +6,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			comment: undefined,
 			unit: undefined,
 			value: undefined,
+			lastTime: undefined,
 			max: undefined,
 			min: undefined,
 			alarm: undefined,

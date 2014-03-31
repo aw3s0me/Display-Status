@@ -122,8 +122,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				}
 			}
 
-			var now = new Date;
-			var x = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+			var x = model.get('lastTime');
 			var y = parseFloat(sensorValue);
 			var Point = {
 				x: x,

@@ -1,28 +1,8 @@
 define(['jquery', 'underscore', 'backbone', 'models/alarmModel'], function($, _, Backbone, Alarm) {
 	var AlarmCollection = Backbone.Collection.extend({
-		id: undefined,
-		type: undefined,
-		size: [],
-		coords: [],
-		cols: undefined,
 		model: Alarm,
-		initialize: function(models, options) {
-			options || (options = {});
-			if (options.id) {
-				this.id = options.id;
-			}
-			if (options.type) {
-				this.type = options.type;
-			}
-			if (options.size) {
-				this.size = options.size;
-			}
-			if (options.coords) {
-				this.coords = options.coords;
-			}
-			if (options.cols) {
-				this.cols = options.cols;
-			}
+		initialize: function(models) {
+			
 		},
 		serToJSON: function() {
 			var jsonAlarms = {

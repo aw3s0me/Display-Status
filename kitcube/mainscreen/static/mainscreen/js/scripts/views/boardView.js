@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'collections/sensorGroupCollection'], function($, _, Backbone, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, sensorTemplate, SensorView, ChartView, SensorGroupCollection) {
+define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView','collections/sensorGroupCollection'], function($, _, Backbone, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, AlarmListModel,sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupCollection) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -172,10 +172,16 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 							alarmList.push(newAlarm); //push to collection
 						};
 
-						var newAlarmCollection = new MyAlarmCollection(alarmList, options);
+						var newAlarmCollection = new MyAlarmCollection(alarmList);
+						var newAlarmListModel = new AlarmListModel({options: options});
 						//console.log(newAlarmCollection.id);
 						this.elements.alarms[_id] = newAlarmCollection;
-						self.addAlarmList( /*size.dx, size.dy, coords.px, coords.py, 2, "alarmList1", */ newAlarmCollection);
+						var newAlarmList = new AlarmListView({
+							model: newAlarmListModel,
+							grid: this.grid,
+							elements: newAlarmCollection
+						});
+						//self.addAlarmList( /*size.dx, size.dy, coords.px, coords.py, 2, "alarmList1", */ newAlarmCollection);
 						break;
 					case "chart":
 						var newChart = new Chart({
@@ -214,7 +220,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 
 			setInterval(function() {
 				self.updateAllSensors();
-			}, 12000); //the only way to pass param */
+			}, 2000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
 
@@ -361,8 +367,11 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 					arrayOfData[arrayOfData.length - 1]);
 				var sensorDiv = sensor.find(".sensorVal")[0];
 				sensorDiv.innerHTML = value.toFixed(1);
+				var now = new Date;
+				var lastTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 				sensorModel.set({
-					'value': value
+					'value': value,
+					'lastTime': lastTime
 				});
 
 			});
@@ -414,7 +423,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 
 		},
 		addAlarmList: function(alarmCollection) {
-			if (!alarmCollection) {
+			/*if (!alarmCollection) {
 				throw "Please init alarm collection";
 				return;
 			}
@@ -533,7 +542,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 
 			newTable.jqGrid('setGridHeight', newElement.height() - gboxHeight - 2);
 			newTable.jqGrid('setGridWidth', newElement.width() - 1, true);
-
+		*/
 		},
 		alert: function(e) {
 			console.log(e);
