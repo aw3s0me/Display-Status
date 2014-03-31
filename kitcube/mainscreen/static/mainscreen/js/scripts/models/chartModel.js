@@ -5,6 +5,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			caption: undefined,
 			type: undefined,
 			link: [],
+			sensorModels: [],
 			seriesArr: [],
 			legend: undefined,
 			linewidth: undefined,
