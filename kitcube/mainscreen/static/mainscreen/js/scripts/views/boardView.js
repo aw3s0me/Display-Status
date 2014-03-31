@@ -324,6 +324,9 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 				}
 			}
 		},
+		serializeToJson: function() {
+
+		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
 			var self = this;
@@ -443,8 +446,18 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			this.grid.addUnit(dx, dy, px, py, scale, myDiv);
 		},
 		rerenderSensor: function(sensorModel){
+			console.log('rerender');
 			var sensorDiv = $('#'+sensorModel.get('id'));
 			var scale = this.grid.getScale();
+
+			var tile = sensorDiv.parent();
+			var grid = $("#tab1");
+
+			this.grid.resizeTile(sensorModel.get('coords')[0], sensorModel.get('coords')[1], sensorModel.get('size')[0], sensorModel.get('size')[1], tile);
+			//tile.css('left', sensorModel.get('coords')[0] * grid.data('gridUnitX') * scale + 'px');
+			//tile.css('top', sensorModel.get('coords')[1] * grid.data('gridUnitY') * scale + 'px');
+			//tile.css('width', sensorModel.get('size')[0] * grid.data('gridUnitX') * scale + 'px');
+			//tile.css('height', sensorModel.get('size')[1] * grid.data('gridUnitY') * scale + 'px');
 
 			var s0 = sensorDiv.find('.sensorName')[0];
 			s0.style.fontSize = 13 * scale + 'px';
@@ -476,8 +489,9 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			s3.style.right = 5 * scale + 'px';
 			s3.style.top = 4 * scale + 'px';
 			s3.innerHTML = "<b>x</b>";
-
 			console.log('updated');
+		},
+		rerenderChart: function() {
 
 		},
 		updateAllSensors: function() {
@@ -508,7 +522,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 		updateAllCharts: function() {
 			var allCharts = this.charts;
 			var shift = false;
-			console.log('charts');
+			//console.log('charts');
 			for (var chart in allCharts) {
 				var chartObject = allCharts[chart];
 				for (var z = 0; z < chartObject.seriesArr.length; z++) {
@@ -525,7 +539,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 						x: x,
 						y: y
 					};
-					console.log(Point);
+					//console.log(Point);
 					/*if (this.sensors[elemId].get('values').length > 10) {
 						shift = true;
 					}
@@ -759,7 +773,7 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			}
 
 
-			console.log(this.testChart);
+			//console.log(this.testChart);
 			//console.log(seriesArr);
 			//link sensor and chart
 			/*for (var i = 0; i < linkArr.length; i++) {

@@ -64,7 +64,7 @@ define([
 				var curBoard = this.boardViewTabs[numTab].board;
 				var container = curBoard.container;
 				
-				//curBoard.reinitWithOptions({aceText : text});
+				curBoard.reinitWithOptions({aceText : text});
 				if ($("#kitcube-console").val() !== undefined)
 					$("#kitcube-console").hide();
 				if (container.val() !== undefined) {
