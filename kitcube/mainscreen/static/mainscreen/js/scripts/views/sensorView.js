@@ -72,7 +72,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			myDiv.append(s3);
 			myDiv.append(s4);
 
-			this.grid.addUnit(dx, dy, px, py, scale, myDiv);
+			this.grid.addUnit(dx, dy, px, py, scale, myDiv, {}, this.model);
 		}
 
 	});

@@ -18,6 +18,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.on('change: module', function() {
 				//do smth
 			});
+			
 		},
 		serToJSON: function() {
 			return _.clone(this.attributes);

@@ -39,7 +39,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
 				border: 0,
 				transparent: true
-			});
+			}, this.model);
 
 			if (!model) {
 				throw "Please, init model";

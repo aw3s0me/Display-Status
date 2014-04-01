@@ -27,7 +27,7 @@ var kitGrid = (function($) {
 
 
 	// public method. Attach drag handler to an element.
-	function attach(dragElem) {
+	/*function attach(dragElem) {
 		dragElem.onmousedown = _dragBegin;
 
 		// callbacks
@@ -132,7 +132,7 @@ var kitGrid = (function($) {
 		document.onmousemove = null;
 		document.onmouseup = null;
 		_dragElem = null;
-	};
+	}; */
 
 	var DEFAULT_HEIGHT = 500;
 	var DEFAUL_WIDTH = 500;
@@ -211,9 +211,11 @@ var kitGrid = (function($) {
 		elem.onmousedown = (mouseDown);
 	}
 
-	kitGrid.prototype.addUnit = function(dx, dy, posx, posy, scale, content, options) {
+	kitGrid.prototype.addUnit = function(dx, dy, posx, posy, scale, content, options, model) {
 		var divElem = $('<div></div>');
 		scale = defaultFor(scale, _grid.data('scale'));
+		var unitSizeX = _grid.data('gridUnitX') * scale;
+		var unitSizeY = _grid.data('gridUnitY') * scale;
 		divElem.css('left', posx * _grid.data('gridUnitX') * scale + 'px');
 		divElem.css('top', posy * _grid.data('gridUnitY') * scale + 'px');
 		divElem.css('width', dx * _grid.data('gridUnitX') * scale + 'px');
@@ -244,7 +246,23 @@ var kitGrid = (function($) {
 		}
 		this.gridObjects.push(elemObj);
 		_grid.append(divElem);
-		attach(divElem[0]);
+		//attach(divElem[0]);
+		//console.log(unitSizeX);
+		divElem.draggable({ 
+			grid: [unitSizeX, unitSizeY],
+			containment: "parent",
+			stop: function() {
+
+				var scale = _grid.data('scale');
+				var unitSizeX = _grid.data('gridUnitX') * scale;
+				var unitSizeY = _grid.data('gridUnitY') * scale;
+
+				var newCoordX = parseInt(parseFloat(this.style.left) / unitSizeX);
+				var newCoordY = parseInt(parseFloat(this.style.top) / unitSizeY); 	
+				model.set({coords: [newCoordX, newCoordY]});
+				console.log(newCoordX, newCoordY);
+			}
+		});
 		var self = this;
 		divElem.find(".close").click(function(event) {
 			self.removeUnit(divElem);
@@ -280,9 +298,12 @@ var kitGrid = (function($) {
 		//this.makeDraggable(_grid);
 		_grid.append(divElem);
 		console.log(_grid);
-		//divElem.draggable();
+		divElem.draggable({ 
+			containment: "parent", 
+			grid: [unitSizeX, unitSizeY] 
+		});
 		//this.makeDraggable(divElem[0]);
-		attach(divElem[0]);
+		//attach(divElem[0]);
 		var self = this;
 		divElem.find(".close").click(function(event) {
 			self.removeUnit(divElem);
@@ -298,7 +319,7 @@ var kitGrid = (function($) {
 		}
 	}
 
-	function getTotalOffset() {
+	/*function getTotalOffset() {
 		var tempElem = _grid[0];
 		var offset = {
 			x: 0,
@@ -388,7 +409,7 @@ var kitGrid = (function($) {
 
 	kitGrid.prototype.isOccupied = function() {
 
-	}
+	} */
 
 	return kitGrid;
 })(jQuery);

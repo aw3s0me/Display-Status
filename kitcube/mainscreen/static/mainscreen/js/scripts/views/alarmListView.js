@@ -60,7 +60,7 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
 				border: 0,
 				transparent: true
-			});
+			}, this.model);
 
 			newTable.jqGrid({
 				datatype: 'local',
