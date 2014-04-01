@@ -10,7 +10,7 @@
 require.config({
   paths: {
     "jquery": "vendor/jquery/jquery.min", //DO NOT SPECIFY EXTENSION 
-    "jqueryui": "vendor/jquery-ui/ui/jquery-ui",
+    "jqueryui": "vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min",
     //MVC part
     "underscore": "vendor/underscore-amd/underscore",
     "backbone": "vendor/backbone-amd/backbone",
@@ -43,7 +43,8 @@ require.config({
     },
     jqueryui: {
       deps: [
-        'jquery'
+        'jquery',
+        "vendor/jquery-ui/ui/jquery-ui"
       ]
     },
     jqgrid: {

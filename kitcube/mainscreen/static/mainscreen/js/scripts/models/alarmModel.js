@@ -30,7 +30,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			};
 		},
 		serToJSON: function() {
-			return _.clone(this.attributes);
+			var alarmClone = this.clone();
+			alarmClone.unset('id', {silent: true});
+			return _.clone(alarmClone.attributes);
 		}
 
 	});

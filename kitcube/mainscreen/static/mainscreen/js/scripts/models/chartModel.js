@@ -21,7 +21,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			
 		},
 		serToJSON: function() {
-			return _.clone(this.attributes);
+			var chartClone = this.clone();
+			chartClone.unset('id', {silent: true});
+			chartClone.unset('seriesArr', {silent: true});
+			chartClone.unset('puredata', {silent: true});
+			chartClone.unset('sensorModels', {silent: true});
+
+			return _.clone(chartClone.attributes);
 		}
 	});
 

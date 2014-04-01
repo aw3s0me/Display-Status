@@ -12,11 +12,11 @@
 		"gridster": null,
 		"dustmo-gridster.js": null,
 		"flat-ui-official": null,
-		//"ace": "1.1.3",
 		"qunit": null,
 		"js-yaml": null,
 		"jqgrid": null,
 		"backgrid": null,
-		"highcharts.com": "3.0.10"
+		"highcharts.com": "3.0.9",
+		"jqueryui-touch-punch": null
 	} 
 }		

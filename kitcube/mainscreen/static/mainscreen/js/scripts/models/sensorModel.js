@@ -35,7 +35,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			return 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + this.get('server') +'&db_name=' + this.get('dbname') + '&db_group='+ this.get('dbgroup') +'&db_mask='+ this.get('mask') +'&window=-1';
 		},
 		serToJSON: function() {
-			return _.clone(this.attributes);
+			var sensorClone = this.clone();
+			sensorClone.unset('id', {silent: true});
+			sensorClone.unset('values', {silent: true});
+			sensorClone.unset('value', {silent: true});
+			sensorClone.unset('lastTime', {silent: true});
+			return _.clone(sensorClone.attributes);
 		}
 	});
 

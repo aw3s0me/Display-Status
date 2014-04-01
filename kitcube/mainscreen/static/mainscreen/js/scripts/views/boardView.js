@@ -146,14 +146,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui','jqgrid', 'highcharts', '
 							} else if (alarmKey === "size") {
 								options.size.push(attr[alarmKey][0]);
 								options.size.push(attr[alarmKey][1]);
-								//options.size[0] = attr[alarmKey][0];
-								//options.size[1] = attr[alarmKey][1];
 								continue;
 							} else if (alarmKey === "coords") {
 								options.coords.push(attr[alarmKey][0]);
 								options.coords.push(attr[alarmKey][1]);
-								//options.coords[0] = attr[alarmKey][0];
-								//options.coords[1] = attr[alarmKey][1];
 								continue;
 							} else if (alarmKey === "cols") {
 								options.cols = attr[alarmKey];
@@ -176,18 +172,20 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui','jqgrid', 'highcharts', '
 
 							alarmList.push(newAlarm); //push to collection
 						};
-						options.id = _id;
+
 						var newAlarmCollection = new MyAlarmCollection(alarmList);
+						options.id = _id;
+						options.collection = newAlarmCollection;
 						var newAlarmListModel = new AlarmListModel(options);
 						console.log(newAlarmListModel);
 						//console.log(newAlarmCollection.id);
-						this.elements.alarms[_id] = newAlarmCollection;
+						this.elements.alarms[_id] = newAlarmListModel;
 						var newAlarmList = new AlarmListView({
 							model: newAlarmListModel,
 							grid: this.grid,
 							elements: newAlarmCollection
 						});
-						//self.addAlarmList( /*size.dx, size.dy, coords.px, coords.py, 2, "alarmList1", */ newAlarmCollection);
+
 						break;
 					case "chart":
 						var newChart = new Chart({
@@ -218,6 +216,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui','jqgrid', 'highcharts', '
 							grid: this.grid,
 							elements: sensCollection
 						});
+						this.elements.charts[_id] = newChart;
+
 						break;
 					default:
 						break;
@@ -225,7 +225,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui','jqgrid', 'highcharts', '
 			}
 
 			setInterval(function() {
-				self.updateAllSensors();
+				//self.updateAllSensors();
 			}, 2000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
@@ -284,24 +284,25 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui','jqgrid', 'highcharts', '
 		serializeToJson: function() {
 			var newJson = {};
 			var serializeRes = undefined;
-			console.log(this.elements);
+			//console.log(this.elements);
 			for (var elementId in this.elements) {
 				var element = this.elements[elementId];
+				console.log(element);
 				for (var innerElId in element) {
 					var inElem = element[innerElId];
+					console.log(inElem);
 					//console.log(inElem);
 					if (!inElem.serToJSON) {
+						console.log('nnneeee');
 						console.log(inElem.model.serToJSON());
 						newJson[inElem.model.get('id')] = inElem.model.serToJSON();
 					} else {
-						console.log(inElem.serToJSON());
-						console.log(inElem.get('id'));
+						var modelToSave = inElem.clone();
 						newJson[inElem.get('id')] = inElem.serToJSON();
 					}
-
 				}
 			}
-			serializeRes = JSON.stringify(newJson);
+			serializeRes = JSON.stringify(newJson, null, '\t');
 			console.log(serializeRes);
 			return serializeRes;
 
