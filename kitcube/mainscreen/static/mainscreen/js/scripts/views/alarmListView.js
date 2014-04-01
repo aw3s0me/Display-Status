@@ -23,22 +23,23 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 				throw "Please init alarm collection";
 				return;
 			}
+			var alarmCollection = this.elements;
 			var alarmModel = this.model;
 			console.log(alarmModel);
 			var dataToTable = []; //data from collection of alarms
 			var scale = this.grid.getScale();
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
-			var newElement = $("<div></div>");
+			this.container = $("<div></div>");
 			var dx = alarmModel.get('size')[0];
-			var dy = alarmModel.size[1];
-			var px = alarmModel.coords[0];
-			var py = alarmModel.coords[1];
-			var name = alarmModel.id;
-			var cols = alarmModel.cols;
+			var dy = alarmModel.get('size')[1];
+			var px = alarmModel.get('coords')[0];
+			var py = alarmModel.get('coords')[1];
+			var name = alarmModel.get('id');
+			var cols = alarmModel.get('cols');
 
-			newElement.css('width', dx * unitHeight * scale + 'px');
-			newElement.css('height', dy * unitWidth * scale + 'px');
+			this.container.css('width', dx * unitHeight * scale + 'px');
+			this.container.css('height', dy * unitWidth * scale + 'px');
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
 			var noWidth = (dx * unitWidth * scale / 6) + 'px';
@@ -48,15 +49,15 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 
 			//bind id of alarmList
 			newTable.attr("id", name);
-			newElement.append(newTable);
-			newElement.append(newPager);
+			this.container.append(newTable);
+			this.container.append(newPager);
 
 			//create an array of object from models
 			for (var i = 0; i < alarmCollection.models.length; i++) {
 				dataToTable.push(alarmCollection.models[i].getProperties());
 			}
 
-			this.grid.addUnit(dx, dy, px, py, scale, newElement, {
+			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
 				border: 0,
 				transparent: true
 			});
@@ -121,6 +122,26 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 				}
 
 			});
+
+			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
+			//$('#pager_center').css('width', newElement.width() - 6); 
+			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 40 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('width', this.container.width() - 6);
+			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 40 * scale + 'px');
+			$('th.ui-th-column div').css('height', 'auto !important');
+			$('th.ui-th-column div').css('white-space', 'normal !important');
+
+			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
+
+			newTable.jqGrid('setGridHeight', this.container.height() - gboxHeight - 2);
+			newTable.jqGrid('setGridWidth', this.container.width() - 1, true);
+
 
 		}
 	});

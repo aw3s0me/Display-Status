@@ -8,7 +8,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			cols: undefined
 		},
 		initialize: function(options) {
-			options || (options = {});
+			//options || (options = {});
 			if (options.id) {
 				this.id = options.id;
 			}

@@ -50,13 +50,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			if (linkArr) {
 				for (var j = 0; j < linkArr.length; j++) {
-					console.log(this.elements);
+					//console.log(this.elements);
 					var sensorModel = this.elements.models[j];
-					console.log(sensorModel);
+					//console.log(sensorModel);
 					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name')]);
 				}
 			} 
-			console.log(dataToChart);
+			//console.log(dataToChart);
 			this.chart = new Highcharts.Chart({
 				chart: {
 					reflow: false,
@@ -108,9 +108,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		addNewPoint: function(model) {
 			var chart = this.chart;
-			console.log(chart);
+			//console.log(chart);
 			var index = undefined; //index of series
-			console.log(model);
+			//console.log(model);
 			//var model = 
 			//console.log(this.elements);
 			//console.log(self);

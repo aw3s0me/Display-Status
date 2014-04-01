@@ -140,15 +140,20 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 							cols: undefined
 						};
 						for (var alarmKey in attr) { //going from alarmlist object through elems
+							console.log(alarmKey);
 							if (alarmKey === "type") { //except type
 								continue;
 							} else if (alarmKey === "size") {
-								options.size[0] = attr[alarmKey][0];
-								options.size[1] = attr[alarmKey][1];
+								options.size.push(attr[alarmKey][0]);
+								options.size.push(attr[alarmKey][1]);
+								//options.size[0] = attr[alarmKey][0];
+								//options.size[1] = attr[alarmKey][1];
 								continue;
 							} else if (alarmKey === "coords") {
-								options.coords[0] = attr[alarmKey][0];
-								options.coords[1] = attr[alarmKey][1];
+								options.coords.push(attr[alarmKey][0]);
+								options.coords.push(attr[alarmKey][1]);
+								//options.coords[0] = attr[alarmKey][0];
+								//options.coords[1] = attr[alarmKey][1];
 								continue;
 							} else if (alarmKey === "cols") {
 								options.cols = attr[alarmKey];
@@ -171,9 +176,10 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 
 							alarmList.push(newAlarm); //push to collection
 						};
-
+						options.id = _id;
 						var newAlarmCollection = new MyAlarmCollection(alarmList);
-						var newAlarmListModel = new AlarmListModel({options: options});
+						var newAlarmListModel = new AlarmListModel(options);
+						console.log(newAlarmListModel);
 						//console.log(newAlarmCollection.id);
 						this.elements.alarms[_id] = newAlarmCollection;
 						var newAlarmList = new AlarmListView({
@@ -346,9 +352,6 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 			s3.innerHTML = "<b>x</b>";
 			console.log('updated');
 		},
-		rerenderChart: function() {
-
-		},
 		updateAllSensors: function() {
 			for (var sensId in this.elements.sensors) {
 				this.updateSensor(this.elements.sensors[sensId]);
@@ -376,173 +379,6 @@ define(['jquery', 'underscore', 'backbone', 'jqgrid', 'highcharts', 'text!templa
 
 			});
 
-		},
-		updateAllCharts: function() {
-			var allCharts = this.elements.charts;
-			var shift = false;
-			//console.log('charts');
-			for (var chart in allCharts) {
-				var chartObject = allCharts[chart];
-				for (var z = 0; z < chartObject.seriesArr.length; z++) {
-					var elemId = chartObject.seriesArr[z][0];
-					var sensorValue = this.elements.sensors[elemId].get('value');
-					if (sensorValue === undefined) {
-						continue;
-					}
-					var now = new Date;
-					var x = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-						now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-					var y = parseFloat(sensorValue);
-					var Point = {
-						x: x,
-						y: y
-					};
-					//console.log(Point);
-					/*if (this.elements.sensors[elemId].get('values').length > 10) {
-						shift = true;
-					}
-					else {
-						shift = false;
-					}*/
-
-					chartObject.chart.series[z].addPoint(Point, true, shift); //last point is for everyone
-					//NO EQUAL POINTS ONLY IF REDRAW EVERYTIME. SHIIT
-					//console.log(chartObject.chart.series[z]);
-					//console.log(x, y);
-					//console.log(i, chartObject.chart.series[i].data);
-				}
-				//chartObject.chart.yAxis[0].isDirty = true;
-				//chartObject.chart.redraw();
-			}
-
-			/*for (var chart in allCharts) {
-				var chartObject = allCharts[chart];
-				chartObject.chart.yAxis[0].isDirty = true;
-				chartObject.chart.redraw();
-			} */
-
-		},
-		addAlarmList: function(alarmCollection) {
-			/*if (!alarmCollection) {
-				throw "Please init alarm collection";
-				return;
-			}
-			var dataToTable = []; //data from collection of alarms
-			var self = this; // to refering to jquery
-			var scale = self.grid.getScale();
-			var unitHeight = self.grid.getUnitSizes().height;
-			var unitWidth = self.grid.getUnitSizes().width;
-			var newElement = $("<div></div>");
-			var dx = alarmCollection.size[0];
-			var dy = alarmCollection.size[1];
-			var px = alarmCollection.coords[0];
-			var py = alarmCollection.coords[1];
-			var name = alarmCollection.id;
-			var cols = alarmCollection.cols;
-
-			newElement.css('width', dx * unitHeight * scale + 'px');
-			newElement.css('height', dy * unitWidth * scale + 'px');
-
-			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
-			var noWidth = (dx * unitWidth * scale / 6) + 'px';
-
-			var newTable = $("<table></table>");
-			var newPager = $("<div id='pager'></div>");
-
-			//bind id of alarmList
-			newTable.attr("id", name);
-			newElement.append(newTable);
-			newElement.append(newPager);
-
-			//create an array of object from models
-			for (var i = 0; i < alarmCollection.models.length; i++) {
-				dataToTable.push(alarmCollection.models[i].getProperties());
-			}
-
-			this.grid.addUnit(dx, dy, px, py, scale, newElement, {
-				border: 0,
-				transparent: true
-			});
-
-			newTable.jqGrid({
-				datatype: 'local',
-				data: dataToTable,
-				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
-				shrinkToFit: true,
-				autowidth: true,
-				//multiselect: true, //Appears checkboxes. Better to have beforeSelectRow
-				//height: '200px',
-				hidegrid: false,
-				colModel: [{
-					name: 'no',
-					index: 'no',
-					width: noWidth,
-					sorttype: 'int'
-				}, {
-					name: 'module',
-					index: 'module',
-					width: elemWidth
-				}, {
-					name: 'group',
-					index: 'group',
-					width: elemWidth
-				}, {
-					name: 'app',
-					index: 'app',
-					width: elemWidth
-				}, {
-					name: 'lastDate',
-					index: 'lastDate',
-					width: elemWidth
-					//sorttype: 'date'
-				}, {
-					name: 'delayedBy',
-					index: 'delayedBy',
-					width: elemWidth
-					//sorttype: 'date'
-				}],
-				rowNum: cols,
-				pager: "#pager",
-				caption: name,
-				loadComplete: function() {
-					var grid = newTable;
-					var ids = grid.getDataIDs();
-					for (var i = 0; i < ids.length; i++) {
-						grid.setRowData(ids[i], false, {
-							height: 1 * scale + i * 2
-						});
-					}
-				},
-				beforeSelectRow: function(rowid, e) {
-					var $tr;
-					if (e.ctrlKey) {
-						$tr = $(e.target).closest('tr.jqgrow');
-						$tr.toggleClass("ui-state-highlight");
-						return false;
-					}
-					return true;
-				}
-			});
-
-			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
-			//$('#pager_center').css('width', newElement.width() - 6); 
-			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 40 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('width', newElement.width() - 6);
-			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 40 * scale + 'px');
-			$('th.ui-th-column div').css('height', 'auto !important');
-			$('th.ui-th-column div').css('white-space', 'normal !important');
-
-			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
-
-			newTable.jqGrid('setGridHeight', newElement.height() - gboxHeight - 2);
-			newTable.jqGrid('setGridWidth', newElement.width() - 1, true);
-		*/
 		},
 		alert: function(e) {
 			console.log(e);
