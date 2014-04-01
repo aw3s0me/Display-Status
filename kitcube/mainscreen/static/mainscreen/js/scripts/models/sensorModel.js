@@ -3,6 +3,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		defaults: {
 			id: undefined,
 			name: undefined,
+			type: "sensor",
 			comment: undefined,
 			unit: undefined,
 			value: undefined,

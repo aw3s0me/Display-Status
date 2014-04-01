@@ -2,6 +2,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 	var SensorView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
+		model: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			if (options.grid) {
@@ -21,11 +22,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var dy = newSensor.get("size")[1];
 			var px = newSensor.get("coords")[0];
 			var py = newSensor.get("coords")[1];
-			//console.log(newSensor);
-			//var compiledTemplate = _.template(sensorTemplate, { sensor: newSensor.toJSON() });
-			//var jqDivTemplate = $(compiledTemplate);
-			var myDiv = $('<div></div>');
-			myDiv.attr('id', newSensor.get('id'));
+
+			this.container = $('<div></div>');
+			this.container.attr('id', newSensor.get('id'));
 			var s0 = document.createElement('div');
 			s0.style.position = 'absolute';
 			s0.style.fontSize = 13 * scale + 'px';
@@ -66,15 +65,55 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s3.style.top = 4 * scale + 'px';
 			s3.innerHTML = "<b>x</b>";
 			s3.className = "close";
-			myDiv.append(s0);
-			myDiv.append(s1);
-			myDiv.append(s2);
-			myDiv.append(s3);
-			myDiv.append(s4);
+			this.container.append(s0);
+			this.container.append(s1);
+			this.container.append(s2);
+			this.container.append(s3);
+			this.container.append(s4);
 
-			this.grid.addUnit(dx, dy, px, py, scale, myDiv, {}, this.model);
+			this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model);
+		},
+		rerender: function() {
+			var sensorDiv = this.container;
+			var scale = this.grid.getScale();
+			var sensorModel = this.model;
+
+			var tile = sensorDiv.parent();
+
+			this.grid.resizeTile(sensorModel.get('coords')[0], sensorModel.get('coords')[1], sensorModel.get('size')[0], sensorModel.get('size')[1], tile);
+
+			var s0 = sensorDiv.find('.sensorName')[0];
+			s0.style.fontSize = 13 * scale + 'px';
+			s0.style.left = 5 * scale + 'px';
+			s0.innerHTML = sensorModel.get('name');
+			s0.innerHTML += '<br>' + sensorModel.get('comment');
+
+			var s1 = sensorDiv.find('.sensorVal')[0];
+			s1.style.fontSize = 50 * scale + 'px';
+			s1.style.right = 6 * scale + 'px';
+			s1.style.bottom = 0 * scale + 'px';
+			s1.innerHTML = (sensorModel.get('value') === undefined) ? 'NAN' : (sensorModel.get('value')).toFixed(1);
+
+			var s2 = sensorDiv.find('.sensorUnit')[0];
+			s2.style.fontSize = 12 * scale + 'px';
+			s2.style.right = 5 * scale + 'px';
+			s2.style.top = 20 * scale + 'px';
+			s2.innerHTML = sensorModel.get('unit');
+
+			var s4 = sensorDiv.find('.sensorAlarm')[0];
+			s4.style.fontSize = 10 * scale + 'px';
+			s4.style.left = 5 * scale + 'px';
+			s4.style.bottom = 2 * scale + 'px';
+			s4.innerHTML = "min:" + sensorModel.get('min') + "<br>max:" + sensorModel.get('max') + "<br>alert:" + sensorModel.get('alert');
+
+			var s3 = sensorDiv.find('.close')[0];
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 12 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 4 * scale + 'px';
+			s3.innerHTML = "<b>x</b>";
+			console.log('updated');
 		}
-
 	});
 
 	return SensorView;

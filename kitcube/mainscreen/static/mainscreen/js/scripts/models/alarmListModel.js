@@ -2,32 +2,14 @@ define(['jquery', 'underscore', 'backbone', 'collections/alarmCollection'], func
 	var AlarmList = Backbone.Model.extend({
 		defaults: {
 			id: undefined,
-			type: undefined,
+			type: "alarmlist",
 			size: [],
 			coords: [],
 			cols: undefined,
 			collection: undefined
 		},
-		initialize: function(options) {
+		initialize: function() {
 			//options || (options = {});
-			if (options.id) {
-				this.id = options.id;
-			}
-			if (options.type) {
-				this.type = options.type;
-			}
-			if (options.size) {
-				this.size = options.size;
-			}
-			if (options.coords) {
-				this.coords = options.coords;
-			}
-			if (options.cols) {
-				this.cols = options.cols;
-			}
-			if (options.collection) {
-				this.collection = options.collection
-			}
 		},
 		serToJSON: function() {
 			var listClone = this.clone();
@@ -40,7 +22,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/alarmCollection'], func
 				cols: this.get('cols')
 			}
 
-			var collModels = this.collection.models;
+			var collModels = this.get('collection').models;
 
 			for (var i = 0; i < collModels.length; i++) {
 				var model = collModels[i];

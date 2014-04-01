@@ -3,7 +3,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		defaults: {
 			id: undefined,
 			caption: undefined,
-			type: undefined,
+			type: "chart",
 			link: [],
 			sensorModels: [],
 			seriesArr: [],

@@ -20,7 +20,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			}
 			for (var i = 0; i < this.elements.length; i++) {
 				//this.elements.models[i].on('change', this.addNewPoint, {options: "ololo"});
-				this.elements.models[i].on('change', this.addNewPoint, this);
+				this.elements.models[i].on('change : value', this.addNewPoint, this);
 			}
 			
 			this.render();
