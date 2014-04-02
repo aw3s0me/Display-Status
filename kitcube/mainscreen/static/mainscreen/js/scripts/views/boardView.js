@@ -201,7 +201,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 						var newChart = new Chart({
 							id: _id,
 							caption: attr["caption"],
-							type: attr["charttype"],
+							charttype: attr["charttype"],
+							type: attr["type"],
 							link: attr["link"],
 							legend: attr["legend"],
 							linewidth: attr["width"],
@@ -236,8 +237,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 			}
 
 			setInterval(function() {
-				//self.updateAllSensors();
-			}, 2000); //the only way to pass param */
+				self.updateAllSensors();
+			}, 5000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
 
@@ -261,13 +262,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
-				//console.log(attr);
 				switch (attr["type"]) {
 					case "sensor":
 						var sensorModel = this.elements.sensors[_id];
 						var sensorView = this.views.sensors[_id];
 						if (sensorModel && sensorView) {
-							//console.log('set');
 							sensorModel.set({
 								id: _id,
 								name: attr["name"],
@@ -283,7 +282,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								size: attr["size"],
 								coords: attr["coords"]
 							});
-							console.log(sensorModel);
 							sensorView.rerender();
 							//newElements.sensors[_id] = sensorModel;
 							//newViews.sensors[_id] = sensorView;
@@ -304,7 +302,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								size: attr["size"],
 								coords: attr["coords"]
 							});
-							//console.log(newSensor);
 							var newSensorView = new SensorView({
 								model: newSensor,
 								grid: this.grid
@@ -329,7 +326,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							};
 
 							for (var alarmKey in attr) { //going from alarmlist object through elems
-								console.log(alarmKey);
 								if (alarmKey === "type") { //except type
 									continue;
 								} else if (alarmKey === "size") {
@@ -442,6 +438,62 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							newViews.alarms[_id] = newAlarmListView;
 						}
 						break;
+					case "chart":
+						var chartModel = this.elements.charts[_id];
+						var chartView = this.views.charts[_id];
+						console.log(chartModel, chartView);
+						if (chartModel && chartView) {
+							chartModel.set({
+								id: _id,
+								caption: attr["caption"],
+								charttype: attr["charttype"],
+								type: attr["type"],
+								link: attr["link"],
+								legend: attr["legend"],
+								linewidth: attr["width"],
+								size: attr["size"],
+								coords: attr["coords"],
+								puredata: {}
+							});
+
+							chartView.rerender();
+							//newElements.charts[_id] = chartModel;
+							//newViews.charts[_id] = chartView;
+						} else {
+							var newChart = new Chart({
+								id: _id,
+								caption: attr["caption"],
+								charttype: attr["charttype"],
+								type: attr["type"],
+								link: attr["link"],
+								legend: attr["legend"],
+								linewidth: attr["width"],
+								size: attr["size"],
+								coords: attr["coords"],
+								puredata: {}
+							});
+
+							if (newChart.get('link')) {
+								var linkArr = newChart.get('link');
+								var sensArr = [];
+								for (var j = 0; j < linkArr.length; j++) {
+									var linkId = linkArr[j];
+									var sensorModel = this.elements.sensors[linkId];
+									if (sensorModel)
+										sensArr.push(sensorModel);
+								}
+							}
+							var sensCollection = new SensorGroupCollection(sensArr);
+							var newChartView = new ChartView({
+								model: newChart,
+								grid: this.grid,
+								elements: sensCollection
+							});
+							//newElements.charts[_id] = newChart;
+							//newViews.charts[_id] = newChartView;
+						}
+
+						break;
 					default:
 						break;
 				}
@@ -481,11 +533,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};
-			var sensorId = sensorModel.get('id ');
+			var sensorId = sensorModel.get('id');
 
-			var sensor = $('# ' + sensorId);
+			var sensor = $('#' + sensorId);
 			$.get(sensorModel.getDbUrl(), function(data) {
-				var arrayOfData = data.split(', ');
+				var arrayOfData = data.split(',');
 				var value = parseFloat(
 					arrayOfData[arrayOfData.length - 1]);
 				var sensorDiv = sensor.find(".sensorVal")[0];
@@ -493,8 +545,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 				var now = new Date;
 				var lastTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 				sensorModel.set({
-					'value ': value,
-					'lastTime ': lastTime
+					'value': value,
+					'lastTime': lastTime
 				});
 
 			});

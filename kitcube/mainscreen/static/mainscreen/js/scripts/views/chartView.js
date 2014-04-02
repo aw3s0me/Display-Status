@@ -62,17 +62,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					reflow: false,
 					type: 'line',
 					renderTo: model.get('id'),
-					//marginRight: 130,
-					//marginBottom: 25
 				},
 				title: {
 					text: model.get('caption'),
-					x: -20 //center
 				},
-				/*subtitle: {
-					text: 'Source: WorldClimate.com',
-					x: -20
-				},*/
 				xAxis: {
 					type: 'datetime',
 					dateTimeLabelFormats: {
@@ -96,7 +89,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				//legend: model.get('legend'),
 				series: //cache data, store it on the server side and pass here
 				dataToChart
-				//testData
 			});
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -110,10 +102,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var chart = this.chart;
 			//console.log(chart);
 			var index = undefined; //index of series
-			//console.log(model);
-			//var model = 
-			//console.log(this.elements);
-			//console.log(self);
+
 			var sensorValue = model.get('value');
 			for (var i = 0; i < _seriesArr.length; i++) {
 				var elem = _seriesArr[i][0];
@@ -131,8 +120,48 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			if (chart.series[index])
 			chart.series[index].addPoint(Point, true, false); //last point is for everyone
 
-		}
+		},
+		rerender: function() {
+			console.log('rerender chart');
+			var model = this.model;
+			var chart = this.chart;
+			var dataToChart = this.elements.paramToChart();
+			var dx = model.get('size')[0];
+			var dy = model.get('size')[1];
+			var px = model.get('coords')[0];
+			var py = model.get('coords')[1];
 
+			var scale = this.grid.getScale();
+
+			var tile = this.container.parent();
+			this.grid.resizeTile(px, py, dx, dy, tile);
+
+			var linkArr = model.get('link');
+
+			if (linkArr) {
+				for (var j = 0; j < linkArr.length; j++) {
+					//console.log(this.elements);
+					var sensorModel = this.elements.models[j];
+					//console.log(sensorModel);
+					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name')]);
+				}
+			} 
+
+			chart.setTitle({ text: model.get('caption')});
+
+			while(chart.series.length > 0)
+				chart.series[0].remove(true);
+
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+
+			this.chart.setSize(width, height, true);
+			
+			chart.redraw();
+
+		}
 	});
 
 	return ChartView;

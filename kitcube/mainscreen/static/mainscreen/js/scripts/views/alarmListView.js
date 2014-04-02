@@ -161,7 +161,6 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			var px = alarmModel.get('coords')[0];
 			var py = alarmModel.get('coords')[1];
 			var cols = alarmModel.get('cols');
-			console.log(cols);
 
 			var tile = this.container.parent();
 			this.grid.resizeTile(px, py, dx, dy, tile);

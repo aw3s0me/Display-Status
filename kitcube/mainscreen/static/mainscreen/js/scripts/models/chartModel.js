@@ -4,6 +4,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			id: undefined,
 			caption: undefined,
 			type: "chart",
+			charttype: undefined,
 			link: [],
 			sensorModels: [],
 			seriesArr: [],
