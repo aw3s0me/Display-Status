@@ -6,7 +6,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			type: "chart",
 			charttype: undefined,
 			link: [],
-			sensorModels: [],
+			models: [],
 			seriesArr: [],
 			legend: undefined,
 			linewidth: undefined,

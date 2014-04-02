@@ -20,7 +20,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			}
 			for (var i = 0; i < this.elements.length; i++) {
 				//this.elements.models[i].on('change', this.addNewPoint, {options: "ololo"});
-				this.elements.models[i].on('change:value', this.addNewPoint, this);
+				this.elements.models[i].on('addPoint', this.addNewPoint, this);
 			}
 			
 			this.render();
@@ -53,7 +53,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					//console.log(this.elements);
 					var sensorModel = this.elements.models[j];
 					//console.log(sensorModel);
-					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name')]);
+					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name'), j]);
 				}
 			} 
 			//console.log(dataToChart);
@@ -83,7 +83,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						color: '#808080'
 					}]
 				},
-				series: dataToChart
+				series: dataToChart,
+				plotOptions: {
+					series: {
+						lineWidth: 1,
+	                    turboThreshold: 0,
+						threshold: null,
+						//showInLegend : false
+					}
+				}
 			});
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -97,14 +105,22 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var chart = this.chart;
 			//console.log(chart);
 			var index = undefined; //index of series
-
+			var shift = false;
+			//console.log(model.get('id'));
 			var sensorValue = model.get('value');
 			for (var i = 0; i < _seriesArr.length; i++) {
 				var elem = _seriesArr[i][0];
 				if (elem == model.get('id')) {
-					index = i;
+					index = _seriesArr[i][2];
 				}
 			}
+
+			//if (index == 0) {var shift = true;}
+
+			if (model.get('values').length > 10) {
+				shift = true;
+			}
+			//console.log(model.get('values'));
 
 			var x = model.get('lastTime');
 			var y = parseFloat(sensorValue);
@@ -112,8 +128,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				x: x,
 				y: y
 			};
+			console.log(index);
 			if (chart.series[index])
-			chart.series[index].addPoint(Point, true, false); //last point is for everyone
+				chart.series[index].addPoint(Point, false, shift); //last point is for everyone\
+
+			shift = false;
 
 		},
 		rerender: function() {
@@ -161,12 +180,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			this.chart.setSize(width, height, true);
 
-			chart.redraw();
+			//chart.redraw();
 
 		},
 		removeFromDom: function() {
 			this.grid.removeUnit(this.container.parent());
 			console.log('removed chart');
+		},
+		redraw: function() {
+			this.chart.redraw();
 		}
 	});
 

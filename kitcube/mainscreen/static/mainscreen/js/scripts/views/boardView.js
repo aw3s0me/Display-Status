@@ -238,13 +238,19 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
-			}, 5000); //the only way to pass param */
+			}, 2000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
+			//var PriorityQueue = require('queue');
+
+			//var renderQueue = new PriorityQueue(function(a, b) {return a.priority - b.priority;});
+
+
 			this.updSensorsInterval = window.clearInterval(this.updSensorsInterval);
 			var textToParse = options.aceText;
 			var myParser = new cfgParser('1');
 			var prsObj = myParser.parseJson(textToParse);
+
 			//console.log(prsObj);
 			var self = this;
 
@@ -286,6 +292,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							sensorView.rerender();
 							newElements.sensors[_id] = sensorModel;
 							newViews.sensors[_id] = sensorView;
+							//queue.enq({sensorView.rerender});
 						} else {
 							var newSensor = new Sensor({
 								id: _id,
@@ -298,7 +305,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								server: attr["server"],
 								device: attr["device"],
 								dbname: attr["dbname"],
-								dbgroup: attr["group"],
+								dbgroup: attr["dbgroup"],
 								mask: attr["mask"],
 								size: attr["size"],
 								coords: attr["coords"]
@@ -307,8 +314,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								model: newSensor,
 								grid: this.grid
 							});
-							newElements.sensors[_id] = sensorModel;
-							newViews.sensors[_id] = sensorView;
+							newElements.sensors[_id] = newSensor;
+							newViews.sensors[_id] = newSensorView;
 						}
 						break;
 					case "alarmlist":
@@ -454,6 +461,20 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								puredata: {}
 							});
 
+							if (chartModel.get('link')) {
+								var linkArr = chartModel.get('link');
+								var sensArr = [];
+								for (var j = 0; j < linkArr.length; j++) {
+									var linkId = linkArr[j];
+									var sensorModel = newElements.sensors[linkId];
+									if (sensorModel)
+										sensArr.push(sensorModel);
+								}
+							}
+							var sensCollection = new SensorGroupCollection(sensArr);
+
+							chartView.elements = sensCollection;
+
 							chartView.rerender();
 							newElements.charts[_id] = chartModel;
 							newViews.charts[_id] = chartView;
@@ -503,8 +524,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 				var newGroup = newElements[grpId];
 				if (group === undefined) {
 					continue;
-				}
-				else {
+				} else {
 					for (var elemId in group) {
 						var element = newGroup[elemId];
 						if (!element) {
@@ -513,7 +533,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 						}
 
 					}
-				} 
+				}
 			}
 
 			this.elements = newElements;
@@ -523,8 +543,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 				var newGroup = newViews[grpId];
 				if (group === undefined) {
 					continue;
-				}
-				else {
+				} else {
 					for (var viewId in group) {
 						var view = newGroup[viewId];
 						if (!view) {
@@ -534,7 +553,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							console.log('deleted' + viewId);
 						}
 					}
-				} 
+				}
 			}
 
 			this.views = newViews;
@@ -564,35 +583,60 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 		},
 		updateAllSensors: function() {
 			for (var sensId in this.elements.sensors) {
-				this.updateSensor(this.elements.sensors[sensId]);
+				var element = this.elements.sensors[sensId];
+				this.updateSensor(element);
 			}
-			//console.log("charts");
-			//this.updateAllCharts();
+			
+			for (var chartId in this.views.charts) {
+				var chartView = this.views.charts[chartId];
+				chartView.redraw();
+			}
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};
+			if (!sensorModel) {
+				return;
+			}
 			var sensorId = sensorModel.get('id');
-
 			var sensor = $('#' + sensorId);
-			$.get(sensorModel.getDbUrl(), function(data) {
-				var arrayOfData = data.split(',');
-				var value = parseFloat(
-					arrayOfData[arrayOfData.length - 1]);
-				var sensorDiv = sensor.find(".sensorVal")[0];
-				sensorDiv.innerHTML = value.toFixed(1);
-				var now = new Date;
-				var lastTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-				sensorModel.get('values').push({
-					x: lastTime,
-					y: value
-				});
-				sensorModel.set({
-					'value': value,
-					'lastTime': lastTime,
-				});
-				//console.log(sensorId);
-			});
+			if (!sensor)
+				return;
+			$.ajax({
+				type: "GET",
+				url: sensorModel.getDbUrl(),
+				success: function(data) {
+					var arrayOfData = data.split(',');
+					var value = parseFloat(
+						arrayOfData[arrayOfData.length - 1]);
+					var sensorDiv = sensor.find(".sensorVal")[0];
+					sensorDiv.innerHTML = value.toFixed(1);
+					var now = new Date;
+					var lastTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 
+					if (sensorModel.get('values').length > 10) {sensorModel.get('values').shift();}
+					console.log(sensorModel.get('id'));
+					//console.log(JSON.stringify(sensorModel.get('values')));
+					console.log(sensorModel.get('values'));
+
+					var array = sensorModel.get('values').slice(0);
+
+					var valToPush = {
+						x: lastTime,
+						y: value
+					};
+
+					array.push(valToPush);
+
+					//sensorModel.get('values').push(valToPush);
+					sensorModel.set({
+						'value': value,
+						'lastTime': lastTime,
+						'values': array
+					});
+
+					sensorModel.trigger('addPoint', sensorModel);
+				}
+			})
 		},
 		alert: function(e) {
 			console.log(e);

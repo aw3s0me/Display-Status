@@ -23,6 +23,7 @@ require.config({
     "kit.sizeDetector": "dev/kit.sizedetector/sizedetector",
     "kit.parser": "dev/kit.parser/kit.cfgParser",
     "kit.dataDownloader" : "dev/kit.dataDownloader/kit.dataDownloader",
+    "queue": "vendor/priorityqueue",
     //my grid part
     "kitgrid": "dev/kit.grid/kitGrid",
     "text" : "vendor/requirejs-text/text",
