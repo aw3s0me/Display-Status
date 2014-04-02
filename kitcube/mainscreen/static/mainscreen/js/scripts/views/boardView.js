@@ -144,7 +144,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							cols: undefined
 						};
 						for (var alarmKey in attr) { //going from alarmlist object through elems
-							console.log(alarmKey);
+							//console.log(alarmKey);
 							if (alarmKey === "type") { //except type
 								continue;
 							} else if (alarmKey === "size") {
@@ -191,12 +191,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 						console.log(newAlarmListModel);
 						//console.log(newAlarmCollection.id);
 						this.elements.alarms[_id] = newAlarmListModel;
-						var newAlarmList = new AlarmListView({
+						var newAlarmListView = new AlarmListView({
 							model: newAlarmListModel,
 							grid: this.grid,
-							elements: newAlarmCollection
 						});
-						this.views.alarms[_id] = newAlarmList;
+						this.views.alarms[_id] = newAlarmListView;
 						break;
 					case "chart":
 						var newChart = new Chart({
@@ -377,11 +376,71 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 
 							//this.views.alarms[_id] = newAlarmList;
 							//newElements.alarms[_id] = newAlarmListModel;
-
+							console.log('start rerender');
 							alarmListView.rerender();
 							//newViews.alarms[_id] = newAlarmList;
-						}
+						} else {
+							var alarmList = []; //collection of alarms
 
+							var options = {
+								size: [],
+								coords: [],
+								cols: undefined
+							};
+							for (var alarmKey in attr) { //going from alarmlist object through elems
+								//console.log(alarmKey);
+								if (alarmKey === "type") { //except type
+									continue;
+								} else if (alarmKey === "size") {
+									options.size.push(attr[alarmKey][0]);
+									options.size.push(attr[alarmKey][1]);
+									continue;
+								} else if (alarmKey === "coords") {
+									options.coords.push(attr[alarmKey][0]);
+									options.coords.push(attr[alarmKey][1]);
+									continue;
+								} else if (alarmKey === "cols") {
+									options.cols = attr[alarmKey];
+									continue;
+								}
+								var alarmAttr = attr[alarmKey]; //get alarm element by key
+								var newAlarm = new Alarm({
+									id: alarmKey,
+									no: alarmAttr["no"],
+									module: alarmAttr["module"],
+									group: alarmAttr["group"],
+									app: alarmAttr["app"],
+									server: alarmAttr["server"],
+									dbname: alarmAttr["dbname"],
+									mask: alarmAttr["mask"],
+									lastDate: 'NAN', //not initialized, need to get from adei
+									delayedBy: 'NAN',
+									severity: 'NAN'
+								});
+
+								alarmList.push(newAlarm); //push to collection
+							};
+
+							var newAlarmCollection = new MyAlarmCollection(alarmList);
+							var newAlarmListModel = new AlarmListModel({
+								id: _id,
+								collection: newAlarmCollection,
+								size: options.size,
+								coords: options.coords,
+								cols: options.cols,
+								type: 'alarmlist'
+
+							});
+
+							console.log(newAlarmListModel);
+							//console.log(newAlarmCollection.id);
+							newElements.alarms[_id] = newAlarmListModel;
+							var newAlarmListView = new AlarmListView({
+								model: newAlarmListModel,
+								grid: this.grid,
+							});
+							newViews.alarms[_id] = newAlarmListView;
+						}
 						break;
 					default:
 						break;
@@ -400,14 +459,16 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 				for (var innerElId in element) {
 					var inElem = element[innerElId];
 					if (!inElem.serToJSON) {
-						newJson[inElem.model.get('id ')] = inElem.model.serToJSON();
+						newJson[inElem.model.get('id')] = inElem.model.serToJSON();
 					} else {
 						var modelToSave = inElem.clone();
-						newJson[inElem.get('id ')] = inElem.serToJSON();
+						newJson[inElem.get('id')] = inElem.serToJSON();
 					}
 				}
 			}
+			//console.log(newJson);
 			serializeRes = JSON.stringify(newJson, null, '\t ');
+			//console.log(serializeRes);
 			return serializeRes;
 
 		},

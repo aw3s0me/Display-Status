@@ -4,6 +4,7 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 		model: undefined,
 		grid: undefined,
 		jqgridElem: undefined,
+		tableId: undefined,
 		initialize: function(options) { //pass it as new SensorView({collection: collection, options: options})
 			if (options.grid) {
 				this.grid = options.grid;
@@ -16,11 +17,11 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			//this.model.on("change", this.render);
 		},
 		render: function() {
-			if (!this.elements) {
+			if (!this.model.get('collection')) {
 				throw "Please init alarm collection";
 				return;
 			}
-			var alarmCollection = this.model.collection;
+			var alarmCollection = this.model.get('collection');
 			var alarmModel = this.model;
 			console.log(alarmModel);
 			var dataToTable = []; //data from collection of alarms
@@ -34,14 +35,14 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			var py = alarmModel.get('coords')[1];
 			var name = alarmModel.get('id');
 			var cols = alarmModel.get('cols');
-
+			this.tableId = name;
 			this.container.css('width', dx * unitHeight * scale + 'px');
 			this.container.css('height', dy * unitWidth * scale + 'px');
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
 			var noWidth = (dx * unitWidth * scale / 6) + 'px';
 
-			var newTable = $("<table></table>");
+			var newTable = $("<table class='jqgridtable'></table>");
 			var newPager = $("<div id='pager'></div>");
 
 			//bind id of alarmList
@@ -140,29 +141,30 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			newTable.jqGrid('setGridWidth', this.container.width() - 1, true);
 		},
 		rerender: function() {
-			if (!this.model.collection) {
-				console.log(this.model);
+			console.log(this.model);
+			if (!this.model.get('collection')) {
 				throw "Please init alarm collection";
 				return;
 			}
-			console.log(this.jqgridElem);
-			
-			/*
+			this.jqgridElem.clearGridData();
 
-			var alarmCollection = this.elements;
+			var alarmCollection = this.model.get('collection');
 			var alarmModel = this.model;
-			console.log(alarmModel);
 			var dataToTable = []; //data from collection of alarms
 			var scale = this.grid.getScale();
+
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
-			this.container = $("<div></div>");
+
 			var dx = alarmModel.get('size')[0];
 			var dy = alarmModel.get('size')[1];
 			var px = alarmModel.get('coords')[0];
 			var py = alarmModel.get('coords')[1];
-			var name = alarmModel.get('id');
 			var cols = alarmModel.get('cols');
+			console.log(cols);
+
+			var tile = this.container.parent();
+			this.grid.resizeTile(px, py, dx, dy, tile);
 
 			this.container.css('width', dx * unitHeight * scale + 'px');
 			this.container.css('height', dy * unitWidth * scale + 'px');
@@ -170,104 +172,25 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
 			var noWidth = (dx * unitWidth * scale / 6) + 'px';
 
-			var newTable = $("<table></table>");
-			var newPager = $("<div id='pager'></div>");
-
-			//bind id of alarmList
-			newTable.attr("id", name);
-			this.container.append(newTable);
-			this.container.append(newPager);
-
 			//create an array of object from models
 			for (var i = 0; i < alarmCollection.models.length; i++) {
 				dataToTable.push(alarmCollection.models[i].getProperties());
 			}
 
-			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
-				border: 0,
-				transparent: true
-			}, this.model);
+			var tableToChange = this.container.find('.jqgridtable');
 
-			newTable.jqGrid({
-				datatype: 'local',
-				data: dataToTable,
-				colNames: ['No', 'Module', 'Group', 'App', 'LastDate', 'DelayedBy'],
-				shrinkToFit: true,
-				autowidth: true,
-				//multiselect: true, //Appears checkboxes. Better to have beforeSelectRow
-				//height: '200px',
-				hidegrid: false,
-				colModel: [{
-					name: 'no',
-					index: 'no',
-					width: noWidth,
-					sorttype: 'int'
-				}, {
-					name: 'module',
-					index: 'module',
-					width: elemWidth
-				}, {
-					name: 'group',
-					index: 'group',
-					width: elemWidth
-				}, {
-					name: 'app',
-					index: 'app',
-					width: elemWidth
-				}, {
-					name: 'lastDate',
-					index: 'lastDate',
-					width: elemWidth
-					//sorttype: 'date'
-				}, {
-					name: 'delayedBy',
-					index: 'delayedBy',
-					width: elemWidth
-					//sorttype: 'date'
-				}],
-				rowNum: cols,
-				pager: "#pager",
-				caption: name,
-				loadComplete: function() {
-					var grid = newTable;
-					var ids = grid.getDataIDs();
-					for (var i = 0; i < ids.length; i++) {
-						grid.setRowData(ids[i], false, {
-							height: 1 * scale + i * 2
-						});
-					}
-				},
-				beforeSelectRow: function(rowid, e) {
-					var $tr;
-					if (e.ctrlKey) {
-						$tr = $(e.target).closest('tr.jqgrow');
-						$tr.toggleClass("ui-state-highlight");
-						return false;
-					}
-					return true;
-				}
-
-			});
-
-			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
-			//$('#pager_center').css('width', newElement.width() - 6); 
-			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 40 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('width', this.container.width() - 6);
-			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 40 * scale + 'px');
-			$('th.ui-th-column div').css('height', 'auto !important');
-			$('th.ui-th-column div').css('white-space', 'normal !important');
-
+			for (var i = 0; i < dataToTable.length; i++) {
+				tableToChange.jqGrid('addRowData', i + 1, dataToTable[i]);
+			}
+			tableToChange.jqGrid('setGridParam',{ rowNum : cols });
+			
 			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
 
-			newTable.jqGrid('setGridHeight', this.container.height() - gboxHeight - 2);
-			newTable.jqGrid('setGridWidth', this.container.width() - 1, true);
-			*/
+			tableToChange.jqGrid('setGridHeight', this.container.height() - gboxHeight - 2);
+			tableToChange.jqGrid('setGridWidth', this.container.width() - 1, true);
+
+			this.jqgridElem.trigger('reloadGrid');
+			
 		}
 	});
 	return AlarmListView;

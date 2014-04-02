@@ -70,7 +70,7 @@ define([
 			else {
 				//show board according to tab
 				var curBoard = this.boardViewTabs[numTab].board;
-				console.log(curBoard);
+				//console.log(curBoard);
 				//curBoard.clear();
 				var container = curBoard.container;
 				//var tabContainer = curBoard.elContainer;
