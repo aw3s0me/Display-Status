@@ -20,7 +20,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			}
 			for (var i = 0; i < this.elements.length; i++) {
 				//this.elements.models[i].on('change', this.addNewPoint, {options: "ololo"});
-				this.elements.models[i].on('change : value', this.addNewPoint, this);
+				this.elements.models[i].on('change:value', this.addNewPoint, this);
 			}
 			
 			this.render();
@@ -83,12 +83,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						color: '#808080'
 					}]
 				},
-				/*tooltip: {
-					valueSuffix: '°C'
-				}, */
-				//legend: model.get('legend'),
-				series: //cache data, store it on the server side and pass here
-				dataToChart
+				series: dataToChart
 			});
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -99,6 +94,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			//model.set(seriesArr') = seriesArr;
 		},
 		addNewPoint: function(model) {
+			console.log('upd');
 			var chart = this.chart;
 			//console.log(chart);
 			var index = undefined; //index of series
@@ -137,7 +133,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.grid.resizeTile(px, py, dx, dy, tile);
 
 			var linkArr = model.get('link');
-
+			_seriesArr = [];
 			if (linkArr) {
 				for (var j = 0; j < linkArr.length; j++) {
 					//console.log(this.elements);
@@ -150,7 +146,14 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			chart.setTitle({ text: model.get('caption')});
 
 			while(chart.series.length > 0)
-				chart.series[0].remove(true);
+				chart.series[0].remove(false);
+
+			for (var i = 0; i < dataToChart.length; i++) {
+				console.log(dataToChart[i]);
+				chart.addSeries(dataToChart[i], false);
+			}
+
+			console.log(chart.series);
 
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -158,7 +161,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var width = dx * unitHeight * scale;
 
 			this.chart.setSize(width, height, true);
-			
+
 			chart.redraw();
 
 		}

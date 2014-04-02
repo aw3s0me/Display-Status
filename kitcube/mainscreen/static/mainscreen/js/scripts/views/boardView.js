@@ -122,7 +122,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							server: attr["server"],
 							device: attr["device"],
 							dbname: attr["dbname"],
-							dbgroup: attr["group"],
+							dbgroup: attr["dbgroup"],
 							mask: attr["mask"],
 							size: attr["size"],
 							coords: attr["coords"]
@@ -277,10 +277,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								server: attr["server"],
 								device: attr["device"],
 								dbname: attr["dbname"],
-								dbgroup: attr["group"],
+								dbgroup: attr["dbgroup"],
 								mask: attr["mask"],
 								size: attr["size"],
-								coords: attr["coords"]
+								coords: attr["coords"],
+								values: []
 							});
 							sensorView.rerender();
 							//newElements.sensors[_id] = sensorModel;
@@ -544,11 +545,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 				sensorDiv.innerHTML = value.toFixed(1);
 				var now = new Date;
 				var lastTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+				sensorModel.get('values').push({
+					x: lastTime,
+					y: value
+				});
 				sensorModel.set({
 					'value': value,
-					'lastTime': lastTime
+					'lastTime': lastTime,
 				});
-
+				console.log(sensorId);
 			});
 
 		},
