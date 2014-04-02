@@ -113,6 +113,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s3.style.top = 4 * scale + 'px';
 			s3.innerHTML = "<b>x</b>";
 			console.log('updated');
+		},
+		removeFromDom: function() {
+			//this.container.remove();
+			this.grid.removeUnit(this.container.parent());
+			console.log('removed' + this.model.get('id'));
 		}
 	});
 

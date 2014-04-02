@@ -189,7 +189,10 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			tableToChange.jqGrid('setGridWidth', this.container.width() - 1, true);
 
 			this.jqgridElem.trigger('reloadGrid');
-			
+		},
+		removeFromDom: function() {
+			this.grid.removeUnit(this.container.parent());
+			console.log('removed alarm');
 		}
 	});
 	return AlarmListView;

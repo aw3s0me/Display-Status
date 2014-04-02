@@ -28,6 +28,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 			charts: {},
 			alarms: {}
 		},
+		updSensorsInterval: undefined,
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
@@ -188,7 +189,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 
 						});
 
-						console.log(newAlarmListModel);
 						//console.log(newAlarmCollection.id);
 						this.elements.alarms[_id] = newAlarmListModel;
 						var newAlarmListView = new AlarmListView({
@@ -236,12 +236,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 				}
 			}
 
-			setInterval(function() {
+			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
 			}, 5000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
-
+			this.updSensorsInterval = window.clearInterval(this.updSensorsInterval);
 			var textToParse = options.aceText;
 			var myParser = new cfgParser('1');
 			var prsObj = myParser.parseJson(textToParse);
@@ -284,8 +284,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								values: []
 							});
 							sensorView.rerender();
-							//newElements.sensors[_id] = sensorModel;
-							//newViews.sensors[_id] = sensorView;
+							newElements.sensors[_id] = sensorModel;
+							newViews.sensors[_id] = sensorView;
 						} else {
 							var newSensor = new Sensor({
 								id: _id,
@@ -307,8 +307,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								model: newSensor,
 								grid: this.grid
 							});
-							//newElements.sensors[_id] = sensorModel;
-							//newViews.sensors[_id] = sensorView;
+							newElements.sensors[_id] = sensorModel;
+							newViews.sensors[_id] = sensorView;
 						}
 						break;
 					case "alarmlist":
@@ -370,12 +370,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								cols: options.cols,
 								collection: newAlarmCollection
 							});
-
-							//this.views.alarms[_id] = newAlarmList;
-							//newElements.alarms[_id] = newAlarmListModel;
-							console.log('start rerender');
 							alarmListView.rerender();
-							//newViews.alarms[_id] = newAlarmList;
+							newElements.alarms[_id] = alarmListModel;
+							newViews.alarms[_id] = alarmListView;
 						} else {
 							var alarmList = []; //collection of alarms
 
@@ -429,20 +426,20 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 
 							});
 
-							console.log(newAlarmListModel);
 							//console.log(newAlarmCollection.id);
-							newElements.alarms[_id] = newAlarmListModel;
+
 							var newAlarmListView = new AlarmListView({
 								model: newAlarmListModel,
 								grid: this.grid,
 							});
+							newElements.alarms[_id] = newAlarmListModel;
 							newViews.alarms[_id] = newAlarmListView;
 						}
 						break;
 					case "chart":
 						var chartModel = this.elements.charts[_id];
 						var chartView = this.views.charts[_id];
-						console.log(chartModel, chartView);
+						//console.log(chartModel, chartView);
 						if (chartModel && chartView) {
 							chartModel.set({
 								id: _id,
@@ -458,8 +455,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							});
 
 							chartView.rerender();
-							//newElements.charts[_id] = chartModel;
-							//newViews.charts[_id] = chartView;
+							newElements.charts[_id] = chartModel;
+							newViews.charts[_id] = chartView;
 						} else {
 							var newChart = new Chart({
 								id: _id,
@@ -490,19 +487,61 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								grid: this.grid,
 								elements: sensCollection
 							});
-							//newElements.charts[_id] = newChart;
-							//newViews.charts[_id] = newChartView;
+							newElements.charts[_id] = newChart;
+							newViews.charts[_id] = newChartView;
 						}
-
 						break;
 					default:
 						break;
 				}
 				// If Models doesn 't exist - DELETE
-				//this.elements = newElements;
-				//this.views = newViews;
-
+				//this.updSensorsInterval = setInterval(function() {self.updateAllSensors();}, 5000);
 			}
+
+			for (var grpId in this.elements) {
+				var group = this.elements[grpId];
+				var newGroup = newElements[grpId];
+				if (group === undefined) {
+					continue;
+				}
+				else {
+					for (var elemId in group) {
+						var element = newGroup[elemId];
+						if (!element) {
+							delete(group[elemId]);
+							console.log('deleted' + elemId);
+						}
+
+					}
+				} 
+			}
+
+			this.elements = newElements;
+
+			for (var grpId in this.views) {
+				var group = this.views[grpId];
+				var newGroup = newViews[grpId];
+				if (group === undefined) {
+					continue;
+				}
+				else {
+					for (var viewId in group) {
+						var view = newGroup[viewId];
+						if (!view) {
+							var viewToDelete = group[viewId];
+							viewToDelete.removeFromDom();
+							delete(group[viewId]);
+							console.log('deleted' + viewId);
+						}
+					}
+				} 
+			}
+
+			this.views = newViews;
+
+			this.updSensorsInterval = setInterval(function() {
+				self.updateAllSensors();
+			}, 5000);
 		},
 		serializeToJson: function() {
 			var newJson = {};
@@ -519,9 +558,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 					}
 				}
 			}
-			//console.log(newJson);
 			serializeRes = JSON.stringify(newJson, null, '\t ');
-			//console.log(serializeRes);
 			return serializeRes;
 
 		},
@@ -553,7 +590,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 					'value': value,
 					'lastTime': lastTime,
 				});
-				console.log(sensorId);
+				//console.log(sensorId);
 			});
 
 		},

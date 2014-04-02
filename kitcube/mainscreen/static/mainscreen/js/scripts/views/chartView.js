@@ -94,7 +94,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			//model.set(seriesArr') = seriesArr;
 		},
 		addNewPoint: function(model) {
-			console.log('upd');
 			var chart = this.chart;
 			//console.log(chart);
 			var index = undefined; //index of series
@@ -164,6 +163,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			chart.redraw();
 
+		},
+		removeFromDom: function() {
+			this.grid.removeUnit(this.container.parent());
+			console.log('removed chart');
 		}
 	});
 
