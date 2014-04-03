@@ -112,7 +112,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s3.style.right = 5 * scale + 'px';
 			s3.style.top = 4 * scale + 'px';
 			s3.innerHTML = "<b>x</b>";
-			console.log('updated');
+			//console.log('updated');
 		},
 		removeFromDom: function() {
 			//this.container.remove();

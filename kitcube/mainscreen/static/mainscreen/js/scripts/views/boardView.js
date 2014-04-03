@@ -536,7 +536,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 						var element = newGroup[elemId];
 						if (!element) {
 							delete(group[elemId]);
-							console.log('deleted' + elemId);
+							//console.log('deleted' + elemId);
 						}
 
 					}
@@ -557,7 +557,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							var viewToDelete = group[viewId];
 							viewToDelete.removeFromDom();
 							delete(group[viewId]);
-							console.log('deleted' + viewId);
+							//console.log('deleted' + viewId);
 						}
 					}
 				}

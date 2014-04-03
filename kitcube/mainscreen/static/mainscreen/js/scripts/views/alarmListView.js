@@ -5,6 +5,7 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 		grid: undefined,
 		jqgridElem: undefined,
 		tableId: undefined,
+		prevGboxHeight: undefined, //fu
 		initialize: function(options) { //pass it as new SensorView({collection: collection, options: options})
 			if (options.grid) {
 				this.grid = options.grid;
@@ -135,10 +136,16 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			$('th.ui-th-column div').css('height', 'auto !important');
 			$('th.ui-th-column div').css('white-space', 'normal !important');
 
-			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
+			
 
-			newTable.jqGrid('setGridHeight', this.container.height() - gboxHeight - 2);
-			newTable.jqGrid('setGridWidth', this.container.width() - 1, true);
+			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
+			this.prevGboxHeight = gboxHeight;
+			var finalGridHeight = this.container.height() - gboxHeight - 2;
+			var finalGridWidth = this.container.width() - 1;
+
+			newTable.jqGrid('setGridHeight', finalGridHeight);
+			newTable.jqGrid('setGridWidth', finalGridWidth, true);
+			console.log(finalGridHeight, finalGridWidth);
 		},
 		rerender: function() {
 			console.log(this.model);
@@ -161,6 +168,7 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			var px = alarmModel.get('coords')[0];
 			var py = alarmModel.get('coords')[1];
 			var cols = alarmModel.get('cols');
+			var name = alarmModel.get('id');
 
 			var tile = this.container.parent();
 			this.grid.resizeTile(px, py, dx, dy, tile);
@@ -182,12 +190,35 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 				tableToChange.jqGrid('addRowData', i + 1, dataToTable[i]);
 			}
 			tableToChange.jqGrid('setGridParam',{ rowNum : cols });
-			
-			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
 
-			tableToChange.jqGrid('setGridHeight', this.container.height() - gboxHeight - 2);
-			tableToChange.jqGrid('setGridWidth', this.container.width() - 1, true);
+			/*$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
+			//$('#pager_center').css('width', newElement.width() - 6); 
+			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 40 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('width', this.container.width() - 6);
+			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 40 * scale + 'px');
+			$('th.ui-th-column div').css('height', 'auto !important');
+			$('th.ui-th-column div').css('white-space', 'normal !important'); */ 
 
+			var gboxHeight = undefined;
+			if (this.prevGboxHeight !== undefined) {
+				gboxHeight = this.prevGboxHeight;
+			}
+			else {
+				gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
+			}
+
+			var finalGridHeight = this.container.height() - gboxHeight - 2;
+			var finalGridWidth = this.container.width() - 1;
+
+			tableToChange.jqGrid('setGridHeight', finalGridHeight);
+			tableToChange.jqGrid('setGridWidth', finalGridWidth, true);
+			console.log(finalGridHeight, finalGridWidth);
 			this.jqgridElem.trigger('reloadGrid');
 		},
 		removeFromDom: function() {

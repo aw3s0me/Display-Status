@@ -152,7 +152,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				this.elements.models[i].off('addPoint');
 			}
 
-			console.log('rerender chart');
+			//console.log('rerender chart');
 			var model = this.model;
 			var chart = this.chart;
 			var dataToChart = this.elements.paramToChart();
@@ -183,11 +183,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				chart.series[0].remove(false);
 
 			for (var i = 0; i < dataToChart.length; i++) {
-				console.log(dataToChart[i]);
+				//console.log(dataToChart[i]);
 				chart.addSeries(dataToChart[i], false);
 			}
 
-			console.log(chart.series);
+			//console.log(chart.series);
 
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -198,7 +198,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			for (var i = 0; i < this.elements.length; i++) {
 				this.elements.models[i].on('addPoint', this.addNewPoint, this);
-				console.log("CHANGED: " +i);
+				//console.log("CHANGED: " +i);
 			}
 
 
@@ -207,7 +207,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		removeFromDom: function() {
 			this.grid.removeUnit(this.container.parent());
-			console.log('removed chart');
+			//console.log('removed chart');
 		},
 		redraw: function() {
 			this.chart.redraw();
