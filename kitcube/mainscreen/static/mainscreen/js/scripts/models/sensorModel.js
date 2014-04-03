@@ -16,7 +16,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			dbname: undefined,
 			dbgroup: undefined,
 			mask: undefined,
-			values: [],
+			values: undefined,
 			size: [],
 			coords: []
 		},
@@ -25,6 +25,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.on('change: value', function() {
 				//do smth
 			});
+			
+
 		},
 		getChartProperties: function() {
 			return {

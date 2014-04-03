@@ -31,7 +31,7 @@ require.config({
     "yaml": "vendor/js-yaml/js-yaml.min",
     "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min",
     //chart part
-    "highcharts": "vendor/Highcharts-3.0.10/js/modules/exporting"//"vendor/highcharts.com/js/modules/exporting.src"
+    "highcharts": "vendor/highcharts.com/js/highcharts.src"//"vendor/highcharts.com/js/modules/exporting.src"//"vendor/Highcharts-3.0.10/js/modules/exporting"//
   },
   shim: {
     //jqueryui: "jquery",
@@ -105,8 +105,8 @@ require.config({
     },
     highcharts: {
       deps: [
-        "jquery",
-        "vendor/Highcharts-3.0.10/js/highcharts"
+        "jquery"
+        //"vendor/Highcharts-3.0.10/js/highcharts"
       ]
     }
   }

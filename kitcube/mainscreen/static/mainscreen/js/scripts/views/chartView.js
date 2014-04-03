@@ -19,7 +19,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				this.elements = options.elements;
 			}
 			for (var i = 0; i < this.elements.length; i++) {
-				//this.elements.models[i].on('change', this.addNewPoint, {options: "ololo"});
 				this.elements.models[i].on('addPoint', this.addNewPoint, this);
 			}
 			
@@ -117,18 +116,30 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			//if (index == 0) {var shift = true;}
 
-			if (model.get('values').length > 10) {
-				shift = true;
-			}
+			//if (model.get('values').length > 10) {
+				//shift = true;
+			//}
 			//console.log(model.get('values'));
 
 			var x = model.get('lastTime');
 			var y = parseFloat(sensorValue);
+
+			if (!y || !x) {
+				return;
+			}
+
 			var Point = {
 				x: x,
 				y: y
 			};
-			console.log(index);
+			//console.log(chart.series[index]);
+			if (chart.series[index]) {
+				if (chart.series[index].data.length > 10) {
+					shift = true;
+				}
+			}
+			
+
 			if (chart.series[index])
 				chart.series[index].addPoint(Point, false, shift); //last point is for everyone\
 
@@ -136,6 +147,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 		},
 		rerender: function() {
+
+			for (var i = 0; i < this.elements.length; i++) {
+				this.elements.models[i].off('addPoint');
+			}
+
 			console.log('rerender chart');
 			var model = this.model;
 			var chart = this.chart;
@@ -157,7 +173,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					//console.log(this.elements);
 					var sensorModel = this.elements.models[j];
 					//console.log(sensorModel);
-					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name')]);
+					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name'), j]);
 				}
 			} 
 
@@ -180,7 +196,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			this.chart.setSize(width, height, true);
 
-			//chart.redraw();
+			for (var i = 0; i < this.elements.length; i++) {
+				this.elements.models[i].on('addPoint', this.addNewPoint, this);
+				console.log("CHANGED: " +i);
+			}
+
+
+			chart.redraw();
 
 		},
 		removeFromDom: function() {

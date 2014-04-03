@@ -126,7 +126,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 							dbgroup: attr["dbgroup"],
 							mask: attr["mask"],
 							size: attr["size"],
-							coords: attr["coords"]
+							coords: attr["coords"],
+							values: new Array(),
+							lastTime: new Date
 						});
 						//console.log(newSensor);
 						var newSensorView = new SensorView({
@@ -247,6 +249,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 
 
 			this.updSensorsInterval = window.clearInterval(this.updSensorsInterval);
+
 			var textToParse = options.aceText;
 			var myParser = new cfgParser('1');
 			var prsObj = myParser.parseJson(textToParse);
@@ -287,7 +290,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								mask: attr["mask"],
 								size: attr["size"],
 								coords: attr["coords"],
-								values: []
+								values: new Array(),
+								lastTime: new Date,
+								value: undefined
 							});
 							sensorView.rerender();
 							newElements.sensors[_id] = sensorModel;
@@ -308,7 +313,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 								dbgroup: attr["dbgroup"],
 								mask: attr["mask"],
 								size: attr["size"],
-								coords: attr["coords"]
+								coords: attr["coords"],
+								values: new Array(),
+								lastTime: new Date
 							});
 							var newSensorView = new SensorView({
 								model: newSensor,
@@ -611,12 +618,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 					var sensorDiv = sensor.find(".sensorVal")[0];
 					sensorDiv.innerHTML = value.toFixed(1);
 					var now = new Date;
-					var lastTime = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+					var lastTime = _.clone(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
 
 					if (sensorModel.get('values').length > 10) {sensorModel.get('values').shift();}
-					console.log(sensorModel.get('id'));
-					//console.log(JSON.stringify(sensorModel.get('values')));
-					console.log(sensorModel.get('values'));
 
 					var array = sensorModel.get('values').slice(0);
 
