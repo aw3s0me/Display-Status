@@ -23,7 +23,9 @@ define([
 
       Router.initialize();
 
-      document.location.href = '#login';
+      //document.location.href = '#login';
+
+      document.location.href = '#editor';
 
       /*$("#btnBoard").click(function(){
           document.location.href = '#board/0';

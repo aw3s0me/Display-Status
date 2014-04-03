@@ -1,149 +1,31 @@
-<!-- <script type="text/template" id="txtEditorTemplate"> -->
-    <div id="kitcube-console">
-{
-    "sensor1":
-    {
-        "type":"sensor",
-        "sensortype":"tile",
-        "name":"200mm from vessel wall",
-        "comment": "435-RTP-5-0-0103",
-        "device":"HATPRO",
-        "dbgroup":"TempMon",
-        "dbname":"BakeOut2013",
-        "server":"temp0",
-        "min": 0,
-        "max": 100,
-        "unit": "C",
-        "mask": "1",
-        "coords":[1, 1],
-        "size":[4, 2]
-    },
-    "sensor2":
-    {
-        "type":"sensor",
-        "sensortype":"tile",
-        "name":"base #2 downstream up right",
-        "comment": "435-RTP-5-0-0300",
-        "device":"HATPRO",
-        "dbgroup":"TempMon",
-        "dbname":"BakeOut2013",
-        "server":"temp0",
-        "min": 0,
-        "max": 100,
-        "unit": "km/h",
-        "mask": "2",
-        "coords":[5, 5],
-        "size":[4, 2]
-    },
-    "sensor3":
-    {
-        "type":"sensor",
-        "sensortype":"tile",
-        "name":"base #2 downstream down right",
-        "comment": "435-RTP-5-0-0302",
-        "device":"HATPRO",
-        "dbgroup":"TempMon",
-        "dbname":"BakeOut2013",
-        "server":"temp0",
-        "min": 0,
-        "max": 100,
-        "unit": "I",
-        "mask": "3",
-        "coords":[8, 8],
-        "size":[4, 2]
-    },
-    "sensor4":
-    {
-        "type":"sensor",
-        "sensortype":"tile",
-        "name":"500 port downstream on top  part Z",
-        "comment": "435-RTP-5-0-0350",
-        "device":"HATPRO",
-        "dbgroup":"TempMon",
-        "dbname":"BakeOut2013",
-        "server":"temp0",
-        "min": 0,
-        "max": 100,
-        "unit": "K",
-        "mask": "4",
-        "coords":[3, 5],
-        "size":[4, 2]
-    },
-    "alarmlist1": {
-        "type": "alarmlist",
-        "size": [6, 4],
-        "coords": [0, 0],
-        "alarm1": 
-        {
-            "no": 1,
-            "module": "T02",
-            "group": "DAS",
-            "app": "Reader",
-            "server": "fpd",
-            "dbname": "katrin_rep",
-            "mask": 1
-        },
-        "alarm2": 
-        {
-            "no": 2,
-            "module": "T02",
-            "group": "",
-            "app": "sync",
-            "server": "fpd",
-            "dbname": "katrin_rep",
-            "mask": 2
-        },
-        "alarm3":
-        {
-            "no": 3,
-            "module": "T03",
-            "group": "",
-            "app": "sync",
-            "server": "fpd",
-            "dbname": "katrin_rep",
-            "mask": 3
-        },
-        "alarm4":
-        {
-            "no": 4,
-            "module": "T04",
-            "group": "DAS",
-            "app": "Reader",
-            "server": "fpd",
-            "dbname": "katrin_rep",
-            "mask": 4
-        },
-        "alarm5":
-        {
-            "no": 4,
-            "module": "T04",
-            "group": "",
-            "app": "sync",
-            "server": "fpd",
-            "dbname": "katrin_rep",
-            "mask": 4
-        }
-    },
-    "chart1": 
-    {
-        "width": 1,
-        "caption": "sensor values",
-        "type": "chart",
-        "charttype": "line",
-        "size": [8, 5],
-        "coords": [0, 0],
-        "link": ["sensor1", "sensor2", "sensor3", "sensor4"],
-        "legend": 
-        {
-            "layout": "vertical",
-            "align": "right",
-            "verticalAlign": "top",
-            "x": -10,
-            "y": 100,
-            "borderWidth": 0
-        }
-    } 
-}
-
-    </div>
-<!-- </script> -->
+<div id="txtEditContainer">
+    <!-- <ul id="txtProject" class="dropdown-menu scrollable-menu" role="menu">
+        <li><a href="#">Open Project 1</a></li>
+        <li><a href="#">Open Project 2</a></li>
+    </ul>
+    <ul id="txtCfg" class="dropdown-menu scrollable-menu" role="menu">
+        <li><a href="#">Open Cfg 1</a></li>
+        <li><a href="#">Open Cfg 2</a></li>
+    </ul> -->
+    <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Scrollable Menu <span class="caret"></span></button>
+                <ul class="dropdown-menu scrollable-menu" role="menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                </ul>
+            </div>
+    <button id="saveTxt" type="button" class="btn btn-default" value="Save">Save</button>
+    <div id="txtEditor"></div>
+</div>

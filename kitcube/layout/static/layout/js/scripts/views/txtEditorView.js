@@ -1,17 +1,17 @@
-define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], function($, _, Backbone, textEditorTemplate) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templates/txtEditor.html'], function($, _, Backbone, jqueryui ,bootstrap, textEditorTemplate) {
 	var txtEditorView = Backbone.View.extend({
-		el: 'kitcube-console',
-		appendElem: $('#kitcube-container'),
+		el: 'txtEditor',
+		appendElem: $('#container'),
 		externEditor: null,
 		initialize: function() {
-			var elem = $('#kitcube-console').val();
+			var elem = $('#txtEditor').val();
 			if (elem === undefined) {
 				var data = {};
 				var compiledTemplate = _.template(textEditorTemplate, data);
 				this.appendElem.append(compiledTemplate);
-				this.externEditor = ace.edit('kitcube-console');
-				if ($('#kitcube-console').val() !== undefined) {
-					$('#kitcube-console')[0].style.fontSize = '14px';
+				this.externEditor = ace.edit('txtEditor');
+				if ($('#txtEditor').val() !== undefined) {
+					$('#txtEditor')[0].style.fontSize = '14px';
 				}
 				this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
 				this.viewSizeDetector.detectBannerSize();
@@ -20,9 +20,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 
 				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
 
-				$('#kitcube-console').css('margin-top', marginTop + 'px');
-				$('#kitcube-console').css('height', this.viewSizeDetector.boardSizeMax.height + 'px');
-				$('#kitcube-console').css('width', this.viewSizeDetector.boardSizeMax.width + 'px');
+				$('#txtEditor').css('margin-top', marginTop + 'px');
+				$('#txtEditor').css('height', this.viewSizeDetector.boardSizeMax.height + 'px');
+				$('#txtEditor').css('width', this.viewSizeDetector.boardSizeMax.width + 'px');
 				
 				this.externEditor.resize();
 				this.externEditor.setTheme("ace/theme/monokai");

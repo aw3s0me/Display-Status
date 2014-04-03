@@ -33,20 +33,24 @@ define([
 		settingsView: undefined,
 		showLoginView: function() {
 			var loginView = new LoginView();
-			
 
 		},
 		showTextEditorView: function() {
-			if ($("#board-container").val() !== undefined) {
+			/*if ($("#board-container").val() !== undefined) {
 				$("#board-container").hide();
 				if (this.curTab) {
 					var newText = this.curTab.serializeToJson();
 					this.myTextEditorView.externEditor.getSession().setValue(newText);
 				}
 				
+			} */
+
+			if (this.myTextEditorView === undefined) {
+				this.myTextEditorView = new TextEditorView();
 			}
-			if ($("#kitcube-console").val() !== undefined)
-				$("#kitcube-console").show();
+
+			//if ($("#kitcube-console").val() !== undefined)
+				//$("#kitcube-console").show();
 		},
 		showSettingsView: function() {
 			//show it
@@ -58,9 +62,11 @@ define([
 				//if tab doesnt exist so create
 				console.log('doesnt exist');
 
+				//var textObj = {aceText : text};
+
 				this.boardViewTabs.push({
 					id: this.tabCount++,
-					board: new BoardView({aceText : text}),
+					board: new BoardView()
 				});
 
 				this.curTab = this.boardViewTabs[numTab].board; //get board obj
