@@ -1,0 +1,13 @@
+{
+	"alarmlist1": {
+		"alarm1": {
+			"no": 1,
+			"app": "DSA",
+			"group": "DSA",
+			"server": "fpd",
+			"dbname": "katrin_rep",
+			"mask": 0	
+		}
+	}
+
+}

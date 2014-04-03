@@ -1,0 +1,58 @@
+/*html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.wrapper {
+    position: relative;
+    min-height: 100%;
+}
+
+.banner {
+    margin: 0;
+    height: 50px;
+    background: url(kitcube.jpg) #476c99 no-repeat;
+}
+
+.footer {
+    position: absolute;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    border: 0px solid #bbb;
+    bottom: 0;
+}
+
+.canvas {
+    position: relative;
+    font-family: arial;
+    background: #cccccc;
+    border: 5px solid #bbbbbb;
+    margin: auto;
+}
+
+.tile {
+    color: white;
+    position: absolute;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background: #338FFF;
+    border: 3px solid white;
+    padding: 0px;
+    margin: 0px;
+}
+
+.grid {
+    position: absolute;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+ */

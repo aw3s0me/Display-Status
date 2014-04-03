@@ -1,0 +1,70 @@
+{
+	"sensor1":
+	{
+		"type":"sensor",
+		"sensortype":"tile",
+		"name":"200mm from vessel wall",
+		"comment": "435-RTP-5-0-0103",
+		"device":"HATPRO",
+		"group":"TempMon",
+		"dbname":"BakeOut2013",
+		"server":"temp0",
+		"min": 0,
+		"max": 100,
+		"unit": "C",
+		"mask": "1",
+		"coords":[1, 1],
+		"size":[4, 2]
+	},
+	"sensor2":
+	{
+		"type":"sensor",
+		"sensortype":"tile",
+		"name":"base #2 downstream up right",
+		"comment": "435-RTP-5-0-0300",
+		"device":"HATPRO",
+		"group":"TempMon",
+		"dbname":"BakeOut2013",
+		"server":"temp0",
+		"min": 0,
+		"max": 100,
+		"unit": "km/h",
+		"mask": "2",
+		"coords":[5, 5],
+		"size":[4, 2]
+	},
+	"sensor3":
+	{
+		"type":"sensor",
+		"sensortype":"tile",
+		"name":"base #2 downstream down right",
+		"comment": "435-RTP-5-0-0302",
+		"device":"HATPRO",
+		"group":"TempMon",
+		"dbname":"BakeOut2013",
+		"server":"temp0",
+		"min": 0,
+		"max": 100,
+		"unit": "I",
+		"mask": "3",
+		"coords":[8, 8],
+		"size":[4, 2]
+	},
+	"sensor4":
+	{
+		"type":"sensor",
+		"sensortype":"tile",
+		"name":"500 port downstream on top  part Z",
+		"comment": "435-RTP-5-0-0350",
+		"device":"HATPRO",
+		"group":"TempMon",
+		"dbname":"BakeOut2013",
+		"server":"temp0",
+		"min": 0,
+		"max": 100,
+		"unit": "K",
+		"mask": "4",
+		"coords":[3, 5],
+		"size":[4, 2]
+	}
+} 
