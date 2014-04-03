@@ -23,9 +23,9 @@ define([
 
       Router.initialize();
 
-      document.location.href = '#board';
+      document.location.href = '#login';
 
-      $("#btnBoard").click(function(){
+      /*$("#btnBoard").click(function(){
           document.location.href = '#board/0';
       });
 
@@ -35,7 +35,7 @@ define([
 
       $("#btnLogin").click(function(){
           document.location.href = '#login';
-      });
+      }); */
 
 
 

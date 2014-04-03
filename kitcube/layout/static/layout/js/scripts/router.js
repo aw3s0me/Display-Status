@@ -53,7 +53,7 @@ define([
 		},
 		showBoardView: function(id) {
 			var numTab = (id === undefined)? 0 : parseInt(id);
-			var text = this.myTextEditorView.externEditor.getSession().getValue();
+			//var text = this.myTextEditorView.externEditor.getSession().getValue();
 			if (!this.boardViewTabs[numTab]) {
 				//if tab doesnt exist so create
 				console.log('doesnt exist');
@@ -75,13 +75,7 @@ define([
 			else {
 				//show board according to tab
 				var curBoard = this.boardViewTabs[numTab].board;
-				//console.log(curBoard);
-				//curBoard.clear();
 				var container = curBoard.container;
-				//var tabContainer = curBoard.elContainer;
-				//this.boardViewTabs[numTab].board = null;
-				//tabContainer.remove();
-				//this.boardViewTabs[numTab].board = new BoardView({aceText : text});
 				console.log('exists');
 				curBoard.reinitWithOptions({aceText : text});
 				if ($("#kitcube-console").val() !== undefined)

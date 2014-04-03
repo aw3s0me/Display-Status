@@ -72,7 +72,8 @@ body {
     color: #27ae60;
 }
 
-#loginForm input[type="text"], input[type="submit"] {
+#loginForm input[type="text"],
+#loginForm input[type="submit"] {
     clear: both;
     float: left;
     display: block;
@@ -87,13 +88,43 @@ body {
     font-size: 14px;
 }
 
-#loginForm input[type="submit"] {
+#loginForm input[type=submit] {
     background: #27ae60;
     color: #ecf0f1;
     border: 0;
     border-bottom: 2px solid #2ecc71;
     margin: 10px 0 0;
 }
+
+#loginForm input[value*="Facebook"] {
+    background: #3b5998;
+    border-color: #1f4189;
+    width: 50%;
+    float: left;
+    clear: none;
+    margin-left: 0;
+}
+
+#loginForm input[value*="Google"] {
+    background: #0396c7;
+    border-color: #0078a6;
+    width: 50%;
+    float: left;
+    clear: none;
+}
+
+#loginForm input[value*="Facebook"]:active,
+#loginForm input[value*="Facebook"]:focus {
+    color: #ecf0f1;
+    background: #1f4189;
+}
+
+input[value*="Google"]:active,
+input[value*="Google"]:focus {
+    color: #ecf0f1;
+    background: #0078a6;
+}
+
 
 
 #username {
@@ -105,14 +136,6 @@ body {
 }
 
 #loginBtn {
-
-}
-
-#loginFacebook {
-
-}
-
-#loginGoogle {
 
 }
 
