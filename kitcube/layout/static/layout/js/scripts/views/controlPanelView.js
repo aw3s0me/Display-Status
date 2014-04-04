@@ -9,7 +9,7 @@ define(['jquery', 'underscore', 'backbone', 'chosen','text!templates/controlPane
 		render: function() {
 			var compiledTemplate = _.template(ControlPanelTemplate, {});
 			this.container.append(compiledTemplate);
-			//$(element).addClass('chzn-select');
+			
     		//$(element).chosen();
 		}
 	})

@@ -12,13 +12,34 @@ define(['jquery', 'underscore', 'backbone', 'views/boardView', 'text!templates/b
 		render: function() {
 			var compiledBoardTemplate = _.template(BoardViewContainer, {});
 			this.container.append(compiledBoardTemplate);
-
+			$(".nav-tabs").css('width', $('#boardContainer').width());
+			this.el = $('#boardContainer');
 		},
 		addTab: function(newBoard) {
 			tabs.push({
 				id: tabCount++,
 				board: newBoard
 			});
+		},
+		hide: function() {
+			this.el.hide();
+		},
+		show: function() {
+			this.el.show();
+		},
+		isHidden: function() {
+			if(this.el.is(':hidden')) {
+				return true;
+			}
+			else 
+				return false;
+		},
+		isShown: function() {
+			if(this.el.is(':hidden')) {
+				return false;
+			}
+			else 
+				return true;
 		}
 	})
 

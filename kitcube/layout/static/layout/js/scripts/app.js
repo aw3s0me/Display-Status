@@ -25,7 +25,7 @@ define([
 
       //document.location.href = '#login';
 
-      document.location.href = '#board';
+      //document.location.href = '#board';
 
       //document.location.href = '#settings';
 

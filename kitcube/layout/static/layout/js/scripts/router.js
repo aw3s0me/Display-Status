@@ -9,8 +9,9 @@ define([
 	'views/controlPanelView',
 	'views/txtEditorView',
 	'views/settingsView',
-	'views/boardViewContainer'
-], function($, _, Backbone, sizeDetector, BoardView, LoginView, ControlPanelView, TextEditorView, SettingsView, BoardViewContainer ) {
+	'views/boardViewContainer',
+	'views/navPanelView'
+], function($, _, Backbone, sizeDetector, BoardView, LoginView, ControlPanelView, TextEditorView, SettingsView, BoardViewContainer, NavPanelView) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -30,26 +31,54 @@ define([
 		myBoardViewContainer: undefined,
 		myTextEditorView: undefined,
 		mySettingsView: undefined,
+		myNavPanel: undefined,
 		showLoginView: function() {
 			if (this.myLoginView === undefined) {
 				this.myLoginView = new LoginView();
 			}
+
 		},
 		showTextEditorView: function() {
-			if (this.myTextEditorView === undefined) {
-				this.myTextEditorView = new TextEditorView();
+			if (this.myTextEditorView.isHidden()) {
+				this.myTextEditorView.show();
+			} 
+
+			if (this.myBoardViewContainer.isShown()) {
+				this.myBoardViewContainer.hide();
+			} 
+
+			if (this.mySettingsView.isShown()) {
+				this.mySettingsView.hide();
 			}
+
 		},
 		showSettingsView: function() {
-			if (this.mySettingsView === undefined) {
-				this.mySettingsView = new SettingsView();
+			if (this.mySettingsView.isHidden()) {
+				this.mySettingsView.show();
+			} 
+
+			if (this.myBoardViewContainer.isShown()) {
+				this.mySettingsView.hide();
+			} 
+
+			if (this.myTextEditorView.isShown()) {
+				this.myTextEditorView.hide();
 			}
+
 		},
 		showBoardView: function(id) {
-			if (this.myBoardViewContainer === undefined) {
-				this.myBoardViewContainer = new BoardViewContainer();
-				this.myControlPanelView = new ControlPanelView();
+			if (this.myBoardViewContainer.isHidden()) {
+				this.myBoardViewContainer.show();
+			} 
+
+			if (this.mySettingsView.isShown()) {
+				this.mySettingsView.hide();
+			} 
+
+			if (this.myTextEditorView.isShown()) {
+				this.myTextEditorView.hide();
 			}
+
 
 			/*var tabs = this.myBoardViewContainer.tabs;
 			var numTab = (id === undefined)? 0 : parseInt(id);
@@ -79,7 +108,21 @@ define([
 
 	var initialize = function() {
 		var app_router = new AppRouter;
-			
+		app_router.myNavPanel = new NavPanelView();
+
+		if (app_router.myTextEditorView === undefined) {
+			app_router.myTextEditorView = new TextEditorView();
+		}
+
+		if (app_router.myBoardViewContainer === undefined) {
+			app_router.myBoardViewContainer = new BoardViewContainer();
+			app_router.myControlPanelView = new ControlPanelView();
+		}
+
+		if (app_router.mySettingsView === undefined) {
+			app_router.mySettingsView = new SettingsView();
+		}
+
 		Backbone.history.start();
 	};
 	return {
