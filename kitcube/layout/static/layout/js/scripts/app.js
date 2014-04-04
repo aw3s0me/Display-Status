@@ -25,9 +25,9 @@ define([
 
       //document.location.href = '#login';
 
-      //document.location.href = '#editor';
+      document.location.href = '#board';
 
-      document.location.href = '#settings';
+      //document.location.href = '#settings';
 
       /*$("#btnBoard").click(function(){
           document.location.href = '#board/0';

@@ -23,7 +23,9 @@ require.config({
     //chart part
     "highcharts": "vendor/highcharts.com/js/highcharts.src",
     //colorpicker part
-    "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min"
+    "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
+    "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
+    "tabdrop": "vendor/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min"
   },
   shim: {
     backbone: {
@@ -100,6 +102,17 @@ require.config({
       ]
     },
     minicolors: {
+      deps: [
+        "jquery",
+        "bootstrap"
+      ]
+    },
+    chosen: {
+      deps: [
+        "jquery"
+      ]
+    },
+    tabdrop: {
       deps: [
         "jquery",
         "bootstrap"

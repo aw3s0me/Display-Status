@@ -8,8 +8,9 @@ define([
 	'views/loginView',
 	'views/controlPanelView',
 	'views/txtEditorView',
-	'views/settingsView'
-], function($, _, Backbone, sizeDetector, BoardView, LoginView, ControlPanelView, TextEditorView, SettingsView ) {
+	'views/settingsView',
+	'views/boardViewContainer'
+], function($, _, Backbone, sizeDetector, BoardView, LoginView, ControlPanelView, TextEditorView, SettingsView, BoardViewContainer ) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -23,13 +24,11 @@ define([
 			// Default
 			'*actions': 'defaultAction'
 		},
-		myTextEditorView: undefined,
 		self: this,
-		tabCount: 0,
-		boardViewTabs: [],
-		curTab: undefined,
 		myLoginView: undefined,
-		controlPanelView: undefined,
+		myControlPanelView: undefined,
+		myBoardViewContainer: undefined,
+		myTextEditorView: undefined,
 		mySettingsView: undefined,
 		showLoginView: function() {
 			if (this.myLoginView === undefined) {
@@ -37,21 +36,9 @@ define([
 			}
 		},
 		showTextEditorView: function() {
-			/*if ($("#board-container").val() !== undefined) {
-				$("#board-container").hide();
-				if (this.curTab) {
-					var newText = this.curTab.serializeToJson();
-					this.myTextEditorView.externEditor.getSession().setValue(newText);
-				}
-				
-			} */
-
 			if (this.myTextEditorView === undefined) {
 				this.myTextEditorView = new TextEditorView();
 			}
-
-			//if ($("#kitcube-console").val() !== undefined)
-				//$("#kitcube-console").show();
 		},
 		showSettingsView: function() {
 			if (this.mySettingsView === undefined) {
@@ -59,54 +46,34 @@ define([
 			}
 		},
 		showBoardView: function(id) {
+			if (this.myBoardViewContainer === undefined) {
+				this.myBoardViewContainer = new BoardViewContainer();
+				this.myControlPanelView = new ControlPanelView();
+			}
+
+			/*var tabs = this.myBoardViewContainer.tabs;
 			var numTab = (id === undefined)? 0 : parseInt(id);
-			//var text = this.myTextEditorView.externEditor.getSession().getValue();
-			if (!this.boardViewTabs[numTab]) {
-				//if tab doesnt exist so create
-				console.log('doesnt exist');
-
-				//var textObj = {aceText : text};
-
-				this.boardViewTabs.push({
-					id: this.tabCount++,
-					board: new BoardView()
-				});
+			if (!tabs[numTab]) {
+				var newBoard = new BoardView();
+				this.myBoardViewContainer.addTab(newBoard);
 
 				this.curTab = this.boardViewTabs[numTab].board; //get board obj
 
-				var container = this.curTab.container; //get jquery container
-				if ($("#kitcube-console").val() !== undefined) //if console still opened
-					$("#kitcube-console").hide();
-				if (container.val() !== undefined) { //show container
-					container.show();
-				}
 			}
 			else {
 				//show board according to tab
-				var curBoard = this.boardViewTabs[numTab].board;
-				var container = curBoard.container;
-				console.log('exists');
-				curBoard.reinitWithOptions({aceText : text});
-				if ($("#kitcube-console").val() !== undefined)
-					$("#kitcube-console").hide();
-				if (container.val() !== undefined) {
-					container.show();
-				}
-			}	
+				var curBoard = tabs[numTab];
+			}*/
 		},
 		changeUnitNumber: function(x, y) {
-			if (self.boardView !== undefined)
-				self.boardView.change(x, y);
+
 		},
 		resizeBoard: function(x, y) {
-			console.log('resizeBoard2');
-			if (self.boardView !== undefined)
-				self.boardView.resize(x, y);
+
 		},
 		defaultAction: function(actions) {
 			// We have no matching route, lets just log what the URL was
 			console.log('No route:', actions);
-			this.showBoardView();
 		}
 	});
 

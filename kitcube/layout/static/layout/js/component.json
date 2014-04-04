@@ -15,6 +15,7 @@
 		"jqgrid": null,
 		"highcharts.com": "3.0.9",
 		"jqueryui-touch-punch": null,
-		"jquery-minicolors": null
+		"jquery-minicolors": null,
+		"bootstrap-tabdrop" : null
 	} 
 }		

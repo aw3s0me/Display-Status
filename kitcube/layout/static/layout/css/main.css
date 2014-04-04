@@ -141,51 +141,6 @@ input[value*="Google"]:focus {
 
 /* LoginView CSS TEMPLATE END */
 
-/* BoardView CSS TEMPLATE START */
-
-#kitcube-container {
-  margin-top: 100px;
-  margin: 0 auto;
-}
-
-#board-container {
-  width: 100%;
-
-}
-
-.canvas {
-    position: relative;
-    font-family: arial;
-    background: #cccccc;
-    /*border: 5px solid #bbbbbb; */
-    margin: 0 auto; 
-}
-
-.tile {
-    color: white;
-    /*position: relative; */
-    position: absolute; 
-    z-index: 2;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    /*background: #338FFF; */
-    border: 3px solid white;
-    padding: 0px;
-    margin: 0px;
-    background-color: rgba(51, 143, 255, 0.6);
-}
-
-.grid {
-    /*position: absolute; */
-    position: absolute;
-    z-index: 1;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border: 1px solid black;
-}
-
-/* BoardView CSS TEMPLATE END */
-
 /* TextEditorView CSS TEMPLATE START */
 
 #txtEditor {
@@ -277,6 +232,95 @@ input[value*="Google"]:focus {
     margin-top: 15%;
 }
 
-
-
 /* SettingsView CSS TEMPLATE END */
+
+
+
+
+
+
+/* Control Panel CSS TEMPLATE BEGIN */
+
+#controlPanel {
+    width: 20%;
+    background: #ebebeb;
+    width: 200px;
+    position: fixed;
+    z-index: 1000;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+    -moz-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+    -webkit-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+    right: 0;
+}
+
+#controlPanel:hover, #controlPanel:focus {
+    right: 0 !important;
+}
+
+#controlPanel .arrow {
+    right: 2px;
+}
+
+#controlPanel .arrow {
+    font: normal 400 25px/25px 'Acme', Helvetica, Arial, sans-serif; /* Acme font is required for .arrow */
+    color: rgba(0,0,0,0.75); /* Arrow color */
+    width: 16px;
+    height: 25px;
+    display: block;
+    position: absolute;
+    top: 20px;
+    cursor: default;
+}
+
+#controlPanel:hover .arrow {
+    transform: rotate(-180deg) translate(6px,-3px);
+    -moz-transform: rotate(-180deg) translate(6px,-3px);
+    -webkit-transform: rotate(-180deg) translate(6px,-3px);
+}
+
+/* Control Panel CSS TEMPLATE END */
+
+/* BoardView CSS TEMPLATE START */
+
+#kitcube-container {
+  margin-top: 100px;
+  margin: 0 auto;
+}
+
+#board-container {
+  width: 100%;
+
+}
+
+.canvas {
+    position: relative;
+    font-family: arial;
+    background: #cccccc;
+    /*border: 5px solid #bbbbbb; */
+    margin: 0 auto; 
+}
+
+.tile {
+    color: white;
+    /*position: relative; */
+    position: absolute; 
+    z-index: 2;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    /*background: #338FFF; */
+    border: 3px solid white;
+    padding: 0px;
+    margin: 0px;
+    background-color: rgba(51, 143, 255, 0.6);
+}
+
+.grid {
+    /*position: absolute; */
+    position: absolute;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+
+/* BoardView CSS TEMPLATE END */

@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'collections/sensorGroupCollection'], function($, _, Backbone, ui, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupCollection) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 'text!templates/boardTab.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'collections/sensorGroupCollection'], function($, _, Backbone, ui, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupCollection) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -17,7 +17,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 		nowCoordY: 0,
 		grid: null,
 		viewSizeDetector: null,
-		tabs: [],
 		views: {
 			sensors: {},
 			charts: {},
@@ -30,7 +29,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 		},
 		updSensorsInterval: undefined,
 		initialize: function(options) {
-			var self = this; //for refering to this in jquery
+			/*var self = this; //for refering to this in jquery
 			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
 			this.viewSizeDetector.detectBannerSize();
 			this.viewSizeDetector.detectFooterSize();
@@ -65,11 +64,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 				self.toggleGrid();
 			});
 
-			/* board insertion part */
 			var textToParse = options.aceText;
 			var myParser = new cfgParser('1');
 			var prsObj = myParser.parseJson(textToParse);
-			this.insertFromCfg(prsObj);
+			this.insertFromCfg(prsObj); */
 		},
 		toggleGrid: function() {
 			var holder = $("#tab1");
