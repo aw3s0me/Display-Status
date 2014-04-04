@@ -21,10 +21,11 @@ require.config({
     "yaml": "vendor/js-yaml/js-yaml.min",
     "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min",
     //chart part
-    "highcharts": "vendor/highcharts.com/js/highcharts.src"
+    "highcharts": "vendor/highcharts.com/js/highcharts.src",
+    //colorpicker part
+    "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min"
   },
   shim: {
-    //jqueryui: "jquery",
     backbone: {
       deps: [
         'underscore',
@@ -96,6 +97,12 @@ require.config({
     highcharts: {
       deps: [
         "jquery"
+      ]
+    },
+    minicolors: {
+      deps: [
+        "jquery",
+        "bootstrap"
       ]
     }
   }

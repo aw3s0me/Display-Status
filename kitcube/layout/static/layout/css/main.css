@@ -201,17 +201,82 @@ input[value*="Google"]:focus {
     border: 2px solid #ddd;
     width: 90%;
     margin: 0 auto;
+    margin-top: 10px;
     background: white;
 }
 
 #saveTxt {
-    margin-right: 80px;
-    margin-top: 2px;
+    margin-right: 15px;
+    margin-top: 6px;
     float: right;
+}
 
+#txtProjects {
+    float: right;
+    margin-top: 6px;
+    margin-right: 80px;
+}
+
+#txtCfgs {
+    float: right;
+    margin-top: 6px;
+    margin-right: 10px;
 }
 
 /* TextEditorView CSS TEMPLATE END */
 
 
+/* SettingsView CSS TEMPLATE BEGIN */
 
+.settPanel {
+    height: 40%;
+}
+
+#settingsContainer {
+    border: 2px solid #ddd;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 10px;
+    background: white;
+}
+
+#settingsContainer .row {
+  margin-top: 1%;
+  vertical-align: middle;
+}
+
+#cfgProjectList {
+    float:right;
+}
+
+#saveCfg {
+    float: right;
+}
+
+#cfgOptions {
+    background: white;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 1.5%;
+    white-space:nowrap;
+}
+
+.colorpicker {
+    margin-top: 8%;
+    margin-left: 10%;
+}
+
+#cfgOptions .row {
+    width: 40%;
+    margin-top: 2%;
+    margin-left: 2%;
+}
+
+#sizeList {
+    margin-top: 15%;
+}
+
+
+
+/* SettingsView CSS TEMPLATE END */

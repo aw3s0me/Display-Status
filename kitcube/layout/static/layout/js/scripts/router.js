@@ -28,12 +28,13 @@ define([
 		tabCount: 0,
 		boardViewTabs: [],
 		curTab: undefined,
-		loginView: undefined,
+		myLoginView: undefined,
 		controlPanelView: undefined,
-		settingsView: undefined,
+		mySettingsView: undefined,
 		showLoginView: function() {
-			var loginView = new LoginView();
-
+			if (this.myLoginView === undefined) {
+				this.myLoginView = new LoginView();
+			}
 		},
 		showTextEditorView: function() {
 			/*if ($("#board-container").val() !== undefined) {
@@ -53,7 +54,9 @@ define([
 				//$("#kitcube-console").show();
 		},
 		showSettingsView: function() {
-			//show it
+			if (this.mySettingsView === undefined) {
+				this.mySettingsView = new SettingsView();
+			}
 		},
 		showBoardView: function(id) {
 			var numTab = (id === undefined)? 0 : parseInt(id);
