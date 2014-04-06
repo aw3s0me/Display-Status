@@ -1,0 +1,473 @@
+/* Layout CSS START */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#wrapper {
+  min-height: 100%;
+  position: relative;
+}
+
+#content {
+  padding-bottom: 0px; /* Height of the footer element */
+  width: 100%;
+  margin: 0 auto;
+}
+
+#banner {
+  width: 100%;
+  height: 15%;
+}
+
+#container {
+  height: 77%;
+  width: 100%;
+}
+
+#footer {
+  background: #666;
+  width: 100%;
+  height: 8%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+}
+
+/* Layout CSS END */
+
+.shadow {
+  font-size: 12px;
+  color: #ccc;
+}
+
+
+/* Html elements style css */
+
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+
+/* End */
+
+
+/* LoginView CSS TEMPLATE BEGIN */
+
+#loginForm {
+    width: 50%;
+    margin: auto;
+    margin-top: 120px;
+}
+
+#loginForm h2 {
+    text-shadow: 0 1px 0 #27ae60;
+    font-size: 1.62em;
+    color: #2ecc71;
+    display: block;
+    width: 100%;
+    padding-bottom: .4em;
+    margin-bottom: .6em;
+    border-bottom: 2px solid #2ecc71;
+    /*box-shadow*/
+    -webkit-box-shadow: 0 1px 0 #27ae60;
+    -moz-box-shadow: 0 1px 0 #27ae60;
+    box-shadow: 0 1px 0 #27ae60;
+}
+
+#loginForm a {
+    color: #27ae60;
+}
+
+#loginForm input[type="text"],
+#loginForm input[type="submit"] {
+    clear: both;
+    float: left;
+    display: block;
+    border: 1px solid #ccc;
+    background: #ebebeb;
+    margin: 6px 0;
+    padding: 4px 10px;
+    width: 100%;
+    height: 34px;
+    outline: 0;
+    color: #34495e;
+    font-size: 14px;
+}
+
+#loginForm input[type=submit] {
+    background: #27ae60;
+    color: #ecf0f1;
+    border: 0;
+    border-bottom: 2px solid #2ecc71;
+    margin: 10px 0 0;
+}
+
+#loginForm input[value*="Facebook"] {
+    background: #3b5998;
+    border-color: #1f4189;
+    width: 50%;
+    float: left;
+    clear: none;
+    margin-left: 0;
+}
+
+#loginForm input[value*="Google"] {
+    background: #0396c7;
+    border-color: #0078a6;
+    width: 50%;
+    float: left;
+    clear: none;
+}
+
+#loginForm input[value*="Facebook"]:active,
+#loginForm input[value*="Facebook"]:focus {
+    color: #ecf0f1;
+    background: #1f4189;
+}
+
+input[value*="Google"]:active,
+input[value*="Google"]:focus {
+    color: #ecf0f1;
+    background: #0078a6;
+}
+
+</div>
+
+/* LoginView CSS TEMPLATE END */
+
+/* TextEditorView CSS TEMPLATE START */
+
+#txtEditor {
+    background: black;
+    color: white;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin: 0 auto;
+    /*min-height: 100px; */
+}
+
+#txtEditContainer {
+    border: 2px solid #ddd;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 10px;
+    background: white;
+}
+
+#saveTxt {
+    margin-right: 15px;
+    margin-top: 6px;
+    float: right;
+}
+
+#txtProjects {
+    float: right;
+    margin-top: 6px;
+    margin-right: 80px;
+}
+
+#txtCfgs {
+    float: right;
+    margin-top: 6px;
+    margin-right: 10px;
+}
+
+/* TextEditorView CSS TEMPLATE END */
+
+
+/* SettingsView CSS TEMPLATE BEGIN */
+
+.settPanel {
+    height: 40%;
+}
+
+#settingsContainer {
+    border: 2px solid #ddd;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 10px;
+    background: white;
+}
+
+#settingsContainer .row {
+  margin-top: 1%;
+  vertical-align: middle;
+}
+
+#cfgProjectList {
+    float:right;
+}
+
+#saveCfg {
+    float: right;
+}
+
+#cfgOptions {
+    background: white;
+    border: 1px solid #ddd;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 1.5%;
+    white-space:nowrap;
+}
+
+.colorpicker {
+    margin-top: 8%;
+    margin-left: 10%;
+}
+
+#cfgOptions .row {
+    width: 40%;
+    margin-top: 2%;
+    margin-left: 2%;
+}
+
+#sizeList {
+    margin-top: 15%;
+}
+
+/* SettingsView CSS TEMPLATE END */
+
+
+
+
+
+
+/* Control Panel CSS TEMPLATE BEGIN */
+
+#controlPanel {
+    width: 20%;
+    background: #ebebeb;
+    width: 200px;
+    position: fixed;
+    z-index: 1000;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+    -moz-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+    -webkit-box-shadow: 4px 0 10px rgba(0,0,0,0.25);
+    right: 0;
+}
+
+#controlPanel:hover, #controlPanel:focus {
+    right: 0 !important;
+}
+
+#controlPanel .arrow {
+    right: 2px;
+}
+
+#controlPanel .arrow {
+    font: normal 400 25px/25px 'Acme', Helvetica, Arial, sans-serif; /* Acme font is required for .arrow */
+    color: rgba(0,0,0,0.75); /* Arrow color */
+    width: 16px;
+    height: 25px;
+    display: block;
+    position: absolute;
+    top: 20px;
+    cursor: default;
+}
+
+#controlPanel:hover .arrow {
+    transform: rotate(-180deg) translate(6px,-3px);
+    -moz-transform: rotate(-180deg) translate(6px,-3px);
+    -webkit-transform: rotate(-180deg) translate(6px,-3px);
+}
+
+/* Control Panel CSS TEMPLATE END */
+
+/* BoardView CSS TEMPLATE START */
+
+#boardContainer {
+    margin: 0 auto;
+    width: 90%;
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+
+.canvas {
+    position: relative;
+    font-family: arial;
+    background: #cccccc;
+    /*border: 5px solid #bbbbbb; */
+    margin: 0 auto; 
+}
+
+.tile {
+    color: white;
+    /*position: relative; */
+    position: absolute; 
+    z-index: 2;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    /*background: #338FFF; */
+    border: 3px solid white;
+    padding: 0px;
+    margin: 0px;
+    background-color: rgba(51, 143, 255, 0.6);
+}
+
+.grid {
+    /*position: absolute; */
+    position: absolute;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+
+/* BoardView CSS TEMPLATE END */
+
+/* NavMenu CSS TEMPLATE START */
+
+/*#navPanel {
+    list-style:none;
+    height:39px;
+    padding:2px;
+    width:40px;
+}
+
+#navPanel span {
+    width:0;
+    left:38px;
+    padding:0;
+    position:absolute;
+    overflow:hidden;
+
+    font-family:'Myriad Pro',Arial, Helvetica, sans-serif;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:0.6px;
+    white-space:nowrap;
+    line-height:39px;
+
+    -webkit-transition: 0.25s;
+
+    -moz-transition: 0.25s;
+    transition: 0.25s;
+}
+
+#navPanel a {
+    height:39px;
+    width:38px;
+    display:block;
+    position:relative;
+
+}
+
+#navPanel a:hover span { 
+    width:auto; 
+    padding:0 20px;
+    overflow:visible; 
+}
+
+#navPanel a:hover{
+    text-decoration:none;
+    -moz-box-shadow:0 0 5px #9ddff5;
+    -webkit-box-shadow:0 0 5px #9ddff5;
+    box-shadow:0 0 5px #9ddff5;
+}
+
+#navPanel #goBoardBtn { 
+    background-position:0 0;
+    background-color:#3d4f0c;
+}
+#navPanel #goBoardBtn:hover { 
+    background-position:0 -39px;
+    background-color:#3d4f0c;
+}
+
+#navPanel #goBoardBtn span{
+    background-color:#3d4f0c;
+    text-shadow:1px 1px 0 #99bf31;
+}
+
+
+#navPanel #goTxtEditorBtn { 
+  background-color:#223a44;
+  background-position:-38px 0;
+}
+
+#navPanel #goTxtEditorBtn span{
+    background-color:#1e8bb4;
+    color:#223a44;
+    text-shadow:1px 1px 0 #44a8d0;
+}
+
+
+#navPanel #goSettingsBtn { 
+    background-color:#5a3517;
+    background-position:-76px 0;
+}
+
+#navPanel #goSettingsBtn span{
+    background-color:#c86c1f;
+    color:#5a3517;
+    text-shadow:1px 1px 0 #d28344;
+} */
+
+ul#navPanel {
+    position: fixed;
+    margin: 0px;
+    padding: 0px;
+    top: 10px;
+    left: 0px;
+    list-style: none;
+    z-index:9999;
+}
+
+ul#navPanel li {
+    width: 100px;
+}
+
+ul#navPanel li a {
+    display: block;
+    margin-left: -2px;
+    width: 100px;
+    height: 70px;    
+    background-color:#CFCFCF;
+    background-repeat:no-repeat;
+    background-position:center center;
+    border:1px solid #AFAFAF;
+    -moz-border-radius:0px 10px 10px 0px;
+    -webkit-border-bottom-right-radius: 10px;
+    -webkit-border-top-right-radius: 10px;
+    -khtml-border-bottom-right-radius: 10px;
+    -khtml-border-top-right-radius: 10px;
+    /*-moz-box-shadow: 0px 4px 3px #000;
+    -webkit-box-shadow: 0px 4px 3px #000;
+    */
+    opacity: 0.6;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+}
+
+ul#navPanel .goBoardBtn a {
+    background-color: #5a3517;
+    /*background-image: url(../images/home.png);*/
+}
+ul#navPanel .goTxtEditorBtn a {
+    background-color:#223a44;
+    /*background-image: url(../images/id_card.png);*/
+}
+ul#navPanel .goSettingsBtn a {
+    background-color:#3d4f0c;
+    /*background-image: url(../images/search.png); */
+}
+
+
+
+/* NavMenu CSS TEMPLATE END */

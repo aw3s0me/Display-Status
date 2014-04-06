@@ -1,0 +1,46 @@
+{
+	"sensors1" : {
+		"elements" : [
+			{
+				"id" :  "sensor1",
+				"name": "brightness temperature",
+				"device": "HATPRO","group":"Data_080_RPG_nc_l1b",
+				"sensor": "L1B.BRIGHT.TEMP",
+				"server": "server_elv90",
+				"method":"",
+				"source":"file"
+			},
+			{
+				"id": "sensor2",
+				"name": "brightness temp. IR",
+				"device":"HATPRO",
+				"group":"Data_080_RPG_nc_l1b",
+				"sensor":"L1B.BRIGHT.TEMP.IR",
+				"server":"server_elv90",
+				"method":"","source":"file"
+			}
+		]
+	},
+	"sensors2" : {
+		"elements" : [
+			{
+				"id": "sensor3",
+				"name":"water-vapor content",
+				"device":"HATPRO",
+				"group":"Data_080_RPG_nc_l2a",
+				"sensor":"L2A.ATM.WAT.VAP.CNT",
+				"server":"server","method":"",
+				"source":"file"
+			},
+			{
+				"id": "sensor4",
+				"name":"liquid-water content",
+				"device":"HATPRO",
+				"group":"Data_080_RPG_nc_l2a",
+				"sensor":"L2A.ATM.LIQ.WAT.CNT",
+				"server":"server","method":"",
+				"source":"file"
+			}
+		]
+	}
+} 

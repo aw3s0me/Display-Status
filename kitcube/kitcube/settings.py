@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mainscreen'
+    'mainscreen',
+    'layout'
 )
 
 MIDDLEWARE_CLASSES = (
