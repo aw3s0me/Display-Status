@@ -18,15 +18,14 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			mask: undefined,
 			values: undefined,
 			size: [],
-			coords: []
+			coords: [],
+			bgcolor: undefined
 		},
 		initialize: function() {
 			//console.log("model created");
 			this.on('change: value', function() {
 				//do smth
 			});
-			
-
 		},
 		getChartProperties: function() {
 			return {

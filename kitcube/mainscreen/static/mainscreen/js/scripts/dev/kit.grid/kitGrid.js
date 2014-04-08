@@ -134,7 +134,6 @@ var kitGrid = (function($) {
 					var newWidth = ui.size.width / unitSizeX;
 					var newHeight = ui.size.height / unitSizeY;
 
-					trigger()
 
 					console.log(ui.originalPosition);
 

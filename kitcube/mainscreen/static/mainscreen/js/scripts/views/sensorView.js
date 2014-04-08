@@ -12,6 +12,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				this.model = options.model;
 			}
 			this.render();
+			this.model.on('resize', this.onresize);
+			this.model.on('changebgcolor', this.onchangebgcolor, this);
 		},
 		render: function() {
 			//load html template
@@ -122,6 +124,45 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		},
 		onresize: function() {
 
+			/*var s0 = sensorDiv.find('.sensorName')[0];
+			s0.style.fontSize = 13 * scale + 'px';
+			s0.style.left = 5 * scale + 'px';
+			s0.innerHTML = sensorModel.get('name');
+			s0.innerHTML += '<br>' + sensorModel.get('comment');
+
+			var s1 = sensorDiv.find('.sensorVal')[0];
+			s1.style.fontSize = 50 * scale + 'px';
+			s1.style.right = 6 * scale + 'px';
+			s1.style.bottom = 0 * scale + 'px';
+			s1.innerHTML = (sensorModel.get('value') === undefined) ? 'NAN' : (sensorModel.get('value')).toFixed(1);
+
+			var s2 = sensorDiv.find('.sensorUnit')[0];
+			s2.style.fontSize = 12 * scale + 'px';
+			s2.style.right = 5 * scale + 'px';
+			s2.style.top = 20 * scale + 'px';
+			s2.innerHTML = sensorModel.get('unit');
+
+			var s4 = sensorDiv.find('.sensorAlarm')[0];
+			s4.style.fontSize = 10 * scale + 'px';
+			s4.style.left = 5 * scale + 'px';
+			s4.style.bottom = 2 * scale + 'px';
+			s4.innerHTML = "min:" + sensorModel.get('min') + "<br>max:" + sensorModel.get('max') + "<br>alert:" + sensorModel.get('alert');
+
+			var s3 = sensorDiv.find('.close')[0];
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 12 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 4 * scale + 'px'; */
+
+		},
+		onchangebgcolor: function(model) {
+			console.log('changecolor');
+			var sensorDiv = this.container;
+			var sensorModel = model;
+
+			var tile = sensorDiv.parent();
+
+			tile.css('background-color', this.model.get('bgcolor'));
 
 		}
 	});

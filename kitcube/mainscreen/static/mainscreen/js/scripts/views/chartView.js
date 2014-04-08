@@ -2,6 +2,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 	var _seriesArr = [];
 
+
+
 	var ChartView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
@@ -92,15 +94,39 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					}
 				}
 			});
+
+(function(b,a){if(!b){return}var c=b.Chart.prototype,d=b.Legend.prototype;b.extend(c,{legendSetVisibility:function(h){var i=this,k=i.legend,e,g,j,m=i.options.legend,f,l;if(m.enabled==h){return}m.enabled=h;if(!h){d.destroy.call(k);e=k.allItems;if(e){for(g=0,j=e.length;g<j;++g){e[g].legendItem=a}}k.group={}}c.render.call(i);if(!m.floating){f=i.scroller;if(f&&f.render){l=i.xAxis[0].getExtremes();f.render(l.min,l.max)}}},legendHide:function(){this.legendSetVisibility(false)},legendShow:function(){this.legendSetVisibility(true)},legendToggle:function(){this.legendSetVisibility(this.options.legend.enabled^true)}})}(Highcharts));
+
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
 			var height = dy * unitWidth * scale;
 			var width = dx * unitHeight * scale;
 
+			for (var i = 0; i < _seriesArr.length; i++) {
+				var sensorModel = this.elements.models[i];
+				var color = this.chart.series[i].color;
+				sensorModel.set({ bgcolor: color });
+				sensorModel.trigger('changebgcolor', sensorModel);
+				console.log(color);
+			}
+
+			this.chart.legendHide();
+			/*var legend = this.chart.legend; 
+			if(legend.display) {
+	            legend.group.hide();
+	            legend.box.hide();
+	            legend.display = false;
+       		} else {
+	            legend.group.show();
+	            legend.box.show();
+	            legend.display = true;
+        	}*/
+
 			this.chart.setSize(width, height, true);
 			//model.set(seriesArr') = seriesArr;
 		},
 		addNewPoint: function(model) {
+
 			var chart = this.chart;
 			//console.log(chart);
 			var index = undefined; //index of series
