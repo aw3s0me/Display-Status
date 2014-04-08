@@ -78,6 +78,22 @@ body {
     background-color: rgba(51, 143, 255, 0.6);
 }
 
+.widget {
+    position: absolute;
+    z-index: 3;
+}
+
+.sortable_container {
+    width: auto;
+    left: 0;
+    top: 0;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+
+.ui-resizable-helper { border: 2px dotted #00F; }
+
 .grid {
     /*position: absolute; */
     position: absolute;
@@ -86,6 +102,15 @@ body {
     box-sizing: border-box;
     border: 1px solid black;
 }
+
+.ui-resizable-handle {
+  position: absolute;
+  width: 10%; 
+  height: 10%; 
+  border: 0px solid rgb(128, 128, 128); 
+}
+.ui-resizable-se {position: absolute; bottom: 0px; right: 0px; }
+.ui-resizable-ne {position: absolute; top: 0px; right: 0px; }
 
 #btnLogin {
   float: right;
@@ -100,7 +125,10 @@ body {
 }
 
 
-/**/
+
+
+/* Test */
+
 
 
 

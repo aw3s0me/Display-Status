@@ -11,6 +11,7 @@ require.config({
   paths: {
     "jquery": "vendor/jquery/jquery.min", //DO NOT SPECIFY EXTENSION 
     "jqueryui": "vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min",
+    "jquerysort": "vendor/Sortable",
     //MVC part
     "underscore": "vendor/underscore-amd/underscore",
     "backbone": "vendor/backbone-amd/backbone",
@@ -23,7 +24,6 @@ require.config({
     "kit.sizeDetector": "dev/kit.sizedetector/sizedetector",
     "kit.parser": "dev/kit.parser/kit.cfgParser",
     "kit.dataDownloader" : "dev/kit.dataDownloader/kit.dataDownloader",
-    "queue": "vendor/priorityqueue",
     //my grid part
     "kitgrid": "dev/kit.grid/kitGrid",
     "text" : "vendor/requirejs-text/text",
@@ -33,7 +33,9 @@ require.config({
     //chart part
     "highcharts": "vendor/highcharts.com/js/highcharts.src",
     //colorpicker
-    "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min"
+    "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min"//,
+    //fittext plugin:
+    //"fittext": "vendor/FitText.js/jquery.fittext"
 
   },
   shim: {
@@ -49,6 +51,12 @@ require.config({
       deps: [
         'jquery',
         "vendor/jquery-ui/ui/jquery-ui"
+      ]
+    },
+    jquerysort : {
+      deps: [
+        'jquery',
+        'jqueryui'
       ]
     },
     jqgrid: {

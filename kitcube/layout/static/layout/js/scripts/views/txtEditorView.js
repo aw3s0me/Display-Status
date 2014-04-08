@@ -14,16 +14,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 				if ($('#txtEditor').val() !== undefined) {
 					$('#txtEditor')[0].style.fontSize = '14px';
 				}
-				this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
-				this.viewSizeDetector.detectBannerSize();
-				this.viewSizeDetector.detectFooterSize();
-				this.viewSizeDetector.detectBoardSize();
+				console.log('text');
+				this.viewSizeDetector = new sizeDetector(50, 32, 16, '#banner', '#footer');
+				this.viewSizeDetector.detectAllSizes();
 
 				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
 
 				$('#txtEditor').css('margin-top', marginTop + 'px');
-				$('#txtEditor').css('height', this.viewSizeDetector.boardSizeMax.height + 'px');
-				$('#txtEditor').css('width', this.viewSizeDetector.boardSizeMax.width + 'px');
+				$('#txtEditor').css('height', this.viewSizeDetector.boardSizePx.height + 'px');
+				$('#txtEditor').css('width', this.viewSizeDetector.boardSizePx.width + 'px');
 				
 				this.externEditor.resize();
 				this.externEditor.setTheme("ace/theme/monokai");

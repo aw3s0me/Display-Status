@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"dependencies": {
 		"jquery": "1.10.2",
-		"jquery-ui": null,
+		"jquery-ui": "1.10.4",
 		"backbone-amd": null,
 		"underscore-amd": "1.5.2",
 		"requirejs": "2.1.11",
@@ -17,6 +17,7 @@
 		"jqgrid": null,
 		"backgrid": null,
 		"highcharts.com": "3.0.9",
-		"jqueryui-touch-punch": null
+		"jqueryui-touch-punch": null,
+		"FitText.js": null
 	} 
 }		

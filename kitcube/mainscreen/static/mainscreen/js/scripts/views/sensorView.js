@@ -33,6 +33,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s0.innerHTML += '<br>' + newSensor.get('comment');
 			s0.className = "sensorName";
 
+
 			var s1 = document.createElement('div');
 			//s1.id = newSensor.get('id');
 			s1.style.position = 'absolute';
@@ -118,6 +119,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//this.container.remove();
 			this.grid.removeUnit(this.container.parent());
 			console.log('removed' + this.model.get('id'));
+		},
+		onresize: function() {
+
+
 		}
 	});
 

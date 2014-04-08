@@ -7,6 +7,8 @@ define([
   'ace',
   'kitgrid',
   'yaml',
+  'jquerysort',
+  //'fittext',
   "kit.sizeDetector",
   "kit.parser",
   "kit.dataDownloader",
@@ -16,7 +18,7 @@ define([
   //'views/menuRight',
   'views/txtEditorView',
   'router', // Request router.js
-], function($, _, Backbone, FlatUi, ace, kitgrid, YAML, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
+], function($, _, Backbone, FlatUi, ace, kitgrid, YAML, Sortable, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {

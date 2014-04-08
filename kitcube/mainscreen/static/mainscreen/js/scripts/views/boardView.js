@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'collections/sensorGroupCollection'], function($, _, Backbone, ui, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupCollection) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'collections/sensorGroupCollection'], function($, _, Backbone, ui, Sortable, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupCollection) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -31,30 +31,34 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 		updSensorsInterval: undefined,
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
-			this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
-			this.viewSizeDetector.detectBannerSize();
-			this.viewSizeDetector.detectFooterSize();
-			this.viewSizeDetector.detectBoardSize();
+			try {
+				console.log('board');
+				this.viewSizeDetector = new sizeDetector(50, 32, 16, '#banner', '#footer');
+				this.viewSizeDetector.detectAllSizes();
+			}
+			catch (err) {
+				alert(err.message);
+			}
+			
 
 			var data = {};
 			var compiledTemplate = _.template(boardTemplate, data);
 			this.container.append(compiledTemplate);
 			$('.canvas').attr("id", "tab1");
 
-			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
+			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizePx.height) / 2;
 			$('.canvas').css('margin-top', marginTop + 'px');
-			$('.canvas').css('height', this.viewSizeDetector.boardSizeMax.height + 'px');
-			$('.canvas').css('width', this.viewSizeDetector.boardSizeMax.width + 'px');
-			$('.canvas').data('height', this.viewSizeDetector.boardSizeMax.height);
-			$('.canvas').data('width', this.viewSizeDetector.boardSizeMax.width);
-			$('.canvas').data('height-fullscreen', this.viewSizeDetector.boardSizeFullscreen.height);
-			$('.canvas').data('width-fullscreen', this.viewSizeDetector.boardSizeFullscreen.width);
+			$('.canvas').css('height', this.viewSizeDetector.boardSizePx.height + 'px');
+			$('.canvas').css('width', this.viewSizeDetector.boardSizePx.width + 'px');
+			$('.canvas').data('height', this.viewSizeDetector.boardSizePx.height);
+			$('.canvas').data('width', this.viewSizeDetector.boardSizePx.width);
 
-			$('.canvas').data('gridUnitX', this.viewSizeDetector.unitSize.width);
-			$('.canvas').data('gridUnitY', this.viewSizeDetector.unitSize.height);
+			$('.canvas').data('gridUnitX', this.viewSizeDetector.unitSize);
+			$('.canvas').data('gridUnitY', this.viewSizeDetector.unitSize);
 			$('.canvas').data('gridSizeX', this.viewSizeDetector.gridSize.width);
 			$('.canvas').data('gridSizeY', this.viewSizeDetector.gridSize.height);
 			$('.canvas').data('scale', this.viewSizeDetector.scale);
+			$('.canvas').data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 
 			this.grid = new kitGrid("#tab1");
 			this.elContainer = $("#tab1");
@@ -556,6 +560,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jqgrid', 'highcharts', 
 						if (!view) {
 							var viewToDelete = group[viewId];
 							viewToDelete.removeFromDom();
+
 							delete(group[viewId]);
 							//console.log('deleted' + viewId);
 						}

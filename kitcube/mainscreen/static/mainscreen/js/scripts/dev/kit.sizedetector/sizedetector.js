@@ -1,6 +1,6 @@
 var sizeDetector = (function($) {
 
-	var sizeDetector = function(unitDx, unitDy, bannerId, footerId, properties) {
+	var sizeDetector = function(unitSize, gridDx, gridDy, bannerId, footerId, properties) {
 		//banner id, for classes should be .classname, for divId #id
 		var options = $.extend({
 			marginUDFactor: 0.04, //Up Down factor
@@ -15,20 +15,28 @@ var sizeDetector = (function($) {
 			height: screen.height,
 			width: screen.width
 		};
-		this.windowSize = {
-			height: $(window).height(),
-			width: $(window).width()
-		};
+		this.windowSize = { height: $(window).height(), width: $(window).width() };
 		//without taskbar
 		this.availScreenSize = {
 			height: screen.availHeight,
 			width: screen.availWidth
 		};
-		//sizes of block, if unidDx-Dy make 50
-		this.unitSize = { 
-			height: (unitDy === undefined) ? 50 : unitDy,
-			width: (unitDx === undefined) ? 50 : unitDx
+
+		this.maxGridSizes = {
+			height: undefined,
+			width: undefined
 		};
+
+		//sizes of block, if unidDx-Dy make 50
+		this.scaledUnitSize = undefined;
+
+		this.gridSize = {
+			height: gridDy,
+			width: gridDx
+		};
+
+		this.unitSize = unitSize;
+
 		this.boardMargin = {
 			height: options.marginUDFactor * this.screenSize.height, //multiply factor to screen height
 			width: options.marginLRFactor * this.screenSize.width
@@ -40,14 +48,11 @@ var sizeDetector = (function($) {
 
 		};
 		//to findBoardSize
-		this.boardSizeFullscreen = { //Screen size when fullscreen
+		this.boardSizePx = { //Screen size when fullscreen
 			height: undefined,
 			width: undefined
 		};
-		this.boardSizeMax = { //Screen size when maximized
-			height: undefined,
-			width: undefined
-		};
+
 		this.bannerSize = {
 			height: undefined,
 			width: undefined
@@ -56,12 +61,8 @@ var sizeDetector = (function($) {
 			height: undefined,
 			width: undefined
 		};
-		this.scale = Math.floor(this.windowSize.height / this.screenSize.height * 100) / 100;
 
-		this.gridSize = { //number of rows and cols
-			height: undefined,
-			width: undefined
-		};
+		this.scale = undefined;
 
 		this.panelLeftWidth = 0;
 		this.panelRightWidth = 0;
@@ -112,23 +113,67 @@ var sizeDetector = (function($) {
 		return this.footerSize;
 	};
 
-	sizeDetector.prototype.detectBoardSize = function() {
+	sizeDetector.prototype.detectAllSizes = function() {
+		this.detectFooterSize();
+		this.detectBannerSize();
+		this.detectMaxGridSizes();
+		this.detectScale();
+		this.detectBoardSizes();
+		this.detectScaledUnitSize();
+	}
+
+	sizeDetector.prototype.detectScale = function() {
+		var scaleWidth = this.maxGridSizes.width / (this.unitSize * this.gridSize.width);
+		var scaleHeight = this.maxGridSizes.height / (this.unitSize * this.gridSize.height);
+
+		this.scale = (scaleHeight < scaleWidth) ? scaleHeight : scaleWidth;
+		this.scale = Math.floor(this.scale * 100) / 100;
+
+		if (this.scale === undefined || this.scale === NaN) {
+			throw "Error in detecting scale";
+		}
+
+		return this.scale;
+
+	}
+
+	sizeDetector.prototype.detectMaxGridSizes = function() {
+		this.maxGridSizes.width = (this.windowSize.width - 2 * this.boardMargin.width - this.panelRightWidth - this.panelLeftWidth);
+		this.maxGridSizes.height = (this.windowSize.height - this.bannerSize.height - this.footerSize.height - 2 * this.boardMargin.height);
+		if (this.maxGridSizes.width === NaN || this.maxGridSizes.height === NaN) {
+			throw "Error happened while detecting size of board";
+		}
+
+		return this.maxGridSizes;
+	}
+
+	sizeDetector.prototype.detectBoardSizes = function() {
 		//find size for fullscreen
-		this.boardSizeFullscreen.width = (this.screenSize.width - 2 * this.boardMargin.width - this.panelRightWidth - this.panelLeftWidth);
-		this.boardSizeFullscreen.height = (this.screenSize.height - this.bannerSize.height - this.footerSize.height - 2 * this.boardMargin.height);
-		//find number of rows and cols
-		this.gridSize.width = roundToEven(Math.floor(this.boardSizeFullscreen.width / this.unitSize.width));
-		this.gridSize.height = roundToEven(Math.floor(this.boardSizeFullscreen.height / this.unitSize.height));
+	
+		this.boardSizePx.width = this.gridSize.width * this.unitSize * this.scale;
+		this.boardSizePx.height = this.gridSize.height * this.unitSize * this.scale;
 
-		this.boardSizeMax.height = (this.windowSize.height - this.bannerSize.height - this.footerSize.height - 2 * this.boardMargin.height);
-		//find scale
-		this.scale = Math.floor(this.boardSizeMax.height / this.boardSizeFullscreen.height * 100) / 100;
+		if (this.boardSizePx.width === NaN || this.boardSizePx.height === NaN) {
+			throw "Error happened while detecting size of board";
+		}
 
-		this.boardSizeMax.height = this.gridSize.height * this.unitSize.height * this.scale;
+		return this.boardSizePx;
+	}
 
-		this.boardSizeMax.width = this.gridSize.width * this.unitSize.width * this.scale;
+	sizeDetector.prototype.detectGridSizes = function() {
+
+
+	}
+
+
+
+	sizeDetector.prototype.detectScaledUnitSize = function() {
+		if (this.scale === undefined) {
+			throw "Scale wasnt initialized";
+		}
+		this.scaledUnitSize = this.scale * this.unitSize;
 		//ret array of board sizes
-		return [this.boardSizeFullscreen, this.boardSizeMax];
+		return this.scaledUnitSize;
 	};
 
 	sizeDetector.prototype.ifFullScreen = function() {

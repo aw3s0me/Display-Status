@@ -13,16 +13,14 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 				if ($('#kitcube-console').val() !== undefined) {
 					$('#kitcube-console')[0].style.fontSize = '14px';
 				}
-				this.viewSizeDetector = new sizeDetector(50, 50, '#banner', '#footer');
-				this.viewSizeDetector.detectBannerSize();
-				this.viewSizeDetector.detectFooterSize();
-				this.viewSizeDetector.detectBoardSize();
+				this.viewSizeDetector = new sizeDetector(50, 32, 16, '#banner', '#footer');
+				this.viewSizeDetector.detectAllSizes();
 
-				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizeMax.height) / 2;
+				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizePx.height) / 2;
 
 				$('#kitcube-console').css('margin-top', marginTop + 'px');
-				$('#kitcube-console').css('height', this.viewSizeDetector.boardSizeMax.height + 'px');
-				$('#kitcube-console').css('width', this.viewSizeDetector.boardSizeMax.width + 'px');
+				$('#kitcube-console').css('height', this.viewSizeDetector.boardSizePx.height + 'px');
+				$('#kitcube-console').css('width', this.viewSizeDetector.boardSizePx.width + 'px');
 				
 				this.externEditor.resize();
 				this.externEditor.setTheme("ace/theme/monokai");
