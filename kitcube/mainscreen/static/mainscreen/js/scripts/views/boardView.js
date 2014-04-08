@@ -103,10 +103,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			e.dataset.scale = scale;
 
 			e.className = 'tile';
-			e.style.left = px * holder.data('gridUnitX') * scale + 'px';
-			e.style.top = py * holder.data('gridUnitY') * scale + 'px';
-			e.style.width = dx * holder.data('gridUnitX') * scale + 'px';
-			e.style.height = dy * holder.data('gridUnitY') * scale + 'px';
+			e.style.left = px * holder.data('scaledUnitSize') + 'px';
+			e.style.top = py * holder.data('scaledUnitSize') + 'px';
+			e.style.width = dx * holder.data('scaledUnitSize') + 'px';
+			e.style.height = dy * holder.data('scaledUnitSize') + 'px';
 
 			return e;
 		},

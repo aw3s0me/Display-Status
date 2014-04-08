@@ -118,6 +118,7 @@ var sizeDetector = (function($) {
 		this.detectBannerSize();
 		this.detectMaxGridSizes();
 		this.detectScale();
+		this.detectScaledUnitSize();
 		this.detectBoardSizes();
 		this.detectScaledUnitSize();
 	}
@@ -134,7 +135,11 @@ var sizeDetector = (function($) {
 		}
 
 		return this.scale;
+	}
 
+	sizeDetector.prototype.detectScaledUnitSize = function() {
+		this.scaledUnitSize = Math.round(this.scale * this.unitSize);
+		return this.scaledUnitSize;
 	}
 
 	sizeDetector.prototype.detectMaxGridSizes = function() {
@@ -150,8 +155,8 @@ var sizeDetector = (function($) {
 	sizeDetector.prototype.detectBoardSizes = function() {
 		//find size for fullscreen
 	
-		this.boardSizePx.width = this.gridSize.width * this.unitSize * this.scale;
-		this.boardSizePx.height = this.gridSize.height * this.unitSize * this.scale;
+		this.boardSizePx.width = this.gridSize.width * this.scaledUnitSize;
+		this.boardSizePx.height = this.gridSize.height * this.scaledUnitSize;
 
 		if (this.boardSizePx.width === NaN || this.boardSizePx.height === NaN) {
 			throw "Error happened while detecting size of board";
