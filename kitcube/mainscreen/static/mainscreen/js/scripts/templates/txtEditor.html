@@ -69,6 +69,47 @@
         "coords":[3, 5],
         "size":[4, 2]
     },
+    "sensorgroup1":
+    {
+        "type": "sensorgroup",
+        "name": "Vessel Temperature",
+        "size": [10, 10],
+        "coords": [0, 0],
+        "sensors": [{
+                "id": "sensor5",
+                "type":"sensor",
+                "sensortype":"tile",
+                "name":"Vessel temperature part Z09",
+                "comment": "435-RTP-5-0-0350",
+                "device":"HATPRO",
+                "dbgroup":"TempMon",
+                "dbname":"BakeOut2013",
+                "server":"temp0",
+                "min": 0,
+                "max": 100,
+                "unit": "K",
+                "mask": "18",
+                "coords":[0, 0],
+                "size":[4, 2]
+            },{
+                "id": "sensor6",
+                "type":"sensor",
+                "sensortype":"tile",
+                "name":"Vessel temperature part Z125",
+                "comment": "435-RTP-5-0-0350",
+                "device":"HATPRO",
+                "dbgroup":"TempMon",
+                "dbname":"BakeOut2013",
+                "server":"temp0",
+                "min": 0,
+                "max": 100,
+                "unit": "K",
+                "mask": "22",
+                "coords":[3, 5],
+                "size":[4, 2]
+            }
+        ]
+    },
     "alarmlist1": {
         "type": "alarmlist",
         "size": [6, 4],
@@ -142,7 +183,7 @@
             "y": 100,
             "borderWidth": 0
         }
-    } 
+    }
 }
 
     </div>

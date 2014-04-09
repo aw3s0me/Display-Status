@@ -9,8 +9,6 @@
 		"requirejs": "2.1.11",
 		"bootstrap": null,
 		"modernizr": null,
-		"gridster": null,
-		"dustmo-gridster.js": null,
 		"flat-ui-official": null,
 		"qunit": null,
 		"js-yaml": null,
@@ -18,6 +16,7 @@
 		"backgrid": null,
 		"highcharts.com": "3.0.9",
 		"jqueryui-touch-punch": null,
-		"FitText.js": null
+		"FitText.js": null,
+		"jsonlint": null
 	} 
 }		

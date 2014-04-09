@@ -120,14 +120,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		removeFromDom: function() {
 			//this.container.remove();
 			this.grid.removeUnit(this.container.parent());
-			console.log('removed' + this.model.get('id'));
 		},
 		onresize: function(model) {
 
 			var sensorDiv = this.container;
-			console.log('onresize');
 			
-
 			var height = model.get('size')[0];
 			var width = model.get('size')[1];
 
@@ -139,7 +136,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//console.log(ratio);
 			//var scaleResize = this.grid.getScale() * factor;
 
-			var s0 = sensorDiv.find('.sensorName')[0];
+			/*var s0 = sensorDiv.find('.sensorName')[0];
 			s0.style.fontSize = ratio + 'vw';
 
 			var s1 = sensorDiv.find('.sensorVal')[0];
@@ -152,7 +149,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s4.style.fontSize = ratio + 'vw';
 
 			var s3 = sensorDiv.find('.close')[0];
-			s3.style.fontSize = ratio + 'vw';
+			s3.style.fontSize = ratio + 'vw'; */
 
 			/*var s0 = sensorDiv.find('.sensorName')[0];
 			var s1 = sensorDiv.find('.sensorVal')[0];
@@ -164,7 +161,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s4.style.fontSize = '100%'; */
 		},
 		onchangebgcolor: function(model) {
-			console.log('changecolor');
 			var sensorDiv = this.container;
 			var sensorModel = model;
 

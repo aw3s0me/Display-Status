@@ -129,10 +129,10 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
 			//$('#pager_center').css('width', newElement.width() - 6); 
-			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 40 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 25 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('width', this.container.width() - 6);
 			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 40 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 25 * scale + 'px');
 			$('th.ui-th-column div').css('height', 'auto !important');
 			$('th.ui-th-column div').css('white-space', 'normal !important');
 

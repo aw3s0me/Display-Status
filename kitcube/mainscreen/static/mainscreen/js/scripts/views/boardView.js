@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'collections/sensorGroupCollection'], function($, _, Backbone, ui, Sortable, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupCollection) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel','models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'views/sensorGroupView', 'collections/sensorGroupCollection'], function($, _, Backbone, ui, Sortable, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupView, SensorGroupCollection) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -21,12 +21,14 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		views: {
 			sensors: {},
 			charts: {},
-			alarms: {}
+			alarms: {},
+			sensorgroups: {}
 		},
 		elements: {
 			sensors: {},
 			charts: {},
-			alarms: {}
+			alarms: {},
+			sensorgroups: {}
 		},
 		updSensorsInterval: undefined,
 		initialize: function(options) {
@@ -141,6 +143,50 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						});
 						self.elements.sensors[_id] = newSensor;
 						self.views.sensors[_id] = newSensorView;
+						break;
+					case "sensorgroup":
+						var newSensorGroupModel = new SensorGroupModel({
+							id: _id,
+							name: attr['name'],
+							size: attr['size'],
+							coords: attr['coords']
+						});
+						var sensorArr = attr['sensors'];
+						for (var i = 0 ; i < sensorArr.length; i++) {
+							var sensorObj = sensorArr[i];
+
+							var newSensor = new Sensor({
+								id: _id,
+								name: sensorObj["name"],
+								comment: sensorObj["comment"],
+								unit: sensorObj["unit"],
+								max: sensorObj["max"],
+								min: sensorObj["min"],
+								server: sensorObj["server"],
+								device: sensorObj["device"],
+								dbname: sensorObj["dbname"],
+								dbgroup: sensorObj["dbgroup"],
+								mask: sensorObj["mask"],
+								size: sensorObj["size"],
+								coords: sensorObj["coords"],
+								values: new Array(),
+								lastTime: new Date
+							});
+
+							//var newSensorView = new SensorView({
+								//model: newSensor,
+								//grid: this.grid
+							//});
+
+
+						}
+
+						var newSensorGroupView = new SensorGroupView({
+							model: newSensorGroupModel,
+							grid: this.grid,
+							group: undefined
+						});
+
 						break;
 					case "alarmlist":
 						var alarmList = []; //collection of alarms
