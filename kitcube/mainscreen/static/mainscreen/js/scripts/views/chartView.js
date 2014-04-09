@@ -23,7 +23,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			for (var i = 0; i < this.elements.length; i++) {
 				this.elements.models[i].on('addPoint', this.addNewPoint, this);
 			}
-			
+			this.model.on('resize', this.onresize, this);
 			this.render();
 		},
 		render: function() {
@@ -235,7 +235,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				sensorModel.trigger('changebgcolor', sensorModel);
 				console.log(color);
 			}
-			
+
 			chart.legendHide();
 
 			chart.redraw();
@@ -247,6 +247,19 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		redraw: function() {
 			this.chart.redraw();
+		},
+		onresize: function(model) {
+			var dx = model.get('size')[0];
+			var dy = model.get('size')[1];
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var scale = this.grid.getScale();
+
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+
+			this.chart.setSize(width, height, true);
+
 		}
 	});
 

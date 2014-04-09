@@ -131,7 +131,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var height = model.get('size')[0];
 			var width = model.get('size')[1];
 
-			//
+			//var ratio = height/width;
 			var max = (height > width) ? height : width;
 			var min = (height < width) ? height : width;
 			var ratio = min/max;
@@ -141,28 +141,18 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			var s0 = sensorDiv.find('.sensorName')[0];
 			s0.style.fontSize = ratio + 'vw';
-			//s0.style.left = 15 + 'vw';
-/*
+
 			var s1 = sensorDiv.find('.sensorVal')[0];
-			s1.style.fontSize = 50 * scaleResize + 'px';
-			s1.style.right = 6 * scaleResize + 'px';
-			s1.style.bottom = 0 * scaleResize + 'px';
+			s1.style.fontSize = 2*ratio + 'vw';
 
 			var s2 = sensorDiv.find('.sensorUnit')[0];
-			s2.style.fontSize = 12 * scaleResize + 'px';
-			s2.style.right = 5 * scaleResize + 'px';
-			s2.style.top = 20 * scaleResize + 'px';
+			s2.style.fontSize = ratio + 'vw';
 
 			var s4 = sensorDiv.find('.sensorAlarm')[0];
-			s4.style.fontSize = 10 * scaleResize + 'px';
-			s4.style.left = 5 * scaleResize + 'px';
-			s4.style.bottom = 2 * scaleResize + 'px';
+			s4.style.fontSize = ratio + 'vw';
 
 			var s3 = sensorDiv.find('.close')[0];
-			s3.style.position = 'absolute';
-			s3.style.fontSize = 12 * scaleResize + 'px';
-			s3.style.right = 5 * scaleResize + 'px';
-			s3.style.top = 4 * scaleResize + 'px';  
+			s3.style.fontSize = ratio + 'vw';
 
 			/*var s0 = sensorDiv.find('.sensorName')[0];
 			var s1 = sensorDiv.find('.sensorVal')[0];
