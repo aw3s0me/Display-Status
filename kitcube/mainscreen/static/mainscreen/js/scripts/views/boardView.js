@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel','models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'views/sensorGroupView', 'collections/sensorGroupCollection'], function($, _, Backbone, ui, Sortable, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupView, SensorGroupCollection) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 'highcharts', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel','models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'views/sensorGroupView', 'collections/sensorCollection'], function($, _, Backbone, ui, Sortable, jqGrid, _Highcharts, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupView, SensorGroupCollection) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -144,6 +144,16 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						self.elements.sensors[_id] = newSensor;
 						self.views.sensors[_id] = newSensorView;
 						break;
+					case "sensortable":
+						var newSensorTableModel = new SensorTableModel({
+
+						});
+
+						
+						
+
+
+						break;
 					case "sensorgroup":
 						/*var newSensorGroupModel = new SensorGroupModel({
 							id: _id,
@@ -281,7 +291,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 									sensArr.push(sensorModel);
 							}
 						}
-						var sensCollection = new SensorGroupCollection(sensArr);
+						var sensCollection = new SensorCollection(sensArr);
 						var newChartView = new ChartView({
 							model: newChart,
 							grid: this.grid,
@@ -382,6 +392,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							newElements.sensors[_id] = newSensor;
 							newViews.sensors[_id] = newSensorView;
 						}
+						break;
+					case "sensorlist":
 						break;
 					case "alarmlist":
 						var alarmListModel = this.elements.alarms[_id];
@@ -536,7 +548,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 										sensArr.push(sensorModel);
 								}
 							}
-							var sensCollection = new SensorGroupCollection(sensArr);
+							var sensCollection = new SensorCollection(sensArr);
 
 							chartView.elements = sensCollection;
 
@@ -567,7 +579,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 										sensArr.push(sensorModel);
 								}
 							}
-							var sensCollection = new SensorGroupCollection(sensArr);
+							var sensCollection = new SensorCollection(sensArr);
 							var newChartView = new ChartView({
 								model: newChart,
 								grid: this.grid,
