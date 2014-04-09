@@ -30,6 +30,10 @@ TITLE = 'Kitcube Status'
 DESCRIPTION = 'Summary of Kitcube Experiment'
 
 # Application definition
+REST_FRAMEWORK = {
+    'PAGINATE_BY': 10
+}
+
 
 INSTALLED_APPS = (
     'django.contrib.admin', 
@@ -41,7 +45,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainscreen',
-    'layout'
+    'layout',
+    'rest_framework',
+    'snippets'
 )
 
 MIDDLEWARE_CLASSES = (
