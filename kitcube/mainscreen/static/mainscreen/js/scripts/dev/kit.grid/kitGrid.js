@@ -155,9 +155,9 @@ var kitGrid = (function($) {
 					var oldWidth = model.get('size')[0];
 					var oldHeight = model.get('size')[1];
 
-					var newWidth = parseInt(ui.size.width / unitSize);
-					var newHeight = parseInt(ui.size.height / unitSize);
-
+					var newWidth = Math.round(ui.size.width / unitSize);
+					var newHeight = Math.round(ui.size.height / unitSize);
+					//alert(newWidth, newHeight);
 					if (oldWidth === newWidth && oldHeight === newHeight) {
 						return;
 					}
