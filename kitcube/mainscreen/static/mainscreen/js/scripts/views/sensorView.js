@@ -3,6 +3,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		container: undefined,
 		grid: undefined,
 		model: undefined,
+		isGrouped: false,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			if (options.grid) {
@@ -11,6 +12,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			if (options.model) {
 				this.model = options.model;
 			}
+			if (options.group === true) {
+				this.isGrouped = true;
+			}
+
 			this.render();
 			this.model.on('resize', this.onresize, this);
 			this.model.on('changebgcolor', this.onchangebgcolor, this);
@@ -74,7 +79,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.append(s3);
 			this.container.append(s4);
 
-			this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model);
+			if (!this.isGrouped) {
+				this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model);
+			}
+			
+		},
+		getHtml: function() {
+			return this.container[0];
+		},
+		getContainer: function() {
+			return this.container;
 		},
 		rerender: function() {
 			var sensorDiv = this.container;
