@@ -149,26 +149,34 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 					case "sensortable":
 						var sensorgroups = attr['sensors'];
 						var collectionGroups = [];
-						
-
+						var dbname = attr['dbname'];
+						var server = attr['server'];
+						var dbgroup = attr['dbgroup'];
 						for (var i = 0; i < sensorgroups.length; i++) {
 							var sensors = sensorgroups[i]['sensors'];
 
 							var newSensorCollection = undefined;
 							var sensorModelArr = [];
+							
+
 
 							for (var j = 0; j < sensors.length; j++) {
 								var sensorInfoObj = sensors[j];
 
+								if (!attr["diffsensors"]) {
+									dbname = sensorInfoObj["dbname"];
+									server = sensorInfoObj["server"];
+									dbgroup = sensorInfoObj["dbgroup"];
+								}
 								var newSensor = new Sensor({
 									id: sensorInfoObj["id"],
 									name: sensorInfoObj["name"],
 									unit: sensorInfoObj["unit"],
 									//max: attr["max"],
 									//min: attr["min"],
-									server: sensorInfoObj["server"],
-									dbname: sensorInfoObj["dbname"],
-									dbgroup: sensorInfoObj["dbgroup"],
+									server: server,
+									dbname: dbname,
+									dbgroup: dbgroup,
 									mask: sensorInfoObj["mask"],
 									values: new Array(),
 									lastTime: new Date
@@ -763,7 +771,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						'values': array
 					});
 					sensorModel.trigger('addPoint', sensorModel);
-					sensorModel.trigger('changed', sensorModel);
 				}
 			})
 		},

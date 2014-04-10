@@ -20,17 +20,23 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			this.groups = this.model.get('groups');
 
 
+			if (this.model.get('render') === "grid") {
+				rendertype = "grid";
+				for (var i = 0; i < this.groups.length; i++) {
+					var collection = this.groups[i];
+					for (var j = 0 ; j < collection.models.length; j++) {
+						collection.models[j].on('change:value', this.changeGridValue, this);
+					}
+				}
+				this.renderJqGrid();
+				return;
+			}
+
 			for (var i = 0; i < this.groups.length; i++) {
 				var collection = this.groups[i];
 				for (var j = 0 ; j < collection.models.length; j++) {
-					collection.models[j].on('change:value', this.changeValue, this);
+					collection.models[j].on('change:value', this.changeTableValue, this);
 				}
-			}
-
-			if (this.model.get('render') === "grid") {
-				rendertype = "grid";
-				this.renderJqGrid();
-				return;
 			}
 
 			this.renderTable();
@@ -172,12 +178,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var name = sensorModel.get('id');
 			var cols = sensorModel.get('cols');
 
-			this.container.css('width', dx * unitHeight * scale + 'px');
-			this.container.css('height', dy * unitWidth * scale + 'px');
+			this.container.css('width', '100%');
+			this.container.css('height', '100%');
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
 
 			var newTable = $("<table cellpadding='0' cellspacing='0' class='sensortable'></table>");
+			//var newTable = $("<table cellpadding='0' cellspacing='0' class='bordered-table'></table>");
+
 			var tableBody = $("<tbody></tbody>");
 
 			/*SETTING DATA COLS/ROWS */
@@ -224,7 +232,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				tableBody.append(tablerow);
 			}
 			newTable.append(tableBody);
-			this.container = newTable;
+			this.container.append(newTable);
+
 
 			this.grid.addUnit(dx, dy, px, py, scale, this.container, null, this.model);
 
@@ -241,15 +250,22 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		reloadView: function() {
 			this.container.find('table').trigger('reloadGrid');
 		},
-		changeValue: function(model) {
+		changeGridValue: function(model) {
 			var id = model.get('id');
 			console.log(model.get('value'));
 			console.log(model);
 			this.container.find('table').jqGrid('setCell', 1, id, model.get('value') + " " + model.get('unit'));
 
 			this.reloadView();
-
 			//this.jqgridElem.setCell();
+		},
+		changeTableValue: function(model) {
+			var id = model.get('id');
+			console.log(model.get('value'));
+			//var tablecell = this.container.find(id);
+			var tablecell = this.container.find("#" + id);
+			console.log(tablecell);
+			tablecell.text(model.get('value').toFixed(2) + " " + model.get('unit'));
 		},
 		removeFromDom: function() {
 

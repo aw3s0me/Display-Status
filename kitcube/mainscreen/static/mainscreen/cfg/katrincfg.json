@@ -1,12 +1,16 @@
 {
 	"sensorTable1": {
         "type": "sensortable",
-        "size": [9, 4],
+        "size": [14, 2],
         "coords": [0, 0],
         "name": "Magnet",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
         "colids": ["groupname" ,"cur", "t1", "t2", "he", "hrcp", "hrch"],
         "colnames": ["Group", "Current", "T1", "T2", "He Level", "HRC Press", "HRC Heater"],
         "showheaders": true,
+        "diffsensors": false,
         "sensors": [
             {
                 "type": "sensorgroup",
@@ -15,18 +19,12 @@
                     {
                         "id": "sensid1",
                         "name": "Current",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "102",
                         "unit": "A"
                     },
                     {
                         "id": "sensid2",
                         "name": "T1",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "106",
                         "unit": "K"
 
@@ -34,36 +32,24 @@
                     {
                         "id": "sensid3",
                         "name": "T2",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "107",
                         "unit": "K"
                     },
                     {
                         "id": "sensid4",
                         "name": "He Level",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "108",
                         "unit": "%"
                     },
                     {
                         "id": "sensid5",
                         "name": "HRC Press",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "149",
                         "unit": "psig"
                     },
                     {
                         "id": "sensid6",
                         "name": "HRC Heater",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "150",
                         "unit": "W"
                     }
@@ -76,18 +62,12 @@
                     {
                         "id": "sensid7",
                         "name": "Current",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "103",
                         "unit": "A"
                     },
                     {
                         "id": "sensid8",
                         "name": "T1",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "109",
                         "unit": "K"
 
@@ -95,38 +75,94 @@
                     {
                         "id": "sensid9",
                         "name": "T2",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "110",
                         "unit": "K"
                     },
                     {
                         "id": "sensid10",
                         "name": "He Level",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "111",
                         "unit": "%"
                     },
                     {
                         "id": "sensid11",
                         "name": "HRC Press",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "151",
                         "unit": "psig"
                     },
                     {
                         "id": "sensid12",
                         "name": "HRC Heater",
-                        "dbgroup": "0",
-                        "dbname": "katrin_rep",
-                        "server": "fpd",
                         "mask": "152",
                         "unit": "W"
+                    }
+                ]
+            }
+        ]
+    },
+    "sensorTable2": {
+        "type": "sensortable",
+        "size": [14, 2],
+        "coords": [0, 2],
+        "name": "Vacuum",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colids": ["groupname" ,"ion", "ccg", "cep", "cpt"],
+        "colnames": ["Group", "Ion Gauge", "CCG", "CEP", "CP Temp"],
+        "showheaders": true,
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "name": "XHVac",
+                "sensors": [
+                    {
+                        "id": "sensid13",
+                        "mask": "74",
+                        "unit": "mbar"
+                    },
+                    {
+                        "id": "sensid14",
+                        "mask": "66",
+                        "unit": "mbar"
+
+                    },
+                    {
+                        "id": "sensid15",
+                        "mask": "68",
+                        "unit": ""
+                    },
+                    {
+                        "id": "sensid16",
+                        "mask": "99",
+                        "unit": "K"
+                    }
+                ]
+            },
+            {
+                "type": "sensorgroup",
+                "name": "HVac",
+                "sensors": [
+                    {
+                        "id": "sensid22",
+                        "mask": "12",
+                        "unit": "%"
+                    },
+                    {
+                        "id": "sensid19",
+                        "mask": "67",
+                        "unit": "mbar"
+                    },
+                    {
+                        "id": "sensid20",
+                        "mask": "69",
+                        "unit": ""
+
+                    },
+                    {
+                        "id": "sensid21",
+                        "mask": "100",
+                        "unit": "K"
                     }
                 ]
             }
