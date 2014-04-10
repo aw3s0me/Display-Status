@@ -25,6 +25,8 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_ID = 1
+
 # Site information
 TITLE = 'Kitcube Status'
 DESCRIPTION = 'Summary of Kitcube Experiment'

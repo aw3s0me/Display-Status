@@ -64,8 +64,68 @@
                         "unit": "W"
                     }
                 ]
-            }
+            },
+            {
+                "type": "sensorgroup",
+                "name": "Detector",
+                "sensors": [
+                    {
+                        "id": "sensid7",
+                        "name": "Current",
+                        "dbgroup": "0",
+                        "dbname": "katrin_rep",
+                        "server": "fpd",
+                        "mask": "103",
+                        "unit": "A"
+                    },
+                    {
+                        "id": "sensid8",
+                        "name": "T1",
+                        "dbgroup": "0",
+                        "dbname": "katrin_rep",
+                        "server": "fpd",
+                        "mask": "109",
+                        "unit": "K"
 
+                    },
+                    {
+                        "id": "sensid9",
+                        "name": "T2",
+                        "dbgroup": "0",
+                        "dbname": "katrin_rep",
+                        "server": "fpd",
+                        "mask": "110",
+                        "unit": "K"
+                    },
+                    {
+                        "id": "sensid10",
+                        "name": "He Level",
+                        "dbgroup": "0",
+                        "dbname": "katrin_rep",
+                        "server": "fpd",
+                        "mask": "111",
+                        "unit": "%"
+                    },
+                    {
+                        "id": "sensid11",
+                        "name": "HRC Press",
+                        "dbgroup": "0",
+                        "dbname": "katrin_rep",
+                        "server": "fpd",
+                        "mask": "151",
+                        "unit": "psig"
+                    },
+                    {
+                        "id": "sensid12",
+                        "name": "HRC Heater",
+                        "dbgroup": "0",
+                        "dbname": "katrin_rep",
+                        "server": "fpd",
+                        "mask": "152",
+                        "unit": "W"
+                    }
+                ]
+            }
         ]
     }
 }

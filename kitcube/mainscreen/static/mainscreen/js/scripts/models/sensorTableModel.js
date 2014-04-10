@@ -6,7 +6,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			size: [],
 			coords: [],
 			cols: undefined,
-			collection: undefined
+			groups: undefined
 		},
 		initialize: function() {
 			//options || (options = {});

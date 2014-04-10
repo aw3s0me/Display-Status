@@ -147,41 +147,50 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						self.views.sensors[_id] = newSensorView;
 						break;
 					case "sensortable":
-						var sensors = attr['sensors'][0]['sensors'];
-						var sensorModelArr = [];
-						var newSensorCollection = undefined;
+						var sensorgroups = attr['sensors'];
+						var collectionGroups = [];
+						
 
-						for (var i = 0; i < sensors.length; i++) {
-							var sensorInfoObj = sensors[i];
+						for (var i = 0; i < sensorgroups.length; i++) {
+							var sensors = sensorgroups[i]['sensors'];
 
-							var newSensor = new Sensor({
-								id: sensorInfoObj["id"],
-								name: sensorInfoObj["name"],
-								unit: sensorInfoObj["unit"],
-								//max: attr["max"],
-								//min: attr["min"],
-								server: sensorInfoObj["server"],
-								dbname: sensorInfoObj["dbname"],
-								dbgroup: sensorInfoObj["dbgroup"],
-								mask: sensorInfoObj["mask"],
-								values: new Array(),
-								lastTime: new Date
+							var newSensorCollection = undefined;
+							var sensorModelArr = [];
+
+							for (var j = 0; j < sensors.length; j++) {
+								var sensorInfoObj = sensors[j];
+
+								var newSensor = new Sensor({
+									id: sensorInfoObj["id"],
+									name: sensorInfoObj["name"],
+									unit: sensorInfoObj["unit"],
+									//max: attr["max"],
+									//min: attr["min"],
+									server: sensorInfoObj["server"],
+									dbname: sensorInfoObj["dbname"],
+									dbgroup: sensorInfoObj["dbgroup"],
+									mask: sensorInfoObj["mask"],
+									values: new Array(),
+									lastTime: new Date
+								});
+								sensorModelArr.push(newSensor);
+								self.elements.sensors[sensorInfoObj["id"]] = newSensor;
+							}
+
+							newSensorCollection = new SensorCollection(sensorModelArr, {
+								id: attr['sensors'][i]['name'],
+								group: attr['sensors'][i]['name']
 							});
-							sensorModelArr.push(newSensor);
-							self.elements.sensors[sensorInfoObj["id"]] = newSensor;
-						}
 
-						newSensorCollection = new SensorCollection(sensorModelArr, {
-							id: attr['sensors'][0]['name'],
-							group: attr['sensors'][0]['name']
-						});
+							collectionGroups.push(newSensorCollection);
+						}
 
 						var newSensorTableModel = new SensorTableModel({
 							id: _id,
 							size: attr['size'],
 							coords: attr['coords'],
 							cols: undefined,
-							collection: newSensorCollection
+							groups: collectionGroups
 						});
 
 						var newSensorTableView = new SensorTableView({

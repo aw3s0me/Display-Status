@@ -6,7 +6,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		model: undefined,
 		dataToTable: undefined,
 		colAccess: undefined,
-		elements: undefined,
+		groups: undefined,
 		initialize: function(options) {
 			if (options.grid) {
 				this.grid = options.grid;
@@ -15,10 +15,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				this.model = options.model;
 			}
 
-			this.elements = this.model.get('collection').models;
-			for (var i = 0; i < this.elements.length; i++) {
-				console.log(i);
-				this.elements[i].on('change:value', this.changeValue, this);
+			this.groups = this.model.get('groups');
+
+
+			for (var i = 0; i < this.groups.length; i++) {
+				var collection = this.groups[i];
+				for (var j = 0 ; j < collection.models.length; j++) {
+					collection.models[j].on('change:value', this.changeValue, this);
+				}
 			}
 
 			this.render();
@@ -28,7 +32,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				throw "Please init alarm collection";
 				return;
 			} */
-			var sensorCollection = this.model.get('collection');
+			var sensorGroupCollection = this.model.get('groups');
 			var sensorModel = this.model;
 			this.dataToTable = []; //data from collection of alarms
 			var scale = this.grid.getScale();
@@ -54,6 +58,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var colIds = [];
 			var colModel = [];
 
+
+			var sensorCollection = sensorGroupCollection[0];
+
 			if (sensorCollection.group) {
 				colIds.push("groupname");
 				colNames.push("Group");
@@ -63,9 +70,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 					width: elemWidth
 				});
 			}
-			for (var i = 0; i < sensorCollection.length; i++) {
-				var elem = sensorCollection.models[i];
-				
+
+			for (var j = 0; j < sensorCollection.models.length; j++) {
+				var elem = sensorCollection.models[j];	
 				colNames.push(elem.get('name'));
 				colIds.push(elem.get('id'));
 				colModel.push({
@@ -75,13 +82,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				});
 			}
 
-			//Creating col model
+			for (var i = 0; i < sensorGroupCollection.length; i++) {
+				var sensorCollection = sensorGroupCollection[i];
+				var colAccess = [];
+				this.dataToTable.push(sensorCollection.getDataToTable());
 
-
-			var colAccess = [];
-
-			this.dataToTable = sensorCollection.getDataToTable();
-
+			}
+			
 			/* APPENDING HTML */
 			newTable.attr("id", name);
 			this.container.append(newTable);
