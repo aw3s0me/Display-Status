@@ -13,7 +13,7 @@ Contents:
    :maxdepth: 2
 
    install
-   modules/models
+   tutorial
 
 Indices and tables
 ==================
