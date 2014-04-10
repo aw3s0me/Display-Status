@@ -22,13 +22,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			sensors: {},
 			charts: {},
 			alarms: {},
-			sensorgroups: {}
+			sensorgroups: {},
+			tables: {}
 		},
 		elements: {
 			sensors: {},
 			charts: {},
 			alarms: {},
-			sensorgroups: {}
+			sensorgroups: {},
+			tables: {}
 		},
 		updSensorsInterval: undefined,
 		initialize: function(options) {
@@ -145,25 +147,48 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						self.views.sensors[_id] = newSensorView;
 						break;
 					case "sensortable":
-						var sensors = attr['sensors'];
+						var sensors = attr['sensors'][0]['sensors'];
+						var sensorModelArr = [];
+						var newSensorCollection = undefined;
+
+						for (var i = 0; i < sensors.length; i++) {
+							var sensorInfoObj = sensors[i];
+
+							var newSensor = new Sensor({
+								id: sensorInfoObj["id"],
+								name: sensorInfoObj["name"],
+								unit: sensorInfoObj["unit"],
+								//max: attr["max"],
+								//min: attr["min"],
+								server: sensorInfoObj["server"],
+								dbname: sensorInfoObj["dbname"],
+								dbgroup: sensorInfoObj["dbgroup"],
+								mask: sensorInfoObj["mask"],
+								values: new Array(),
+								lastTime: new Date
+							});
+							sensorModelArr.push(newSensor);
+							self.elements.sensors[sensorInfoObj["id"]] = newSensor;
+						}
+
+						newSensorCollection = new SensorCollection(sensorModelArr, {
+							id: attr['sensors'][0]['name'],
+							group: attr['sensors'][0]['name']
+						});
 
 						var newSensorTableModel = new SensorTableModel({
 							id: _id,
 							size: attr['size'],
 							coords: attr['coords'],
-							cols: undefined
+							cols: undefined,
+							collection: newSensorCollection
 						});
-
-						for (var sensor in sensors) {
-							console.log(sensor);
-						}
 
 						var newSensorTableView = new SensorTableView({
 							grid: this.grid,
-							model: this.model//,
-							//collection: 
+							model: newSensorTableModel
+						});
 
-						})
 
 						break;
 					case "sensorgroup":
@@ -681,6 +706,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 				var chartView = this.views.charts[chartId];
 				chartView.redraw();
 			}
+
+
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};
@@ -699,7 +726,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 					var value = parseFloat(
 						arrayOfData[arrayOfData.length - 1]);
 					var sensorDiv = sensor.find(".sensorVal")[0];
-					sensorDiv.innerHTML = value.toFixed(1);
+					if (sensorDiv)
+						sensorDiv.innerHTML = value.toFixed(1);
 					var now = new Date;
 					var lastTime = _.clone(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
 
@@ -712,6 +740,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						y: value
 					};
 
+
 					array.push(valToPush);
 
 					//sensorModel.get('values').push(valToPush);
@@ -720,8 +749,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						'lastTime': lastTime,
 						'values': array
 					});
-
 					sensorModel.trigger('addPoint', sensorModel);
+					sensorModel.trigger('changed', sensorModel);
 				}
 			})
 		},

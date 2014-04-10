@@ -6,7 +6,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			type: "sensor",
 			comment: undefined,
 			unit: undefined,
-			value: undefined,
+			value: "NaN",
 			lastTime: undefined,
 			max: undefined,
 			min: undefined,
@@ -19,12 +19,14 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			values: undefined,
 			size: [],
 			coords: [],
-			bgcolor: undefined
+			bgcolor: undefined,
+			valUnit: "NaN"
 		},
 		initialize: function() {
 			//console.log("model created");
+			this.set({valUnit: this.get('value') + " " + this.get('unit')});
 			this.on('change: value', function() {
-				//do smth
+				this.set({valUnit: this.get('value') + " " + this.get('unit')});
 			});
 		},
 		getChartProperties: function() {

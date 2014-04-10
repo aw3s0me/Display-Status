@@ -3,9 +3,15 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 		el: 'kitcube-console',
 		appendElem: $('#kitcube-container'),
 		externEditor: null,
-		initialize: function() {
+		initialize: function(options) {
+			/*var url;
+			if (options.url) {
+				url = options.url;
+			}*/
+
 			var elem = $('#kitcube-console').val();
 			if (elem === undefined) {
+				var self = this;
 				var data = {};
 				var compiledTemplate = _.template(textEditorTemplate, data);
 				this.appendElem.append(compiledTemplate);
@@ -21,10 +27,24 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 				$('#kitcube-console').css('margin-top', marginTop + 'px');
 				$('#kitcube-console').css('height', this.viewSizeDetector.boardSizePx.height + 'px');
 				$('#kitcube-console').css('width', this.viewSizeDetector.boardSizePx.width + 'px');
-				
+
 				this.externEditor.resize();
 				this.externEditor.setTheme("ace/theme/monokai");
 				this.externEditor.getSession().setMode("ace/mode/yaml");
+
+
+				//using jQuery to fire off an ajax request to load the xml,
+				//using our callback as the success function
+				$.ajax({
+					url: 'static/mainscreen/cfg/katrincfg.json',
+					async: false,
+					dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
+					success: function(data){
+						console.log(data);
+						//apparently, only modes supported are 'html', 'javascript' & 'text'
+						self.externEditor.setValue(data);
+					}
+				});
 
 			}
 		}
