@@ -28,19 +28,30 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 			}
 			return dataToChart;
 		},
-		getDataToTable: function() {
+		getDataToTable: function(colIds) {
 			var models = this.models;
 			var dataToTable = [];
 			var objToPush = {};
 
+			if (this.group)
+				dataToTable.push(this.group);
 			for (var i = 0; i < models.length; i++) {
-				if (this.group)
-					objToPush['groupname'] = this.group;
+				dataToTable.push(models[i].get('valUnit'));
+				//if (this.group)
+					//objToPush['groupname'] = this.group;
 				//var value = models[i].get('value') === undefined ? 0: models[i].get('value');
-				objToPush[models[i].get('id')] = models[i].get('valUnit');
+				//objToPush[models[i].get('id')] = models[i].get('valUnit');
+			} 
+
+			/*if (this.group) {
+				objToPush[colIds[0]] = this.group;
 			}
 
-			dataToTable.push(objToPush);
+			for (var i = 0; i < models.length; i++) {
+				objToPush[colIds[i + 1]] = models[i].get('valUnit');
+			}
+
+			dataToTable.push(objToPush);*/
 
 			return dataToTable;
 			

@@ -1,8 +1,12 @@
 {
 	"sensorTable1": {
         "type": "sensortable",
-        "size": [9, 2],
+        "size": [9, 4],
         "coords": [0, 0],
+        "name": "Magnet",
+        "colids": ["groupname" ,"cur", "t1", "t2", "he", "hrcp", "hrch"],
+        "colnames": ["Group", "Current", "T1", "T2", "He Level", "HRC Press", "HRC Heater"],
+        "showheaders": true,
         "sensors": [
             {
                 "type": "sensorgroup",

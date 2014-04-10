@@ -4,9 +4,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		container: undefined,
 		grid: undefined,
 		model: undefined,
-		dataToTable: undefined,
+		//dataToTable: undefined,
 		colAccess: undefined,
 		groups: undefined,
+		rendertype: "table",
 		initialize: function(options) {
 			if (options.grid) {
 				this.grid = options.grid;
@@ -14,6 +15,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			if (options.model) {
 				this.model = options.model;
 			}
+			
 
 			this.groups = this.model.get('groups');
 
@@ -25,16 +27,22 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				}
 			}
 
-			this.render();
+			if (this.model.get('render') === "grid") {
+				rendertype = "grid";
+				this.renderJqGrid();
+				return;
+			}
+
+			this.renderTable();
 		},
-		render: function() {
+		renderJqGrid: function() {
 			/*if (!this.model.get('collection')) {
 				throw "Please init alarm collection";
 				return;
 			} */
 			var sensorGroupCollection = this.model.get('groups');
 			var sensorModel = this.model;
-			this.dataToTable = []; //data from collection of alarms
+			var dataToTable = []; //data from collection of alarms
 			var scale = this.grid.getScale();
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -54,30 +62,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			var newTable = $("<table class='jqgridtable'></table>");
 			/*SETTING DATA COLS/ROWS */
-			var colNames = [];
-			var colIds = [];
+			var colNames = this.model.get('colnames');
+			var colIds = this.model.get('colids');
 			var colModel = [];
-
 
 			var sensorCollection = sensorGroupCollection[0];
 
-			if (sensorCollection.group) {
-				colIds.push("groupname");
-				colNames.push("Group");
+			for (var i = 0; i < colIds.length; i++) {
 				colModel.push({
-					name: 'groupname',
-					index: 'groupname',
-					width: elemWidth
-				});
-			}
-
-			for (var j = 0; j < sensorCollection.models.length; j++) {
-				var elem = sensorCollection.models[j];	
-				colNames.push(elem.get('name'));
-				colIds.push(elem.get('id'));
-				colModel.push({
-					name: elem.get('id'),
-					index: elem.get('id'),
+					name: colNames[i],
+					index: colIds[i],
 					width: elemWidth
 				});
 			}
@@ -85,9 +79,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			for (var i = 0; i < sensorGroupCollection.length; i++) {
 				var sensorCollection = sensorGroupCollection[i];
 				var colAccess = [];
-				this.dataToTable.push(sensorCollection.getDataToTable());
-
+				dataToTable.push(sensorCollection.getDataToTable(colIds));
 			}
+
+
+
 			
 			/* APPENDING HTML */
 			newTable.attr("id", name);
@@ -102,14 +98,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			this.jqgridElem = newTable.jqGrid({
 				datatype: 'local',
-				data: this.dataToTable,
+				data: dataToTable,
 				colNames: colNames,
 				shrinkToFit: true,
 				autowidth: true,
 				hidegrid: false,
 				colModel: colModel,
-				rowNum: cols,
-				caption: name,
+				//rowNum: cols,
+				caption: "name",
 				loadComplete: function() {
 					var grid = newTable;
 					var ids = grid.getDataIDs();
@@ -130,6 +126,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				}
 
 			});
+
+			console.log(this.jqgridElem);
 
 			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
@@ -155,6 +153,88 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			newTable.jqGrid('setGridHeight', finalGridHeight);
 			newTable.jqGrid('setGridWidth', finalGridWidth, true);
 			console.log(this.jqgridElem);
+
+
+		},
+		renderTable: function() {
+			var sensorGroupCollection = this.model.get('groups');
+			var sensorModel = this.model;
+			var dataToTable = []; //data from collection of alarms
+			var scale = this.grid.getScale();
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+
+			this.container = $("<div></div>");
+			var dx = sensorModel.get('size')[0];
+			var dy = sensorModel.get('size')[1];
+			var px = sensorModel.get('coords')[0];
+			var py = sensorModel.get('coords')[1];
+			var name = sensorModel.get('id');
+			var cols = sensorModel.get('cols');
+
+			this.container.css('width', dx * unitHeight * scale + 'px');
+			this.container.css('height', dy * unitWidth * scale + 'px');
+
+			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
+
+			var newTable = $("<table cellpadding='0' cellspacing='0' class='sensortable'></table>");
+			var tableBody = $("<tbody></tbody>");
+
+			/*SETTING DATA COLS/ROWS */
+			var colNames = this.model.get('colnames');
+			var colIds = this.model.get('colids');
+
+			if (this.model.get('showheaders')) {
+				var tablerow = $('<tr></tr>');
+				tablerow.append($('<td></td>'));
+
+				for (var i = 1; i < colNames.length; i++) {
+					var tableheader = $('<th></th>');
+					tableheader.text(colNames[i]);
+					tablerow.append(tableheader);
+				}
+				tableBody.append(tablerow);
+			}
+			else {
+				var tablerow = $('<tr></tr>');
+
+				for (var i = 0; i < colNames.length; i++) {
+					var tableheader = $('<th></th>');
+					tableheader.text(colNames[i]);
+					tablerow.append(tableheader);
+				}
+				tableBody.append(tablerow);
+			}
+
+			for (var i = 0; i < sensorGroupCollection.length; i++) {
+				var collection = sensorGroupCollection[i];
+				var tablerow = $("<tr></tr>");
+				//appending groupname
+				var groupheader = $('<th></th>');
+				groupheader.text(collection.group);
+				tablerow.append(groupheader);
+
+				for (var j = 0; j < collection.models.length; j++) {
+					var tablecell = $("<td></td>");
+					var model = collection.models[j];
+					tablecell.attr('id', model.get('id'));
+					tablecell.text(model.get('valUnit'));
+					tablerow.append(tablecell);
+				}
+				tableBody.append(tablerow);
+			}
+			newTable.append(tableBody);
+			this.container = newTable;
+
+			this.grid.addUnit(dx, dy, px, py, scale, this.container, null, this.model);
+
+			//SETTING CSS
+
+			newTable.css('background-color', 'white');
+			newTable.parent().css('background-color', 'white');
+			newTable.find('th').each( function() {
+				$(this).css('background-color', '#ccccff');
+			} );
 
 
 		},

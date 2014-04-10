@@ -190,12 +190,16 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							size: attr['size'],
 							coords: attr['coords'],
 							cols: undefined,
-							groups: collectionGroups
+							groups: collectionGroups,
+							colids: attr['colids'],
+							colnames: attr['colnames'],
+							showheaders: attr['showheaders']
 						});
 
 						var newSensorTableView = new SensorTableView({
 							grid: this.grid,
 							model: newSensorTableModel
+
 						});
 
 
