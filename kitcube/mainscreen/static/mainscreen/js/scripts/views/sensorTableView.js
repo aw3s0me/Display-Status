@@ -9,6 +9,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		groups: undefined,
 		rendertype: "table",
 		lookuptable: {},
+		jqgridElem: undefined,
+		prevGboxHeight: undefined,
 		initialize: function(options) {
 			if (options.grid) {
 				this.grid = options.grid;
@@ -20,7 +22,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			this.groups = this.model.get('groups');
 
-			this.model.on('resize', this.onresize, this);
+			
 			if (this.model.get('render') === "grid") {
 				rendertype = "grid";
 				for (var i = 0; i < this.groups.length; i++) {
@@ -30,6 +32,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 					}
 				}
 				this.renderJqGrid();
+				this.model.on('resize', this.onresizeGrid, this);
+
+
 				return;
 			}
 
@@ -39,7 +44,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 					collection.models[j].on('change:value', this.changeTableValue, this);
 				}
 			}
-
+			this.model.on('resize', this.onresizeTable, this);
 			this.renderTable();
 
 		},
@@ -142,7 +147,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			console.log(this.jqgridElem);
 
-			/*$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
@@ -154,7 +159,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 25 * scale + 'px');
 			$('th.ui-th-column div').css('height', 'auto !important');
-			$('th.ui-th-column div').css('white-space', 'normal !important'); */
+			$('th.ui-th-column div').css('white-space', 'normal !important'); 
 
 			
 
@@ -295,7 +300,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		removeFromDom: function() {
 
 		},
-		onresize: function(model) {
+		onresizeTable: function(model) {
 			var dx = model.get('size')[0];
 			var dy = model.get('size')[1];
 			var unitHeight = this.grid.getUnitSizes().height;
@@ -312,6 +317,31 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var hscale = totalHeight/$(window).height(); //scale font for header
 			this.container.find(".tblheader").css('font-size', 120 * hscale + 'px');
 
+		},
+		onresizeGrid: function(model) {
+			var dx = model.get('size')[0];
+			var dy = model.get('size')[1];
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var scale = this.grid.getScale();
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+			var tableToChange = this.container.find('.jqgridtable');
+			var gboxHeight = undefined;
+
+			if (this.prevGboxHeight !== undefined) {
+				gboxHeight = this.prevGboxHeight;
+			}
+			else {
+				gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
+			}
+
+			var finalGridHeight = height - gboxHeight - 2;
+			var finalGridWidth = width - 1;
+
+			tableToChange.jqGrid('setGridHeight', finalGridHeight);
+			tableToChange.jqGrid('setGridWidth', finalGridWidth, true);
+			this.jqgridElem.trigger('reloadGrid');
 		}
 
 

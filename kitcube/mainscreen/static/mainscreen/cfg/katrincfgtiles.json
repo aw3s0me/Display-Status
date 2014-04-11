@@ -1,0 +1,468 @@
+{
+	"sensorTable1": {
+        "type": "sensortable",
+        "size": [14, 2],
+        "coords": [0, 0],
+        "name": "Magnet",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colids": ["groupname" ,"cur", "t1", "t2", "he", "hrcp", "hrch"],
+        "colnames": ["Group", "Current", "T1", "T2", "He Level", "HRC Press", "HRC Heater"],
+        "showheaders": true,
+        "diffsensors": false,
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "name": "Pinch",
+                "sensors": [
+                    {
+                        "id": "sensid1",
+                        "name": "Current",
+                        "mask": "102",
+                        "unit": "A"
+                    },
+                    {
+                        "id": "sensid2",
+                        "name": "T1",
+                        "mask": "106",
+                        "unit": "K"
+
+                    },
+                    {
+                        "id": "sensid3",
+                        "name": "T2",
+                        "mask": "107",
+                        "unit": "K"
+                    },
+                    {
+                        "id": "sensid4",
+                        "name": "He Level",
+                        "mask": "108",
+                        "unit": "%"
+                    },
+                    {
+                        "id": "sensid5",
+                        "name": "HRC Press",
+                        "mask": "149",
+                        "unit": "psig"
+                    },
+                    {
+                        "id": "sensid6",
+                        "name": "HRC Heater",
+                        "mask": "150",
+                        "unit": "W"
+                    }
+                ]
+            },
+            {
+                "type": "sensorgroup",
+                "name": "Detector",
+                "sensors": [
+                    {
+                        "id": "sensid7",
+                        "name": "Current",
+                        "mask": "103",
+                        "unit": "A"
+                    },
+                    {
+                        "id": "sensid8",
+                        "name": "T1",
+                        "mask": "109",
+                        "unit": "K"
+
+                    },
+                    {
+                        "id": "sensid9",
+                        "name": "T2",
+                        "mask": "110",
+                        "unit": "K"
+                    },
+                    {
+                        "id": "sensid10",
+                        "name": "He Level",
+                        "mask": "111",
+                        "unit": "%"
+                    },
+                    {
+                        "id": "sensid11",
+                        "name": "HRC Press",
+                        "mask": "151",
+                        "unit": "psig"
+                    },
+                    {
+                        "id": "sensid12",
+                        "name": "HRC Heater",
+                        "mask": "152",
+                        "unit": "W"
+                    }
+                ]
+            }
+        ]
+    },
+    "sensorTable2": {
+        "type": "sensortable",
+        "size": [14, 2],
+        "coords": [0, 2],
+        "name": "Vacuum",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colids": ["groupname" ,"ion", "ccg", "cep", "cpt"],
+        "colnames": ["Group", "Ion Gauge", "CCG", "CEP", "CP Temp"],
+        "showheaders": true,
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "name": "XHVac",
+                "sensors": [
+                    {
+                        "id": "sensid13",
+                        "mask": "74",
+                        "unit": "mbar"
+                    },
+                    {
+                        "id": "sensid14",
+                        "mask": "66",
+                        "unit": "mbar"
+
+                    },
+                    {
+                        "id": "sensid15",
+                        "mask": "68",
+                        "unit": ""
+                    },
+                    {
+                        "id": "sensid16",
+                        "mask": "99",
+                        "unit": "K"
+                    }
+                ]
+            },
+            {
+                "type": "sensorgroup",
+                "name": "HVac",
+                "sensors": [
+                    {
+                        "id": "sensid22",
+                        "mask": "12",
+                        "unit": "%"
+                    },
+                    {
+                        "id": "sensid19",
+                        "mask": "67",
+                        "unit": "mbar"
+                    },
+                    {
+                        "id": "sensid20",
+                        "mask": "69",
+                        "unit": ""
+
+                    },
+                    {
+                        "id": "sensid21",
+                        "mask": "100",
+                        "unit": "K"
+                    }
+                ]
+            }
+        ]
+    },
+    "sensorTable3": {
+        "type": "sensortable",
+        "size": [14, 2],
+        "coords": [0, 4],
+        "name": "Temperature",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colnames": ["XHV CP Jacket", "HVac CP Jacket", "PTC Cold Finger", "Cooling Ring Top", "Cooling Ring Bottom", "PAE Bell", "PAE Tube", "Detector Flange"],
+        "showheaders": false,
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "sensors": [
+                    {
+                        "id": "sensid22",
+                        "mask": "2",
+                        "unit": "C"
+                    },
+                    {
+                        "id": "sensid23",
+                        "mask": "3"
+                    },
+                    {
+                        "id": "sensid24",
+                        "mask": "4"
+                    },
+                    {
+                        "id": "sensid25",
+                        "mask": "5"
+                    },
+                    {
+                        "id": "sensid26",
+                        "mask": "6"
+                    },
+                    {
+                        "id": "sensid27",
+                        "mask": "7"
+                    },
+                    {
+                        "id": "sensid28",
+                        "mask": "8"
+                    },
+                    {
+                        "id": "sensid29",
+                        "mask": "9"
+                    }
+                ]
+            }
+        ]
+    },
+    "sensorTable4": {
+        "type": "sensortable",
+        "size": [14, 2],
+        "coords": [0, 6],
+        "name": "Source & HV",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colnames": ["GS Position", "ES Position", "ES Voltage", "ES En/Dis", "PAE Voltage", "PAE En/Dis", "Ramping"],
+        "showheaders": false,
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "sensors": [
+                    {
+                        "id": "sensid30",
+                        "mask": "59"
+                    },
+                    {
+                        "id": "sensid31",
+                        "mask": "61"
+                    },
+                    {
+                        "id": "sensid32",
+                        "mask": "75"
+                    },
+                    {
+                        "id": "sensid33",
+                        "mask": "78"
+                    },
+                    {
+                        "id": "sensid34",
+                        "mask": "80",
+                        "unit": "kV"
+                    },
+                    {
+                        "id": "sensid35",
+                        "mask": "82"
+                    },
+                    {
+                        "id": "sensid36",
+                        "mask": "145"
+                    }
+                ]
+            }
+        ]
+    },
+    "sensorTable5": {
+        "type": "sensortable",
+        "size": [14, 2],
+        "coords": [0, 8],
+        "name": "Amrel LV",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colnames": ["FET", "-8V", "+6V", "-6V", "Bias", "Ramping"],
+        "showheaders": false,
+        "diffsensors": false,
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "sensors": [
+                    {
+                        "id": "sensid37",
+                        "mask": "112",
+                        "unit": "V"
+                    },
+                    {
+                        "id": "sensid38",
+                        "mask": "113",
+                        "unit": "V"
+
+                    },
+                    {
+                        "id": "sensid39",
+                        "mask": "116",
+                        "unit": "V"
+                    },
+                    {
+                        "id": "sensid40",
+                        "mask": "117",
+                        "unit": "V"
+                    },
+                    {
+                        "id": "sensid41",
+                        "mask": "118",
+                        "unit": "V"
+                    },
+                    {
+                        "id": "sensid42",
+                        "mask": "146"
+                    }
+                ]
+            },
+            {
+                "type": "sensorgroup",
+                "sensors": [
+                    {
+                        "id": "sensid43",
+                        "mask": "112",
+                        "unit": "mA"
+                    },
+                    {
+                        "id": "sensid44",
+                        "mask": "113",
+                        "unit": "mA"
+
+                    },
+                    {
+                        "id": "sensid45",
+                        "mask": "116",
+                        "unit": "A"
+                    },
+                    {
+                        "id": "sensid46",
+                        "mask": "117",
+                        "unit": "A"
+                    },
+                    {
+                        "id": "sensid47",
+                        "mask": "118",
+                        "unit": "uA"
+                    },
+                    {
+
+                    }
+                ]
+            }
+        ]
+    },
+    "sensorTable6": {
+        "type": "sensortable",
+        "size": [5, 2],
+        "coords": [0, 10],
+        "name": "Veto Non Peltier",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colnames": ["+6V", "-6V", "Bias"],
+        "showheaders": false,
+        "diffsensors": false,
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "sensors": [
+                    {
+                        "id": "sensid48",
+                        "mask": "186",
+                        "unit": "V"
+                    },
+                    {
+                        "id": "sensid49",
+                        "mask": "187",
+                        "unit": "V"
+
+                    },
+                    {
+                        "id": "sensid50",
+                        "mask": "188",
+                        "unit": "V"
+                    }
+                ]
+            },
+            {
+                "type": "sensorgroup",
+                "sensors": [
+                    {
+                        "id": "sensid51",
+                        "mask": "190",
+                        "unit": "mA"
+                    },
+                    {
+                        "id": "sensid52",
+                        "mask": "191",
+                        "unit": "mA"
+
+                    },
+                    {
+                        "id": "sensid53",
+                        "mask": "192",
+                        "unit": "mA"
+                    }
+                ]
+            }
+        ]
+    },
+    "sensorTable7": {
+        "type": "sensortable",
+        "size": [7, 2],
+        "coords": [5, 10],
+        "name": "Veto Peltier",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colnames": ["Group", "Temp", "Temp SP", "Output"],
+        "showheaders": true,
+        "diffsensors": false,
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "name": "Peltier 1",
+                "sensors": [
+                    {
+                        "id": "sensid54",
+                        "mask": "186",
+                        "unit": "V"
+                    },
+                    {
+                        "id": "sensid55",
+                        "mask": "187",
+                        "unit": "V"
+
+                    },
+                    {
+                        "id": "sensid56",
+                        "mask": "188",
+                        "unit": "V"
+                    }
+                ]
+            },
+            {
+                "type": "sensorgroup",
+                "name": "Peltier 2",
+                "sensors": [
+                    {
+                        "id": "sensid57",
+                        "mask": "190",
+                        "unit": "mA"
+                    },
+                    {
+                        "id": "sensid58",
+                        "mask": "191",
+                        "unit": "mA"
+
+                    },
+                    {
+                        "id": "sensid59",
+                        "mask": "192",
+                        "unit": "mA"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+
