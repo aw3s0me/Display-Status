@@ -30,10 +30,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 		},
 		getDataToTable: function(colIds) {
 			var models = this.models;
-			var dataToTable = [];
+			//var dataToTable = [];
 			var objToPush = {};
 
-			if (this.group)
+			/*if (this.group)
 				dataToTable.push(this.group);
 			for (var i = 0; i < models.length; i++) {
 				dataToTable.push(models[i].get('valUnit'));
@@ -41,9 +41,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 					//objToPush['groupname'] = this.group;
 				//var value = models[i].get('value') === undefined ? 0: models[i].get('value');
 				//objToPush[models[i].get('id')] = models[i].get('valUnit');
-			} 
+			} */
 
-			/*if (this.group) {
+			if (this.group) {
 				objToPush[colIds[0]] = this.group;
 			}
 
@@ -51,10 +51,25 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 				objToPush[colIds[i + 1]] = models[i].get('valUnit');
 			}
 
-			dataToTable.push(objToPush);*/
+			return objToPush;
 
-			return dataToTable;
+			//dataToTable.push(objToPush);
+
+			//return dataToTable;
 			
+		},
+		getLookupTable: function() {
+			var obj = {};
+			var models = this.models;
+			for (var i = 0; i < models.length; i++) {
+				obj[models[i].get('id')] = {
+					id: models[i].get('id'),
+					col: i + 1,
+					row: this.rowId
+				};
+			}
+			return obj;
+
 		}
 
 

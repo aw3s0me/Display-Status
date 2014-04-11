@@ -204,7 +204,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							colids: attr['colids'],
 							colnames: attr['colnames'],
 							showheaders: attr['showheaders'],
-							name: attr['name']
+							name: attr['name'],
+							render: attr['render']
 						});
 
 						var newSensorTableView = new SensorTableView({
@@ -735,7 +736,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};
-			console.log(sensorModel);
+			//console.log(sensorModel);
 			if (!sensorModel) {
 				return;
 			}

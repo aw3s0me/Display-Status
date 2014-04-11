@@ -1,0 +1,106 @@
+{
+	"sensorTable1": {
+        "type": "sensortable",
+        "size": [14, 2],
+        "coords": [0, 0],
+        "name": "Magnet",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "colids": ["groupname" ,"cur", "t1", "t2", "he", "hrcp", "hrch"],
+        "colnames": ["Group", "Current", "T1", "T2", "He Level", "HRC Press", "HRC Heater"],
+        "showheaders": true,
+        "diffsensors": false,
+        "render": "grid",
+        "sensors": [
+            {
+                "type": "sensorgroup",
+                "name": "Pinch",
+                "sensors": [
+                    {
+                        "id": "sensid1",
+                        "name": "Current",
+                        "mask": "102",
+                        "unit": "A"
+                    },
+                    {
+                        "id": "sensid2",
+                        "name": "T1",
+                        "mask": "106",
+                        "unit": "K"
+
+                    },
+                    {
+                        "id": "sensid3",
+                        "name": "T2",
+                        "mask": "107",
+                        "unit": "K"
+                    },
+                    {
+                        "id": "sensid4",
+                        "name": "He Level",
+                        "mask": "108",
+                        "unit": "%"
+                    },
+                    {
+                        "id": "sensid5",
+                        "name": "HRC Press",
+                        "mask": "149",
+                        "unit": "psig"
+                    },
+                    {
+                        "id": "sensid6",
+                        "name": "HRC Heater",
+                        "mask": "150",
+                        "unit": "W"
+                    }
+                ]
+            },
+            {
+                "type": "sensorgroup",
+                "name": "Detector",
+                "sensors": [
+                    {
+                        "id": "sensid7",
+                        "name": "Current",
+                        "mask": "103",
+                        "unit": "A"
+                    },
+                    {
+                        "id": "sensid8",
+                        "name": "T1",
+                        "mask": "109",
+                        "unit": "K"
+
+                    },
+                    {
+                        "id": "sensid9",
+                        "name": "T2",
+                        "mask": "110",
+                        "unit": "K"
+                    },
+                    {
+                        "id": "sensid10",
+                        "name": "He Level",
+                        "mask": "111",
+                        "unit": "%"
+                    },
+                    {
+                        "id": "sensid11",
+                        "name": "HRC Press",
+                        "mask": "151",
+                        "unit": "psig"
+                    },
+                    {
+                        "id": "sensid12",
+                        "name": "HRC Heater",
+                        "mask": "152",
+                        "unit": "W"
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+

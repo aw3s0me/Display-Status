@@ -9,7 +9,8 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			groups: undefined,
 			colids: undefined,
 			colnames: undefined,
-			showheaders: false
+			showheaders: false,
+			render: "table"
 		},
 		initialize: function() {
 			//options || (options = {});

@@ -8,6 +8,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		colAccess: undefined,
 		groups: undefined,
 		rendertype: "table",
+		lookuptable: {},
 		initialize: function(options) {
 			if (options.grid) {
 				this.grid = options.grid;
@@ -68,7 +69,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			this.container.css('width', dx * unitHeight * scale + 'px');
 			this.container.css('height', dy * unitWidth * scale + 'px');
 
-			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
+			var elemWidth = parseInt((dx * unitWidth * scale / 6) - 2);
 
 			var newTable = $("<table class='jqgridtable'></table>");
 			/*SETTING DATA COLS/ROWS */
@@ -80,7 +81,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			for (var i = 0; i < colIds.length; i++) {
 				colModel.push({
-					name: colNames[i],
+					name: colIds[i],
 					index: colIds[i],
 					width: elemWidth
 				});
@@ -90,11 +91,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				var sensorCollection = sensorGroupCollection[i];
 				var colAccess = [];
 				dataToTable.push(sensorCollection.getDataToTable(colIds));
+				sensorCollection.rowId = i + 1;
+				var tempLookupTable = sensorCollection.getLookupTable();
+				$.extend(true, this.lookuptable ,tempLookupTable);
+				
 			}
 
-
-
-			
 			/* APPENDING HTML */
 			newTable.attr("id", name);
 			this.container.append(newTable);
@@ -110,12 +112,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				datatype: 'local',
 				data: dataToTable,
 				colNames: colNames,
+				height: '100%',
 				shrinkToFit: true,
 				autowidth: true,
 				hidegrid: false,
 				colModel: colModel,
 				//rowNum: cols,
-				caption: "name",
+				caption: this.model.get('name'),
 				loadComplete: function() {
 					var grid = newTable;
 					var ids = grid.getDataIDs();
@@ -139,7 +142,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			console.log(this.jqgridElem);
 
-			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
+			/*$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
@@ -151,7 +154,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 25 * scale + 'px');
 			$('th.ui-th-column div').css('height', 'auto !important');
-			$('th.ui-th-column div').css('white-space', 'normal !important');
+			$('th.ui-th-column div').css('white-space', 'normal !important'); */
 
 			
 
@@ -163,7 +166,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			newTable.jqGrid('setGridHeight', finalGridHeight);
 			newTable.jqGrid('setGridWidth', finalGridWidth, true);
 			console.log(this.jqgridElem);
-
 
 		},
 		renderTable: function() {
@@ -277,9 +279,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		},
 		changeGridValue: function(model) {
 			var id = model.get('id');
+			var lookupObj = this.lookuptable[id];
 			console.log(model.get('value'));
-			console.log(model);
-			this.container.find('table').jqGrid('setCell', 1, id, model.get('value') + " " + model.get('unit'));
+			//console.log(model);
+			this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], model.get('value') + " " + model.get('unit'));
 
 			this.reloadView();
 			//this.jqgridElem.setCell();

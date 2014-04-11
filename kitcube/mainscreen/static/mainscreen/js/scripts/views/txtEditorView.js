@@ -36,7 +36,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 				//using jQuery to fire off an ajax request to load the xml,
 				//using our callback as the success function
 				$.ajax({
-					url: 'static/mainscreen/cfg/katrincfg.json',
+					url: 'static/mainscreen/cfg/katrincfggrid.json',
 					async: false,
 					dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 					success: function(data){
