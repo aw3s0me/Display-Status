@@ -365,18 +365,18 @@
                 "type": "sensorgroup",
                 "sensors": [
                     {
-                        "id": "sensid37",
+                        "id": "sensid48",
                         "mask": "186",
                         "unit": "V"
                     },
                     {
-                        "id": "sensid38",
+                        "id": "sensid49",
                         "mask": "187",
                         "unit": "V"
 
                     },
                     {
-                        "id": "sensid39",
+                        "id": "sensid50",
                         "mask": "188",
                         "unit": "V"
                     }
@@ -386,18 +386,18 @@
                 "type": "sensorgroup",
                 "sensors": [
                     {
-                        "id": "sensid43",
+                        "id": "sensid51",
                         "mask": "190",
                         "unit": "mA"
                     },
                     {
-                        "id": "sensid44",
+                        "id": "sensid52",
                         "mask": "191",
                         "unit": "mA"
 
                     },
                     {
-                        "id": "sensid45",
+                        "id": "sensid53",
                         "mask": "192",
                         "unit": "mA"
                     }
@@ -422,18 +422,18 @@
                 "name": "Peltier 1",
                 "sensors": [
                     {
-                        "id": "sensid37",
+                        "id": "sensid54",
                         "mask": "186",
                         "unit": "V"
                     },
                     {
-                        "id": "sensid38",
+                        "id": "sensid55",
                         "mask": "187",
                         "unit": "V"
 
                     },
                     {
-                        "id": "sensid39",
+                        "id": "sensid56",
                         "mask": "188",
                         "unit": "V"
                     }
@@ -444,18 +444,18 @@
                 "name": "Peltier 2",
                 "sensors": [
                     {
-                        "id": "sensid43",
+                        "id": "sensid57",
                         "mask": "190",
                         "unit": "mA"
                     },
                     {
-                        "id": "sensid44",
+                        "id": "sensid58",
                         "mask": "191",
                         "unit": "mA"
 
                     },
                     {
-                        "id": "sensid45",
+                        "id": "sensid59",
                         "mask": "192",
                         "unit": "mA"
                     }
