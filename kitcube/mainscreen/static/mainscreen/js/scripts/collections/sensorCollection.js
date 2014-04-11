@@ -61,10 +61,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 		getLookupTable: function() {
 			var obj = {};
 			var models = this.models;
+			var startColIndex = 0;
+
+			if (this.group) {
+				startColIndex = 1;
+			}
+
 			for (var i = 0; i < models.length; i++) {
 				obj[models[i].get('id')] = {
 					id: models[i].get('id'),
-					col: i + 1,
+					col: startColIndex++,
 					row: this.rowId
 				};
 			}
