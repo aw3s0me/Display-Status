@@ -175,7 +175,7 @@ body {
 .sensortable {
   width: 100%;
   color: black;
-  height: 85%;
+  height: 100%;
   text-align: center;
   border-spacing: 2px;
   border-collapse: separate;
@@ -193,6 +193,10 @@ body {
   height: 15%;
   color: black;
   font-weight: bold;
+}
+
+.tablecontainer {
+  height: 85%;
 }
 
 /* SENSOR TABLE STYLE END */

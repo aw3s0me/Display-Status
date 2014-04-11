@@ -19,7 +19,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			this.groups = this.model.get('groups');
 
-
+			this.model.on('resize', this.onresize, this);
 			if (this.model.get('render') === "grid") {
 				rendertype = "grid";
 				for (var i = 0; i < this.groups.length; i++) {
@@ -40,6 +40,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			}
 
 			this.renderTable();
+
 		},
 		renderJqGrid: function() {
 			/*if (!this.model.get('collection')) {
@@ -191,7 +192,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
 
-			var newTable = $("<table class='sensortable'></table>");
+			var tablecontainer = $("<div class='tablecontainer'></div>")
+
+			var newTable = $("<table cellpadding='0' cellspacing='0' class='sensortable'></table>");
 			//var newTable = $("<table cellpadding='0' cellspacing='0' class='bordered-table'></table>");
 
 			var tableBody = $("<tbody></tbody>");
@@ -204,7 +207,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				var tableheader = $("<div class='tblheader'></div>");
 				tableheader.text(this.model.get('name'));
 				console.log(hscale);
-				tableheader.css('font-size', 80 * hscale + 'px');
+				tableheader.css('font-size', 120 * hscale + 'px');
 
 				this.container.append(tableheader);
 				//tableheader.
@@ -248,12 +251,17 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				tableBody.append(tablerow);
 			}
 			newTable.append(tableBody);
-			this.container.append(newTable);
+			tablecontainer.append(newTable)
+			this.container.append(tablecontainer)
+			//this.container.append(newTable);
 
 			newTable.parent().css('background-color', 'white');
 
-			this.grid.addUnit(dx, dy, px, py, scale, this.container, null, this.model);
-
+			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
+				border: 0,
+				transparent: true
+			}, this.model);
+			this.container.css('border', 'solid 1px')
 			//SETTING CSS
 			
 			
@@ -279,7 +287,22 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		removeFromDom: function() {
 
 		},
-		onresize: function() {
+		onresize: function(model) {
+			var dx = model.get('size')[0];
+			var dy = model.get('size')[1];
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var scale = this.grid.getScale();
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+			console.log(height,width)
+
+			this.container.css('height', height);
+			this.container.css('width', width);
+
+			var totalHeight = dy * unitHeight * scale;
+			var hscale = totalHeight/$(window).height(); //scale font for header
+			this.container.find(".tblheader").css('font-size', 120 * hscale + 'px');
 
 		}
 
