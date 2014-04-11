@@ -217,17 +217,22 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 						break;
 					case "sensorgroup":
-						/*var newSensorGroupModel = new SensorGroupModel({
-							id: _id,
-							name: attr['name'],
-							size: attr['size'],
-							coords: attr['coords']
-						});
 						var sensorArr = attr['sensors'];
 						var groupArr = [];
+						var sensorModelsArr = [];
+
+						var dbname = attr['dbname'];
+						var server = attr['server'];
+						var dbgroup = attr['dbgroup'];
 
 						for (var i = 0 ; i < sensorArr.length; i++) {
 							var sensorObj = sensorArr[i];
+
+							if (attr['diffsensors']) {
+								dbname = sensorObj['dbname'];
+								server = sensorObj['server'];
+								dbgroup = sensorObj['dbgroup'];
+							}
 
 							var newSensor = new Sensor({
 								id: _id,
@@ -254,9 +259,19 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							});
 
 							self.elements.sensors[_id] = newSensor;
+							sensorModelsArr.push(newSensor);
 							self.views.sensors[_id] = newSensorView;
 							groupArr.push(newSensorView);
 						}
+
+						var newSensorGroupModel = new SensorGroupModel({
+							id: _id,
+							name: attr['name'],
+							size: attr['size'],
+							coords: attr['coords'],
+							collection: new SensorCollection(sensorModelsArr)
+						});
+
 
 						var newSensorGroupView = new SensorGroupView({
 							model: newSensorGroupModel,
@@ -266,7 +281,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 						self.views.sensorgroups[_id] = newSensorGroupView;
 						self.elements.sensorgroups[_id] = newSensorGroupModel;
-						*/
 						break;
 					case "alarmlist":
 						var alarmList = []; //collection of alarms

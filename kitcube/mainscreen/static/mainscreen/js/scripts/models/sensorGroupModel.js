@@ -6,7 +6,8 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			type: "sensorgroup",
 			size: [],
 			coords: [],
-			bgcolor: undefined
+			bgcolor: undefined,
+			collection: undefined
 		},
 		initialize: function() {
 			//console.log("model created");
