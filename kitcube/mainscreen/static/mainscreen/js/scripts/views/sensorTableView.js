@@ -53,6 +53,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
 
+			var totalHeight = dy * unitHeight * scale;
+			var hscale = totalHeight/$(window).height(); //scale font for header
+
 			this.container = $("<div></div>");
 			var dx = sensorModel.get('size')[0];
 			var dy = sensorModel.get('size')[1];
@@ -170,6 +173,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
 
+			
+
 			this.container = $("<div></div>");
 			var dx = sensorModel.get('size')[0];
 			var dy = sensorModel.get('size')[1];
@@ -178,12 +183,15 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var name = sensorModel.get('id');
 			var cols = sensorModel.get('cols');
 
-			this.container.css('width', '100%');
-			this.container.css('height', '100%');
+			var totalHeight = dy * unitHeight * scale;
+			var hscale = totalHeight/$(window).height(); //scale font for header
+
+			this.container.css('width', dx * unitWidth * scale + 'px');
+			this.container.css('height', dy * unitHeight * scale + 'px');
 
 			var elemWidth = (dx * unitWidth * scale / 6) - 2 + 'px';
 
-			var newTable = $("<table cellpadding='0' cellspacing='0' class='sensortable'></table>");
+			var newTable = $("<table class='sensortable'></table>");
 			//var newTable = $("<table cellpadding='0' cellspacing='0' class='bordered-table'></table>");
 
 			var tableBody = $("<tbody></tbody>");
@@ -193,13 +201,21 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var colIds = this.model.get('colids');
 
 			if (this.model.get('showheaders')) {
+				var tableheader = $("<div class='tblheader'></div>");
+				tableheader.text(this.model.get('name'));
+				console.log(hscale);
+				tableheader.css('font-size', 80 * hscale + 'px');
+
+				this.container.append(tableheader);
+				//tableheader.
+
 				var tablerow = $('<tr></tr>');
 				tablerow.append($('<td></td>'));
 
 				for (var i = 1; i < colNames.length; i++) {
-					var tableheader = $('<th></th>');
-					tableheader.text(colNames[i]);
-					tablerow.append(tableheader);
+					var colheader = $('<th></th>');
+					colheader.text(colNames[i]);
+					tablerow.append(colheader);
 				}
 				tableBody.append(tablerow);
 			}
@@ -207,9 +223,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				var tablerow = $('<tr></tr>');
 
 				for (var i = 0; i < colNames.length; i++) {
-					var tableheader = $('<th></th>');
-					tableheader.text(colNames[i]);
-					tablerow.append(tableheader);
+					var colheader = $('<th></th>');
+					colheader.text(colNames[i]);
+					tablerow.append(colheader);
 				}
 				tableBody.append(tablerow);
 			}
@@ -234,18 +250,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			newTable.append(tableBody);
 			this.container.append(newTable);
 
+			newTable.parent().css('background-color', 'white');
 
 			this.grid.addUnit(dx, dy, px, py, scale, this.container, null, this.model);
 
 			//SETTING CSS
-
-			newTable.css('background-color', 'white');
-			newTable.parent().css('background-color', 'white');
-			newTable.find('th').each( function() {
-				$(this).css('background-color', '#ccccff');
-			} );
-
-
+			
+			
+			
 		},
 		reloadView: function() {
 			this.container.find('table').trigger('reloadGrid');
@@ -261,10 +273,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		},
 		changeTableValue: function(model) {
 			var id = model.get('id');
-			console.log(model.get('value'));
-			//var tablecell = this.container.find(id);
 			var tablecell = this.container.find("#" + id);
-			console.log(tablecell);
 			tablecell.text(model.get('value').toFixed(2) + " " + model.get('unit'));
 		},
 		removeFromDom: function() {

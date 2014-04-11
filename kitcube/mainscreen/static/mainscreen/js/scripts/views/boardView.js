@@ -36,7 +36,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			try {
-				console.log('board');
 				this.viewSizeDetector = new sizeDetector(50, 32, 16, '#banner', '#footer');
 				this.viewSizeDetector.detectAllSizes();
 			}
@@ -152,21 +151,21 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						var dbname = attr['dbname'];
 						var server = attr['server'];
 						var dbgroup = attr['dbgroup'];
+
 						for (var i = 0; i < sensorgroups.length; i++) {
 							var sensors = sensorgroups[i]['sensors'];
 
 							var newSensorCollection = undefined;
 							var sensorModelArr = [];
 							
-
-
 							for (var j = 0; j < sensors.length; j++) {
 								var sensorInfoObj = sensors[j];
 
-								if (!attr["diffsensors"]) {
+								if (attr["diffsensors"]) {
 									dbname = sensorInfoObj["dbname"];
 									server = sensorInfoObj["server"];
 									dbgroup = sensorInfoObj["dbgroup"];
+
 								}
 								var newSensor = new Sensor({
 									id: sensorInfoObj["id"],
@@ -201,7 +200,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							groups: collectionGroups,
 							colids: attr['colids'],
 							colnames: attr['colnames'],
-							showheaders: attr['showheaders']
+							showheaders: attr['showheaders'],
+							name: attr['name']
 						});
 
 						var newSensorTableView = new SensorTableView({
@@ -732,6 +732,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};
+			//console.log(sensorModel);
 			if (!sensorModel) {
 				return;
 			}
@@ -770,6 +771,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						'lastTime': lastTime,
 						'values': array
 					});
+
+
 					sensorModel.trigger('addPoint', sensorModel);
 				}
 			})

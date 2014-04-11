@@ -1,7 +1,7 @@
 {
 	"sensorTable1": {
         "type": "sensortable",
-        "size": [14, 2],
+        "size": [14, 4],
         "coords": [0, 0],
         "name": "Magnet",
         "dbgroup": "0",
