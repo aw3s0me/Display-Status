@@ -180,8 +180,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 									values: new Array(),
 									lastTime: new Date
 								});
-								sensorModelArr.push(newSensor);
-								self.elements.sensors[sensorInfoObj["id"]] = newSensor;
+								if (sensorInfoObj["id"] !== undefined) {
+									sensorModelArr.push(newSensor);
+									self.elements.sensors[sensorInfoObj["id"]] = newSensor;
+								}
+								
 							}
 
 							newSensorCollection = new SensorCollection(sensorModelArr, {
@@ -732,7 +735,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};
-			//console.log(sensorModel);
+			console.log(sensorModel);
 			if (!sensorModel) {
 				return;
 			}

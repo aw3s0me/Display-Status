@@ -203,13 +203,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var colNames = this.model.get('colnames');
 			var colIds = this.model.get('colids');
 
-			if (this.model.get('showheaders')) {
-				var tableheader = $("<div class='tblheader'></div>");
-				tableheader.text(this.model.get('name'));
-				console.log(hscale);
-				tableheader.css('font-size', 120 * hscale + 'px');
+			var tableheader = $("<div class='tblheader'></div>");
+			tableheader.text(this.model.get('name'));
+			console.log(hscale);
+			tableheader.css('font-size', 120 * hscale + 'px');
+			this.container.append(tableheader);
 
-				this.container.append(tableheader);
+
+			if (this.model.get('showheaders')) {
 				//tableheader.
 
 				var tablerow = $('<tr></tr>');
@@ -237,9 +238,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				var collection = sensorGroupCollection[i];
 				var tablerow = $("<tr></tr>");
 				//appending groupname
-				var groupheader = $('<th></th>');
-				groupheader.text(collection.group);
-				tablerow.append(groupheader);
+
+				if (this.model.get('showheaders')) {
+					var groupheader = $('<th></th>');
+					groupheader.text(collection.group);
+					tablerow.append(groupheader);
+				}
+				
 
 				for (var j = 0; j < collection.models.length; j++) {
 					var tablecell = $("<td></td>");
