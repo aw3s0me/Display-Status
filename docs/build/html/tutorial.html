@@ -1,0 +1,497 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorials &mdash; Kitcube Status 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Kitcube Status 0.0.1 documentation" href="index.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Kitcube Status 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tutorials">
+<h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h1>
+<p>This tutorial is written base on OpenSuse OS.</p>
+<div class="section" id="bower">
+<h2>Bower<a class="headerlink" href="#bower" title="Permalink to this headline">¶</a></h2>
+<p>Package manager for control front-end packages</p>
+<ol class="arabic simple">
+<li>Install npm:</li>
+<li>Install node js (do not forget about version of OpenSUSE.)</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>sudo zypper ar http://download.opensuse.org/repositories/devel:/languages:/nodejs/openSUSE_13.1/ NodeJSBuildService
+<span class="nv">$ </span>sudo zypper in nodejs nodejs-devel
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="3">
+<li>Install bower</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>npm install -g bower
+</pre></div>
+</td></tr></table></div>
+<div class="section" id="installing-library-with-bower">
+<h3>Installing library with bower<a class="headerlink" href="#installing-library-with-bower" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Find library in terminal</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>bower search <span class="o">[</span>&lt;name&gt;<span class="o">]</span>
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="2">
+<li>open/create component.json file in main js folder</li>
+</ol>
+<div class="highlight-json"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="highlight"><pre>#Basic structure of component.json
+{
+  &quot;name&quot;: &quot;Name of your project&quot;,
+  &quot;version&quot;: &quot;Version of your project&quot;,
+  &quot;dependencies&quot; : {
+    &quot;vendor_lib_name1&quot; : version1,
+    &quot;vendor_lib_name2&quot; : version2
+  }
+}
+
+#Kitcube example for installation of jquery
+{
+  &quot;name&quot;: &quot;Kitcube status&quot;,
+  &quot;version&quot;: &quot;0.0.1&quot;,
+  &quot;dependencies&quot; : {
+    &quot;jquery&quot; : null //null to install latest version (1.9 to install 1.9 version),
+    &quot;vendor_lib_name&quot; :
+  }
+}
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="3">
+<li>cd to folder where lies your component.json</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>bower install
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="4">
+<li>That&#8217;s all.</li>
+</ol>
+</div>
+<div class="section" id="configuration-of-bower">
+<h3>Configuration of bower<a class="headerlink" href="#configuration-of-bower" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>CAUTION. WILL BE HARD TO MERGE. If you wanna to configure bower (Installation path etc, just create .bowerrc file in one folder with)</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>touch .bowerrc
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="2">
+<li>Put configuration like:</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span class="o">{</span>
+   <span class="s2">&quot;directory&quot;</span> : <span class="s2">&quot;scripts/vendor&quot;</span>
+<span class="o">}</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="installation-of-the-new-version">
+<h3>Installation of the new version<a class="headerlink" href="#installation-of-the-new-version" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Just do again bower install with null parameter in component.json</li>
+</ol>
+</div>
+<div class="section" id="removing-of-library">
+<h3>Removing of library<a class="headerlink" href="#removing-of-library" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>In terminal</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>bower uninstall &lt;package-name&gt;
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+<div class="section" id="backbone-require-js">
+<h2>Backbone-Require.js<a class="headerlink" href="#backbone-require-js" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="why-to-use-reqjs">
+<h3>Why to use Reqjs<a class="headerlink" href="#why-to-use-reqjs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>some sort of #include/import/require (if you like C, python style)</li>
+<li>ability to load nested dependencies (jquery ui won&#8217;t work without jquery)</li>
+<li>ease of use for developer but then backed by an optimization tool that helps deployment</li>
+</ul>
+</div>
+<div class="section" id="backbone-js">
+<h3>Backbone JS<a class="headerlink" href="#backbone-js" title="Permalink to this headline">¶</a></h3>
+<p>It&#8217;s bad to have all logic in dom -&gt; better to divide it into parts.</p>
+</div>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Search repo by using bower search</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span class="nv">$ </span>bower search require.js
+<span class="nv">$ </span>bower search backbone-amd
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="2">
+<li>Put needed name into component.json, like:</li>
+</ol>
+<div class="highlight-bash"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre>requirejs: null,
+backbone-amd: null //do not forget about amd version. To support asynchronous downloading it should be with -amd
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="3">
+<li>bower install</li>
+<li>structure of js folders should be like:</li>
+</ol>
+<p>/* File Structure
+├── imgs
+├── css
+│   └── style.css
+├── templates
+│   ├── projects
+│   │   ├── list.html
+│   │   └── edit.html
+│   └── users
+│       ├── list.html
+│       └── edit.html
+├── js
+├──── build //files for configuration of building js files
+├─────── dist  //folder for all minified files. 1 main file is called main.js (contatins all info)
+├─────tests //test files
+├─────scripts
+│       ├─ vendor //Vendor libraries. Here we put installed libraries with bower
+│       ├──  jquery
+│       │     ├── jquery.min.js
+│       ├──  backbone
+│       │     ├── backbone.min.js
+│       ├──  underscore
+│       │     ├── underscore.min.js
+│       ├── dev // for our created libs
+│       │    myParser
+│       │     ├── myparser.js
+│       │    myLib
+│       ├── models
+│       │   ├── users.js
+│       │   └── projects.js
+│       ├── collections
+│       │    ├── users.js
+│       │    └── projects.js
+│       ├── views
+│       │   ├── projects
+│       │   │     ├── list.js
+│       │   │     └── edit.js
+│       │   └── users
+│       │         ├── list.js
+│       │         └── edit.js
+│       ├── router.js //Router file. Do url routing
+│       ├── app.js //Create application object here
+│       ├── main.js  // Bootstrap. Just template for creating modules
+│       ├── order.js //Require.js plugin
+│       └── text.js  //Require.js plugin
+└── index.html</p>
+<ol class="arabic simple" start="5">
+<li>main.js should contatin information about paths and dependencies order, like:</li>
+</ol>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22</pre></div></td><td class="code"><div class="highlight"><pre><span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+   <span class="nx">paths</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;jquery&quot;</span><span class="o">:</span> <span class="s2">&quot;vendor/jquery/jquery.min&quot;</span><span class="p">,</span> <span class="c1">//DO NOT SPECIFY EXTENSION</span>
+      <span class="s2">&quot;jqueryui&quot;</span><span class="o">:</span> <span class="s2">&quot;vendor/jquery-ui/ui/jquery-ui&quot;</span><span class="p">,</span> <span class="c1">//Don&#39;t forget to comment your parts</span>
+                                                   <span class="c1">//MVC part</span>
+      <span class="s2">&quot;underscore&quot;</span><span class="o">:</span> <span class="s2">&quot;vendor/underscore-amd/underscore&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;backbone&quot;</span><span class="o">:</span> <span class="s2">&quot;vendor/backbone-amd/backbone&quot;</span>
+   <span class="p">},</span>
+   <span class="nx">shim</span><span class="o">:</span> <span class="p">{</span> <span class="c1">//json object to set dependency order</span>
+      <span class="nx">backbone</span><span class="o">:</span> <span class="p">{</span>
+         <span class="nx">deps</span><span class="o">:</span> <span class="p">[</span>
+           <span class="s1">&#39;underscore&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;jquery&#39;</span>
+         <span class="p">],</span>
+         <span class="nx">exports</span><span class="o">:</span> <span class="s1">&#39;Backbone&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">jqueryui</span><span class="o">:</span> <span class="p">{</span> <span class="c1">//if jqueryui dependent of jquery, download it firstly</span>
+         <span class="nx">deps</span><span class="o">:</span> <span class="p">[</span>
+            <span class="s1">&#39;jquery&#39;</span>
+         <span class="p">]</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="6">
+<li>app.js just to initialize router and do $(document).ready stuff</li>
+</ol>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span class="nx">define</span><span class="p">([</span>
+   <span class="s1">&#39;jquery&#39;</span><span class="p">,</span>
+   <span class="s1">&#39;underscore&#39;</span><span class="p">,</span>
+   <span class="s1">&#39;backbone&#39;</span><span class="p">,</span>
+   <span class="nx">router</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">,</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">Backbone</span><span class="p">,</span> <span class="nx">Router</span><span class="p">)</span> <span class="p">{</span>
+   <span class="kd">var</span> <span class="nx">initialize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">Router</span><span class="p">.</span><span class="nx">initialize</span><span class="p">();</span>
+      <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="nx">funnction</span><span class="p">(</span><span class="nx">$</span><span class="p">)</span> <span class="p">{</span>
+      <span class="p">};</span>
+   <span class="p">}</span>
+   <span class="k">return</span> <span class="p">{</span>
+      <span class="nx">initialize</span><span class="o">:</span> <span class="nx">initialize</span>
+   <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+<ol class="arabic simple" start="7">
+<li>put in your one-page site index.html your single script tag:</li>
+</ol>
+<dl class="docutils">
+<dt>::</dt>
+<dd>&lt;script data-main=&#8221;/js/scripts/main.js&#8221; src={% static &#8220;/js/scripts/vendor/requirejs/require.js&#8221; %}&gt;&lt;/script&gt;</dd>
+</dl>
+</div>
+<div class="section" id="model">
+<h3>Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h3>
+<p>Model - contains interactive data with logic:</p>
+<ol class="arabic simple">
+<li>Conversions of data</li>
+<li>Validation of data</li>
+<li>Get Set properties</li>
+</ol>
+<p>Example</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">Person</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+   <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span> <span class="c1">//Default values</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Alex&#39;</span><span class="p">,</span>
+      <span class="nx">age</span><span class="o">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span>
+      <span class="nx">child</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+   <span class="p">},</span>
+   <span class="nx">initialize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;You&#39;re newborn&quot;</span><span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Nicholas&quot;</span><span class="p">,</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">67</span><span class="p">,</span> <span class="nx">child</span><span class="o">:</span> <span class="s1">&#39;Chuan&#39;</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">age</span> <span class="o">=</span> <span class="nx">person</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;age&quot;</span><span class="p">);</span> <span class="c1">// 67</span>
+<span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">person</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">);</span> <span class="c1">// &quot;Nicholas&quot;</span>
+<span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="nx">person</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;child&quot;</span><span class="p">);</span> <span class="c1">// &#39;Chuan&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="view">
+<h3>View<a class="headerlink" href="#view" title="Permalink to this headline">¶</a></h3>
+<p>View - contains logic to encapsulate DOM element functionality. You can think about this that it&#8217;s a widget on the screen (like menuLeft or gridster). Can contain logic like:</p>
+<ol class="arabic simple">
+<li>rendering a dom element (using underscore library to compile template)</li>
+<li>initialize dom events to interact with users</li>
+<li>Bind to event of changing the model</li>
+</ol>
+<p>Simple view:</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="highlight"><pre><span class="nx">GridView</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">tagName</span> <span class="o">:</span> <span class="s2">&quot;div&quot;</span><span class="p">,</span>
+    <span class="nx">className</span> <span class="o">:</span> <span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+
+    <span class="nx">render</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+       <span class="k">this</span><span class="p">.</span><span class="nx">el</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">);</span>
+
+       <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">model</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="s1">&#39;change:name&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="router">
+<h3>Router<a class="headerlink" href="#router" title="Permalink to this headline">¶</a></h3>
+<p>Routing by using app url</p>
+<div class="highlight-javascript"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="highlight"><pre><span class="kd">var</span> <span class="nx">MyRouter</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Router</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+   <span class="nx">routes</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;say/:something&quot;</span> <span class="o">:</span> <span class="s2">&quot;say&quot;</span>
+   <span class="p">},</span>
+   <span class="nx">say</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">something</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="nx">something</span><span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorials</a><ul>
+<li><a class="reference internal" href="#bower">Bower</a><ul>
+<li><a class="reference internal" href="#installing-library-with-bower">Installing library with bower</a></li>
+<li><a class="reference internal" href="#configuration-of-bower">Configuration of bower</a></li>
+<li><a class="reference internal" href="#installation-of-the-new-version">Installation of the new version</a></li>
+<li><a class="reference internal" href="#removing-of-library">Removing of library</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backbone-require-js">Backbone-Require.js</a><ul>
+<li><a class="reference internal" href="#why-to-use-reqjs">Why to use Reqjs</a></li>
+<li><a class="reference internal" href="#backbone-js">Backbone JS</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#model">Model</a></li>
+<li><a class="reference internal" href="#view">View</a></li>
+<li><a class="reference internal" href="#router">Router</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Installation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/tutorial.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">Kitcube Status 0.0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Nicholas Tan Jerome.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

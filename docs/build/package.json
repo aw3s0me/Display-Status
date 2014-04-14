@@ -1,0 +1,8 @@
+{
+  "name": "Kitcube-status",
+  "version": "0.0.1",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-gh-pages": "^0.9.1"
+  }
+}
