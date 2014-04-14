@@ -14,6 +14,7 @@ Contents:
 
    install
    tutorial
+   publish
 
 Indices and tables
 ==================
