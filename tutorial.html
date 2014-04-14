@@ -25,6 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Kitcube Status 0.0.1 documentation" href="index.html" />
+    <link rel="next" title="Publishing documentation" href="publish.html" />
     <link rel="prev" title="Installation" href="install.html" /> 
   </head>
   <body>
@@ -37,6 +38,9 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="publish.html" title="Publishing documentation"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="install.html" title="Installation"
              accesskey="P">previous</a> |</li>
@@ -201,52 +205,52 @@ backbone-amd: null //do not forget about amd version. To support asynchronous do
 <li>bower install</li>
 <li>structure of js folders should be like:</li>
 </ol>
-<p>/* File Structure
-├── imgs
-├── css
-│   └── style.css
-├── templates
-│   ├── projects
-│   │   ├── list.html
-│   │   └── edit.html
-│   └── users
-│       ├── list.html
-│       └── edit.html
-├── js
-├──── build //files for configuration of building js files
-├─────── dist  //folder for all minified files. 1 main file is called main.js (contatins all info)
-├─────tests //test files
-├─────scripts
-│       ├─ vendor //Vendor libraries. Here we put installed libraries with bower
-│       ├──  jquery
-│       │     ├── jquery.min.js
-│       ├──  backbone
-│       │     ├── backbone.min.js
-│       ├──  underscore
-│       │     ├── underscore.min.js
-│       ├── dev // for our created libs
-│       │    myParser
-│       │     ├── myparser.js
-│       │    myLib
-│       ├── models
-│       │   ├── users.js
-│       │   └── projects.js
-│       ├── collections
-│       │    ├── users.js
-│       │    └── projects.js
-│       ├── views
-│       │   ├── projects
-│       │   │     ├── list.js
-│       │   │     └── edit.js
-│       │   └── users
-│       │         ├── list.js
-│       │         └── edit.js
-│       ├── router.js //Router file. Do url routing
-│       ├── app.js //Create application object here
-│       ├── main.js  // Bootstrap. Just template for creating modules
-│       ├── order.js //Require.js plugin
-│       └── text.js  //Require.js plugin
-└── index.html</p>
+<p>/* File Structure</p>
+<p>├── imgs</p>
+<p>├── css</p>
+<p>│   └── style.css</p>
+<p>├── templates</p>
+<p>│   ├── projects</p>
+<p>│   │   ├── list.html</p>
+<p>│   │   └── edit.html</p>
+<p>│   └── users</p>
+<p>│       ├── list.html</p>
+<p>│       └── edit.html</p>
+<p>├── js</p>
+<p>├──── build //files for configuration of building js files</p>
+<p>├─────── dist  //folder for all minified files. 1 main file is called main.js (contatins all info)</p>
+<p>├─────tests //test files</p>
+<p>├─────scripts</p>
+<p>│       ├─ vendor //Vendor libraries. Here we put installed libraries with bower</p>
+<p>│       ├──  jquery</p>
+<p>│       │     ├── jquery.min.js</p>
+<p>│       ├──  backbone</p>
+<p>│       │     ├── backbone.min.js</p>
+<p>│       ├──  underscore</p>
+<p>│       │     ├── underscore.min.js</p>
+<p>│       ├── dev // for our created libs</p>
+<p>│       │    myParser</p>
+<p>│       │     ├── myparser.js</p>
+<p>│       │    myLib</p>
+<p>│       ├── models</p>
+<p>│       │   ├── users.js</p>
+<p>│       │   └── projects.js</p>
+<p>│       ├── collections</p>
+<p>│       │    ├── users.js</p>
+<p>│       │    └── projects.js</p>
+<p>│       ├── views</p>
+<p>│       │   ├── projects</p>
+<p>│       │   │     ├── list.js</p>
+<p>│       │   │     └── edit.js</p>
+<p>│       │   └── users
+│       │         ├── list.js</p>
+<p>│       │         └── edit.js</p>
+<p>│       ├── router.js //Router file. Do url routing</p>
+<p>│       ├── app.js //Create application object here</p>
+<p>│       ├── main.js  // Bootstrap. Just template for creating modules</p>
+<p>│       ├── order.js //Require.js plugin</p>
+<p>│       └── text.js  //Require.js plugin</p>
+<p>└── index.html</p>
 <ol class="arabic simple" start="5">
 <li>main.js should contatin information about paths and dependencies order, like:</li>
 </ol>
@@ -452,6 +456,9 @@ backbone-amd: null //do not forget about amd version. To support asynchronous do
   <h4>Previous topic</h4>
   <p class="topless"><a href="install.html"
                         title="previous chapter">Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="publish.html"
+                        title="next chapter">Publishing documentation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/tutorial.txt"
@@ -483,6 +490,9 @@ backbone-amd: null //do not forget about amd version. To support asynchronous do
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="publish.html" title="Publishing documentation"
+             >next</a> |</li>
         <li class="right" >
           <a href="install.html" title="Installation"
              >previous</a> |</li>
