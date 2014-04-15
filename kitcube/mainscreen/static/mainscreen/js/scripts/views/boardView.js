@@ -235,7 +235,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							}
 
 							var newSensor = new Sensor({
-								id: _id,
+								id: sensorObj["id"],
 								name: sensorObj["name"],
 								comment: sensorObj["comment"],
 								unit: sensorObj["unit"],
@@ -255,7 +255,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							var newSensorView = new SensorView({
 								model: newSensor,
 								grid: this.grid,
-								isGrouped: true
+								group: true
 							});
 
 							self.elements.sensors[_id] = newSensor;

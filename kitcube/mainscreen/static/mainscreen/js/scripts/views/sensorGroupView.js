@@ -37,12 +37,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
     		this.container[0].style.left = 5*scale + 'px';
     		this.container[0].innerHTML = newSensorGroup.get("name");
 
-    		var unitX = this.grid.getUnitSizes().width;
-    		var unitY = this.grid.getUnitSizes().height;
+    		var unitX = this.grid.getUnitSizes().width * scale;
+    		var unitY = this.grid.getUnitSizes().height * scale;
 
     		var newSortableContainer = $('<span></span>');
 			newSortableContainer.css('left', 0 + 'px');
-			newSortableContainer.css('top', unitX  + 'px');
+			newSortableContainer.css('top', unitX + 'px');
+			newSortableContainer.css('height', unitY * dy + 'px');
+			newSortableContainer.css('width', (unitX - 2) * dx + 'px' )
 			newSortableContainer.addClass('sortable_container').sortable();
 
     		if (this.group !== undefined) {
@@ -60,25 +62,21 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 
     		this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model).addClass('group')
     		.draggable({
-           		grid: [unitX,unitY],
+           		grid: [unitX, unitY],
             	containment: 'parent',
         	})
         	.resizable({
-	            grid: [unitX,unitY],
+	            grid: [unitX, unitY],
 	            minWidth: 6*unitX,
-	            minHeight: 7*unitY,
+	            minHeight: 7*unitY ,
 	            handles: 'ne, se',
 	            containment: 'parent',
 	            stop: function() {
-	                var width = $(this).children('.sortable_container').css('width').toNum();
-	                var height = $(this).children('.sortable_container').css('height').toNum();
-	                alert(height+' '+$(this).css('height'));
-	                if ( $(this).css('width').toNum() < width ) {
-	                    $(this).css('width', width);
-	                }
-	                if ( $(this).css('height').toNum() < height + unitY) {
-	                    $(this).css('height', height + unitY);
-	                }
+	                //var width = $(this).children('.sortable_container').css('width').toNum();
+	                //var height = $(this).children('.sortable_container').css('height').toNum();
+	                $(this).children('.sortable_container').css('width', $(this).css('width'));
+                	$(this).children('.sortable_container').css('height', $(this).css('height').toNum()-unitY);
+
 	            },
         	});
 		},
@@ -91,10 +89,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 		setContainer: function(sensorView) {
 			var divElem = sensorView.getContainer();
 			var model = sensorView.model;
-			var posx = model.get('coords')[0];
-			var posy = model.get('coords')[1];
-			var dx = model.get('size')[0];
-			var dy = model.get('size')[1];
+			var posx = 0;
+			var posy = 0;
+			var dx = 2;
+			var dy = 2;
 
 			var scale = this.grid.getScale();
 			var unitSizeX = this.grid.getUnitSizes().width * scale;
@@ -103,10 +101,15 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			divElem.css('top', posy * unitSizeY + 'px');
 			divElem.css('width', dx * unitSizeX + 'px');
 			divElem.css('height', dy * unitSizeY + 'px');
+
+			//sensorModel.set({ bgcolor: color });
+			//sensorModel.trigger('changebgcolor', sensorModel);
+
 			divElem.data('id', model.get('id'));
 
-			divElem.addClass('widget')
-			.draggable({
+			//divElem.addClass('widget');
+			divElem.addClass('subtile');
+			/*.draggable({
 				grid: [unitSizeX, unitSizeY],
 				containment: "parent",
 				stop: function() {
@@ -158,7 +161,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 					model.set({ size: [newWidth, newHeight]});
 					model.trigger('resize', model);
 				}
-			}); 
+			}); */
 
 			return divElem;
 

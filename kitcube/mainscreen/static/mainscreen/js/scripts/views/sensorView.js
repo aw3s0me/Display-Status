@@ -14,13 +14,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			}
 			if (options.group === true) {
 				this.isGrouped = true;
+				this.renderGrouped();
 			}
-
-			this.render();
+			else {
+				this.renderSingle();
+			}
+			
 			this.model.on('resize', this.onresize, this);
 			this.model.on('changebgcolor', this.onchangebgcolor, this);
 		},
-		render: function() {
+		renderSingle: function() {
 			//load html template
 			var newSensor = this.model;
 			//console.log(this.model);
@@ -39,7 +42,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s0.innerHTML = newSensor.get('name');
 			s0.innerHTML += '<br>' + newSensor.get('comment');
 			s0.className = "sensorName";
-
 
 			var s1 = document.createElement('div');
 			//s1.id = newSensor.get('id');
@@ -79,10 +81,58 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.append(s3);
 			this.container.append(s4);
 
-			if (!this.isGrouped) {
-				this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model);
-			}
+			this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model);
 			
+		},
+		renderGrouped: function() {
+			var newSensor = this.model;
+			//console.log(this.model);
+			var scale = this.grid.getScale();
+			var dx = newSensor.get("size")[0];
+			var dy = newSensor.get("size")[1];
+			var px = newSensor.get("coords")[0];
+			var py = newSensor.get("coords")[1];
+
+			this.container = $('<div></div>');
+			this.container.attr('id', newSensor.get('id'));
+			var s0 = document.createElement('div');
+			s0.style.position = 'absolute';
+			s0.style.fontSize = 13 * scale + 'px';
+			s0.style.left = 5 * scale + 'px';
+			s0.innerHTML = newSensor.get('name');
+			s0.className = "sensorName";
+
+			var s1 = document.createElement('div');
+			//s1.id = newSensor.get('id');
+			s1.style.position = 'absolute';
+			s1.style.fontSize = 30 * scale + 'px';
+			s1.style.right = 6 * scale + 'px';
+			s1.style.bottom = 0 * scale + 'px';
+			s1.innerHTML = (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1);
+			s1.className = "sensorVal";
+
+			var s2 = document.createElement('div');
+			s2.style.position = 'absolute';
+			s2.style.fontSize = 12 * scale + 'px';
+			s2.style.right = 5 * scale + 'px';
+			s2.style.top = 20 * scale + 'px';
+			s2.innerHTML = newSensor.get('unit');
+			s2.className = "sensorUnit";
+
+			var s3 = document.createElement('div');
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 12 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 4 * scale + 'px';
+			s3.innerHTML = "<b>x</b>";
+			s3.className = "close";
+
+			this.container.append(s0);
+			this.container.append(s1);
+			this.container.append(s2);
+			this.container.append(s3);
+
+			this.container.css('background-color', this.model.get('bgcolor'));
 		},
 		getHtml: function() {
 			return this.container[0];

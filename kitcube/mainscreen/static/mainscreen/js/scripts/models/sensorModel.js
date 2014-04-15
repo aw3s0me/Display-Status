@@ -19,7 +19,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			values: undefined,
 			size: [],
 			coords: [],
-			bgcolor: undefined,
+			bgcolor: '#338fff',
 			valUnit: "NaN"
 		},
 		initialize: function() {
