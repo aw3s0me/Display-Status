@@ -12,7 +12,9 @@
                         "id": "sensid1",
                         "mask": "102",
                         "unit": "A",
-                        "name": "Current"
+                        "name": "Current",
+                        "min": 1.0,
+                        "max": 2.0
                     },
                     {
                         "id": "sensid2",

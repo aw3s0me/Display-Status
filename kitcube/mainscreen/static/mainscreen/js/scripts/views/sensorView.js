@@ -21,7 +21,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			}
 			
 			this.model.on('resize', this.onresize, this);
-			this.model.on('changebgcolor', this.onchangebgcolor, this);
+			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 		},
 		renderSingle: function() {
 			//load html template
@@ -97,10 +97,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.attr('id', newSensor.get('id'));
 			var s0 = document.createElement('div');
 			s0.style.position = 'absolute';
-			s0.style.fontSize = 13 * scale + 'px';
+			s0.style.fontSize = 14 * scale + 'px';
 			s0.style.left = 5 * scale + 'px';
 			s0.innerHTML = newSensor.get('name');
 			s0.className = "sensorName";
+			s0.style.fontWeight = 'bold';
 
 			var s1 = document.createElement('div');
 			//s1.id = newSensor.get('id');

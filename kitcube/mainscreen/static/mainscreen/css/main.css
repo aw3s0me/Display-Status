@@ -145,7 +145,7 @@ body {
     box-sizing: border-box;
     border: 1px solid red;
     z-index: 2;
-}
+    font-weight: bold;
 
 /*.sensorName {
     width: 100%;

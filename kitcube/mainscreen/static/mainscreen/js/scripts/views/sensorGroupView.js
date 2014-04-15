@@ -19,7 +19,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
  
 			this.render();
 			this.model.on('resize', this.onresize, this);
-			this.model.on('changebgcolor', this.onchangebgcolor, this);
+			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 		},
 		render: function() {
 			var scale = this.grid.getScale();
@@ -36,6 +36,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
     		s0.style.position = 'absolute';
     		s0.style.fontSize = 1.4*scale+'em';
     		s0.style.left = 5*scale + 'px';
+    		s0.style.fontWeight = 'bold';
     		s0.innerHTML = newSensorGroup.get("name");
     		this.container.append($(s0));
 
@@ -108,6 +109,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			divElem.css('top', posy * unitSizeY + 'px');
 			divElem.css('width', dx * unitSizeX + 'px');
 			divElem.css('height', dy * unitSizeY + 'px');
+
 
 			//sensorModel.set({ bgcolor: color });
 			//sensorModel.trigger('changebgcolor', sensorModel);
