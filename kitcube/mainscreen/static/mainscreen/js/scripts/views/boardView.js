@@ -241,10 +241,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								unit: sensorObj["unit"],
 								max: sensorObj["max"],
 								min: sensorObj["min"],
-								server: sensorObj["server"],
+								server: server,
 								device: sensorObj["device"],
-								dbname: sensorObj["dbname"],
-								dbgroup: sensorObj["dbgroup"],
+								dbname: dbname,
+								dbgroup: dbgroup,
 								mask: sensorObj["mask"],
 								size: sensorObj["size"],
 								coords: sensorObj["coords"],
@@ -258,9 +258,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								group: true
 							});
 
-							self.elements.sensors[_id] = newSensor;
+							self.elements.sensors[sensorObj["id"]] = newSensor;
 							sensorModelsArr.push(newSensor);
-							self.views.sensors[_id] = newSensorView;
+							self.views.sensors[sensorObj["id"]] = newSensorView;
 							groupArr.push(newSensorView);
 						}
 

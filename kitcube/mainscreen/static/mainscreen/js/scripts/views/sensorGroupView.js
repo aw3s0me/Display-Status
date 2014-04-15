@@ -32,19 +32,26 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			this.container = $('<div></div>');
 			this.container.attr('id', newSensorGroup.get('id'));
 
-			this.container[0].style.position = 'absolute';
+			var s0 = document.createElement('div');
+    		s0.style.position = 'absolute';
+    		s0.style.fontSize = 1.4*scale+'em';
+    		s0.style.left = 5*scale + 'px';
+    		s0.innerHTML = newSensorGroup.get("name");
+    		this.container.append($(s0));
+
+			/*this.container[0].style.position = 'absolute';
 			this.container[0].style.fontSize = 1.8*scale +'em';
     		this.container[0].style.left = 5*scale + 'px';
-    		this.container[0].innerHTML = newSensorGroup.get("name");
+    		this.container[0].innerHTML = newSensorGroup.get("name"); */
 
     		var unitX = this.grid.getUnitSizes().width * scale;
     		var unitY = this.grid.getUnitSizes().height * scale;
 
     		var newSortableContainer = $('<span></span>');
 			newSortableContainer.css('left', 0 + 'px');
-			newSortableContainer.css('top', unitX + 'px');
-			newSortableContainer.css('height', unitY * dy + 'px');
-			newSortableContainer.css('width', (unitX - 2) * dx + 'px' )
+			newSortableContainer.css('top', unitY + 'px');
+			newSortableContainer.css('height', unitY * (dy - 1) + 'px');
+			newSortableContainer.css('width', unitX * dx + 'px' )
 			newSortableContainer.addClass('sortable_container').sortable();
 
     		if (this.group !== undefined) {
@@ -67,15 +74,15 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
         	})
         	.resizable({
 	            grid: [unitX, unitY],
-	            minWidth: 6*unitX,
-	            minHeight: 7*unitY ,
+	            //minWidth: 6*unitX,
+	            //minHeight: 7*unitY ,
 	            handles: 'ne, se',
 	            containment: 'parent',
 	            stop: function() {
 	                //var width = $(this).children('.sortable_container').css('width').toNum();
 	                //var height = $(this).children('.sortable_container').css('height').toNum();
 	                $(this).children('.sortable_container').css('width', $(this).css('width'));
-                	$(this).children('.sortable_container').css('height', $(this).css('height').toNum()-unitY);
+                	$(this).children('.sortable_container').css('height', parseInt($(this).css('height'))- unitY);
 
 	            },
         	});
