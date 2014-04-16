@@ -22,6 +22,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			
 			this.model.on('resize', this.onresize, this);
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
+			this.model.on('change:value', this.onchangevalue, this);
 		},
 		renderSingle: function() {
 			//load html template
@@ -231,6 +232,53 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			sensorDiv.css('background-color', this.model.get('bgcolor'));
 
+		},
+		onchangevalue: function(model) {
+			var sensorDiv = this.container;
+			var sensortype = model.get('sensortype');
+			var valToInsert = model.get('valUnit');
+			/*switch(sensortype) {
+				case "2-state":
+					{
+						valToInsert = model.get('valUnit');
+						break;
+					}
+				case "valve":
+					{
+						valToInsert = model.get('valUnit');
+						break;
+					}
+				case "3-state":
+					{
+						valToInsert = model.get('valUnit');
+						break;
+					}
+				case "endis":
+					{
+						valToInsert = model.get('valUnit');
+						break;
+					}
+				case "noval":
+					{
+						valToInsert = model.get('valUnit');
+						break;
+					}
+				default:
+					{
+						valToInsert = model.get('value');
+						break;
+					}
+			} */
+			var name = this.model.get('name');
+			if (name === "Ion Gauge") {
+				var a = 1;
+				var val = this.model.get('value');
+
+			}
+
+
+			var valDiv = this.container.find('.sensorVal');
+			valDiv.text(valToInsert);
 		}
 	});
 

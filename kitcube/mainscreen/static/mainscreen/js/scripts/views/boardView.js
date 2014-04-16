@@ -125,6 +125,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							comment: attr["comment"],
 							unit: attr["unit"],
 							//value: attr[n],
+							sensorviewtype : "single",
 							max: attr["max"],
 							min: attr["min"],
 							server: attr["server"],
@@ -171,8 +172,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 									id: sensorInfoObj["id"],
 									name: sensorInfoObj["name"],
 									unit: sensorInfoObj["unit"],
-									//max: attr["max"],
-									//min: attr["min"],
+									max: sensorInfoObj["max"],
+									min: sensorInfoObj["min"],
+									sensorviewtype : "table",
+									sensortype: sensorInfoObj["sensortype"],
+									sibling: sensorInfoObj["sibling"],
 									server: server,
 									dbname: dbname,
 									dbgroup: dbgroup,
@@ -238,9 +242,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								id: sensorObj["id"],
 								name: sensorObj["name"],
 								comment: sensorObj["comment"],
+								sensortype: sensorObj["sensortype"],
+								sibling: sensorObj["sibling"],
+								sensorviewtype : "group",
 								unit: sensorObj["unit"],
 								max: sensorObj["max"],
 								min: sensorObj["min"],
+								precision: sensorObj["precision"],
 								server: server,
 								device: sensorObj["device"],
 								dbname: dbname,
@@ -765,9 +773,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 					var arrayOfData = data.split(',');
 					var value = parseFloat(
 						arrayOfData[arrayOfData.length - 1]);
-					var sensorDiv = sensor.find(".sensorVal")[0];
-					if (sensorDiv)
-						sensorDiv.innerHTML = value.toFixed(1);
 					var now = new Date;
 					var lastTime = _.clone(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
 

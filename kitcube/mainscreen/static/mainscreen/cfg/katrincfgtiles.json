@@ -14,38 +14,43 @@
                         "unit": "A",
                         "name": "Current",
                         "min": 1.0,
-                        "max": 2.0
+                        "max": 2.0,
+                        "precision": 0
                     },
                     {
                         "id": "sensid2",
                         "mask": "106",
                         "unit": "K",
-                        "name": "T1"
-
+                        "name": "T1",
+                        "precision": 3
                     },
                     {
                         "id": "sensid3",
                         "mask": "107",
                         "unit": "K",
-                        "name": "T2"
+                        "name": "T2",
+                        "precision": 3
                     },
                     {
                         "id": "sensid4",
                         "mask": "108",
                         "unit": "%",
-                        "name": "He Level"
+                        "name": "He Level",
+                        "precision": 1
                     },
                     {
                         "id": "sensid5",
                         "mask": "149",
                         "unit": "psig",
-                        "name": "HRC Press"
+                        "name": "HRC Press",
+                        "precision": 2
                     },
                     {
                         "id": "sensid6",
                         "mask": "150",
                         "unit": "W",
-                        "name": "HRC Heater"
+                        "name": "HRC Heater",
+                        "precision": 2
                     }
         ]
     },
@@ -62,38 +67,44 @@
                         "id": "sensid7",
                         "mask": "103",
                         "unit": "A",
-                        "name": "Current"
+                        "name": "Current",
+                        "precision": 3
                     },
                     {
                         "id": "sensid8",
                         "mask": "109",
                         "unit": "K",
-                        "name": "T1"
+                        "name": "T1",
+                        "precision": 3
 
                     },
                     {
                         "id": "sensid9",
                         "mask": "110",
                         "unit": "K",
-                        "name": "T2"
+                        "name": "T2",
+                        "precision": 3
                     },
                     {
                         "id": "sensid10",
                         "mask": "111",
                         "unit": "%",
-                        "name": "He Level"
+                        "name": "He Level",
+                        "precision": 1
                     },
                     {
                         "id": "sensid11",
                         "mask": "151",
                         "unit": "psig",
-                        "name": "HRC Press"
+                        "name": "HRC Press",
+                        "precision": 2
                     },
                     {
                         "id": "sensid12",
                         "mask": "152",
                         "unit": "W",
-                        "name": "HRC Heater"
+                        "name": "HRC Heater",
+                        "precision": 2
                     }
         ]
     },
@@ -182,42 +193,50 @@
                         "id": "sensid22",
                         "mask": "2",
                         "unit": "C",
-                        "name": "XHV CP Jacket"
+                        "name": "XHV CP Jacket",
+                        "precision": 2
                     },
                     {
                         "id": "sensid23",
                         "mask": "3",
-                        "name": "HVac CP Jacket"
+                        "name": "HVac CP Jacket",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid24",
                         "mask": "4",
-                        "name": "PTC Cold Finger"
+                        "name": "PTC Cold Finger",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid25",
                         "mask": "5",
-                        "name": "Cooling Ring Top"
+                        "name": "Cooling Ring Top",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid26",
                         "mask": "6",
-                        "name": "Cooling Ring Bottom"
+                        "name": "Cooling Ring Bottom",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid27",
                         "mask": "7",
-                        "name": "PAE Bell"
+                        "name": "PAE Bell",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid28",
                         "mask": "8",
-                        "name": "PAE Tube"
+                        "name": "PAE Tube",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid29",
                         "mask": "9",
-                        "name": "Detector Flange"
+                        "name": "Detector Flange",
+                        "sensortype": "valve"
                     }
         ]
     },
@@ -233,38 +252,45 @@
         "sensors": [{
                         "id": "sensid30",
                         "mask": "59",
-                        "name": "GS Position"
+                        "name": "GS Position",
+                        "sensortype": "3-state"
                     },
                     {
                         "id": "sensid31",
                         "mask": "61",
-                        "name": "ES Position"
+                        "name": "ES Position",
+                        "sensortype": "3-state"
                     },
                     {
                         "id": "sensid32",
                         "mask": "75",
-                        "name": "ES Voltage"
+                        "name": "ES Voltage",
+                        "precision": 3
                     },
                     {
                         "id": "sensid33",
                         "mask": "78",
-                        "name": "ES En/Dis"
+                        "name": "ES En/Dis",
+                        "sensortype": "endis"
                     },
                     {
                         "id": "sensid34",
                         "mask": "80",
                         "unit": "kV",
-                        "name": "PAE Voltage"
+                        "name": "PAE Voltage",
+                        "precision": 3
                     },
                     {
                         "id": "sensid35",
                         "mask": "82",
-                        "name": "PAE En/Dis"
+                        "name": "PAE En/Dis",
+                        "sensortype": "endis"
                     },
                     {
                         "id": "sensid36",
                         "mask": "145",
-                        "name": "Ramping"
+                        "name": "Ramping",
+                        "sensortype": "2-state"
                     }
         ]
     },
@@ -281,67 +307,78 @@
                         "id": "sensid37",
                         "mask": "112",
                         "unit": "V",
-                        "name": "FET"
+                        "name": "FET",
+                        "precision": 2
                     },
                     {
                         "id": "sensid38",
                         "mask": "113",
                         "unit": "V",
-                        "name": "-8V"
+                        "name": "-8V",
+                        "precision": 2
 
                     },
                     {
                         "id": "sensid39",
                         "mask": "116",
                         "unit": "V",
-                        "name": "+6V"
+                        "name": "+6V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid40",
                         "mask": "117",
                         "unit": "V",
-                        "name": "-6V"
+                        "name": "-6V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid41",
                         "mask": "118",
                         "unit": "V",
-                        "name": "Bias"
+                        "name": "Bias",
+                        "precision": 2
                     },
                     {
                         "id": "sensid42",
                         "mask": "146",
-                        "name": "Ramping"
+                        "name": "Ramping",
+                        "sensortype": "2-state"
                     },
                     {
                         "id": "sensid43",
                         "mask": "112",
                         "unit": "mA",
-                        "name": "FET"
+                        "name": "FET",
+                        "precision": 2
                     },
                     {
                         "id": "sensid44",
                         "mask": "113",
                         "unit": "mA",
-                        "name": "-8V"
+                        "name": "-8V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid45",
                         "mask": "116",
                         "unit": "A",
-                        "name": "+6V"
+                        "name": "+6V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid46",
                         "mask": "117",
                         "unit": "A",
-                        "name": "-6V"
+                        "name": "-6V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid47",
                         "mask": "118",
                         "unit": "uA",
-                        "name": "Ramping"
+                        "name": "Ramping",
+                        "sensortype": "2-state"
                     }
         ]
     },
@@ -358,39 +395,45 @@
                         "id": "sensid48",
                         "mask": "186",
                         "unit": "V",
-                        "name": "+6V"
+                        "name": "+6V",
+                        "precision": 3
                     },
                     {
                         "id": "sensid49",
                         "mask": "187",
                         "unit": "V",
-                        "name": "-6V"
+                        "name": "-6V",
+                        "precision": 3
 
                     },
                     {
                         "id": "sensid50",
                         "mask": "188",
                         "unit": "V",
-                        "name": "Bias"
+                        "name": "Bias",
+                        "precision": 3
                     },
                     {
                         "id": "sensid54",
                         "mask": "186",
                         "unit": "V",
-                        "name": "Temp"
+                        "name": "Temp",
+                        "precision": 1
                     },
                     {
                         "id": "sensid55",
                         "mask": "187",
                         "unit": "V",
-                        "name": "Temp SP"
+                        "name": "Temp SP",
+                        "precision": 1
 
                     },
                     {
                         "id": "sensid56",
                         "mask": "188",
                         "unit": "V",
-                        "name": "Output"
+                        "name": "Output",
+                        "precision": 2
                     }
         ]
     },
@@ -407,39 +450,45 @@
                         "id": "sensid51",
                         "mask": "190",
                         "unit": "mA",
-                        "name": "+6V"
+                        "name": "+6V",
+                        "precision": 1
                     },
                     {
                         "id": "sensid52",
                         "mask": "191",
                         "unit": "mA",
-                        "name": "-6V"
+                        "name": "-6V",
+                        "precision": 1
 
                     },
                     {
                         "id": "sensid53",
                         "mask": "192",
                         "unit": "mA",
-                        "name": "Bias"
+                        "name": "Bias",
+                        "precision": 1
                     },
                     {
                         "id": "sensid57",
                         "mask": "190",
                         "unit": "mA",
-                        "name": "Temp"
+                        "name": "Temp",
+                        "precision": 1
                     },
                     {
                         "id": "sensid58",
                         "mask": "191",
                         "unit": "mA",
-                        "name": "Temp SP"
+                        "name": "Temp SP",
+                        "precision": 1
 
                     },
                     {
                         "id": "sensid59",
                         "mask": "192",
                         "unit": "mA",
-                        "name": "Output"
+                        "name": "Output",
+                        "precision": 2
                     }
         ]
     }
