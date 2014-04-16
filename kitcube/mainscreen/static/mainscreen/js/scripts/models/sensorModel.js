@@ -6,6 +6,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 	var _min3State = 0.5;
 	var _max3State = 1.5;
 	var _minNoneState = 0;
+	var _defbgcolor;
 
 	var Sensor = Backbone.Model.extend({
 		defaults: {
@@ -35,7 +36,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		},
 		initialize: function() {
 			//console.log("model created");
-			
+			_defbgcolor = this.get('bgcolor');
 			switch (this.get('sensortype')) {
 				case "2-state": {
 						if (this.get('min') === undefined) {
@@ -112,7 +113,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			} 
 
-			this.on('change: value', function() {
+			this.on('change:value', function() {
 				switch(this.get('sensortype')) {
 					case "2-state": {
 						var value = (floatvalue > this.get('min')) ? "YES" : "NO";
@@ -175,6 +176,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						else {
 							if (val < this.get('min') || val > this.get('max')) {
 								this.set({valUnit: val + " " + this.get('unit'), bgcolor: "#F5025B"});
+							}
+							else {
+								this.set({valUnit: val + " " + this.get('unit'), bgcolor: _defbgcolor});
 							}
 						}
 						break;

@@ -229,9 +229,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var sensorDiv = this.container;
 			var sensorModel = model;
 
-			var tile = sensorDiv.parent();
-
-			tile.css('background-color', this.model.get('bgcolor'));
+			sensorDiv.css('background-color', this.model.get('bgcolor'));
 
 		}
 	});
