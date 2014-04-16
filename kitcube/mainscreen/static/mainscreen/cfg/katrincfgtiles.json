@@ -140,7 +140,8 @@
                         "id": "sensid16",
                         "mask": "99",
                         "unit": "K",
-                        "name": "CP Temp"
+                        "name": "CP Temp",
+                        "precision": 2
                     }
         ]
     },
@@ -176,7 +177,8 @@
                         "id": "sensid21",
                         "mask": "100",
                         "unit": "K",
-                        "name": "CP Temp"
+                        "name": "CP Temp",
+                        "precision": 2
                     }
         ]
     },
