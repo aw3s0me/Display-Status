@@ -28,6 +28,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			var dy = newSensorGroup.get("size")[1];
 			var px = newSensorGroup.get("coords")[0];
 			var py = newSensorGroup.get("coords")[1];
+			var self = this;
 
 			this.container = $('<div></div>');
 			this.container.attr('id', newSensorGroup.get('id'));
@@ -74,19 +75,31 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
             	containment: 'parent',
         	})
         	.resizable({
-	            grid: [unitX, unitY],
-	            //minWidth: 6*unitX,
-	            //minHeight: 7*unitY ,
-	            handles: 'ne, se',
-	            containment: 'parent',
-	            stop: function() {
-	                //var width = $(this).children('.sortable_container').css('width').toNum();
-	                //var height = $(this).children('.sortable_container').css('height').toNum();
-	                //$(this).children('.sortable_container').css('width', $(this).css('width'));
-                	//$(this).children('.sortable_container').css('height', parseInt($(this).css('height')) - unitY);
+				grid: unitX,
+				//containment: 'parent',
+				handles: 'ne, se',
+				//helper: 'ui-resizable-helper',
+				start: function(event, ui) {},
+				resize: function( event, ui) {},
+				stop: function(event, ui) {
+					var model = self.model;
+					var unitSize = unitX;
 
-	            },
-        	});
+					var oldWidth = model.get('size')[0];
+					var oldHeight = model.get('size')[1];
+
+					var newWidth = Math.round(ui.size.width / unitSize);
+					var newHeight = Math.round(ui.size.height / unitSize);
+					//alert(newWidth, newHeight);
+					if (oldWidth === newWidth && oldHeight === newHeight) {
+						return;
+					}
+					self.model.set({ size: [newWidth, newHeight]});
+					$(this).find('.sortable_container').css('width', $(this).css('width'));
+                	$(this).find('.sortable_container').css('height', parseInt($(this).css('height'))-unitY);
+					self.model.trigger('resize', model);
+				}
+			}); 
 		},
 		rerender: function() {
 
@@ -176,7 +189,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 
 		},
 		onresize: function(model) {
-
+			var ololo = 1;
 		},
 		onchangebgcolor: function(model) {
 

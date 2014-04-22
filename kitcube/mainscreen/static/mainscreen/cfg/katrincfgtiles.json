@@ -122,14 +122,16 @@
                         "mask": "74",
                         "unit": "mbar",
                         "name": "Ion Gauge",
-                        "precision": 2
+                        "precision": 2,
+                        "exp": true
                     },
                     {
                         "id": "sensid14",
                         "mask": "66",
                         "unit": "mbar",
                         "name": "CCG",
-                        "precision": 2
+                        "precision": 2,
+                        "exp": true
 
                     },
                     {

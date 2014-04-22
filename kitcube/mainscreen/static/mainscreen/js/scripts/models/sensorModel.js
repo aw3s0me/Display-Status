@@ -39,6 +39,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			dbgroup: undefined,
 			mask: undefined,
 			values: undefined,
+			exp: false,
 			size: [],
 			coords: [],
 			bgcolor: '#338fff',
@@ -154,13 +155,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						}
 						break;
 					}
-
-
 			}
 
 			this.on('change:value', function() {
 				var precision = this.get('precision');
-
 				switch (this.get('sensortype')) {
 					case "2-state":
 						{
@@ -252,6 +250,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						{
 							var val = this.get('value');
 							var valueToInsert = "NaN";
+							var exp = this.get('exp');
 							if (this.get('name') === "HRC Heater") {
 								var a = 1;
 							}
@@ -259,8 +258,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 							var type = this.get('sensorviewtype');
 							if (type === "table") {
 								if (_isNumber(precision)) {
-									if (_isExponent(val)) {
-										console.log('exp' + val);
+									if (_isExponent(val) && exp) {
 										valueToInsert = val.toExponential(precision) + " " + this.get('unit');
 									}
 									else {
@@ -274,8 +272,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 							}
 							else {
 								if (_isNumber(precision)) {
-									if (_isExponent(val)) {
-										console.log('exp' + val);
+									if (_isExponent(val) && exp) {
 										valueToInsert = val.toPrecision(precision);
 									}
 									else {
