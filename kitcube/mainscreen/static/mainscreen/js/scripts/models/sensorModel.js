@@ -12,6 +12,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
   		return !isNaN(parseFloat(n)) && isFinite(n);
 	}
 
+	function _isExponent(n) {
+		//var reg = /[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?./;
+		//return n.toString().test(reg);
+		return (n.toString().indexOf('e') !== -1);
+	}
+
 	var Sensor = Backbone.Model.extend({
 		defaults: {
 			id: undefined,
@@ -253,7 +259,14 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 							var type = this.get('sensorviewtype');
 							if (type === "table") {
 								if (_isNumber(precision)) {
-									valueToInsert = val.toFixed(precision) + " " + this.get('unit');
+									if (_isExponent(val)) {
+										console.log('exp' + val);
+										valueToInsert = val.toExponential(precision) + " " + this.get('unit');
+									}
+									else {
+										valueToInsert = val.toExponential(precision) + " " + this.get('unit');
+									}
+									
 								}
 								else {
 									valueToInsert = val + " " + this.get('unit');
@@ -261,7 +274,14 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 							}
 							else {
 								if (_isNumber(precision)) {
-									valueToInsert = val.toFixed(precision);
+									if (_isExponent(val)) {
+										console.log('exp' + val);
+										valueToInsert = val.toPrecision(precision);
+									}
+									else {
+										valueToInsert = val.toFixed(precision);
+									}
+									
 								}
 								else {
 									valueToInsert = val;
