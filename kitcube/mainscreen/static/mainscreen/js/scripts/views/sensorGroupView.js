@@ -82,8 +82,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 	            stop: function() {
 	                //var width = $(this).children('.sortable_container').css('width').toNum();
 	                //var height = $(this).children('.sortable_container').css('height').toNum();
-	                $(this).children('.sortable_container').css('width', $(this).css('width'));
-                	$(this).children('.sortable_container').css('height', parseInt($(this).css('height'))- unitY);
+	                //$(this).children('.sortable_container').css('width', $(this).css('width'));
+                	//$(this).children('.sortable_container').css('height', parseInt($(this).css('height')) - unitY);
 
 	            },
         	});

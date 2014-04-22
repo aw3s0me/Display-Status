@@ -195,12 +195,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 							var value;
 							if (val > this.get('min')) {
-								value = "INVALID";
+								value = "INV"; //"INVALID"
 								this.set({
 									bgcolor: "#F5025B"
 								});
 							} else if (val < this.get('max')) {
-								value = "MIDDLE";
+								value = "MID"; //Full = "MIDDLE"
 								this.set({
 									bgcolor: "#4280D6"
 								});
@@ -221,12 +221,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 							if (val > this.get('min')) {
 								this.set({
-									valUnit: "DISABLED",
+									valUnit: "DIS", //Full = "DIS"
 									bgcolor: "#F5025B"
 								});
 							} else {
 								this.set({
-									valUnit: "ENABLED",
+									valUnit: "ENAB", //Full = "ENABLED"
 									bgcolor: "#66D97B"
 								});
 							}
