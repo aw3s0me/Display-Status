@@ -139,6 +139,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 
 
+			 
+
+			var s2 = document.createElement('div');
+			s2.style.position = 'absolute';
+			s2.style.fontSize = 12 * scale + 'px';
+			s2.style.right = 5 * scale + 'px';
+			s2.style.top = 20 * scale + 'px';
+			s2.innerHTML = newSensor.get('unit');
+			s2.className = "sensorUnit";
+
 			if (newSensor.get('link')) {
 				//var prevHeight = this.container.height() * 0.4;
 				var prevHeight = 2 * this.grid.getUnitSizes().height * this.grid.getScale() * 0.34;
@@ -150,7 +160,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				console.log(prevHeight);
 				var tempDiv = $('<div></div>');
 				tempDiv.attr('id', 'c'+ this.model.get('id'));
-				tempDiv.text((newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1));
+				tempDiv.text((this.linkModel.get('value') === undefined) ? 'NAN' : (this.linkModel.get('value')).toFixed(1));
 				$(s5).append(tempDiv);
 				s5.className = "sensorVal";
 				s5.className += " slab";
@@ -162,15 +172,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 					maxfontsize: maxFont
 				});
 				this.container.append(s5);
-			} 
-
-			var s2 = document.createElement('div');
-			s2.style.position = 'absolute';
-			s2.style.fontSize = 12 * scale + 'px';
-			s2.style.right = 5 * scale + 'px';
-			s2.style.top = 20 * scale + 'px';
-			s2.innerHTML = newSensor.get('unit');
-			s2.className = "sensorUnit";
+				s2.innerHTML = this.linkModel.get('unit') + "/" + s2.innerHTML;
+			}
 
 			var s3 = document.createElement('div');
 			s3.style.position = 'absolute';

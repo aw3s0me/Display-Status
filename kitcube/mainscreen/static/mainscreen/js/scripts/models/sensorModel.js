@@ -45,7 +45,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			coords: [],
 			bgcolor: '#338fff',
 			valUnit: "NaN",
-			link: undefined
+			link: undefined,
+			factor: 1
 		},
 		initialize: function() {
 			//console.log("model created");
@@ -249,11 +250,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						}
 					default:
 						{
-							var val = this.get('value');
+							var val = this.get('value') * this.get('factor');
 							var valueToInsert = "NaN";
 							var exp = this.get('exp');
-							if (this.get('name') === "HRC Heater") {
+							if (this.get('name') === "-8V") {
 								var a = 1;
+								console.log(val);
+								console.log(this.get('value'));
 							}
 							
 							var type = this.get('sensorviewtype');

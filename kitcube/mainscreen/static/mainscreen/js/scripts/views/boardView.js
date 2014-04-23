@@ -263,7 +263,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								size: sensorObj["size"],
 								coords: sensorObj["coords"],
 								values: new Array(),
-								lastTime: new Date
+								lastTime: new Date,
+								factor: sensorObj["factor"]
 							});
 
 							self.elements.sensors[sensorObj["id"]] = newSensor;
@@ -793,6 +794,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 				type: "GET",
 				url: sensorModel.getDbUrl(),
 				success: function(data) {
+					//console.log(data);
 					var arrayOfData = data.split(',');
 					var value = parseFloat(
 						arrayOfData[arrayOfData.length - 1]);

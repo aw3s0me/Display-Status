@@ -122,7 +122,7 @@
                         "mask": "74",
                         "unit": "mbar",
                         "name": "Ion Gauge",
-                        "precision": 9,
+                        "precision": 2,
                         "exp": true
                     },
                     {
@@ -316,14 +316,16 @@
                         "mask": "112",
                         "unit": "V",
                         "name": "FET",
-                        "precision": 2
+                        "precision": 2,
+                        "link": "sensid43"
                     },
                     {
                         "id": "sensid38",
                         "mask": "113",
                         "unit": "V",
                         "name": "-8V",
-                        "precision": 2
+                        "precision": 2,
+                        "link": "sensid44"
 
                     },
                     {
@@ -331,21 +333,24 @@
                         "mask": "116",
                         "unit": "V",
                         "name": "+6V",
-                        "precision": 2
+                        "precision": 2,
+                        "link": "sensid45"
                     },
                     {
                         "id": "sensid40",
                         "mask": "117",
                         "unit": "V",
                         "name": "-6V",
-                        "precision": 2
+                        "precision": 2,
+                        "link": "sensid46"
                     },
                     {
                         "id": "sensid41",
                         "mask": "118",
                         "unit": "V",
                         "name": "Bias",
-                        "precision": 2
+                        "precision": 2,
+                        "link": "sensid47"
                     },
                     {
                         "id": "sensid42",
@@ -355,44 +360,52 @@
                     },
                     {
                         "id": "sensid43",
-                        "mask": "112",
+                        "mask": "119",
                         "unit": "mA",
                         "name": "FET",
-                        "precision": 2
+                        "precision": 0,
+                        "factor": 1000,
+                        "norender": true
                     },
                     {
                         "id": "sensid44",
-                        "mask": "113",
+                        "mask": "120",
                         "unit": "mA",
                         "name": "-8V",
-                        "precision": 2
+                        "precision": 0,
+                        "factor": 1000,
+                        "norender": true
                     },
                     {
                         "id": "sensid45",
-                        "mask": "116",
+                        "mask": "123",
                         "unit": "A",
                         "name": "+6V",
-                        "precision": 2
+                        "precision": 2,
+                        "norender": true
                     },
                     {
                         "id": "sensid46",
-                        "mask": "117",
+                        "mask": "124",
                         "unit": "A",
                         "name": "-6V",
-                        "precision": 2
+                        "precision": 2,
+                        "norender": true
                     },
                     {
                         "id": "sensid47",
-                        "mask": "118",
+                        "mask": "125",
                         "unit": "uA",
-                        "name": "Ramping",
-                        "sensortype": "2-state"
+                        "name": "Bias",
+                        "precision": 1,
+                        "factor": 1000000,
+                        "norender": true
                     }
         ]
     },
     "sensorgroup8": {
         "type": "sensorgroup",
-        "name": "Veto Peltier 1",
+        "name": "Veto Peltier 1/Veto Peltier 2",
         "size": [12, 3],
         "coords": [20, 6],
         "diffsensors": false,
@@ -404,14 +417,16 @@
                         "mask": "186",
                         "unit": "V",
                         "name": "+6V",
-                        "precision": 3
+                        "precision": 3,
+                        "link": "sensid51"
                     },
                     {
                         "id": "sensid49",
                         "mask": "187",
                         "unit": "V",
                         "name": "-6V",
-                        "precision": 3
+                        "precision": 3,
+                        "link": "sensid52"
 
                     },
                     {
@@ -419,21 +434,24 @@
                         "mask": "188",
                         "unit": "V",
                         "name": "Bias",
-                        "precision": 3
+                        "precision": 3,
+                        "link": "sensid53"
                     },
                     {
                         "id": "sensid54",
                         "mask": "186",
                         "unit": "V",
                         "name": "Temp",
-                        "precision": 1
+                        "precision": 1,
+                        "link": "sensid57"
                     },
                     {
                         "id": "sensid55",
                         "mask": "187",
                         "unit": "V",
                         "name": "Temp SP",
-                        "precision": 1
+                        "precision": 1,
+                        "link": "sensid58"
 
                     },
                     {
@@ -441,54 +459,49 @@
                         "mask": "188",
                         "unit": "V",
                         "name": "Output",
-                        "precision": 2
-                    }
-        ]
-    },
-    "sensorgroup9": {
-        "type": "sensorgroup",
-        "name": "Veto Peltier 2",
-        "size": [12, 3],
-        "coords": [20, 9],
-        "diffsensors": false,
-        "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd",
-        "sensors": [{
+                        "precision": 2,
+                        "link": "sensid59"
+                    },
+                    {
                         "id": "sensid51",
                         "mask": "190",
                         "unit": "mA",
                         "name": "+6V",
-                        "precision": 1
+                        "precision": 0,
+                        "norender": true
                     },
                     {
                         "id": "sensid52",
                         "mask": "191",
                         "unit": "mA",
                         "name": "-6V",
-                        "precision": 1
-
+                        "precision": 0,
+                        "norender": true
                     },
                     {
                         "id": "sensid53",
                         "mask": "192",
                         "unit": "mA",
                         "name": "Bias",
-                        "precision": 1
+                        "factor": 100,
+                        "precision": 0,
+                        "norender": true
                     },
                     {
                         "id": "sensid57",
                         "mask": "190",
                         "unit": "mA",
                         "name": "Temp",
-                        "precision": 1
+                        "precision": 1,
+                        "norender": true
                     },
                     {
                         "id": "sensid58",
                         "mask": "191",
                         "unit": "mA",
                         "name": "Temp SP",
-                        "precision": 1
+                        "precision": 1,
+                        "norender": true
 
                     },
                     {
@@ -496,7 +509,8 @@
                         "mask": "192",
                         "unit": "mA",
                         "name": "Output",
-                        "precision": 2
+                        "precision": 2,
+                        "norender": true
                     }
         ]
     }
