@@ -36,8 +36,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 				//using our callback as the success function
 				$.ajax({
 					//url: 'static/mainscreen/cfg/katrincfggrid.json',
-					//url: 'static/mainscreen/cfg/katrincfg.json',
-					url: 'static/mainscreen/cfg/katrincfgtiles.json',
+					url: 'static/mainscreen/cfg/katrincfg.json',
+					//url: 'static/mainscreen/cfg/katrincfgtiles.json',
 					async: false,
 					dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 					success: function(data){

@@ -255,7 +255,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var sensorModel = model;
 
 			sensorDiv.css('background-color', this.model.get('bgcolor'));
-
 		},
 		onchangevalue: function(model) {
 			var sensorDiv = this.container;

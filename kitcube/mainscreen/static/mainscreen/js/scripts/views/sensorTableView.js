@@ -42,6 +42,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				var collection = this.groups[i];
 				for (var j = 0 ; j < collection.models.length; j++) {
 					collection.models[j].on('change:value', this.changeTableValue, this);
+					collection.models[j].on('change:bgcolor', this.onchangebgcolortable, this);
 				}
 			}
 			this.model.on('resize', this.onresizeTable, this);
@@ -212,7 +213,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			var tableheader = $("<div class='tblheader'></div>");
 			tableheader.text(this.model.get('name'));
-			console.log(hscale);
+			//console.log(hscale);
 			tableheader.css('font-size', 120 * hscale + 'px');
 			this.container.append(tableheader);
 
@@ -287,7 +288,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var lookupObj = this.lookuptable[id];
 			console.log(model.get('value'));
 			//console.log(model);
-			this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], model.get('value') + " " + model.get('unit'));
+			this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], model.get('valUnit'));
 
 			this.reloadView();
 			//this.jqgridElem.setCell();
@@ -295,7 +296,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		changeTableValue: function(model) {
 			var id = model.get('id');
 			var tablecell = this.container.find("#" + id);
-			tablecell.text(model.get('value').toFixed(2) + " " + model.get('unit'));
+			var value = model.get('valUnit');
+			tablecell.text(value);
+		},
+		onchangebgcolortable: function(model) {
+			var id = model.get('id');
+			var tablecell = this.container.find("#" + id);
+			var value = model.get('valUnit');
+			tablecell.css('background-color', model.get('bgcolor'));
 		},
 		removeFromDom: function() {
 

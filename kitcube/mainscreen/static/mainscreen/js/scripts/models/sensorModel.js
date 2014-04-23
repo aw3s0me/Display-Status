@@ -245,6 +245,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 									bgcolor: "#F5025B"
 								});
 							}
+							break;
 						}
 					default:
 						{
@@ -262,7 +263,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 										valueToInsert = val.toExponential(precision) + " " + this.get('unit');
 									}
 									else {
-										valueToInsert = val.toExponential(precision) + " " + this.get('unit');
+										valueToInsert = val.toFixed(precision) + " " + this.get('unit');
 									}
 									
 								}
