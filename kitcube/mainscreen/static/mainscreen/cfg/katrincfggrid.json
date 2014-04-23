@@ -20,33 +20,38 @@
                     {
                         "id": "sensid1",
                         "mask": "102",
-                        "unit": "A"
+                        "unit": "A",
+                        "precision": 0
                     },
                     {
                         "id": "sensid2",
                         "mask": "106",
-                        "unit": "K"
-
+                        "unit": "K",
+                        "precision": 3
                     },
                     {
                         "id": "sensid3",
                         "mask": "107",
-                        "unit": "K"
+                        "unit": "K",
+                        "precision": 3
                     },
                     {
                         "id": "sensid4",
                         "mask": "108",
-                        "unit": "%"
+                        "unit": "%",
+                        "precision": 1
                     },
                     {
                         "id": "sensid5",
                         "mask": "149",
-                        "unit": "psig"
+                        "unit": "psig",
+                        "precision": 2
                     },
                     {
                         "id": "sensid6",
                         "mask": "150",
-                        "unit": "W"
+                        "unit": "W",
+                        "precision": 2
                     }
                 ]
             },
@@ -57,33 +62,38 @@
                     {
                         "id": "sensid7",
                         "mask": "103",
-                        "unit": "A"
+                        "unit": "A",
+                        "precision": 3
                     },
                     {
                         "id": "sensid8",
                         "mask": "109",
-                        "unit": "K"
-
+                        "unit": "K",
+                        "precision": 3
                     },
                     {
                         "id": "sensid9",
                         "mask": "110",
-                        "unit": "K"
+                        "unit": "K",
+                        "precision": 3
                     },
                     {
                         "id": "sensid10",
                         "mask": "111",
-                        "unit": "%"
+                        "unit": "%",
+                        "precision": 1
                     },
                     {
                         "id": "sensid11",
                         "mask": "151",
-                        "unit": "psig"
+                        "unit": "psig",
+                        "precision": 2
                     },
                     {
                         "id": "sensid12",
                         "mask": "152",
-                        "unit": "W"
+                        "unit": "W",
+                        "precision": 2
                     }
                 ]
             }
@@ -109,23 +119,29 @@
                     {
                         "id": "sensid13",
                         "mask": "74",
-                        "unit": "mbar"
+                        "unit": "mbar",
+                        "precision": 9,
+                        "exp": true
                     },
                     {
                         "id": "sensid14",
                         "mask": "66",
-                        "unit": "mbar"
+                        "unit": "mbar",
+                        "precision": 2,
+                        "exp": true
 
                     },
                     {
                         "id": "sensid15",
                         "mask": "68",
-                        "unit": ""
+                        "unit": "",
+                        "sensortype": "noval"
                     },
                     {
                         "id": "sensid16",
                         "mask": "99",
-                        "unit": "K"
+                        "unit": "K",
+                        "precision": 2
                     }
                 ]
             },
@@ -136,23 +152,27 @@
                     {
                         "id": "sensid22",
                         "mask": "12",
-                        "unit": "%"
+                        "unit": "%",
+                        "name": "Ion Gauge"
                     },
                     {
                         "id": "sensid19",
                         "mask": "67",
-                        "unit": "mbar"
+                        "unit": "mbar",
+                        "name": "CCG"
                     },
                     {
                         "id": "sensid20",
                         "mask": "69",
-                        "unit": ""
+                        "unit": "",
+                        "sensortype": "noval"
 
                     },
                     {
                         "id": "sensid21",
                         "mask": "100",
-                        "unit": "K"
+                        "unit": "K",
+                        "precision": 2
                     }
                 ]
             }
@@ -177,35 +197,43 @@
                     {
                         "id": "sensid22",
                         "mask": "2",
-                        "unit": "C"
+                        "unit": "C",
+                        "precision": 2
                     },
                     {
                         "id": "sensid23",
-                        "mask": "3"
+                        "mask": "3",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid24",
-                        "mask": "4"
+                        "mask": "4",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid25",
-                        "mask": "5"
+                        "mask": "5",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid26",
-                        "mask": "6"
+                        "mask": "6",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid27",
-                        "mask": "7"
+                        "mask": "7",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid28",
-                        "mask": "8"
+                        "mask": "8",
+                        "sensortype": "valve"
                     },
                     {
                         "id": "sensid29",
-                        "mask": "9"
+                        "mask": "9",
+                        "sensortype": "valve"
                     }
                 ]
             }
@@ -229,32 +257,39 @@
                 "sensors": [
                     {
                         "id": "sensid30",
-                        "mask": "59"
+                        "mask": "59",
+                        "sensortype": "3-state"
                     },
                     {
                         "id": "sensid31",
-                        "mask": "61"
+                        "mask": "61",
+                        "sensortype": "3-state"
                     },
                     {
                         "id": "sensid32",
-                        "mask": "75"
+                        "mask": "75",
+                        "precision": 3
                     },
                     {
                         "id": "sensid33",
-                        "mask": "78"
+                        "mask": "78",
+                        "sensortype": "endis"
                     },
                     {
                         "id": "sensid34",
                         "mask": "80",
-                        "unit": "kV"
+                        "unit": "kV",
+                        "precision": 3
                     },
                     {
                         "id": "sensid35",
-                        "mask": "82"
+                        "mask": "82",
+                        "sensortype": "endis"
                     },
                     {
                         "id": "sensid36",
-                        "mask": "145"
+                        "mask": "145",
+                        "sensortype": "2-state"
                     }
                 ]
             }
@@ -280,32 +315,37 @@
                     {
                         "id": "sensid37",
                         "mask": "112",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid38",
                         "mask": "113",
-                        "unit": "V"
-
+                        "unit": "V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid39",
                         "mask": "116",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid40",
                         "mask": "117",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid41",
                         "mask": "118",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 2
                     },
                     {
                         "id": "sensid42",
-                        "mask": "146"
+                        "mask": "146",
+                        "sensortype": "2-state"
                     }
                 ]
             },
@@ -315,28 +355,33 @@
                     {
                         "id": "sensid43",
                         "mask": "112",
-                        "unit": "mA"
+                        "unit": "mA",
+                        "precision": 2
                     },
                     {
                         "id": "sensid44",
                         "mask": "113",
-                        "unit": "mA"
+                        "unit": "mA",
+                        "precision": 2
 
                     },
                     {
                         "id": "sensid45",
                         "mask": "116",
-                        "unit": "A"
+                        "unit": "A",
+                        "precision": 2
                     },
                     {
                         "id": "sensid46",
                         "mask": "117",
-                        "unit": "A"
+                        "unit": "A",
+                        "precision": 2
                     },
                     {
                         "id": "sensid47",
                         "mask": "118",
-                        "unit": "uA"
+                        "unit": "uA",
+                        "sensortype": "2-state"
                     },
                     {
 
@@ -365,18 +410,21 @@
                     {
                         "id": "sensid48",
                         "mask": "186",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 3
                     },
                     {
                         "id": "sensid49",
                         "mask": "187",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 3
 
                     },
                     {
                         "id": "sensid50",
                         "mask": "188",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 3
                     }
                 ]
             },
@@ -386,18 +434,21 @@
                     {
                         "id": "sensid51",
                         "mask": "190",
-                        "unit": "mA"
+                        "unit": "mA",
+                        "precision": 1
                     },
                     {
                         "id": "sensid52",
                         "mask": "191",
-                        "unit": "mA"
+                        "unit": "mA",
+                        "precision": 1
 
                     },
                     {
                         "id": "sensid53",
                         "mask": "192",
-                        "unit": "mA"
+                        "unit": "mA",
+                        "precision": 1
                     }
                 ]
             }
@@ -424,18 +475,21 @@
                     {
                         "id": "sensid54",
                         "mask": "186",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 1
                     },
                     {
                         "id": "sensid55",
                         "mask": "187",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 1
 
                     },
                     {
                         "id": "sensid56",
                         "mask": "188",
-                        "unit": "V"
+                        "unit": "V",
+                        "precision": 1
                     }
                 ]
             },
@@ -446,18 +500,21 @@
                     {
                         "id": "sensid57",
                         "mask": "190",
-                        "unit": "mA"
+                        "unit": "mA",
+                        "precision": 1
                     },
                     {
                         "id": "sensid58",
                         "mask": "191",
-                        "unit": "mA"
+                        "unit": "mA",
+                        "precision": 1
 
                     },
                     {
                         "id": "sensid59",
                         "mask": "192",
-                        "unit": "mA"
+                        "unit": "mA",
+                        "precision": 1
                     }
                 ]
             }

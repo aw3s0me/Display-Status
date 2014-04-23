@@ -178,9 +178,9 @@ body {
 /* SENSOR TABLE STYLE */
 
 .sensortable {
-  width: 100%;
+  //width: 100%;
   color: black;
-  height: 100%;
+  //height: 100%;
   text-align: center;
   border-spacing: 2px;
   border-collapse: separate;

@@ -29,6 +29,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 					var collection = this.groups[i];
 					for (var j = 0 ; j < collection.models.length; j++) {
 						collection.models[j].on('change:value', this.changeGridValue, this);
+						collection.models[j].on('change:bgcolor', this.onchangebgcolorgrid, this);
 					}
 				}
 				this.renderJqGrid();
@@ -202,7 +203,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			var tablecontainer = $("<div class='tablecontainer'></div>")
 
-			var newTable = $("<table cellpadding='0' cellspacing='0' class='sensortable'></table>");
+			//var newTable = $("<table cellpadding='0' cellspacing='0' class='sensortable'></table>");
+			var newTable = $("<table class='sensortable'></table>");
 			//var newTable = $("<table cellpadding='0' cellspacing='0' class='bordered-table'></table>");
 
 			var tableBody = $("<tbody></tbody>");
@@ -266,6 +268,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			newTable.append(tableBody);
 			tablecontainer.append(newTable)
 			this.container.append(tablecontainer)
+			newTable.css('height', this.container.height()*0.85 + 'px');
+			newTable.css('width', this.container.width() + 'px');
 			//this.container.append(newTable);
 
 			newTable.parent().css('background-color', 'white');
@@ -276,8 +280,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			}, this.model);
 			this.container.css('border', 'solid 1px')
 			//SETTING CSS
-			
-			
+			//Setting minsize of table
+			var rowCount = newTable.length;
+			//var colCount = newTable.find('tbody tr:first td').length;]
+			var colCount = newTable.find('tbody tr:first').children().length;
+			this.model.set({minsize: [colCount, rowCount]});
 			
 		},
 		reloadView: function() {
@@ -286,11 +293,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		changeGridValue: function(model) {
 			var id = model.get('id');
 			var lookupObj = this.lookuptable[id];
-			console.log(model.get('value'));
 			//console.log(model);
 			this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], model.get('valUnit'));
 
-			this.reloadView();
+			//this.reloadView();
 			//this.jqgridElem.setCell();
 		},
 		changeTableValue: function(model) {
@@ -302,8 +308,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		onchangebgcolortable: function(model) {
 			var id = model.get('id');
 			var tablecell = this.container.find("#" + id);
-			var value = model.get('valUnit');
 			tablecell.css('background-color', model.get('bgcolor'));
+		},
+		onchangebgcolorgrid: function(model) {
+			var id = model.get('id');
+			var lookupObj = this.lookuptable[id];
+			this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], '', {'background-color': model.get('bgcolor')});
+			//this.reloadView();
 		},
 		removeFromDom: function() {
 
@@ -320,6 +331,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			this.container.css('height', height);
 			this.container.css('width', width);
+			var newTable = this.container.find(".sensortable");
+			newTable.css('height', this.container.height()*0.85 + 'px');
+			newTable.css('width', this.container.width() + 'px');
 
 			var totalHeight = dy * unitHeight * scale;
 			var hscale = totalHeight/$(window).height(); //scale font for header
@@ -349,7 +363,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			tableToChange.jqGrid('setGridHeight', finalGridHeight);
 			tableToChange.jqGrid('setGridWidth', finalGridWidth, true);
-			this.jqgridElem.trigger('reloadGrid');
+			//this.jqgridElem.trigger('reloadGrid');
 		}
 
 
