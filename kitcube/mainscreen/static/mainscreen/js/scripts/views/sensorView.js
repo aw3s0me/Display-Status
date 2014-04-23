@@ -3,6 +3,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		container: undefined,
 		grid: undefined,
 		model: undefined,
+		linkModel: undefined,
 		isGrouped: false,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
@@ -11,6 +12,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			}
 			if (options.model) {
 				this.model = options.model;
+			}
+			else {
+				throw "SensorView needs model";
+			}
+			if (options.linkModel) {
+				this.linkModel = options.linkModel;
+				this.linkModel.on('change:bgcolor', this.onchangebgcolor, this);
+				this.linkModel.on('change:value', this.onchangevaluelink, this);
 			}
 			if (options.group === true) {
 				this.isGrouped = true;
@@ -23,6 +32,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('resize', this.onresize, this);
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
+
+
 		},
 		renderSingle: function() {
 			//load html template
@@ -105,20 +116,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s0.style.fontWeight = 'bold';
 
 			var s1 = document.createElement('div');
-			//s1.id = newSensor.get('id');
 			s1.style.position = 'absolute';
-			//s1.style.fontSize = 30 * scale + 'px';
 			var maxFont = 30 * scale;
-			var minFont = 25 * scale + 'px';
-			//s1.style.right = 6 * scale + 'px';
-			s1.style.bottom = 0 * scale + 'px';
-
+			s1.style.bottom = 2 * scale + 'px';
 			var tempDiv = $('<div></div>');
 			tempDiv.attr('id', 'b'+ this.model.get('id'));
 			tempDiv.text((newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1));
 			$(s1).append(tempDiv);
-			//s1.innerHTML = '<div id="' + 'b' + this.model.get('id') + '">' + (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1) + '</div>';
-			//s1.innerHTML = (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1);
 			s1.className = "sensorVal";
 			//s1.className += " slabtext";
 			s1.className += " slab";
@@ -132,10 +136,33 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			$(s1).bigtext({
 				maxfontsize: maxFont
 			});
-			console.log($('#b' + this.model.get('id')));
-			//console.log($("h1"));
-			//$("h1").slabText();
-			//$(s1).fitText();
+
+
+
+			if (newSensor.get('link')) {
+				//var prevHeight = this.container.height() * 0.4;
+				var prevHeight = 2 * this.grid.getUnitSizes().height * this.grid.getScale() * 0.34;
+
+				var s5 = document.createElement('div');
+				s5.style.position = 'absolute';
+				var maxFont = 30 * scale;
+				s5.style.bottom = prevHeight + 'px';
+				console.log(prevHeight);
+				var tempDiv = $('<div></div>');
+				tempDiv.attr('id', 'c'+ this.model.get('id'));
+				tempDiv.text((newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1));
+				$(s5).append(tempDiv);
+				s5.className = "sensorVal";
+				s5.className += " slab";
+				s5.className += " bigtext";
+				s5.style.paddingRight = 6 * scale + 'px';
+				tempDiv.css('width', $(s5).width());
+				tempDiv.css('height', $(s5).height());
+				$(s5).bigtext({
+					maxfontsize: maxFont
+				});
+				this.container.append(s5);
+			} 
 
 			var s2 = document.createElement('div');
 			s2.style.position = 'absolute';
@@ -260,38 +287,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var sensorDiv = this.container;
 			var sensortype = model.get('sensortype');
 			var valToInsert = model.get('valUnit');
-			/*switch(sensortype) {
-				case "2-state":
-					{
-						valToInsert = model.get('valUnit');
-						break;
-					}
-				case "valve":
-					{
-						valToInsert = model.get('valUnit');
-						break;
-					}
-				case "3-state":
-					{
-						valToInsert = model.get('valUnit');
-						break;
-					}
-				case "endis":
-					{
-						valToInsert = model.get('valUnit');
-						break;
-					}
-				case "noval":
-					{
-						valToInsert = model.get('valUnit');
-						break;
-					}
-				default:
-					{
-						valToInsert = model.get('value');
-						break;
-					}
-			} */
 			var name = this.model.get('name');
 			if (name === "Ion Gauge") {
 				var a = 1;
@@ -309,10 +304,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//var val = valDiv.find()
 			//valDiv.text(valToInsert);
 			//valDiv.fitText(1.2, { minFontSize: minFont, maxFontSize: maxFont });
-			$('#b' + this.model.get('id')).text(valToInsert);
+			$('#b' + model.get('id')).text(valToInsert);
 			/*valDiv.bigtext({
 				maxfontsize: maxFont
 			});*/
+		},
+		onchangevaluelink: function(model) {
+			var valToInsert = model.get('valUnit');
+			$('#c' + this.model.get('id')).text(valToInsert);
 		}
 	});
 

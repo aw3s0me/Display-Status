@@ -37,6 +37,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			device: undefined,
 			dbname: undefined,
 			dbgroup: undefined,
+			norender: false,
 			mask: undefined,
 			values: undefined,
 			exp: false,
@@ -44,8 +45,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			coords: [],
 			bgcolor: '#338fff',
 			valUnit: "NaN",
-			sibling: undefined,
-			siblingvalue: undefined
+			link: undefined
 		},
 		initialize: function() {
 			//console.log("model created");

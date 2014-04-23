@@ -247,7 +247,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								name: sensorObj["name"],
 								comment: sensorObj["comment"],
 								sensortype: sensorObj["sensortype"],
-								sibling: sensorObj["sibling"],
+								link: sensorObj["link"],
 								sensorviewtype : "group",
 								unit: sensorObj["unit"],
 								max: sensorObj["max"],
@@ -256,6 +256,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								exp: sensorObj["exp"],
 								server: server,
 								device: sensorObj["device"],
+								norender: sensorObj["norender"],
 								dbname: dbname,
 								dbgroup: dbgroup,
 								mask: sensorObj["mask"],
@@ -265,16 +266,32 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								lastTime: new Date
 							});
 
-							var newSensorView = new SensorView({
-								model: newSensor,
-								grid: this.grid,
-								group: true
-							});
-
 							self.elements.sensors[sensorObj["id"]] = newSensor;
 							sensorModelsArr.push(newSensor);
-							self.views.sensors[sensorObj["id"]] = newSensorView;
-							groupArr.push(newSensorView);
+						}
+
+						for (var sensorName in sensorModelsArr) {
+							var sensor = sensorModelsArr[sensorName];
+							var linkModel = undefined;
+
+							if (sensor.get('link') !== undefined) {
+								linkModel = self.elements.sensors[sensor.get('link')];
+								if (!linkModel) {
+									throw "Wrong link: " + sensor.get('link') + " at: " + sensor.get('id');
+								}
+							}
+
+							var newSensorView = new SensorView({
+								model: sensor,
+								grid: this.grid,
+								group: true,
+								linkModel: linkModel
+							});
+
+							if (!sensor.get('norender')) {
+								self.views.sensors[sensor.get('id')] = newSensorView;
+								groupArr.push(newSensorView);
+							}
 						}
 
 						var newSensorGroupModel = new SensorGroupModel({
