@@ -21,6 +21,6 @@
     "commit": "547a357a15b814827bf0c80ade5c7922b8d70796"
   },
   "_source": "git://github.com/jquery/qunit.git",
-  "_target": "*",
+  "_target": ">=1.12.0",
   "_originalSource": "qunit"
 }

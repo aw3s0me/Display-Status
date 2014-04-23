@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/sensor.html'], function($, _, Backbone, SensorModel, SensorTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/sensor.html', 'slabtext'], function($, _, Backbone, SensorModel, SensorTemplate, slabText) {
 	var SensorView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
@@ -107,11 +107,33 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var s1 = document.createElement('div');
 			//s1.id = newSensor.get('id');
 			s1.style.position = 'absolute';
-			s1.style.fontSize = 30 * scale + 'px';
-			s1.style.right = 6 * scale + 'px';
+			//s1.style.fontSize = 30 * scale + 'px';
+			var maxFont = 30 * scale + 'px';
+			var minFont = 25 * scale + 'px';
+			//s1.style.right = 6 * scale + 'px';
 			s1.style.bottom = 0 * scale + 'px';
-			s1.innerHTML = (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1);
+
+			var tempDiv = $('<div></div>');
+			tempDiv.attr('id', 'b'+ this.model.get('id'));
+			tempDiv.text((newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1));
+			$(s1).append(tempDiv);
+			//s1.innerHTML = '<div id="' + 'b' + this.model.get('id') + '">' + (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1) + '</div>';
+			//s1.innerHTML = (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1);
 			s1.className = "sensorVal";
+			//s1.className += " slabtext";
+			s1.className += " slab";
+			s1.className += " bigtext";
+			s1.style.paddingRight = 6 * scale + 'px';
+			//$(s1).fitText(1.2, { minFontSize: minFont, maxFontSize: maxFont });
+			//$(".slab").slabText();
+			tempDiv.css('width', $(s1).width());
+			tempDiv.css('height', $(s1).height());
+			//$(s1).bigtext();
+			tempDiv.bigtext();
+			console.log($('#b' + this.model.get('id')));
+			//console.log($("h1"));
+			//$("h1").slabText();
+			//$(s1).fitText();
 
 			var s2 = document.createElement('div');
 			s2.style.position = 'absolute';
@@ -275,10 +297,21 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				var val = this.model.get('value');
 
 			}
+			var scale = this.grid.getScale();
+			var maxFont = 30 * scale;
+			var minFont = 25 * scale + 'px';
+
 
 
 			var valDiv = this.container.find('.sensorVal');
-			valDiv.text(valToInsert);
+			//var tempDiv = valDiv.children();
+			//var val = valDiv.find()
+			//valDiv.text(valToInsert);
+			//valDiv.fitText(1.2, { minFontSize: minFont, maxFontSize: maxFont });
+			$('#b' + this.model.get('id')).text(valToInsert);
+			valDiv.bigtext({
+				maxfontsize: maxFont
+			});
 		}
 	});
 

@@ -33,9 +33,12 @@ require.config({
     //chart part
     "highcharts": "vendor/highcharts.com/js/highcharts.src",
     //colorpicker
-    "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min"//,
+    "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
     //fittext plugin:
-    //"fittext": "vendor/FitText.js/jquery.fittext"
+    "fittext": "vendor/FitText.js/jquery.fittext",
+    "slabtext": "vendor/slabText/js/jquery.slabtext.min",
+    //"bigtext": "vendor/bigtext"
+    "bigtext": "vendor/bigtext/src/bigtext"
 
   },
   shim: {
@@ -118,6 +121,21 @@ require.config({
       deps: [
         "jquery"
         //"vendor/Highcharts-3.0.10/js/highcharts"
+      ]
+    },
+    fittext: {
+      deps: [
+        "jquery"
+      ]
+    },
+    slabtext: {
+      deps: [
+        "jquery"
+      ]
+    },
+    bigtext: {
+      deps: [
+        "jquery"
       ]
     }
   }

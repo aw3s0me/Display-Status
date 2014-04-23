@@ -122,7 +122,7 @@
                         "mask": "74",
                         "unit": "mbar",
                         "name": "Ion Gauge",
-                        "precision": 2,
+                        "precision": 9,
                         "exp": true
                     },
                     {

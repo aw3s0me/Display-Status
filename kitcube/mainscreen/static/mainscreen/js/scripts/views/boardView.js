@@ -294,6 +294,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 						self.views.sensorgroups[_id] = newSensorGroupView;
 						self.elements.sensorgroups[_id] = newSensorGroupModel;
+						$(window).trigger('resize'); //because big text works only after resize event
 						break;
 					case "alarmlist":
 						var alarmList = []; //collection of alarms
@@ -759,7 +760,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 				chartView.redraw();
 			}
 
-
+			$(window).trigger('resize'); //because big text works only after resize event
 		},
 		updateSensor: function(sensorModel) {
 			var data = {};

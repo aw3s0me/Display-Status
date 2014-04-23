@@ -147,15 +147,20 @@ body {
     z-index: 2;
     font-weight: bold;
 
+}
+.sensorVal {
+    width: 100%;
+    height: 40%;
+    text-align: right;
+
+}
+
 /*.sensorName {
     width: 100%;
     height: 20%;
 }
 
-.sensorVal {
-    width: 45%;
-    height: 60%;
-}
+
 
 .sensorUnit {
     width: 10%;
@@ -202,5 +207,28 @@ body {
 /* SENSOR TABLE STYLE END */
 
 
+/* SLABTEXT */
 
+.slabtexted .slabtext
+        {
+        display:-moz-inline-box;
+        display:inline-block;
+        white-space:nowrap;
+        }
+.slabtextinactive .slabtext
+        {
+        display:inline;
+        white-space:normal;
+        font-size:1em !important;
+        letter-spacing:inherit !important;
+        word-spacing:inherit !important;
+        *letter-spacing:0 !important;
+        *word-spacing:0 !important;
+        }
+.slabtextdone .slabtext
+        {
+        display:block;
+        }
+
+/* SLABTEXT END */
 
