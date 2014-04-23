@@ -222,7 +222,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 						});
 
-
+						$(window).trigger('resize'); //because big text works only after resize event
 						break;
 					case "sensorgroup":
 						var sensorArr = attr['sensors'];

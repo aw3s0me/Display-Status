@@ -131,7 +131,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 					var ids = grid.getDataIDs();
 					for (var i = 0; i < ids.length; i++) {
 						grid.setRowData(ids[i], false, {
-							height: 1 * scale + i * 2
+							height: 14 * scale + i * 2
 						});
 					}
 				},
@@ -151,6 +151,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
+
+
+
 			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
@@ -173,7 +176,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			newTable.jqGrid('setGridHeight', finalGridHeight);
 			newTable.jqGrid('setGridWidth', finalGridWidth, true);
 			console.log(this.jqgridElem);
-
+			$('.ui-jqgrid tr.jqgrow td').css('height', 14 * scale + 'px');
+			//$('.ui-jqgrid .ui-jqgrid-btable .jqgrow td').css('height', 0 * scale + 'px !important');
+			
 		},
 		renderTable: function() {
 			var sensorGroupCollection = this.model.get('groups');
@@ -216,10 +221,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			var tableheader = $("<div class='tblheader'></div>");
 			tableheader.text(this.model.get('name'));
 			//console.log(hscale);
-			tableheader.css('font-size', 120 * hscale + 'px');
+			tableheader.css('font-size', 80 * hscale + 'px');
 			this.container.append(tableheader);
 
-
+			var maxFont = 10*scale;
 			if (this.model.get('showheaders')) {
 				//tableheader.
 
@@ -258,9 +263,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 				for (var j = 0; j < collection.models.length; j++) {
 					var tablecell = $("<td></td>");
+					//var tablecell = $("<div class='cell'></div>");
 					var model = collection.models[j];
 					tablecell.attr('id', model.get('id'));
 					tablecell.text(model.get('valUnit'));
+					//td.append(tablecell);
+					//tablerow.append(td);
+					tablecell.bigtext({
+						maxfontsize: maxFont
+					});
+
 					tablerow.append(tablecell);
 				}
 				tableBody.append(tablerow);
@@ -274,18 +286,22 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			newTable.parent().css('background-color', 'white');
 
+
 			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
 				border: 0,
 				transparent: true
 			}, this.model);
 			this.container.css('border', 'solid 1px')
+			newTable.find('th').css('font-size', 15*scale + 'px');
+			//newTable.bigtext();
+			//tablecontainer.bigtext();
+			newTable.find('td').css('font-size', 15*scale + 'px');
 			//SETTING CSS
 			//Setting minsize of table
 			var rowCount = newTable.length;
 			//var colCount = newTable.find('tbody tr:first td').length;]
 			var colCount = newTable.find('tbody tr:first').children().length;
 			this.model.set({minsize: [colCount, rowCount]});
-			
 		},
 		reloadView: function() {
 			this.container.find('table').trigger('reloadGrid');
@@ -337,7 +353,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 
 			var totalHeight = dy * unitHeight * scale;
 			var hscale = totalHeight/$(window).height(); //scale font for header
-			this.container.find(".tblheader").css('font-size', 120 * hscale + 'px');
+			this.container.find(".tblheader").css('font-size', 80 * hscale + 'px');
 
 		},
 		onresizeGrid: function(model) {
