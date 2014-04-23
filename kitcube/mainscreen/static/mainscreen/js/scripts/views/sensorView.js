@@ -108,7 +108,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//s1.id = newSensor.get('id');
 			s1.style.position = 'absolute';
 			//s1.style.fontSize = 30 * scale + 'px';
-			var maxFont = 30 * scale + 'px';
+			var maxFont = 30 * scale;
 			var minFont = 25 * scale + 'px';
 			//s1.style.right = 6 * scale + 'px';
 			s1.style.bottom = 0 * scale + 'px';
@@ -129,7 +129,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			tempDiv.css('width', $(s1).width());
 			tempDiv.css('height', $(s1).height());
 			//$(s1).bigtext();
-			tempDiv.bigtext();
+			$(s1).bigtext({
+				maxfontsize: maxFont
+			});
 			console.log($('#b' + this.model.get('id')));
 			//console.log($("h1"));
 			//$("h1").slabText();
@@ -309,9 +311,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//valDiv.text(valToInsert);
 			//valDiv.fitText(1.2, { minFontSize: minFont, maxFontSize: maxFont });
 			$('#b' + this.model.get('id')).text(valToInsert);
-			valDiv.bigtext({
+			/*valDiv.bigtext({
 				maxfontsize: maxFont
-			});
+			});*/
 		}
 	});
 
