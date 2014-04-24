@@ -1,7 +1,12 @@
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 	var TrendSensorModel = Backbone.Model.extend({
 		defaults: {
-			id: undefined
+			id: undefined,
+			model: undefined,
+			range: undefined,
+			name: "",
+			size: [6, 4],
+			coords: [0, 0]
 		},
 		initialize: function() {
 
@@ -10,6 +15,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 		},
 		getDbUrl: function() {
+
 		},
 		serToJSON: function() {
 

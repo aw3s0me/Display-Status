@@ -2,7 +2,7 @@
     "sensorgroup1": {
         "type": "sensorgroup",
         "name": "Magnet Pinch",
-        "size": [12, 3],
+        "size": [20, 10],
         "coords": [0, 0],
         "diffsensors": false,
         "dbgroup": "0",

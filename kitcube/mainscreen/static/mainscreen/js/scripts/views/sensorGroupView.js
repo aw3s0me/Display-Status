@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/sensorView'], function($, _, Backbone, SensorGroupModel, SensorView) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/sensorView', 'views/trendSensorView'], function($, _, Backbone, SensorGroupModel, SensorView) {
 	var SensorGroupView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
@@ -61,6 +61,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
     				var newSensorView = this.group[i];
     				var cont = this.setContainer(newSensorView);
     				newSortableContainer.append(cont);
+    				if (newSensorView.isTrend) {
+    					newSensorView.trigger('chartInit');
+    				}
     			}
     		}
     		else {
@@ -112,8 +115,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			var model = sensorView.model;
 			var posx = 0;
 			var posy = 0;
-			var dx = 2;
-			var dy = 2;
+			var dx = model.get('size')[0];
+			var dy = model.get('size')[1];
 
 			var scale = this.grid.getScale();
 			var unitSizeX = this.grid.getUnitSizes().width * scale;

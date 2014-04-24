@@ -3,6 +3,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		container: undefined,
 		grid: undefined,
 		model: undefined,
+		isTrend: true,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			if (options.grid) {
@@ -25,9 +26,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.model.on('resize', this.onresize, this);
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
+
+			this.on('chartInit', this.chartInit);
 		},
 		renderSingle: function() {
-			//load html template
+			/*//load html template
 			var newSensor = this.model;
 			//console.log(this.model);
 			var scale = this.grid.getScale();
@@ -39,10 +42,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.container = $('<div></div>');
 			this.container.attr('id', newSensor.get('id'));
 			
-			this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model);
+			this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model); */
 			
 		},
 		renderGrouped: function() {
+			console.log("RENDER");
 			var newSensor = this.model;
 			//console.log(this.model);
 			var scale = this.grid.getScale();
@@ -54,8 +58,68 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.container = $('<div></div>');
 			this.container.attr('id', newSensor.get('id'));
 
+			this.container.css('background-color', this.model.get('bgcolor')); 
 
-			this.container.css('background-color', this.model.get('bgcolor'));
+			
+
+			
+		},
+		chartInit: function() {
+			console.log("CHART INIT");
+			var newSensor = this.model;
+			//console.log(this.model);
+			var scale = this.grid.getScale();
+			var dx = newSensor.get("size")[0];
+			var dy = newSensor.get("size")[1];
+			var px = newSensor.get("coords")[0];
+			var py = newSensor.get("coords")[1];
+
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+			console.log(newSensor.get('id'));
+
+			/*this.chart = new Highcharts.Chart({
+				chart: {
+					reflow: false,
+					type: 'line',
+					renderTo: newSensor.get('id')
+				},
+				title: {
+					text: newSensor.get('name')
+				},
+				xAxis: {
+					type: 'datetime',
+					dateTimeLabelFormats: {
+						minute: '%H:%M'
+					}
+				},
+				yAxis: {
+					title: {
+						text: 'Values'
+					},
+					plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+					}]
+				},
+				series: 0,
+				plotOptions: {
+					series: {
+						lineWidth: 1,
+	                    turboThreshold: 0,
+						threshold: null
+					}
+				}
+			});
+
+			(function(b,a){if(!b){return}var c=b.Chart.prototype,d=b.Legend.prototype;b.extend(c,{legendSetVisibility:function(h){var i=this,k=i.legend,e,g,j,m=i.options.legend,f,l;if(m.enabled==h){return}m.enabled=h;if(!h){d.destroy.call(k);e=k.allItems;if(e){for(g=0,j=e.length;g<j;++g){e[g].legendItem=a}}k.group={}}c.render.call(i);if(!m.floating){f=i.scroller;if(f&&f.render){l=i.xAxis[0].getExtremes();f.render(l.min,l.max)}}},legendHide:function(){this.legendSetVisibility(false)},legendShow:function(){this.legendSetVisibility(true)},legendToggle:function(){this.legendSetVisibility(this.options.legend.enabled^true)}})}(Highcharts));
+
+
+			this.chart.legendHide();
+			this.chart.setSize() */
 		},
 		getHtml: function() {
 			return this.container[0];
