@@ -57,7 +57,7 @@
                         "type": "trend",
                         "sensor": "sensid6",
                         "name": "HRC Heater",
-                        "range": "1-day"
+                        "range": "2-hours"
                     }
         ]
     }

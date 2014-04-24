@@ -5,6 +5,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		model: undefined,
 		isTrend: true,
 		chart: undefined,
+		limit: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			if (options.grid) {
@@ -59,7 +60,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.container = $('<div></div>');
 			this.container.attr('id', newSensor.get('id'));
 
-			this.container.css('background-color', this.model.get('bgcolor')); 
+			this.container.css('background-color', 'white'); 
 
 		},
 		chartInit: function() {
@@ -80,6 +81,50 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var dataToChart = [newSensor.get('model').getChartProperties()];
 			console.log(dataToChart);
 
+			var lblFormat = {};
+			switch(newSensor.get('range')) {
+				case "2-hours": {
+					lblFormat = {
+						hour: '%H:%M'
+					}
+					break;
+				}
+				case "1-day": {
+					lblFormat = {
+						hour: '%a %H:%M'
+					}
+					break;
+				}
+				case "10-days": {
+					lblFormat = {
+						day: '%a'
+					}
+					break;
+				}
+				case "4-months": {
+					lblFormat = {
+						month: '%b'
+					}
+					break;
+				}
+				default: {
+					lblFormat = {
+						millisecond: '%H:%M:%S.%L',
+						second: '%H:%M:%S',
+						minute: '%H:%M',
+						hour: '%H:%M',
+						day: '%e. %b',
+						week: '%e. %b',
+						month: '%b \'%y',
+						year: '%Y'
+					}
+					break;
+				}
+			}
+
+
+			console.log(lblFormat);
+
 			this.chart = new Highcharts.Chart({
 				chart: {
 					reflow: false,
@@ -91,9 +136,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				},
 				xAxis: {
 					type: 'datetime',
-					dateTimeLabelFormats: {
-						minute: '%H:%M'
-					}
+					dateTimeLabelFormats: lblFormat
 				},
 				yAxis: {
 					title: {
@@ -184,7 +227,6 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				console.log('added');
 				chart.series[0].addPoint(Point, true, shift); //last point is for everyone\
 			}
-			console.log(chart.series[0])
 
 			shift = false;
 
