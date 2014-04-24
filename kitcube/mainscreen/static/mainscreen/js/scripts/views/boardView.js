@@ -319,9 +319,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							
 
 							var newTrendSensorView = new TrendSensorView({
-								model: trendModel
+								model: trendModel,
+								group: true,
+								grid: this.grid
 							});
-							
+
 							groupArr.push(newTrendSensorView);
 						}
 
