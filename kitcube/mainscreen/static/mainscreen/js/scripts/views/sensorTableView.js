@@ -120,16 +120,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				data: dataToTable,
 				colNames: colNames,
 				//height: 'auto',
-				//height: '100%',
+				height: '100%',
 				width: '100%',
 				shrinkToFit: false,
-				//autowidth: true,
+				autowidth: true,
 				hidegrid: false,
 				colModel: colModel,
 				scrollOffset: 0,
 				//rowNum: cols,
 				caption: this.model.get('name'),
-				/*loadComplete: function() {
+				loadComplete: function() {
 					var grid = newTable;
 					var ids = grid.getDataIDs();
 					for (var i = 0; i < ids.length; i++) {
@@ -137,7 +137,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 							height: 14 * scale + i * 2
 						});
 					}
-				},*/
+				},
 				beforeSelectRow: function(rowid, e) {
 					var $tr;
 					if (e.ctrlKey) {
@@ -155,19 +155,17 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
 
-
-
 			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
 			//$('#pager_center').css('width', newElement.width() - 6); 
 			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 25 * scale + 'px');
-			//$('.ui-jqgrid .ui-jqgrid-pager').css('width', this.container.width() - 6);
+			$('.ui-jqgrid .ui-jqgrid-pager').css('width', this.container.width() - 6);
 			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
-			//$('.ui-jqgrid .ui-jqgrid-pager').css('height', 25 * scale + 'px');
-			//$('th.ui-th-column div').css('height', 'auto !important');
-			//$('th.ui-th-column div').css('white-space', 'normal !important'); 
+			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 25 * scale + 'px');
+			$('th.ui-th-column div').css('height', 'auto !important');
+			$('th.ui-th-column div').css('white-space', 'normal !important'); 
 
 			
 			

@@ -3,8 +3,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		container: undefined,
 		grid: undefined,
 		model: undefined,
-		linkModel: undefined,
-		isGrouped: false,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			if (options.grid) {
@@ -15,11 +13,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			}
 			else {
 				throw "SensorView needs model";
-			}
-			if (options.linkModel) {
-				this.linkModel = options.linkModel;
-				this.linkModel.on('change:bgcolor', this.onchangebgcolor, this);
-				this.linkModel.on('change:value', this.onchangevaluelink, this);
 			}
 			if (options.group === true) {
 				this.isGrouped = true;
@@ -32,8 +25,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('resize', this.onresize, this);
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
-
-
 		},
 		renderSingle: function() {
 			//load html template
@@ -239,42 +230,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		},
 		onresize: function(model) {
 
-			var sensorDiv = this.container;
-			
-			var height = model.get('size')[0];
-			var width = model.get('size')[1];
-
-			//var ratio = height/width;
-			var max = (height > width) ? height : width;
-			var min = (height < width) ? height : width;
-			var ratio = min/max;
-			//var ratio = $(s0).height()/sensorDiv.parent().height();
-			//console.log(ratio);
-			//var scaleResize = this.grid.getScale() * factor;
-
-			/*var s0 = sensorDiv.find('.sensorName')[0];
-			s0.style.fontSize = ratio + 'vw';
-
-			var s1 = sensorDiv.find('.sensorVal')[0];
-			s1.style.fontSize = 2*ratio + 'vw';
-
-			var s2 = sensorDiv.find('.sensorUnit')[0];
-			s2.style.fontSize = ratio + 'vw';
-
-			var s4 = sensorDiv.find('.sensorAlarm')[0];
-			s4.style.fontSize = ratio + 'vw';
-
-			var s3 = sensorDiv.find('.close')[0];
-			s3.style.fontSize = ratio + 'vw'; */
-
-			/*var s0 = sensorDiv.find('.sensorName')[0];
-			var s1 = sensorDiv.find('.sensorVal')[0];
-			var s2 = sensorDiv.find('.sensorUnit')[0];
-			var s4 = sensorDiv.find('.sensorAlarm')[0];
-			s0.style.fontSize = '100%';
-			s1.style.fontSize = '100%';
-			s2.style.fontSize = '100%';
-			s4.style.fontSize = '100%'; */
 		},
 		onchangebgcolor: function(model) {
 			var sensorDiv = this.container;
@@ -287,22 +242,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var sensortype = model.get('sensortype');
 			var valToInsert = model.get('valUnit');
 			var name = this.model.get('name');
-			if (name === "Ion Gauge") {
-				var a = 1;
-				var val = this.model.get('value');
 
-			}
 			var scale = this.grid.getScale();
 			var maxFont = 30 * scale;
 			var minFont = 25 * scale + 'px';
-
-
-
 			var valDiv = this.container.find('.sensorVal');
-			//var tempDiv = valDiv.children();
-			//var val = valDiv.find()
-			//valDiv.text(valToInsert);
-			//valDiv.fitText(1.2, { minFontSize: minFont, maxFontSize: maxFont });
+
 			$('#b' + model.get('id')).text(valToInsert);
 			/*valDiv.bigtext({
 				maxfontsize: maxFont

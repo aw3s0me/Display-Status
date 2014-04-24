@@ -1,0 +1,64 @@
+{
+    "sensorgroup1": {
+        "type": "sensorgroup",
+        "name": "Magnet Pinch",
+        "size": [12, 3],
+        "coords": [0, 0],
+        "diffsensors": false,
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "sensors": [{
+                        "id": "sensid1",
+                        "mask": "102",
+                        "unit": "A",
+                        "name": "Current",
+                        "min": 1.0,
+                        "max": 2.0,
+                        "precision": 0
+                    },
+                    {
+                        "id": "sensid2",
+                        "mask": "106",
+                        "unit": "K",
+                        "name": "T1",
+                        "precision": 3
+                    },
+                    {
+                        "id": "sensid3",
+                        "mask": "107",
+                        "unit": "K",
+                        "name": "T2",
+                        "precision": 3
+                    },
+                    {
+                        "id": "sensid4",
+                        "mask": "108",
+                        "unit": "%",
+                        "name": "He Level",
+                        "precision": 1
+                    },
+                    {
+                        "id": "sensid5",
+                        "mask": "149",
+                        "unit": "psig",
+                        "name": "HRC Press",
+                        "precision": 2
+                    },
+                    {
+                        "id": "sensid6",
+                        "mask": "150",
+                        "unit": "W",
+                        "name": "HRC Heater",
+                        "precision": 2
+                    },
+                    {
+                        "id": "trendsensid6",
+                        "type": "trend",
+                        "sensor": "sensid6",
+                        "name": "HRC Heater",
+                        "range": "1-day"
+                    }
+        ]
+    }
+}
