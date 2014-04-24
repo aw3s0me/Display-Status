@@ -4,6 +4,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		grid: undefined,
 		model: undefined,
 		isTrend: true,
+		chart: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			if (options.grid) {
@@ -25,7 +26,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			
 			this.model.on('resize', this.onresize, this);
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
-			this.model.on('change:value', this.onchangevalue, this);
+			this.model.get('model').on('addPoint', this.onaddpoint, this);
 
 			this.on('chartInit', this.chartInit);
 		},
@@ -60,9 +61,6 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			this.container.css('background-color', this.model.get('bgcolor')); 
 
-			
-
-			
 		},
 		chartInit: function() {
 			console.log("CHART INIT");
@@ -79,8 +77,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var height = dy * unitWidth * scale;
 			var width = dx * unitHeight * scale;
 			console.log(newSensor.get('id'));
+			var dataToChart = [newSensor.get('model').getChartProperties()];
+			console.log(dataToChart);
 
-			/*this.chart = new Highcharts.Chart({
+			this.chart = new Highcharts.Chart({
 				chart: {
 					reflow: false,
 					type: 'line',
@@ -105,7 +105,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						color: '#808080'
 					}]
 				},
-				series: 0,
+				series: dataToChart,
 				plotOptions: {
 					series: {
 						lineWidth: 1,
@@ -119,7 +119,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 
 			this.chart.legendHide();
-			this.chart.setSize() */
+			this.chart.setSize();
 		},
 		getHtml: function() {
 			return this.container[0];
@@ -150,9 +150,43 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			sensorDiv.css('background-color', this.model.get('bgcolor'));
 		},
-		onchangevalue: function(model) {
+		onaddpoint: function(model) {
+			console.log('ADDPOINT');
+
 			var sensorDiv = this.container;
 			var sensortype = model.get('sensortype');
+
+			var chart = this.chart;
+			var index = undefined;
+			var shift = false;
+
+			var sensorValue = model.get('value');
+
+			var x = model.get('lastTime');
+			var y = parseFloat(sensorValue);
+
+			if (!y || !x) {
+				return;
+			}
+
+			var Point = {
+				x: x,
+				y: y
+			}
+
+			/*if (chart.series[0]) {
+				if (chart.series[0].data.length > 10) {
+					shift = true;
+				}
+			}*/
+
+			if (chart.series[0]) {
+				console.log('added');
+				chart.series[0].addPoint(Point, true, shift); //last point is for everyone\
+			}
+			console.log(chart.series[0])
+
+			shift = false;
 
 		}
 	});

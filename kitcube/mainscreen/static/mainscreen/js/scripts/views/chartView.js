@@ -57,7 +57,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name'), j]);
 				}
 			} 
-			//console.log(dataToChart);
+			console.log(dataToChart);
 			this.chart = new Highcharts.Chart({
 				chart: {
 					reflow: false,

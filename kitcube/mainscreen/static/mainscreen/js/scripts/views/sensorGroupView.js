@@ -22,6 +22,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 		},
 		render: function() {
+			var trendChartInitArr = [];
+
+
 			var scale = this.grid.getScale();
 			var newSensorGroup = this.model;
 			var dx = newSensorGroup.get("size")[0];
@@ -62,7 +65,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
     				var cont = this.setContainer(newSensorView);
     				newSortableContainer.append(cont);
     				if (newSensorView.isTrend) {
-    					newSensorView.trigger('chartInit');
+    					trendChartInitArr.push(newSensorView);
     				}
     			}
     		}
@@ -103,6 +106,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 					self.model.trigger('resize', model);
 				}
 			}); 
+
+        	for (var i = 0; i < trendChartInitArr.length; i++) {
+        		var view = trendChartInitArr[i];
+        		view.trigger('chartInit');
+        	}
+
 		},
 		rerender: function() {
 
