@@ -90,28 +90,28 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					xAxis.dateTimeLabelFormats = {
 						hour: '%H:%M'
 					}
-					xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 2, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+					//xAxis.minRange = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 2, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 					break;
 				}
 				case "1-day": {
 					xAxis.dateTimeLabelFormats = {
 						hour: '%a %H:%M'
 					}
-					xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+					//xAxis.minRange = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 					break;
 				}
 				case "10-days": {
 					xAxis.dateTimeLabelFormats = {
 						day: '%a'
 					}
-					xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 10, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+					//xAxis.minRange = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 10, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 					break;
 				}
 				case "4-months": {
 					xAxis.dateTimeLabelFormats = {
 						month: '%b'
 					}
-					xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 4, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+					//xAxis.minRange = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 4, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 					break;
 				}
 				default: {
@@ -125,15 +125,46 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						month: '%b \'%y',
 						year: '%Y'
 					}
-					//xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds())
+					//xAxis.minRange = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds())
+					xAxis.minRange = 1;
 					break;
 				}
 			}
 
-			console.log(xAxis)
 			//xAxis.minRange = 1;
 			//xAxis.tickInterval = 2;
-
+			/*this.chart = new Highcharts.StockChart({
+				chart: {
+					reflow: false,
+					type: 'line',
+					renderTo: newSensor.get('id')
+				},
+				title: {
+					text: newSensor.get('name')
+				},
+				scrollbar: {
+					enabled: false
+				},
+				xAxis: xAxis,
+				yAxis: {
+					title: {
+						text: 'Values'
+					},
+					plotLines: [{
+						value: 0,
+						width: 1,
+						color: '#808080'
+					}]
+				},
+				series: dataToChart,
+				plotOptions: {
+					series: {
+						lineWidth: 1,
+	                    turboThreshold: 0,
+						threshold: null
+					}
+				}
+			}); */
 
 			this.chart = new Highcharts.Chart({
 				chart: {
@@ -168,10 +199,14 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			(function(b,a){if(!b){return}var c=b.Chart.prototype,d=b.Legend.prototype;b.extend(c,{legendSetVisibility:function(h){var i=this,k=i.legend,e,g,j,m=i.options.legend,f,l;if(m.enabled==h){return}m.enabled=h;if(!h){d.destroy.call(k);e=k.allItems;if(e){for(g=0,j=e.length;g<j;++g){e[g].legendItem=a}}k.group={}}c.render.call(i);if(!m.floating){f=i.scroller;if(f&&f.render){l=i.xAxis[0].getExtremes();f.render(l.min,l.max)}}},legendHide:function(){this.legendSetVisibility(false)},legendShow:function(){this.legendSetVisibility(true)},legendToggle:function(){this.legendSetVisibility(this.options.legend.enabled^true)}})}(Highcharts));
 
 
-			this.chart.legendHide();
+			this.chart.legendHide(); 
 			this.chart.setSize();
 			console.log(this.chart);
+			now = new Date;
+			var max = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+			var min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 3, now.getUTCSeconds(), now.getUTCMilliseconds());
 
+			this.chart.xAxis[0].setExtremes(min, max);
 			this.chart.redraw();
 		},
 		getHtml: function() {
@@ -205,7 +240,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		},
 		onaddpoint: function(model) {
 			//console.log('ADDPOINT');
-
+			var now = new Date;
 			var sensorDiv = this.container;
 
 			var chart = this.chart;
@@ -236,7 +271,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						lblFormat = {
 							hour: '%a %H:%M'
 						}
-											limit = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds())
+						limit = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds())
 
 						break;
 					}
@@ -265,15 +300,22 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 							month: '%b \'%y',
 							year: '%Y'
 						}
-						limit = 0;
+						limit = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 4, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
 					}
 				}
-			}*/
+			} */
+
 			if (chart.series[0]) {
 				//console.log('added');
-				chart.series[0].addPoint(Point, true, true); //last point is for everyone\
+				chart.series[0].addPoint(Point, true, shift); //last point is for everyone\
+				console.log(chart.series[0].data);
 			}
+
+			var max = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+			var min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 3, now.getUTCSeconds(), now.getUTCMilliseconds());
+
+			this.chart.xAxis[0].setExtremes(min, max);
 
 			shift = false;
 

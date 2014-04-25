@@ -319,10 +319,19 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			} 
 			var now = new Date;
 			var self = this;
+			var offset = now.getTimezoneOffset()/60 * (-1);
 			var tmpStampNow = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 			tmpStampNow = Math.floor(tmpStampNow/1000);
+			console.log(range);
 			range = Math.floor(range/1000);
+
+			console.log([new Date(tmpStampNow*1000), new Date(range*1000)]);
+			var to = now.getTime();
+			var from = new Date(range).getTime();
+			console.log(now.getTime() + now.getTimezoneOffset()*60000);
+
 			var url = this.getDbUrl().replace("window=-1", "window=" + range + "-" + tmpStampNow);
+			//var url = this.getDbUrl().replace("window=-1", "window=" + from + "-" + to);
 			console.log(url);
 			$.ajax({
 				type: "GET",
@@ -339,10 +348,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						}
 
 						var values = arrayOfData[i].split(', ');
-						var dateObj = new Date(values[0]);
-						console.log(dateObj.getUTCMilliseconds());
+						var dateObj = new Date(values[0]); //WRONG BEHAVIOUR
+						console.log(dateObj);
 						//console.log(Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds());
-						var x = Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds());
+						var x = Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours() + 2, dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds());
 						console.log("x: " + x);
 						var y = +parseFloat(values[1]).toFixed(7);
 						console.log("y: " + y);
@@ -352,7 +361,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					var value = self.get('values')[self.get('values').length - 1][0];
 					var lastTime = self.get('values')[self.get('values').length - 1][1];
 
-					console.log(self.get('values'))
+					
 
 					self.set({
 						'value': value,
@@ -361,6 +370,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 				}
 			})
+
+			console.log(self.get('values'))
 		},
 		getChartProperties: function() {
 			return {

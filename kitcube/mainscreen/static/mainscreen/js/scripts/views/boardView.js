@@ -839,7 +839,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 					var valToPush = [lastTime, value];
 					//console.log(valToPush);
-
+					
 
 					array.push(valToPush);
 
