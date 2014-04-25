@@ -40,7 +40,6 @@ require.config({
     //"bigtext": "vendor/bigtext"
     "bigtext": "vendor/bigtext/src/bigtext",
     "momentjs": "vendor/momentjs/min/moment.min"
-
   },
   shim: {
     //jqueryui: "jquery",
@@ -135,6 +134,11 @@ require.config({
       ]
     },
     bigtext: {
+      deps: [
+        "jquery"
+      ]
+    },
+    momentjs: {
       deps: [
         "jquery"
       ]
