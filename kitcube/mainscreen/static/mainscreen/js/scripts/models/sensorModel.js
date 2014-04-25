@@ -313,6 +313,55 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			});
 		},
+		getAdeiDataRange: function(range) {
+			if (!_isNumber(range)){
+				throw "range value should be timestamp";
+			} 
+			var now = new Date;
+			var self = this;
+			var tmpStampNow = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+			tmpStampNow = Math.floor(tmpStampNow/1000);
+			range = Math.floor(range/1000);
+			var url = this.getDbUrl().replace("window=-1", "window=" + range + "-" + tmpStampNow);
+			console.log(url);
+			$.ajax({
+				type: "GET",
+				url: url,
+				async: false,
+				success: function(data) {
+					console.log(data);
+					var arrayOfData = data.split('\n');
+					arrayOfData.shift();
+					console.log(arrayOfData)
+					for (var i = 0; i < arrayOfData.length; i++) {
+						if (arrayOfData[i] === "") {
+							continue;
+						}
+
+						var values = arrayOfData[i].split(', ');
+						var dateObj = new Date(values[0]);
+						console.log(dateObj.getUTCMilliseconds());
+						//console.log(Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds());
+						var x = Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds());
+						console.log("x: " + x);
+						var y = +parseFloat(values[1]).toFixed(7);
+						console.log("y: " + y);
+						self.get('values').push([x, y]);
+					}
+
+					var value = self.get('values')[self.get('values').length - 1][0];
+					var lastTime = self.get('values')[self.get('values').length - 1][1];
+
+					console.log(self.get('values'))
+
+					self.set({
+						'value': value,
+						'lastTime': lastTime
+					});
+
+				}
+			})
+		},
 		getChartProperties: function() {
 			return {
 				"name": this.get('name'),

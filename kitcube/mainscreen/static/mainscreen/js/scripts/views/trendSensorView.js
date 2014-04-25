@@ -66,6 +66,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		chartInit: function() {
 			console.log("CHART INIT");
 			var newSensor = this.model;
+			var now = new Date;
 			//console.log(this.model);
 			var scale = this.grid.getScale();
 			var dx = newSensor.get("size")[0];
@@ -78,37 +79,43 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var height = dy * unitWidth * scale;
 			var width = dx * unitHeight * scale;
 			console.log(newSensor.get('id'));
+			newSensor.get('model').getAdeiDataRange(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds()))
 			var dataToChart = [newSensor.get('model').getChartProperties()];
 			console.log(dataToChart);
-
-			var lblFormat = {};
+			
+			var xAxis = {};
+			xAxis.type = 'datetime';
 			switch(newSensor.get('range')) {
 				case "2-hours": {
-					lblFormat = {
+					xAxis.dateTimeLabelFormats = {
 						hour: '%H:%M'
 					}
+					xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 2, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 					break;
 				}
 				case "1-day": {
-					lblFormat = {
+					xAxis.dateTimeLabelFormats = {
 						hour: '%a %H:%M'
 					}
+					xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 					break;
 				}
 				case "10-days": {
-					lblFormat = {
+					xAxis.dateTimeLabelFormats = {
 						day: '%a'
 					}
+					xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 10, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 					break;
 				}
 				case "4-months": {
-					lblFormat = {
+					xAxis.dateTimeLabelFormats = {
 						month: '%b'
 					}
+					xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 4, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 					break;
 				}
 				default: {
-					lblFormat = {
+					xAxis.dateTimeLabelFormats = {
 						millisecond: '%H:%M:%S.%L',
 						second: '%H:%M:%S',
 						minute: '%H:%M',
@@ -118,12 +125,15 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						month: '%b \'%y',
 						year: '%Y'
 					}
+					//xAxis.min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds())
 					break;
 				}
 			}
 
+			console.log(xAxis)
+			//xAxis.minRange = 1;
+			//xAxis.tickInterval = 2;
 
-			console.log(lblFormat);
 
 			this.chart = new Highcharts.Chart({
 				chart: {
@@ -134,10 +144,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				title: {
 					text: newSensor.get('name')
 				},
-				xAxis: {
-					type: 'datetime',
-					dateTimeLabelFormats: lblFormat
-				},
+				xAxis: xAxis,
 				yAxis: {
 					title: {
 						text: 'Values'
@@ -163,6 +170,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			this.chart.legendHide();
 			this.chart.setSize();
+			console.log(this.chart);
+
+			this.chart.redraw();
 		},
 		getHtml: function() {
 			return this.container[0];
@@ -194,10 +204,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			sensorDiv.css('background-color', this.model.get('bgcolor'));
 		},
 		onaddpoint: function(model) {
-			console.log('ADDPOINT');
+			//console.log('ADDPOINT');
 
 			var sensorDiv = this.container;
-			var sensortype = model.get('sensortype');
 
 			var chart = this.chart;
 			var index = undefined;
@@ -208,24 +217,62 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var x = model.get('lastTime');
 			var y = parseFloat(sensorValue);
 
-			if (!y || !x) {
+			if (y === undefined || y === "NAN" || x === undefined || y === "NAN") {
 				return;
 			}
 
-			var Point = {
-				x: x,
-				y: y
-			}
+			var Point = [x, y];
+
+			var limit;
 
 			/*if (chart.series[0]) {
-				if (chart.series[0].data.length > 10) {
-					shift = true;
+				var range = this.model.get('range');
+				switch(range) {
+					case "2-hours": {
+						limit = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 2, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds())
+						break;
+					}
+					case "1-day": {
+						lblFormat = {
+							hour: '%a %H:%M'
+						}
+											limit = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds())
+
+						break;
+					}
+					case "10-days": {
+						lblFormat = {
+							day: '%a'
+						}
+						limit = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 10, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds())
+						break;
+					}
+					case "4-months": {
+						lblFormat = {
+							month: '%b'
+						}
+						limit = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 4, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds())
+						break;
+					}
+					default: {
+						lblFormat = {
+							millisecond: '%H:%M:%S.%L',
+							second: '%H:%M:%S',
+							minute: '%H:%M',
+							hour: '%H:%M',
+							day: '%e. %b',
+							week: '%e. %b',
+							month: '%b \'%y',
+							year: '%Y'
+						}
+						limit = 0;
+						break;
+					}
 				}
 			}*/
-
 			if (chart.series[0]) {
-				console.log('added');
-				chart.series[0].addPoint(Point, true, shift); //last point is for everyone\
+				//console.log('added');
+				chart.series[0].addPoint(Point, true, true); //last point is for everyone\
 			}
 
 			shift = false;

@@ -56,8 +56,7 @@
                         "id": "trendsensid6",
                         "type": "trend",
                         "sensor": "sensid6",
-                        "name": "HRC Heater",
-                        "range": "2-hours"
+                        "name": "HRC Heater"
                     }
         ]
     }

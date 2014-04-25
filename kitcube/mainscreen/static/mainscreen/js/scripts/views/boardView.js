@@ -837,10 +837,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 					var array = sensorModel.get('values').slice(0);
 
-					var valToPush = {
-						x: lastTime,
-						y: value
-					};
+					var valToPush = [lastTime, value];
+					//console.log(valToPush);
 
 
 					array.push(valToPush);
