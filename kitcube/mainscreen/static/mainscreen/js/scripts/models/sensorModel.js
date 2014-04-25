@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
+define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone, momentw) {
 	var _minValve = -199.5;
 	var _maxValve = 849.5;
 	var _min2State = 0.5;
@@ -348,10 +348,31 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						}
 
 						var values = arrayOfData[i].split(', ');
-						var dateObj = new Date(values[0]); //WRONG BEHAVIOUR
-						console.log(dateObj);
+						var mom = moment.utc(values[0], "DD-MMM-YY HH:mm:ss.SSS");
+						//console.log(now);
+						console.log(mom.valueOf());
+						var x = mom.valueOf();
+						console.log(x);
+
+						/*var time = values[0].replace(/-/g,'/').replace(/\.\d*$/,'');
+						//var time = values[0].replace(/-/g,'/');
+						//console.log(time);
+						//console.log((new Date()).getTime());
+						var darr = values[0].split('.');
+						var dat = new Date(darr[0]);
+						var datestr = '';
+						dat.setMilliseconds(Math.round(darr[1]/1000));
+						//datestr = [ [dat.getFullYear(),dat.getMonth()+1,dat.getDate()].join('-') ,' ', [dat.getHours(),dat.getMinutes(),dat.getSeconds()].join(':') ,'.',dat.getMilliseconds()].join('');
+						console.log(darr);
+						//var parsed = _.clone(Date.UTC(dat.getFullYear(), dat.getMonth()+1, dat.getDate(), dat.getHours(), dat.getMinutes(), dat.getSeconds(), dat.getMilliseconds()));
+						//console.log(parseInt(parsed));
+						//var x = parseInt(parsed); */
+
+						//var dateObj = new Date(parsed); //WRONG BEHAVIOUR
+						var dateObj = new Date(values[0]);
+
 						//console.log(Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds());
-						var x = Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours() + 2, dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds());
+						//var x = Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours() + 2, dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds()); 
 						console.log("x: " + x);
 						var y = +parseFloat(values[1]).toFixed(7);
 						console.log("y: " + y);

@@ -38,7 +38,8 @@ require.config({
     "fittext": "vendor/FitText.js/jquery.fittext",
     "slabtext": "vendor/slabText/js/jquery.slabtext.min",
     //"bigtext": "vendor/bigtext"
-    "bigtext": "vendor/bigtext/src/bigtext"
+    "bigtext": "vendor/bigtext/src/bigtext",
+    "momentjs": "vendor/momentjs/min/moment.min"
 
   },
   shim: {

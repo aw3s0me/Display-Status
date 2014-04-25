@@ -47,16 +47,16 @@
                     },
                     {
                         "id": "sensid6",
-                        "mask": "150",
+                        "mask": "2",
                         "unit": "W",
-                        "name": "HRC Heater",
+                        "name": "XHV CP Jacket",
                         "precision": 2
                     },
                     {
                         "id": "trendsensid6",
                         "type": "trend",
                         "sensor": "sensid6",
-                        "name": "HRC Heater"
+                        "name": "XHV CP Jacket"
                     }
         ]
     }

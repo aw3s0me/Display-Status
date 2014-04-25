@@ -445,10 +445,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						break;
 				}
 			}
-
+			//self.updateAllSensors();
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
-			}, 2000); //the only way to pass param */
+			}, 5000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
 			//var PriorityQueue = require('queue');
@@ -839,7 +839,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 					var valToPush = [lastTime, value];
 					//console.log(valToPush);
-					
+
 
 					array.push(valToPush);
 
