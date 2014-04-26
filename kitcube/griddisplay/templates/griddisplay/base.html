@@ -1,0 +1,20 @@
+{% load static %}
+
+<link rel='stylesheet' href="{% static 'griddisplay/css/style.css' %}">
+<link rel='text/javascript' href="{% static 'griddisplay/js/grid.js' %}">
+
+<div class='wrapper'>
+    <div class='banner'>
+        {% block banner %}
+        {% endblock %}
+    </div>
+    <div class='canvas'>
+        {% block canvas %}
+        {% endblock %}
+    </div>
+    <div class='footer'>
+        {% block footer %}
+        {% endblock %}
+    </div>
+</div>
+
