@@ -12,7 +12,8 @@ urlpatterns = patterns('',
     url(r'^snippets/', include('snippets.urls')),
     url(r'^$', include('mainscreen.urls')),
     url(r'^layout/', include('layout.urls')),
-    url(r'^admin/', include(admin.site.urls))
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^display/', include('griddisplay.urls'))
 )
 
 urlpatterns += staticfiles_urlpatterns()

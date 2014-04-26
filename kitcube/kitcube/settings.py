@@ -49,7 +49,8 @@ INSTALLED_APPS = (
     'mainscreen',
     'layout',
     'rest_framework',
-    'snippets'
+    'snippets',
+    'griddisplay',
 )
 
 MIDDLEWARE_CLASSES = (
