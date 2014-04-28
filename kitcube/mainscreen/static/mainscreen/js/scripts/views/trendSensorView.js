@@ -80,8 +80,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var width = dx * unitHeight * scale;
 			console.log(newSensor.get('id'));
 			newSensor.get('model').getAdeiDataRange(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds()))
-			var dataToChart = [newSensor.get('model').getChartProperties()];
-			console.log(dataToChart);
+			var sensorData = newSensor.get('model').getChartProperties();
+			var dataToChart = [sensorData];
+			console.log("OLOLO" + sensorData);
 			
 			var xAxis = {};
 			xAxis.type = 'datetime';
@@ -165,11 +166,21 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					}
 				}
 			}); */
+			console.log(fitData)
+			/*dataToChart.push({
+				type: 'line',
+     	 		marker: { enabled: true },
+      			// function returns data for trend-line
+      			data: (function() {
+        			return fitData(sensorData).data;
+      			})()
+			}) */
+
 
 			this.chart = new Highcharts.Chart({
 				chart: {
-					reflow: false,
-					type: 'line',
+					//reflow: false,
+					//type: 'line',
 					renderTo: newSensor.get('id')
 				},
 				title: {
@@ -187,6 +198,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					}]
 				},
 				series: dataToChart,
+				//series: 
 				plotOptions: {
 					series: {
 						lineWidth: 1,

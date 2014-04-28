@@ -24,7 +24,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 		render: function() {
 			var trendChartInitArr = [];
 
-
 			var scale = this.grid.getScale();
 			var newSensorGroup = this.model;
 			var dx = newSensorGroup.get("size")[0];
@@ -111,6 +110,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
         		var view = trendChartInitArr[i];
         		view.trigger('chartInit');
         	}
+
+        	//for (var i = 0; i < )
 
 		},
 		rerender: function() {

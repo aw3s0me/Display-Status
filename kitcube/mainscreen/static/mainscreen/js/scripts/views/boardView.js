@@ -336,6 +336,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							collection: new SensorCollection(sensorModelsArr)
 						});
 
+						if (attr['diffsensors'] === false) {
+							newSensorGroupModel.set({
+								dbname: attr['dbname'],
+								dbgroup: attr['dbgroup'],
+								server: attr['server']
+							});
+						}
 
 						var newSensorGroupView = new SensorGroupView({
 							model: newSensorGroupModel,

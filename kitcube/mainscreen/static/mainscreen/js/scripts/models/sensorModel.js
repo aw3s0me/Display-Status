@@ -312,6 +312,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				}
 
 			});
+
+			this.updateModel();
+
 		},
 		getAdeiDataRange: function(range) {
 			if (!_isNumber(range)){
@@ -319,16 +322,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			} 
 			var now = new Date;
 			var self = this;
-			var offset = now.getTimezoneOffset()/60 * (-1);
 			var tmpStampNow = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 			tmpStampNow = Math.floor(tmpStampNow/1000);
-			console.log(range);
 			range = Math.floor(range/1000);
-
-			console.log([new Date(tmpStampNow*1000), new Date(range*1000)]);
-			var to = now.getTime();
-			var from = new Date(range).getTime();
-			console.log(now.getTime() + now.getTimezoneOffset()*60000);
 
 			var url = this.getDbUrl().replace("window=-1", "window=" + range + "-" + tmpStampNow);
 			//var url = this.getDbUrl().replace("window=-1", "window=" + from + "-" + to);
@@ -386,7 +382,15 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 						'lastTime': lastTime
 					});
 
-				}
+				},
+				error: function(jqXHR,error, errorThrown) {  
+               		if(jqXHR.status && jqXHR.status == 400){
+                    	console.log(jqXHR.responseText); 
+               		} else {
+                   		console.log("Error at getting data from adei at: " + self.get('id'));
+                   		throw "Error at getting data from adei at: " + self.get('id');
+               		}
+         		}
 			})
 
 			console.log(self.get('values'))
@@ -398,23 +402,13 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				type: "GET",
 				url: self.getDbUrl(),
 				success: function(data) {
-					//console.log(data);
 					var values = data.split(',');
-					//var value = parseFloat(arrayOfData[arrayOfData.length - 1]);
-
-					var values = data.split(',');
-
 					if (values === "") {
 						return;
 					}
-
-					//var values = arrayOfData.split(', ');
-
 					var mom = moment.utc();
 					var x = mom.valueOf();
-					var y = parseFloat(
-						values[values.length - 1]);
-
+					var y = parseFloat(values[values.length - 1]);
 					//if (self.get('values').length > 10) {self.get('values').shift();}
 					var array = self.get('values').slice(0); //cloning of array, because backbone works with only one instance
 					var valToPush = [x, y];
@@ -427,13 +421,22 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					});
 
 					self.trigger('addPoint', self);
-				}
+				},
+				error: function(jqXHR,error, errorThrown) {  
+               		if(jqXHR.status && jqXHR.status == 400){
+                    	console.log(jqXHR.responseText); 
+               		} else {
+                   		console.log("Error at getting data from adei at: " + self.get('id'));
+                   		throw "Error at getting data from adei at: " + self.get('id');
+               		}
+         		}
 			})
 		},
 		getChartProperties: function() {
 			return {
 				"name": this.get('name'),
-				"data": this.get('values')
+				"data": this.get('values'),
+				"type": 'scatter'
 			}
 		},
 		getDbUrl: function() {
@@ -452,6 +455,19 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					sensorClone.unset('id', {
 						silent: true
 					});
+					sensorClone.unset('size', {
+						silent: true
+					});
+					sensorClone.unset('coords', {
+						silent: true
+					});
+
+					if (this.get('type') === 'sensor') {
+						sensorClone.unset('type', {
+							silent: true
+						});
+					}
+
 				}
 
 				if (options['diffsensors'] === false){
@@ -466,8 +482,19 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					});
 				}
 			}
-			
 
+			if (this.get('type') === 'trend') {
+				sensorClone.unset('mask', {
+					silent: true
+				});
+				sensorClone.unset('unit', {
+					silent: true
+				});
+				sensorClone.unset('precision', {
+					silent: true
+				});
+			}
+			
 			sensorClone.unset('values', {
 				silent: true
 			});
@@ -546,6 +573,18 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 			if (this.get('precision') === undefined) {
 				sensorClone.unset('precision', {
+					silent: true
+				});
+			}
+
+			if (this.get('min') === undefined) {
+				sensorClone.unset('min', {
+					silent: true
+				});
+			}
+
+			if (this.get('max') === undefined) {
+				sensorClone.unset('max', {
 					silent: true
 				});
 			}

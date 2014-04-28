@@ -39,7 +39,8 @@ require.config({
     "slabtext": "vendor/slabText/js/jquery.slabtext.min",
     //"bigtext": "vendor/bigtext"
     "bigtext": "vendor/bigtext/src/bigtext",
-    "momentjs": "vendor/momentjs/min/moment.min"
+    "momentjs": "vendor/momentjs/min/moment.min",
+    "regression": "vendor/highcharts_trendline/regression"
   },
   shim: {
     //jqueryui: "jquery",
@@ -141,6 +142,11 @@ require.config({
     momentjs: {
       deps: [
         "jquery"
+      ]
+    },
+    regression: {
+      deps: [
+        "highcharts"
       ]
     }
   }

@@ -8,7 +8,10 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			coords: [],
 			bgcolor: undefined,
 			collection: undefined,
-			diffsensors: true
+			diffsensors: true,
+			dbgroup: undefined,
+			dbname: undefined,
+			server: undefined
 		},
 		initialize: function() {
 			//console.log("model created");
@@ -17,21 +20,22 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			});
 		},
 		serToJSON: function() {
-			var sensorGroupClone = this.clone();
 			var collection = this.get('collection').models;
-			sensorGroupClone.unset('id', {silent: true});
+
 			var jsonAttr = {
 				"type": this.get('type'),
 				"size": this.get('size'),
 				"coords": this.get('coords')
 			}
-			if (this.get('diffsensors') === false) {
-				
-
+			if (this.get('diffsensors') === false && (this.get('dbgroup') !== undefined && this.get('dbname') !== undefined && this.get('server') !== undefined)) {
 				jsonAttr['diffsensors'] = this.get('diffsensors');
-				//jsonAttr['dbgroup'] = ;
-				//jsonAttr['dbname'] = ;
-				//jsonAttr['server'] = ;
+				jsonAttr['dbgroup'] = this.get('dbgroup');
+				jsonAttr['dbname'] = this.get('dbname');
+				jsonAttr['server'] = this.get('server');
+			}
+
+			if (this.get('bgcolor') !== undefined) {
+				jsonAttr['bgcolor'] = this.get('bgcolor');
 			}
 
 			jsonAttr['sensors'] = [];
@@ -46,12 +50,12 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 
 				jsonSensorAttr = sensor.serToJSON(options);
 
-				//jsonAttr.push()
+				jsonAttr['sensors'].push(jsonSensorAttr);
 			}
 
+			console.log(jsonAttr);
 
-
-			return _.clone(sensorClone.attributes);
+			return jsonAttr;
 		}
 	});
 

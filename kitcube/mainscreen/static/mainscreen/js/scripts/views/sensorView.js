@@ -33,7 +33,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
 
-
+			this.model.updateModel();
 		},
 		renderSingle: function() {
 			//load html template
@@ -185,6 +185,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.append(s3);
 
 			this.container.css('background-color', this.model.get('bgcolor'));
+
 		},
 		getHtml: function() {
 			return this.container[0];
