@@ -332,6 +332,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							name: attr['name'],
 							size: attr['size'],
 							coords: attr['coords'],
+							diffsensors: attr['diffsensors'],
 							collection: new SensorCollection(sensorModelsArr)
 						});
 
@@ -448,7 +449,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			//self.updateAllSensors();
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
-			}, 30000); //the only way to pass param */
+			}, 10000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
 			//var PriorityQueue = require('queue');
@@ -778,7 +779,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
-			}, 5000);
+			}, 2000);
 		},
 		serializeToJson: function() {
 			var newJson = {};
@@ -813,47 +814,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			$(window).trigger('resize'); //because big text works only after resize event
 		},
 		updateSensor: function(sensorModel) {
-			var data = {};
-			//console.log(sensorModel);
-			if (!sensorModel) {
-				return;
-			}
-			var sensorId = sensorModel.get('id');
-			var sensor = $('#' + sensorId);
-			if (!sensor)
-				return;
-			$.ajax({
-				type: "GET",
-				url: sensorModel.getDbUrl(),
-				success: function(data) {
-					//console.log(data);
-					var arrayOfData = data.split(',');
-					var value = parseFloat(
-						arrayOfData[arrayOfData.length - 1]);
-					var now = new Date;
-					var lastTime = _.clone(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds()));
+			sensorModel.updateModel();
 
-					if (sensorModel.get('values').length > 10) {sensorModel.get('values').shift();}
-
-					var array = sensorModel.get('values').slice(0);
-
-					var valToPush = [lastTime, value];
-					//console.log(valToPush);
-
-
-					array.push(valToPush);
-
-					//sensorModel.get('values').push(valToPush);
-					sensorModel.set({
-						'value': value,
-						'lastTime': lastTime,
-						'values': array
-					});
-
-
-					sensorModel.trigger('addPoint', sensorModel);
-				}
-			})
 		},
 		alert: function(e) {
 			console.log(e);

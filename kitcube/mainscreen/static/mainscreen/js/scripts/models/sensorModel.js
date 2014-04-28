@@ -34,7 +34,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			min: undefined,
 			alarm: undefined,
 			server: undefined,
-			device: undefined,
+			//device: undefined,
 			dbname: undefined,
 			dbgroup: undefined,
 			norender: false,
@@ -349,7 +349,6 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 						var values = arrayOfData[i].split(', ');
 						var mom = moment.utc(values[0], "DD-MMM-YY HH:mm:ss.SSS");
-						//console.log(now);
 						console.log(mom.valueOf());
 						var x = mom.valueOf();
 						console.log(x);
@@ -379,10 +378,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 						self.get('values').push([x, y]);
 					}
 
-					var value = self.get('values')[self.get('values').length - 1][0];
-					var lastTime = self.get('values')[self.get('values').length - 1][1];
-
-					
+					var value = self.get('values')[self.get('values').length - 1][1];
+					var lastTime = self.get('values')[self.get('values').length - 1][0];
 
 					self.set({
 						'value': value,
@@ -394,6 +391,45 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 			console.log(self.get('values'))
 		},
+		updateModel: function() {
+			var data = {};
+			var self = this;
+			$.ajax({
+				type: "GET",
+				url: self.getDbUrl(),
+				success: function(data) {
+					//console.log(data);
+					var values = data.split(',');
+					//var value = parseFloat(arrayOfData[arrayOfData.length - 1]);
+
+					var values = data.split(',');
+
+					if (values === "") {
+						return;
+					}
+
+					//var values = arrayOfData.split(', ');
+
+					var mom = moment.utc();
+					var x = mom.valueOf();
+					var y = parseFloat(
+						values[values.length - 1]);
+
+					//if (self.get('values').length > 10) {self.get('values').shift();}
+					var array = self.get('values').slice(0); //cloning of array, because backbone works with only one instance
+					var valToPush = [x, y];
+
+					array.push(valToPush);
+					self.set({
+						'value': y,
+						'lastTime': x,
+						'values': array
+					});
+
+					self.trigger('addPoint', self);
+				}
+			})
+		},
 		getChartProperties: function() {
 			return {
 				"name": this.get('name'),
@@ -403,11 +439,35 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		getDbUrl: function() {
 			return 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + this.get('server') + '&db_name=' + this.get('dbname') + '&db_group=' + this.get('dbgroup') + '&db_mask=' + this.get('mask') + '&window=-1';
 		},
-		serToJSON: function() {
+		serToJSON: function(options) {
 			var sensorClone = this.clone();
-			sensorClone.unset('id', {
-				silent: true
-			});
+
+			if (options) {
+				if (options['type'] !== 'group') {
+					sensorClone.unset('id', {
+						silent: true
+					});
+				}
+				else {
+					sensorClone.unset('id', {
+						silent: true
+					});
+				}
+
+				if (options['diffsensors'] === false){
+					sensorClone.unset('dbgroup', {
+						silent: true
+					});
+					sensorClone.unset('dbname', {
+						silent: true
+					});
+					sensorClone.unset('server', {
+						silent: true
+					});
+				}
+			}
+			
+
 			sensorClone.unset('values', {
 				silent: true
 			});
@@ -417,6 +477,79 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			sensorClone.unset('lastTime', {
 				silent: true
 			});
+			sensorClone.unset('valUnit', {
+				silent: true
+			});
+			sensorClone.unset('sensorviewtype', {
+				silent: true
+			});
+
+			if (this.get('factor') === 1) {
+				sensorClone.unset('factor', {
+					silent: true
+				});
+			}
+
+			if (this.get('sensortype') === 'default') {
+				sensorClone.unset('sensortype', {
+					silent: true
+				});
+			}
+
+			if (this.get('unit') === '') {
+				sensorClone.unset('unit', {
+					silent: true
+				});
+			}
+
+			if (this.get('norender') === false) {
+				sensorClone.unset('norender', {
+					silent: true
+				});
+			}
+
+			if (this.get('link') === undefined) {
+				sensorClone.unset('link', {
+					silent: true
+				});
+			}
+
+			if (this.get('exp') === false) {
+				sensorClone.unset('exp', {
+					silent: true
+				});
+			}
+
+			if (this.get('bgcolor') === '#338fff') {
+				sensorClone.unset('bgcolor', {
+					silent: true
+				});
+			}
+
+			if (this.get('name') === undefined) {
+				sensorClone.unset('name', {
+					silent: true
+				});
+			}
+
+			if (this.get('comment') === undefined) {
+				sensorClone.unset('comment', {
+					silent: true
+				});
+			}
+
+			if (this.get('alarm') === undefined) {
+				sensorClone.unset('alarm', {
+					silent: true
+				});
+			}
+
+			if (this.get('precision') === undefined) {
+				sensorClone.unset('precision', {
+					silent: true
+				});
+			}
+
 			return _.clone(sensorClone.attributes);
 		}
 	});
