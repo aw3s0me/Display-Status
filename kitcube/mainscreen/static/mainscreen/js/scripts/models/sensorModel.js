@@ -46,7 +46,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			bgcolor: '#338fff',
 			valUnit: "NaN",
 			link: undefined,
-			factor: 1
+			factor: 1,
+			linecolor: undefined
 		},
 		initialize: function() {
 			//console.log("model created");
@@ -431,6 +432,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
                		}
          		}
 			})
+		},
+		getAxisProperties: function() {
+
 		},
 		getChartProperties: function() {
 			return {

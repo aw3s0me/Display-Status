@@ -11,6 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		elements: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
+			var self = this;
 			if (options.grid) {
 				this.grid = options.grid;
 			}
@@ -25,6 +26,32 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			}
 			this.model.on('resize', this.onresize, this);
 			this.render();
+
+			/*this.container.parent().click(function(event){
+				var elems = $('.canvas').find('.activeSensor');
+				for (var elem in elems) {
+					console.log(elem);
+				}
+			});
+
+			this.container.click(function(event){
+				var elems = $('.canvas').find('.activeSensor');
+				for (var elem in elems) {
+					console.log(elem);
+				}
+			}); */
+			this.container.find('.addChartBtn').click(function(event){
+				var elems = $('.canvas').find('.activeSensor');
+				console.log(elems);
+				for (var i = 0; i < elems.length; i++) {
+					var jqElement = elems[i];
+					var id = jqElement.attr('id');
+					
+
+					
+				}
+			});
+
 		},
 		render: function() {
 			//load html template
@@ -111,6 +138,16 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			}
 
 			this.chart.legendHide();
+
+			var s5 = $('<button>Add</button>');
+			s5.css('top', 5 * scale + 'px');
+			s5.css('left', 5 * scale + 'px');
+			s5.button();
+			s5.addClass('addChartBtn');
+
+			this.container.append(s5);
+
+
 			/*var legend = this.chart.legend; 
 			if(legend.display) {
 	            legend.group.hide();

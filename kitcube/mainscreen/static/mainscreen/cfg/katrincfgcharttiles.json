@@ -1,0 +1,80 @@
+{
+    "sensorgroup1": {
+        "type": "sensorgroup",
+        "name": "Magnet Pinch",
+        "size": [12, 5],
+        "coords": [0, 0],
+        "diffsensors": false,
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd",
+        "sensors": [{
+                        "id": "sensid1",
+                        "mask": "102",
+                        "unit": "A",
+                        "name": "Current",
+                        "min": 1.0,
+                        "max": 2.0,
+                        "precision": 0,
+                        "linecolor": "#0066FF"
+                    },
+                    {
+                        "id": "sensid2",
+                        "mask": "106",
+                        "unit": "K",
+                        "name": "T1",
+                        "precision": 3,
+                        "linecolor": "#FF3399"
+                    },
+                    {
+                        "id": "sensid3",
+                        "mask": "107",
+                        "unit": "K",
+                        "name": "T2",
+                        "precision": 3,
+                        "linecolor": "#00FF00"
+                    },
+                    {
+                        "id": "sensid4",
+                        "mask": "108",
+                        "unit": "%",
+                        "name": "He Level",
+                        "precision": 1,
+                        "linecolor": "#CC3300"
+                    },
+                    {
+                        "id": "sensid5",
+                        "mask": "149",
+                        "unit": "psig",
+                        "name": "HRC Press",
+                        "precision": 2,
+                        "linecolor": "#333300"
+                    },
+                    {
+                        "id": "sensid6",
+                        "mask": "2",
+                        "unit": "W",
+                        "name": "XHV CP Jacket",
+                        "precision": 2,
+                        "linecolor": "#FFFF66"
+                    }
+        ]
+    },
+    "chart1": {
+    	"width": 1,
+        "caption": "sensor values",
+        "type": "chart",
+        "charttype": "line",
+        "size": [10, 6],
+        "coords": [15, 8],
+        "legend": 
+        {
+            "layout": "vertical",
+            "align": "right",
+            "verticalAlign": "top",
+            "x": -10,
+            "y": 100,
+            "borderWidth": 0
+        }
+    }
+}

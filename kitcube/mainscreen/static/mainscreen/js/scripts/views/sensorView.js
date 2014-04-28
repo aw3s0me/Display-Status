@@ -7,6 +7,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		isGrouped: false,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
+			var self = this;
 			if (options.grid) {
 				this.grid = options.grid;
 			}
@@ -34,6 +35,21 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('change:value', this.onchangevalue, this);
 
 			this.model.updateModel();
+
+			this.container.find('.chartCircle').click(function(event) {
+				if (event.ctrlKey) {
+					console.log('control pushed');
+					console.log(self.container)
+					self.container.toggleClass("activeSensor");
+				}
+			});
+
+		},
+		events: {
+			'click': 'onClick'
+		},
+		onClick: function(event) {
+			console.log('clicked');
 		},
 		renderSingle: function() {
 			//load html template
@@ -179,10 +195,20 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s3.innerHTML = "<b>x</b>";
 			s3.className = "close";
 
+			var s5 = document.createElement('div');
+			s5.style.position = 'absolute';
+			s5.style.left = 5 * scale + 'px';
+			s5.style.top = 20 * scale + 'px';
+			s5.style.width = 10 * scale + 'px';
+			s5.style.height = 10 * scale + 'px';
+			s5.className = "chartCircle";
+
+
 			this.container.append(s0);
 			this.container.append(s1);
 			this.container.append(s2);
 			this.container.append(s3);
+			this.container.append(s5);
 
 			this.container.css('background-color', this.model.get('bgcolor'));
 

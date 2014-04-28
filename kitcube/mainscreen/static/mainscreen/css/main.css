@@ -155,7 +155,25 @@ body {
 
 }
 
+.chartCircle {
+  width: 10%;
+  height: 10%;
+  -webkit-border-radius: 5em; 
+  -moz-border-radius: 5em;
+  background-color: grey;
+  border: 1px solid black;
+}
 
+.activeSensor {
+  border: 2px solid yellow;
+}
+
+.addChartBtn {
+  width: 10%;
+  height: 10%;
+  z-index: 2;
+  position: absolute;
+}
 
 /*.sensorName {
     width: 100%;
