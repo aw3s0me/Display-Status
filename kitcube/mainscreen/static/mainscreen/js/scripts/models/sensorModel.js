@@ -440,7 +440,19 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			return {
 				"name": this.get('name'),
 				"data": this.get('values'),
-				"type": 'scatter'
+				"type": 'scatter',
+				"id": this.get('id'),
+				"yAxis": this.get('id') + '-axis'
+			}
+		},
+		getChartAxisInfo: function() {
+			return {
+				id: this.get('id') + '-axis',
+				title: {
+					text: this.get('name')
+				},
+				lineWidth: 2,
+				lineColor: this.get('bgcolor') 
 			}
 		},
 		getDbUrl: function() {

@@ -443,7 +443,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						var newChartView = new ChartView({
 							model: newChart,
 							grid: this.grid,
-							elements: sensCollection
+							elements: sensCollection,
+							allSensors: this.elements.sensors
 						});
 						this.elements.charts[_id] = newChart;
 						this.views.charts[_id] = newChartView;

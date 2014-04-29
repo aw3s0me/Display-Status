@@ -1,7 +1,7 @@
 define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/sensorGroupCollection'], function($, _, Backbone, ChartModel, SensorGroupCollection) {
 
 	var _seriesArr = [];
-
+	var _allSensors = undefined;
 
 
 	var ChartView = Backbone.View.extend({
@@ -21,6 +21,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			if (options.elements) {
 				this.elements = options.elements;
 			}
+			if (options.allSensors) {
+				_allSensors = options.allSensors;
+			}
+
+
 			for (var i = 0; i < this.elements.length; i++) {
 				this.elements.models[i].on('addPoint', this.addNewPoint, this);
 			}
@@ -42,14 +47,37 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			}); */
 			this.container.find('.addChartBtn').click(function(event){
 				var elems = $('.canvas').find('.activeSensor');
+				var dataSeries = [];
+				var index = undefined;
+				var series = self.chart.series;
 				console.log(elems);
 				for (var i = 0; i < elems.length; i++) {
 					var jqElement = elems[i];
-					var id = jqElement.attr('id');
-					
+					var circle = $(jqElement).find('.chartCircle');
+					//var id = jqElement.attr('id');
+					var id = jqElement.getAttribute('id');
+					var sensorModel = _allSensors[id];
+					sensorModel.on('addPoint', self.addNewPoint, self);
+					if (!sensorModel) {
+						throw "Cant add sensor";
+					} 
+					var seriesObject = sensorModel.getChartProperties();
+					var axisObject = sensorModel.getChartAxisInfo();
+					self.chart.addAxis(axisObject);
+					self.chart.addSeries(seriesObject, false);
+					for (var seriesName in series) {
+						var seriesObject = series[seriesName];
+						var id = seriesObject.userOptions.id;
+						if (id === sensorModel.get('id')) {
+							index = seriesObject._i;
+							break;
+						}
+					}
 
-					
+
 				}
+				self.chart.redraw();
+
 			});
 
 		},
@@ -165,17 +193,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		addNewPoint: function(model) {
 
 			var chart = this.chart;
+			var series = this.chart.series;
 			//console.log(chart);
 			var index = undefined; //index of series
 			var shift = false;
 			//console.log(model.get('id'));
 			var sensorValue = model.get('value');
-			for (var i = 0; i < _seriesArr.length; i++) {
+			/*for (var i = 0; i < _seriesArr.length; i++) {
 				var elem = _seriesArr[i][0];
 				if (elem == model.get('id')) {
 					index = _seriesArr[i][2];
 				}
-			}
+			} */
 
 			//if (index == 0) {var shift = true;}
 
@@ -184,10 +213,20 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			//}
 			//console.log(model.get('values'));
 
+			for (var seriesName in series) {
+				var seriesObject = series[seriesName];
+				var id = seriesObject.userOptions.id;
+				if (id === model.get('id')) {
+					index = seriesObject._i;
+					break;
+				}
+			}
+
+
 			var x = model.get('lastTime');
 			var y = parseFloat(sensorValue);
 
-			if (!y || !x) {
+			if (y === undefined || x === undefined) {
 				return;
 			}
 
