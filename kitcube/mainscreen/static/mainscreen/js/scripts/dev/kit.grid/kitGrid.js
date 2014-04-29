@@ -121,7 +121,7 @@ var kitGrid = (function($) {
 			.resizable({
 				grid: _grid.data('scaledUnitSize'),
 				//containment: 'parent',
-				handles: 'ne, se',
+				handles: 'se',
 				//helper: 'ui-resizable-helper',
 				start: function(event, ui) {
 					/*var unitSize = _grid.data('scaledUnitSize');
@@ -184,9 +184,9 @@ var kitGrid = (function($) {
 		});  */
 
 		var self = this;
-		divElem.find(".close").click(function(event) {
+		/*divElem.find(".close").click(function(event) {
 			self.removeUnit(divElem);
-		});
+		}); */
 		return divElem;
 	}
 
@@ -228,9 +228,9 @@ var kitGrid = (function($) {
 		});
 
 		var self = this;
-		divElem.find(".close").click(function(event) {
+		/*divElem.find(".close").click(function(event) {
 			self.removeUnit(divElem);
-		});;
+		});; */
 		return divElem;
 	}
 

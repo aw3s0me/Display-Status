@@ -26,8 +26,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				this.isGrouped = true;
 				this.renderGrouped();
 			}
-			else {
+			else if (options.single === true){
 				this.renderSingle();
+			}
+			else if (options.empty === true) {
+				this.renderEmptyGrouped();
+				return;
 			}
 			
 			this.model.on('resize', this.onresize, this);
@@ -72,6 +76,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 					//console.log(self.container)
 					//self.container.toggleClass("activeSensor");
 				}
+			});
+
+			this.container.find('.close').click(function(event){
+				self.container.remove();
 			});
 
 		},
@@ -141,6 +149,90 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model);
 			
+		},
+		renderEmptyGrouped: function() {
+			var newSensor = this.model;
+			var self = this;
+			//console.log(this.model);
+			var scale = this.grid.getScale();
+			var dx = newSensor.get("size")[0];
+			var dy = newSensor.get("size")[1];
+			var px = newSensor.get("coords")[0];
+			var py = newSensor.get("coords")[1];
+			this.container = $('<div></div>');
+			this.container.attr('class', 'empty');
+
+			this.container = $('<div></div>');
+			this.container.attr('id', newSensor.get('id'));
+			var s0 = document.createElement('div');
+			s0.style.position = 'absolute';
+			s0.style.fontSize = 14 * scale + 'px';
+			s0.style.left = 5 * scale + 'px';
+			//s0.innerHTML = newSensor.get('name');
+			s0.innerHTML = "";
+			s0.className = "sensorName";
+			s0.style.fontWeight = 'bold';
+
+			var s1 = document.createElement('div');
+			s1.style.position = 'absolute';
+			var maxFont = 30 * scale;
+			s1.style.bottom = 2 * scale + 'px';
+			var tempDiv = $('<div></div>');
+			tempDiv.attr('id', 'b'+ this.model.get('id'));
+			//tempDiv.text((newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1));
+			tempDiv.text("");
+			$(s1).append(tempDiv);
+			s1.className = "sensorVal";
+			//s1.className += " slabtext";
+			s1.className += " slab";
+			s1.className += " bigtext";
+			s1.style.paddingRight = 6 * scale + 'px';
+			//$(s1).fitText(1.2, { minFontSize: minFont, maxFontSize: maxFont });
+			//$(".slab").slabText();
+			tempDiv.css('width', $(s1).width());
+			tempDiv.css('height', $(s1).height());
+			//$(s1).bigtext();
+			$(s1).bigtext({
+				maxfontsize: maxFont
+			});
+
+			var s2 = document.createElement('div');
+			s2.style.position = 'absolute';
+			s2.style.fontSize = 12 * scale + 'px';
+			s2.style.right = 5 * scale + 'px';
+			s2.style.top = 20 * scale + 'px';
+			//s2.innerHTML = newSensor.get('unit');
+			s2.className = "sensorUnit";
+
+			var s3 = document.createElement('div');
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 12 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 4 * scale + 'px';
+			s3.innerHTML = "<b>x</b>";
+			s3.className = "close";
+
+			/*var s5 = document.createElement('div');
+			s5.style.position = 'absolute';
+			s5.style.left = 5 * scale + 'px';
+			s5.style.top = 30 * scale + 'px';
+			s5.style.width = 10 * scale + 'px';
+			s5.style.height = 10 * scale + 'px';
+			s5.className = "chartCircle"; */
+
+
+			this.container.append(s0);
+			this.container.append(s1);
+			this.container.append(s2);
+			this.container.append(s3);
+
+
+			this.container.css('background-color', this.model.get('bgcolor'));
+
+			this.container.find('.close').click(function(event){
+				self.container.remove();
+			});
+
 		},
 		renderGrouped: function() {
 			var newSensor = this.model;
@@ -241,6 +333,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.append(s5);
 
 			this.container.css('background-color', this.model.get('bgcolor'));
+
+
 
 		},
 		getHtml: function() {

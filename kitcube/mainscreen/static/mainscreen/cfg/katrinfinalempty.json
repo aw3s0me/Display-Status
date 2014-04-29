@@ -8,6 +8,7 @@
         "dbgroup": "0",
         "dbname": "katrin_rep",
         "server": "fpd",
+        "empties": 2,
         "sensors": [{
                         "id": "sensid1",
                         "mask": "102",
@@ -247,6 +248,7 @@
         "dbgroup": "0",
         "dbname": "katrin_rep",
         "server": "fpd",
+        "empties": 1,
         "sensors": [{
                         "id": "sensid30",
                         "mask": "59",
@@ -301,6 +303,7 @@
         "dbgroup": "0",
         "dbname": "katrin_rep",
         "server": "fpd",
+        "empties": 2,
         "sensors": [{
                         "id": "sensid37",
                         "mask": "112",
@@ -402,6 +405,7 @@
         "dbgroup": "0",
         "dbname": "katrin_rep",
         "server": "fpd",
+        "empties": 2,
         "sensors": [{
                         "id": "sensid48",
                         "mask": "186",

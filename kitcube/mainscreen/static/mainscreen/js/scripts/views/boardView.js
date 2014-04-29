@@ -36,7 +36,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			try {
-				this.viewSizeDetector = new sizeDetector(50, 32, 16, '#banner', '#footer');
+				this.viewSizeDetector = new sizeDetector(50, 32, 18, '#banner', '#footer');
 				this.viewSizeDetector.detectAllSizes();
 			}
 			catch (err) {
@@ -229,6 +229,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						var trendsArr = [];
 						var groupArr = [];
 						var sensorModelsArr = [];
+						var emptyCount = attr['empties'];
 
 						var dbname = attr['dbname'];
 						var server = attr['server'];
@@ -236,6 +237,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 
 						for (var i = 0 ; i < sensorArr.length; i++) {
 							var sensorObj = sensorArr[i];
+
+							if (sensorObj['type'] === 'empty') {
+								var newSensor = new Sensor({});
+
+								continue;
+							}
 
 							if (attr['diffsensors']) {
 								dbname = sensorObj['dbname'];
@@ -301,6 +308,21 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							}
 						}
 
+						var empties = undefined;
+
+						if (emptyCount > 0) {
+							empties = [];
+							while(emptyCount--) {
+								var newSensorView = new SensorView({
+									model: new Sensor(),
+									grid: this.grid,
+									empty: true
+								});
+								empties.push(newSensorView);
+							}
+						}
+
+
 						for (var trendName in trendsArr) {
 							var trendObj = trendsArr[trendName];
 							var sensorModelId = trendObj["sensor"];
@@ -347,7 +369,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						var newSensorGroupView = new SensorGroupView({
 							model: newSensorGroupModel,
 							grid: this.grid,
-							group: groupArr
+							group: groupArr,
+							empties: empties
 						});
 
 						self.views.sensorgroups[_id] = newSensorGroupView;

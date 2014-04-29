@@ -4,7 +4,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 		grid: undefined,
 		model: undefined,
 		group: undefined,
+		empties: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options}) 
+			var self = this;
+
 			if (options.grid) {
 				this.grid = options.grid;
 			}
@@ -16,10 +19,19 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			if (options.group ) {
 				this.group = options.group;
 			}
+
+			if (options.empties) {
+				this.empties = options.empties;
+			}
  
 			this.render();
 			this.model.on('resize', this.onresize, this);
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
+
+			this.container.find('.close').click(function(event){
+				self.container.parent().remove();
+			});
+
 		},
 		render: function() {
 			var trendChartInitArr = [];
@@ -37,7 +49,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 
 			var s0 = document.createElement('div');
     		s0.style.position = 'absolute';
-    		s0.style.fontSize = 1.4*scale+'em';
+    		s0.style.fontSize = 30*scale+'px';
     		s0.style.left = 5*scale + 'px';
     		s0.style.fontWeight = 'bold';
     		s0.innerHTML = newSensorGroup.get("name");
@@ -79,7 +91,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 				} */
 			);
 
-			
+
 
     		if (this.group !== undefined) {
     			for (var i = 0 ; i < this.group.length; i++) {
@@ -90,6 +102,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
     					trendChartInitArr.push(newSensorView);
     				}
     			}
+    			if (this.empties) {
+    				for (var i = 0; i < this.empties.length; i++) {
+	    				var newSensorView = this.empties[i];
+	    				var cont = this.setContainer(newSensorView);
+	    				newSortableContainer.append(cont);
+    				}
+    			}
+    			
     		}
     		else {
     			throw "groupArray wasnt initialized";
@@ -140,7 +160,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
         		view.trigger('chartInit');
         	}
 
-        	//for (var i = 0; i < )
+        	var s3 = document.createElement('div');
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 20 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 4 * scale + 'px';
+			s3.innerHTML = "<b>x</b>";
+			s3.className = "close";
+
+			this.container.append(s3);
+
 
 		},
 		rerender: function() {

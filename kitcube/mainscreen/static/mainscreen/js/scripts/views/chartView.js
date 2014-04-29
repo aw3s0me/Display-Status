@@ -99,7 +99,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				}
 				
 			});
-
+			//this.container.parent().find().remove();
 		},
 		render: function() {
 			//load html template
@@ -141,7 +141,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					renderTo: model.get('id'),
 				},
 				title: {
-					text: model.get('caption'),
+					//text: model.get('caption'),
 				},
 				xAxis: {
 					type: 'datetime',
@@ -239,10 +239,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			s6.css('top', 5 * scale + 'px');
 			s6.css('right', 5 * scale + 'px');
 			s6.css('font-size', 10 * scale + 'px');
+			s6.css('z-index', '2 !important');
 			s6.button();
 			s6.addClass('legendChartBtn');
 
-			this.container.append(s6);
+			this.container.find('.highcharts-container').append(s6);
 
 
 			/*var legend = this.chart.legend; 
