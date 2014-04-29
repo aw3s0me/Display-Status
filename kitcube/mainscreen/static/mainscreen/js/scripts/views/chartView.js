@@ -2,6 +2,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 	var _seriesArr = [];
 	var _allSensors = undefined;
+	var _isLegendShown = false;
 
 
 	var ChartView = Backbone.View.extend({
@@ -25,6 +26,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				_allSensors = options.allSensors;
 			}
 
+				(function(b,a){if(!b){return}var c=b.Chart.prototype,d=b.Legend.prototype;b.extend(c,{legendSetVisibility:function(h){var i=this,k=i.legend,e,g,j,m=i.options.legend,f,l;if(m.enabled==h){return}m.enabled=h;if(!h){d.destroy.call(k);e=k.allItems;if(e){for(g=0,j=e.length;g<j;++g){e[g].legendItem=a}}k.group={}}c.render.call(i);if(!m.floating){f=i.scroller;if(f&&f.render){l=i.xAxis[0].getExtremes();f.render(l.min,l.max)}}},legendHide:function(){this.legendSetVisibility(false)},legendShow:function(){this.legendSetVisibility(true)},legendToggle:function(){this.legendSetVisibility(this.options.legend.enabled^true)}})}(Highcharts));
 
 			for (var i = 0; i < this.elements.length; i++) {
 				this.elements.models[i].on('addPoint', this.addNewPoint, this);
@@ -86,6 +88,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			});
 
+			this.container.find('.legendChartBtn').click(function(event){
+				if(!_isLegendShown) {
+					self.chart.legendShow();
+					_isLegendShown = true;
+				}
+				else {
+					self.chart.legendHide();
+					_isLegendShown = false;
+				}
+				
+			});
+
 		},
 		render: function() {
 			//load html template
@@ -127,7 +141,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					renderTo: model.get('id'),
 				},
 				title: {
-					text: ""//model.get('caption'),
+					text: model.get('caption'),
 				},
 				xAxis: {
 					type: 'datetime',
@@ -150,6 +164,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				tooltip: {
 					shared: true,
 					crosshairs: true
+				},
+				legend: {
+					align: 'right',
+					verticalAlign: 'top',
+					y: 35 * scale,
+					floating: true,
+					borderWidth: 0
 				},
 				plotOptions: {
 					series: {
@@ -187,8 +208,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					} */
 				}
 			});
+			(function(b,a){if(!b){return}var c=b.Chart.prototype,d=b.Legend.prototype;b.extend(c,{legendSetVisibility:function(h){var i=this,k=i.legend,e,g,j,m=i.options.legend,f,l;if(m.enabled==h){return}m.enabled=h;if(!h){d.destroy.call(k);e=k.allItems;if(e){for(g=0,j=e.length;g<j;++g){e[g].legendItem=a}}k.group={}}c.render.call(i);if(!m.floating){f=i.scroller;if(f&&f.render){l=i.xAxis[0].getExtremes();f.render(l.min,l.max)}}},legendHide:function(){this.legendSetVisibility(false)},legendShow:function(){this.legendSetVisibility(true)},legendToggle:function(){this.legendSetVisibility(this.options.legend.enabled^true)}})}(Highcharts));
 
-(function(b,a){if(!b){return}var c=b.Chart.prototype,d=b.Legend.prototype;b.extend(c,{legendSetVisibility:function(h){var i=this,k=i.legend,e,g,j,m=i.options.legend,f,l;if(m.enabled==h){return}m.enabled=h;if(!h){d.destroy.call(k);e=k.allItems;if(e){for(g=0,j=e.length;g<j;++g){e[g].legendItem=a}}k.group={}}c.render.call(i);if(!m.floating){f=i.scroller;if(f&&f.render){l=i.xAxis[0].getExtremes();f.render(l.min,l.max)}}},legendHide:function(){this.legendSetVisibility(false)},legendShow:function(){this.legendSetVisibility(true)},legendToggle:function(){this.legendSetVisibility(this.options.legend.enabled^true)}})}(Highcharts));
 
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -213,6 +234,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			s5.addClass('addChartBtn');
 
 			this.container.append(s5);
+
+			var s6 = $('<button>Legend</button>');
+			s6.css('top', 5 * scale + 'px');
+			s6.css('right', 5 * scale + 'px');
+			s6.css('font-size', 10 * scale + 'px');
+			s6.button();
+			s6.addClass('legendChartBtn');
+
+			this.container.append(s6);
 
 
 			/*var legend = this.chart.legend; 
