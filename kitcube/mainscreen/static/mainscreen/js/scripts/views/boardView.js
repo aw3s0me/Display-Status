@@ -916,8 +916,17 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		            alert('function "' + fncname + '" not defined');
 		    }
 		},
-		loadCfg: function() {
-			this.elements = {};
+		loadCfg: function(filename) {
+			var self = this;
+			var _data = undefined;
+			//this.elements = {};
+
+			for (var modelSectionName in this.elements) {
+				var modelSection = this.elements[modelSectionName];
+				modelSection = {};
+			}
+
+
 			for (var viewSectionName in this.views) {
 				var viewSection = this.views[viewSectionName];
 				for (var elemId in viewSection) {
@@ -925,9 +934,19 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 					view.removeFromDom();
 
 				}
-
-
 			}
+			$.ajax({
+				url: 'static/mainscreen/tempcfg/' + filename.replace('\"', ""),
+				async: false,
+				dataType: 'text',
+				success: function(data){
+					_data = data;
+				}
+			});
+
+			console.log(_data);
+			this.initialize({aceText: _data});
+
 
 			//this.clear();
 		}
