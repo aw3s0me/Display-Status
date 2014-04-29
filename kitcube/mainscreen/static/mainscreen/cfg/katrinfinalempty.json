@@ -514,7 +514,7 @@
         "caption": "sensor values",
         "type": "chart",
         "charttype": "line",
-        "size": [16, 10],
+        "size": [16, 9],
         "coords": [16, 0]
     },
     "chart2": {
@@ -522,7 +522,7 @@
         "caption": "sensor values",
         "type": "chart",
         "charttype": "line",
-        "size": [16, 10],
-        "coords": [16, 8]
+        "size": [16, 9],
+        "coords": [16, 9]
     }
 } 

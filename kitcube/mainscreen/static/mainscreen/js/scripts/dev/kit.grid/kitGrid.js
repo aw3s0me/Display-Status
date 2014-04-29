@@ -85,6 +85,12 @@ var kitGrid = (function($) {
 				divElem.css('border', 0);
 				divElem.css('width', dx * _grid.data('scaledUnitSize') + 'px');
 			}
+			if (options.border > 0) {
+				divElem.css('border', 0);
+				//divElem.css('border', options.border);
+				divElem.css('width', dx * _grid.data('scaledUnitSize') + options.border - 1 + 'px');
+			}
+
 			if (options.absolute) {
 				divElem.css('left', posx * scale + 'px');
 				divElem.css('top', posy * scale + 'px');
@@ -236,13 +242,13 @@ var kitGrid = (function($) {
 
 
 
-	kitGrid.prototype.removeUnit = function(elem) {
+	/*kitGrid.prototype.removeUnit = function(elem) {
 		if (elem) {
 			elem.remove();
 		}
 
 
-	}
+	} */
 
 
 

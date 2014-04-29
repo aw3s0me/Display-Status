@@ -43,7 +43,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 				alert(err.message);
 			}
 			
-
 			var data = {};
 			var compiledTemplate = _.template(boardTemplate, data);
 			this.container.append(compiledTemplate);
@@ -77,6 +76,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			var myParser = new cfgParser('1');
 			var prsObj = myParser.parseJson(textToParse);
 			this.insertFromCfg(prsObj);
+		},
+		submitTest: function() {
+
 		},
 		toggleGrid: function() {
 			var holder = $("#tab1");
@@ -314,7 +316,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							empties = [];
 							while(emptyCount--) {
 								var newSensorView = new SensorView({
-									model: new Sensor(),
+									model: new Sensor({}),
 									grid: this.grid,
 									empty: true
 								});
@@ -859,6 +861,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		},
 		change: function(NumX, NumY) {},
 		clear: function() {
+			this.container.empty();
 			/*this.container.empty();
 			this.maxSizeX = 0;
 			this.maxSizeY = 0;
@@ -878,6 +881,55 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			}*/
 
 
+		},
+		submitTest: function() {
+			fncstring = $('#testfunction').val();
+
+		    var fncname = /^[a-zA-Z0-9]+/.exec(fncstring);
+		    var args =  /\(([^)]+)/.exec(fncstring);
+
+		    fncname = fncname[0];
+		    if (args !== null)
+		        args = args[1].split(/\s*,\s*/);
+
+		    switch(fncname) {
+		        case "drawText":
+		            args[4] = /[^'"]+/.exec(args[4]);
+		            //var e = drawText(args[0], args[1], args[2], args[3], args[4], args[5]);
+		            break;
+		        case "drawSensor":
+		            //var e = drawSensor(args[0], args[1], args[2], args[3]);
+		            break;
+		        case "addSensor":
+		            args[2] = /[^'"]+/.exec(args[2]);
+		            //var e = addSensor(args[0], args[1], args[2], args[3]);
+		            break;
+		        case "updatePage":
+		            break;
+		        case "addSensorGroup":
+		            //addSensorGroup.call($('.canvas'), args[0], args[1], args[2], args[3], args[4]);
+		            break;
+		        case "loadCfg":
+		        	this.loadCfg(args[0]);
+		        	break;
+		        default:
+		            alert('function "' + fncname + '" not defined');
+		    }
+		},
+		loadCfg: function() {
+			this.elements = {};
+			for (var viewSectionName in this.views) {
+				var viewSection = this.views[viewSectionName];
+				for (var elemId in viewSection) {
+					var view = viewSection[elemId];
+					view.removeFromDom();
+
+				}
+
+
+			}
+
+			//this.clear();
 		}
 	});
 

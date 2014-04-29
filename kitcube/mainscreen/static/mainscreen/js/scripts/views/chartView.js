@@ -413,7 +413,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 		},
 		removeFromDom: function() {
-			this.grid.removeUnit(this.container.parent());
+			this.container.parent().remove();
+			//this.grid.removeUnit(this.container.parent());
 			//console.log('removed chart');
 		},
 		redraw: function() {

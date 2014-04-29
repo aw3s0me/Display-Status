@@ -447,7 +447,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			}
 		},
 		getChartAxisInfo: function() {
-			return {
+			var self = this;
+			var axisObj = {
 				id: this.get('id') + '-axis',
 				title: {
 					text: this.get('name')
@@ -459,7 +460,34 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					x: 3,
 					y: 16
 				} */
+			};
+
+			if (this.get('exp') !== true) {
+				if (this.get('precision') === undefined) {
+					axisObj.labels =  {
+						formatter: function() {
+							return Highcharts.numberFormat(this.value, 2);
+						}
+					}
+				}
+				else {
+					axisObj.labels = {
+						formatter: function() {
+							return Highcharts.numberFormat(this.value, self.get('precision'));
+						}
+					}
+				}
 			}
+			else {
+				axisObj.labels = {
+					formatter: function() {
+						return this.value.toExponential(self.get('precision'))//Highcharts.numberFormat(this.value, self.get('precision'));
+					}
+				}
+			}
+
+			return axisObj;
+			
 		},
 		getDbUrl: function() {
 			return 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + this.get('server') + '&db_name=' + this.get('dbname') + '&db_group=' + this.get('dbgroup') + '&db_mask=' + this.get('mask') + '&window=-1';

@@ -79,7 +79,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			});
 
 			this.container.find('.close').click(function(event){
+				//self.removeFromDom();
+				//event.preventDefault();
 				self.container.remove();
+
 			});
 
 		},
@@ -385,8 +388,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//console.log('updated');
 		},
 		removeFromDom: function() {
-			//this.container.remove();
-			this.grid.removeUnit(this.container.parent());
+			this.container.remove();
 		},
 		onresize: function(model) {
 

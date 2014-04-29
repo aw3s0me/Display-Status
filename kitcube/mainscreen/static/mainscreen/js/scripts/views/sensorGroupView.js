@@ -29,7 +29,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 
 			this.container.find('.close').click(function(event){
-				self.container.parent().remove();
+				self.removeFromDom();
 			});
 
 		},
@@ -170,13 +170,15 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 
 			this.container.append(s3);
 
+			this.container.parent().css('border', '1px solid black');
+
 
 		},
 		rerender: function() {
 
 		},
 		removeFromDom: function() {
-
+			this.container.parent().remove();
 		},
 		setContainer: function(sensorView) {
 			var divElem = sensorView.getContainer();
