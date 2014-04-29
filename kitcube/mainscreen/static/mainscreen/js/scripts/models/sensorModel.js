@@ -433,16 +433,17 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
          		}
 			})
 		},
-		getAxisProperties: function() {
-
-		},
 		getChartProperties: function() {
 			return {
 				"name": this.get('name'),
 				"data": this.get('values'),
-				"type": 'scatter',
+				//"type": 'scatter',
 				"id": this.get('id'),
-				"yAxis": this.get('id') + '-axis'
+				"yAxis": this.get('id') + '-axis' /*,
+				marker: {
+					radius: 4
+				},
+				lineWidth: 3 */
 			}
 		},
 		getChartAxisInfo: function() {
@@ -452,7 +453,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					text: this.get('name')
 				},
 				lineWidth: 2,
-				lineColor: this.get('bgcolor') 
+				lineColor: this.get('bgcolor')/*,
+				labels: {
+					align: 'left',
+					x: 3,
+					y: 16
+				} */
 			}
 		},
 		getDbUrl: function() {

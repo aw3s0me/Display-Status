@@ -123,10 +123,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				chart: {
 					reflow: false,
 					type: 'line',
+					//type: 'line',
 					renderTo: model.get('id'),
 				},
 				title: {
-					text: model.get('caption'),
+					text: ""//model.get('caption'),
 				},
 				xAxis: {
 					type: 'datetime',
@@ -135,7 +136,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					},
 					//tickInterval: 600 * 1000
 				},
-				yAxis: {
+				/*yAxis: {
 					title: {
 						text: 'Values'
 					},
@@ -144,15 +145,46 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						width: 1,
 						color: '#808080'
 					}]
-				},
+				},*/
 				series: dataToChart,
+				tooltip: {
+					shared: true,
+					crosshairs: true
+				},
 				plotOptions: {
 					series: {
-						lineWidth: 1,
+						cursor: 'pointer',
+						lineWidth: 2,
 	                    turboThreshold: 0,
 						threshold: null,
+						marker: {
+							enabled: false
+						}/*,
+						cursor: 'pointer',
+	                    point: {
+	                        events: {
+	                            click: function() {
+	                                hs.htmlExpand(null, {
+	                                    pageOrigin: {
+	                                        x: this.pageX,
+	                                        y: this.pageY
+	                                    },
+	                                    headingText: this.series.name,
+	                                    maincontentText: Highcharts.dateFormat('%A, %b %e, %Y', this.x) +':<br/> '+
+	                                        this.y,
+	                                    width: 200
+	                                });
+	                            }
+	                        }
+	                    }, */
 						//showInLegend : false
-					}
+					}/*,
+					line: {
+						dashStyle: "Solid",
+						marker: {
+							enabled: false
+						}
+					} */
 				}
 			});
 
@@ -176,6 +208,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var s5 = $('<button>Add</button>');
 			s5.css('top', 5 * scale + 'px');
 			s5.css('left', 5 * scale + 'px');
+			s5.css('font-size', 10 * scale + 'px');
 			s5.button();
 			s5.addClass('addChartBtn');
 
@@ -241,11 +274,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				y: y
 			};
 			//console.log(chart.series[index]);
-			if (chart.series[index]) {
+			/*if (chart.series[index]) {
 				if (chart.series[index].data.length > 10) {
 					shift = true;
 				}
-			}
+			} */
 			
 
 			if (chart.series[index])

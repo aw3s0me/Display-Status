@@ -457,7 +457,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			//self.updateAllSensors();
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
-			}, 10000); //the only way to pass param */
+			}, 2000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
 			//var PriorityQueue = require('queue');

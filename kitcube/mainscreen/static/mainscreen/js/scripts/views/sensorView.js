@@ -36,6 +36,19 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.model.updateModel();
 
+			this.container.on('sortSensor', function(event) {
+				if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
+					self.container.addClass('activeSensor');
+					//return;
+				}
+				if (self.container.hasClass('chartAdded')) {
+					self.container.find('.chartCircle').css('background-color', 'grey');
+					self.container.removeClass('chartAdded');
+					self.model.trigger('deleteSensor', self.model);	
+				}
+				console.log('startMovviing');
+			});
+
 			this.container.find('.chartCircle').click(function(event) {
 				if (event.ctrlKey) {
 					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
@@ -209,7 +222,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var s5 = document.createElement('div');
 			s5.style.position = 'absolute';
 			s5.style.left = 5 * scale + 'px';
-			s5.style.top = 20 * scale + 'px';
+			s5.style.top = 30 * scale + 'px';
 			s5.style.width = 10 * scale + 'px';
 			s5.style.height = 10 * scale + 'px';
 			s5.className = "chartCircle";

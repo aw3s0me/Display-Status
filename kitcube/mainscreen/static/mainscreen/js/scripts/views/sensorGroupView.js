@@ -56,7 +56,28 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			newSortableContainer.css('top', unitY + 'px');
 			newSortableContainer.css('height', unitY * (dy - 1) + 'px');
 			newSortableContainer.css('width', unitX * dx + 'px' )
-			newSortableContainer.addClass('sortable_container').sortable();
+			newSortableContainer.addClass('sortable_container').sortable({
+				/*activate: function(event, ui) {
+					if (event.ctrlKey) {
+						event.preventDefault();
+						ui.item.trigger('sortSensor');
+					}
+					console.log(ui);
+					//if (ctrl)
+				} */
+				/*sort: function(event, ui) {
+					if (event.ctrlKey) {
+						event.preventDefault();
+						ui.item.trigger('sortSensor');
+					}
+				},*/
+				start: function(event, ui) {
+					if (event.ctrlKey) {
+						//event.preventDefault();
+						ui.item.trigger('sortSensor');
+					}
+				}
+			});
 
     		if (this.group !== undefined) {
     			for (var i = 0 ; i < this.group.length; i++) {
@@ -78,6 +99,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
     		.draggable({
            		grid: [unitX, unitY],
             	containment: 'parent',
+            	drag: function(event, ui) {
+            		console.log('dragg');
+            	},
+            	start: function(event, ui) {
+            		console.log('staart');
+            	}
         	})
         	.resizable({
 				grid: unitX,

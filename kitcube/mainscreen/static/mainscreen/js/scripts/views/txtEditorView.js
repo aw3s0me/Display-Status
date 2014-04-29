@@ -41,7 +41,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/txtEditor.html'], fu
 					//url: 'static/mainscreen/cfg/katrincfgtrends.json',
 					//url: 'static/mainscreen/cfg/katrincfgtiles.json',
 					//url: 'static/mainscreen/cfg/demo.json',
-					url: 'static/mainscreen/cfg/katrincfgcharttiles.json',
+					//url: 'static/mainscreen/cfg/katrincfgcharttiles.json',
+					url: 'static/mainscreen/cfg/katrinfinal.json',
 					async: false,
 					dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 					success: function(data){
