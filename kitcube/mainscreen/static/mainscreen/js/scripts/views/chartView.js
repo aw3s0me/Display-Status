@@ -58,11 +58,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					var id = jqElement.getAttribute('id');
 					var sensorModel = _allSensors[id];
 					sensorModel.on('addPoint', self.addNewPoint, self);
+					sensorModel.on('deleteSensor', self.removeSeries, self);
 					if (!sensorModel) {
 						throw "Cant add sensor";
 					} 
 					var seriesObject = sensorModel.getChartProperties();
 					var axisObject = sensorModel.getChartAxisInfo();
+					var color = undefined;
 					self.chart.addAxis(axisObject);
 					self.chart.addSeries(seriesObject, false);
 					for (var seriesName in series) {
@@ -70,11 +72,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						var id = seriesObject.userOptions.id;
 						if (id === sensorModel.get('id')) {
 							index = seriesObject._i;
+							color = seriesObject.color;
 							break;
 						}
 					}
 
+					circle.css('background-color', color);
 
+					$(jqElement).removeClass('activeSensor');
+					$(jqElement).addClass('chartAdded');
 				}
 				self.chart.redraw();
 
@@ -246,6 +252,31 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				chart.series[index].addPoint(Point, false, shift); //last point is for everyone\
 
 			shift = false;
+
+		},
+		removeSeries: function(model) {
+			var chart = this.chart;
+			var id = model.get('id');
+			var series = chart.series;
+			var index = undefined;
+			for (var seriesName in series) {
+				var seriesObject = series[seriesName];
+				var id = seriesObject.userOptions.id;
+				if (id === model.get('id')) {
+					//seriesObject.isRemoving = true;
+					var axisId = seriesObject.yAxis.userOptions.id;
+					for (var i = 0; i < chart.yAxis.length; i++) {
+						var yaxis = chart.yAxis[i];
+						if (yaxis.userOptions.id === axisId) {
+							yaxis.remove();
+						}
+					}
+					seriesObject.remove();
+					//index = seriesObject._i;
+					break;
+				}
+			}
+			chart.redraw();
 
 		},
 		rerender: function() {

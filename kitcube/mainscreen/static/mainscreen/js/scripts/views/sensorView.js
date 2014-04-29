@@ -38,9 +38,20 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.container.find('.chartCircle').click(function(event) {
 				if (event.ctrlKey) {
-					console.log('control pushed');
-					console.log(self.container)
-					self.container.toggleClass("activeSensor");
+					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
+						self.container.addClass('activeSensor');
+						return;
+					}
+					if (self.container.hasClass('chartAdded')) {
+						self.container.find('.chartCircle').css('background-color', 'grey');
+						self.container.removeClass('chartAdded');
+						self.model.trigger('deleteSensor', self.model);
+						
+					}
+
+					//console.log('control pushed');
+					//console.log(self.container)
+					//self.container.toggleClass("activeSensor");
 				}
 			});
 
