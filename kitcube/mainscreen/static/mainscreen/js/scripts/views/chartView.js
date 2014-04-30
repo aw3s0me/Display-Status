@@ -237,13 +237,30 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			var s6 = $('<button>Legend</button>');
 			s6.css('top', 5 * scale + 'px');
-			s6.css('right', 5 * scale + 'px');
+			s6.css('right', 17 * scale + 'px');
 			s6.css('font-size', 10 * scale + 'px');
 			s6.css('z-index', '2 !important');
 			s6.button();
 			s6.addClass('legendChartBtn');
 
 			this.container.find('.highcharts-container').append(s6);
+
+			var closeDiv = document.createElement('div');
+			closeDiv.style.position = 'absolute';
+			closeDiv.style.fontSize = 12 * scale + 'px';
+			closeDiv.style.right = 5 * scale + 'px';
+			closeDiv.style.top = 4 * scale + 'px';
+			closeDiv.innerHTML = "<b>x</b>";
+			closeDiv.className = "close";
+
+			this.container.find('.highcharts-container').append(closeDiv);
+			var self = this;
+
+			$(closeDiv).click(function(event) {
+				self.removeFromDom();
+			});
+
+
 
 
 			/*var legend = this.chart.legend; 

@@ -54,11 +54,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				}
 			});
 
-			this.container.on('sortSensor', function(event) {
-				
-				console.log('startMovviing');
-			});
-
 			this.container.find('.chartCircle').click(function(event) {
 				if (event.ctrlKey) {
 					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
@@ -81,9 +76,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.find('.close').click(function(event){
 				//self.removeFromDom();
 				//event.preventDefault();
+				//event.stopPropagation();
+				//self.container.wrap("<div></div>");
+				//self.container.parent().remove();
+				event.stopImmediatePropagation();
 				self.container.remove();
-
-			});
+				//event.stopPropagation();
+				return;
+			}); 
 
 		},
 		events: {
@@ -320,6 +320,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s3.style.top = 4 * scale + 'px';
 			s3.innerHTML = "<b>x</b>";
 			s3.className = "close";
+			
+
 
 			var s5 = document.createElement('div');
 			s5.style.position = 'absolute';
@@ -338,7 +340,23 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.container.css('background-color', this.model.get('bgcolor'));
 
+			var self = this;
 
+			/*$(s3).click(function(event) {
+				self.removeFromDom();
+			}); */
+
+			/*this.container.find('.close').click(function(event){
+				//self.removeFromDom();
+				event.preventDefault();
+				event.stopPropagation();
+				//self.container.wrap("<div></div>");
+				//self.container.parent().remove();
+				//self.container.empty();
+				self.remove();
+				event.stopPropagation();
+				return;
+			});*/
 
 		},
 		getHtml: function() {
@@ -437,25 +455,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			sensorDiv.css('background-color', this.model.get('bgcolor'));
 		},
 		onchangevalue: function(model) {
-			if (model.get('name') === "XHV CP Jacket") {
-				var a = 1;
-			}
-
 			var sensorDiv = this.container;
 			var sensortype = model.get('sensortype');
 			var valToInsert = model.get('valUnit');
 			var name = this.model.get('name');
-			if (name === "Ion Gauge") {
-				var a = 1;
-				var val = this.model.get('value');
-
-			}
 			var scale = this.grid.getScale();
 			var maxFont = 30 * scale;
 			var minFont = 25 * scale + 'px';
-
-
-
 			var valDiv = this.container.find('.sensorVal');
 			//var tempDiv = valDiv.children();
 			//var val = valDiv.find()

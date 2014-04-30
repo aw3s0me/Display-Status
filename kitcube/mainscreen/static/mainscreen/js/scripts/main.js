@@ -9,7 +9,7 @@
 } */
 require.config({
   paths: {
-    "jquery": "vendor/jquery/jquery.min", //DO NOT SPECIFY EXTENSION 
+    "jquery": "vendor/jquery/dist/jquery.min", //DO NOT SPECIFY EXTENSION 
     "jqueryui": "vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min",
     "jquerysort": "vendor/Sortable",
     //MVC part
