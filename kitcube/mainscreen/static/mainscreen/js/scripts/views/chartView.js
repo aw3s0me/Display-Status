@@ -69,7 +69,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					var color = undefined;
 					self.chart.addAxis(axisObject);
 					self.chart.addSeries(seriesObject, false);
-					
+
 					for (var seriesName in series) {
 						var seriesObject = series[seriesName];
 						var id = seriesObject.userOptions.id;
@@ -80,15 +80,20 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 							$(jqElement).removeClass('activeSensor');
 							$(jqElement).addClass('chartAdded');
-							/*var axisId = seriesObject.yAxis.userOptions.id;
+							var axisId = seriesObject.yAxis.userOptions.id;
 							for (var j = 0; j < self.chart.yAxis.length; j++) {
 								var yaxis = self.chart.yAxis[j];
 								if (yaxis.userOptions.id === axisId) {
-									yaxis.options.lineColor = color;
+									//yaxis.options.lineColor = color;
+									yaxis.update({
+										lineColor: color
+									});
+
+
 									break;
 									//break;
 								}
-							} */
+							} 
 							break;
 						}
 					}

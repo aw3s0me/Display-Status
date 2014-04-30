@@ -121,11 +121,19 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 
 			if (this.get('caption') === "") {
-				chart.marginTop = 25*this.get('scale');
+				chart.marginTop = 30*this.get('scale');
 			}
 
 			chart.borderRadius = this.get('radius');
 			chart.borderWidth = this.get('border');
+
+			/*chart.events = {
+				load: function(event) {
+					this.yAxis[0].update({
+						lineColor: this.series[0].color
+					});
+				}
+			}*/
 
 			return chart;
 

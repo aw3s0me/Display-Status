@@ -856,8 +856,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 				//chartView.setExtremes();
 			}
 
-
-
 			$(window).trigger('resize'); //because big text works only after resize event
 		},
 		updateSensor: function(sensorModel) {
@@ -948,6 +946,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 					view.removeFromDom();
 
 				}
+
+				viewSection = {};
 			}
 			$.ajax({
 				url: 'static/mainscreen/tempcfg/' + filename.replace('\"', ""),

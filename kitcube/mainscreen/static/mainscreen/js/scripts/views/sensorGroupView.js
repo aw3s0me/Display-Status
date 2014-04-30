@@ -178,6 +178,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 
 		},
 		removeFromDom: function() {
+			//this.remove()
 			this.container.parent().remove();
 		},
 		setContainer: function(sensorView) {
