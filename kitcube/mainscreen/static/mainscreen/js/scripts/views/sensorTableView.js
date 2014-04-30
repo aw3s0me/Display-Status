@@ -339,7 +339,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			//this.reloadView();
 		},
 		removeFromDom: function() {
+			//if (this.rendertype === "grid")
 
+			this.container.parent().remove();
 		},
 		onresizeTable: function(model) {
 			var dx = model.get('size')[0];

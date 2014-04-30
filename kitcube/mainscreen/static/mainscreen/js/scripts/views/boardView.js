@@ -44,8 +44,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			}
 			
 			var data = {};
-			var compiledTemplate = _.template(boardTemplate, data);
-			this.container.append(compiledTemplate);
+
+			if (!options.reinit) {
+				var compiledTemplate = _.template(boardTemplate, data);
+				this.container.append(compiledTemplate);
+			}
+
 			$('.canvas').attr("id", "tab1");
 
 			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizePx.height) / 2;
@@ -218,11 +222,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							render: attr['render']
 						});
 
+						this.elements.tables[_id] = newSensorTableModel;
+
 						var newSensorTableView = new SensorTableView({
 							grid: this.grid,
 							model: newSensorTableModel
 
 						});
+
+						this.views.tables[_id] = newSensorTableView;
 
 						$(window).trigger('resize'); //because big text works only after resize event
 						break;
@@ -944,8 +952,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 				}
 			});
 
+
 			console.log(_data);
-			this.initialize({aceText: _data});
+			this.initialize({aceText: _data, reinit: true});
 
 
 			//this.clear();
