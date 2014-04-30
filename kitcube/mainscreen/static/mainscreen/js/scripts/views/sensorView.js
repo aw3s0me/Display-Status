@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/sensor.html', 'slabtext'], function($, _, Backbone, SensorModel, SensorTemplate, slabText) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/sensor.html'], function($, _, Backbone, SensorModel, SensorTemplate) {
 	var SensorView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,

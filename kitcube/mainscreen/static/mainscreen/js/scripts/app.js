@@ -3,13 +3,13 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'flatui-app',
+  //'flatui-app',
   'ace',
   'kitgrid',
   'yaml',
-  'jquerysort',
-  'fittext',
-  'slabtext',
+  //'jquerysort',
+  //'fittext',
+  //'slabtext',
   'bigtext',
   'highstock',
   //'regression',
@@ -25,7 +25,7 @@ define([
   //'views/menuRight',
   'views/txtEditorView',
   'router', // Request router.js
-], function($, _, Backbone, FlatUi, ace, kitgrid, YAML, Sortable, fitText, slabText, bigtext,Highstock, /* regression,*/ momentw, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, /*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ momentw, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {

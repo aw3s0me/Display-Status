@@ -11,13 +11,13 @@ require.config({
   paths: {
     "jquery": "vendor/jquery/dist/jquery.min", //DO NOT SPECIFY EXTENSION 
     "jqueryui": "vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min",
-    "jquerysort": "vendor/Sortable",
+    //"jquerysort": "vendor/Sortable",
     //MVC part
     "underscore": "vendor/underscore-amd/underscore",
     "backbone": "vendor/backbone-amd/backbone",
     //Flat-ui part
     "bootstrap": "vendor/bootstrap/dist/js/bootstrap",
-    "flatui-app": "vendor/flat-ui-official/js/application",
+    //"flatui-app": "vendor/flat-ui-official/js/application",
     //Text Editor part
     "ace": "vendor/ace/build/src-min/ace",
     //There goes my helpers
@@ -36,8 +36,8 @@ require.config({
     //colorpicker
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
     //fittext plugin:
-    "fittext": "vendor/FitText.js/jquery.fittext",
-    "slabtext": "vendor/slabText/js/jquery.slabtext.min",
+    //"fittext": "vendor/FitText.js/jquery.fittext",
+    //"slabtext": "vendor/slabText/js/jquery.slabtext.min",
     //"bigtext": "vendor/bigtext"
     "bigtext": "vendor/bigtext/src/bigtext",
     "momentjs": "vendor/momentjs/min/moment.min"
@@ -58,12 +58,12 @@ require.config({
         "vendor/jquery-ui/ui/jquery-ui"
       ]
     },
-    jquerysort : {
+    /*jquerysort : {
       deps: [
         'jquery',
         'jqueryui'
       ]
-    },
+    },*/
     jqgrid: {
       deps: [
         'jquery',
@@ -95,7 +95,7 @@ require.config({
         "jquery"
       ]
     },
-    "flatui-app": {
+    /*"flatui-app": {
       deps: [
         "jquery",
         "jqueryui",
@@ -107,7 +107,7 @@ require.config({
         "vendor/flat-ui-official/js/jquery.placeholder",
         "vendor/flat-ui-official/js/jquery.tagsinput"
       ]
-    },
+    },*/
     kitgrid: {
       deps: [
         "jquery"//,
@@ -131,7 +131,7 @@ require.config({
         //"vendor/Highcharts-3.0.10/js/highcharts"
       ]
     },
-    fittext: {
+    /*fittext: {
       deps: [
         "jquery"
       ]
@@ -140,7 +140,7 @@ require.config({
       deps: [
         "jquery"
       ]
-    },
+    },*/
     bigtext: {
       deps: [
         "jquery"

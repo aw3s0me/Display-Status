@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel','models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'views/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/sensorTableView', 'views/trendSensorView','models/trendSensorModel'], function($, _, Backbone, ui, Sortable, jqGrid, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel','models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'views/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/sensorTableView', 'views/trendSensorView','models/trendSensorModel'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -18,15 +18,18 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 		grid: null,
 		viewSizeDetector: null,
 		tabs: [],
+		sensors: {
+
+		},
 		views: {
-			sensors: {},
+			singlesensors: {},
 			charts: {},
 			alarms: {},
 			sensorgroups: {},
 			tables: {}
 		},
 		elements: {
-			sensors: {},
+			singlesensors: {},
 			charts: {},
 			alarms: {},
 			sensorgroups: {},
@@ -151,8 +154,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							model: newSensor,
 							grid: this.grid
 						});
-						self.elements.sensors[_id] = newSensor;
-						self.views.sensors[_id] = newSensorView;
+						self.elements.singlesensors[_id] = newSensor;
+						self.views.singlesensors[_id] = newSensorView;
 						break;
 					case "sensortable":
 						var sensorgroups = attr['sensors'];
@@ -196,9 +199,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								});
 								if (sensorInfoObj["id"] !== undefined) {
 									sensorModelArr.push(newSensor);
-									self.elements.sensors[sensorInfoObj["id"]] = newSensor;
+									self.sensors[sensorInfoObj["id"]] = newSensor;
 								}
-								
 							}
 
 							newSensorCollection = new SensorCollection(sensorModelArr, {
@@ -290,7 +292,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								factor: sensorObj["factor"]
 							});
 
-							self.elements.sensors[sensorObj["id"]] = newSensor;
+							if (self.sensors[sensorObj["id"]]) {
+								throw "This sensor already exists" + sensorObj["id"];
+							}
+
+							self.sensors[sensorObj["id"]] = newSensor;
 							sensorModelsArr.push(newSensor);
 						}
 
@@ -299,7 +305,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							var linkModel = undefined;
 
 							if (sensor.get('link') !== undefined) {
-								linkModel = self.elements.sensors[sensor.get('link')];
+								linkModel = self.sensors[sensor.get('link')];
 								if (!linkModel) {
 									throw "Wrong link: " + sensor.get('link') + " at: " + sensor.get('id');
 								}
@@ -313,7 +319,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							});
 
 							if (!sensor.get('norender')) {
-								self.views.sensors[sensor.get('id')] = newSensorView;
+								//self.views.sensors[sensor.get('id')] = newSensorView;
 								groupArr.push(newSensorView);
 							}
 						}
@@ -336,7 +342,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 						for (var trendName in trendsArr) {
 							var trendObj = trendsArr[trendName];
 							var sensorModelId = trendObj["sensor"];
-							var sensorModel = self.elements.sensors[sensorModelId];
+							var sensorModel = self.sensors[sensorModelId];
 
 							if (!sensorModel) {
 								throw "Sensor of trend: " + trendObj["id"] + " is not defined";
@@ -469,7 +475,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							var sensArr = [];
 							for (var j = 0; j < linkArr.length; j++) {
 								var linkId = linkArr[j];
-								var sensorModel = this.elements.sensors[linkId];
+								var sensorModel = this.sensors[linkId];
 								if (sensorModel)
 									sensArr.push(sensorModel);
 							}
@@ -480,7 +486,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 							model: newChart,
 							grid: this.grid,
 							elements: sensCollection,
-							allSensors: this.elements.sensors
+							allSensors: this.sensors
 						});
 						this.elements.charts[_id] = newChart;
 						this.views.charts[_id] = newChartView;
@@ -511,13 +517,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			var self = this;
 
 			var newElements = {
-				sensors: {},
+				singlesensors: {},
 				alarms: {},
 				charts: {}
 			}
 
 			var newViews = {
-				sensors: {},
+				singlesensors: {},
 				alarms: {},
 				charts: {}
 			}
@@ -526,8 +532,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 				var attr = prsObj[_id];
 				switch (attr["type"]) {
 					case "sensor":
-						var sensorModel = this.elements.sensors[_id];
-						var sensorView = this.views.sensors[_id];
+						var sensorModel = this.elements.singlesensors[_id];
+						var sensorView = this.views.singlesensors[_id];
 						if (sensorModel && sensorView) {
 							sensorModel.set({
 								id: _id,
@@ -548,8 +554,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								value: undefined
 							});
 							sensorView.rerender();
-							newElements.sensors[_id] = sensorModel;
-							newViews.sensors[_id] = sensorView;
+							newElements.singlesensors[_id] = sensorModel;
+							newViews.singlesensors[_id] = sensorView;
 							//queue.enq({sensorView.rerender});
 						} else {
 							var newSensor = new Sensor({
@@ -574,8 +580,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 								model: newSensor,
 								grid: this.grid
 							});
-							newElements.sensors[_id] = newSensor;
-							newViews.sensors[_id] = newSensorView;
+							newElements.singlesensors[_id] = newSensor;
+							newViews.singlesensors[_id] = newSensorView;
 						}
 						break;
 					case "sensorlist":
@@ -842,13 +848,27 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'jquerysort', 'jqgrid', 
 			}
 			serializeRes = JSON.stringify(newJson, null, '\t ');
 			return serializeRes;
-
 		},
 		updateAllSensors: function() {
-			for (var sensId in this.elements.sensors) {
-				var element = this.elements.sensors[sensId];
+			for (var sensId in this.sensors) {
+				var element = this.sensors[sensId];
 				this.updateSensor(element);
 			}
+
+			/*for (var sensGrpId in this.elements.groups) {
+				var grpElement = this.elements.groups[sensGrpId];
+				var models = grpElement.get('collection').models;
+				for (var i = 0; i < models.length; i++) {
+					var elem = models[i];
+					elem.updateModel();
+				}
+			}
+
+			for (var sensTableGrpId in this.elements.tables) {
+				var tblElement = this.elements.tables[sensTableGrpId];
+				var groups = tblElement.groups;
+			} */
+
 			
 			for (var chartId in this.views.charts) {
 				var chartView = this.views.charts[chartId];
