@@ -226,11 +226,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 
 			this.container.css('background-color', this.model.get('bgcolor'));
-
-			this.container.find('.close').click(function(event){
-				self.container.remove();
-			});
-
 		},
 		renderGrouped: function() {
 			var newSensor = this.model;

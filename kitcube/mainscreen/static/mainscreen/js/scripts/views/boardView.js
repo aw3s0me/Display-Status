@@ -155,6 +155,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 							grid: this.grid
 						});
 						self.elements.singlesensors[_id] = newSensor;
+						self.sensors[_id] = newSensor;
 						self.views.singlesensors[_id] = newSensorView;
 						break;
 					case "sensortable":
