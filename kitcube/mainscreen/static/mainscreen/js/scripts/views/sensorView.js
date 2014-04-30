@@ -39,6 +39,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('change:value', this.onchangevalue, this);
 
 			this.model.updateModel();
+			//var now = new Date;
+			//this.model.getAdeiDataRange(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds()));
 
 			this.container.mousedown(function(event) {
 				if (event.ctrlKey) {
@@ -74,14 +76,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			});
 
 			this.container.find('.close').click(function(event){
-				//self.removeFromDom();
-				//event.preventDefault();
-				//event.stopPropagation();
-				//self.container.wrap("<div></div>");
-				//self.container.parent().remove();
 				event.stopImmediatePropagation();
 				self.container.remove();
-				//event.stopPropagation();
 				return;
 			}); 
 
@@ -95,7 +91,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		renderSingle: function() {
 			//load html template
 			var newSensor = this.model;
-			//console.log(this.model);
 			var scale = this.grid.getScale();
 			var dx = newSensor.get("size")[0];
 			var dy = newSensor.get("size")[1];
@@ -321,8 +316,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s3.innerHTML = "<b>x</b>";
 			s3.className = "close";
 			
-
-
 			var s5 = document.createElement('div');
 			s5.style.position = 'absolute';
 			s5.style.left = 5 * scale + 'px';
@@ -331,7 +324,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s5.style.height = 10 * scale + 'px';
 			s5.className = "chartCircle";
 
-
 			this.container.append(s0);
 			this.container.append(s1);
 			this.container.append(s2);
@@ -339,24 +331,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.append(s5);
 
 			this.container.css('background-color', this.model.get('bgcolor'));
-
-			var self = this;
-
-			/*$(s3).click(function(event) {
-				self.removeFromDom();
-			}); */
-
-			/*this.container.find('.close').click(function(event){
-				//self.removeFromDom();
-				event.preventDefault();
-				event.stopPropagation();
-				//self.container.wrap("<div></div>");
-				//self.container.parent().remove();
-				//self.container.empty();
-				self.remove();
-				event.stopPropagation();
-				return;
-			});*/
 
 		},
 		getHtml: function() {

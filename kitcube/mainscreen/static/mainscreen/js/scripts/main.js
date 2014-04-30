@@ -31,7 +31,8 @@ require.config({
     "yaml": "vendor/js-yaml/js-yaml.min",
     "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min",
     //chart part
-    "highcharts": "vendor/highcharts.com/js/highcharts.src",
+    "highstock": "vendor/highcharts.com/js/highcharts.src",
+    //"highstock": "vendor/highcharts.com/js/highstock.src",
     //colorpicker
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
     //fittext plugin:
@@ -39,8 +40,8 @@ require.config({
     "slabtext": "vendor/slabText/js/jquery.slabtext.min",
     //"bigtext": "vendor/bigtext"
     "bigtext": "vendor/bigtext/src/bigtext",
-    "momentjs": "vendor/momentjs/min/moment.min",
-    "regression": "vendor/highcharts_trendline/regression"
+    "momentjs": "vendor/momentjs/min/moment.min"
+    //"regression": "vendor/highcharts_trendline/regression"
   },
   shim: {
     //jqueryui: "jquery",
@@ -118,7 +119,13 @@ require.config({
         "jquery",
       ]
     },
-    highcharts: {
+    /*highcharts: {
+      deps: [
+        "jquery"
+        //"vendor/Highcharts-3.0.10/js/highcharts"
+      ]
+    }, */
+    highstock: {
       deps: [
         "jquery"
         //"vendor/Highcharts-3.0.10/js/highcharts"
@@ -143,12 +150,12 @@ require.config({
       deps: [
         "jquery"
       ]
-    },
+    }/*,
     regression: {
       deps: [
         "highcharts"
       ]
-    }
+    } */
   }
 });
 

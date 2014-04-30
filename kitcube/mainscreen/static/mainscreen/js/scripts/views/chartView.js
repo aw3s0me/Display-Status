@@ -69,20 +69,32 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					var color = undefined;
 					self.chart.addAxis(axisObject);
 					self.chart.addSeries(seriesObject, false);
+					
 					for (var seriesName in series) {
 						var seriesObject = series[seriesName];
 						var id = seriesObject.userOptions.id;
 						if (id === sensorModel.get('id')) {
 							index = seriesObject._i;
 							color = seriesObject.color;
+							circle.css('background-color', color);
+
+							$(jqElement).removeClass('activeSensor');
+							$(jqElement).addClass('chartAdded');
+							/*var axisId = seriesObject.yAxis.userOptions.id;
+							for (var j = 0; j < self.chart.yAxis.length; j++) {
+								var yaxis = self.chart.yAxis[j];
+								if (yaxis.userOptions.id === axisId) {
+									yaxis.options.lineColor = color;
+									break;
+									//break;
+								}
+							} */
 							break;
 						}
 					}
 
-					circle.css('background-color', color);
 
-					$(jqElement).removeClass('activeSensor');
-					$(jqElement).addClass('chartAdded');
+					
 				}
 				self.chart.redraw();
 
@@ -132,24 +144,17 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name'), j]);
 				}
 			} 
-			console.log(dataToChart);
+
+			var xAxis = model.getXAxisObj();
+			var chart = model.getChartOptions();
+
 			this.chart = new Highcharts.Chart({
-				chart: {
-					reflow: false,
-					type: 'line',
-					//type: 'line',
-					renderTo: model.get('id'),
-				},
+			//this.chart = new Highcharts.StockChart({
+				chart: chart,
 				title: {
-					//text: model.get('caption'),
+					text: model.get('caption'),
 				},
-				xAxis: {
-					type: 'datetime',
-					dateTimeLabelFormats: {
-						minute: '%H:%M'
-					},
-					//tickInterval: 600 * 1000
-				},
+				xAxis: xAxis,
 				/*yAxis: {
 					title: {
 						text: 'Values'
@@ -171,6 +176,20 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					y: 35 * scale,
 					floating: true,
 					borderWidth: 0
+				},
+				subtitle: {
+					text: '',
+					style: {
+						display: 'none'
+					}
+				},
+				credits: {
+					enabled: false
+				},
+				yAxis: {
+					title: {
+						text: ''
+					}
 				},
 				plotOptions: {
 					series: {
@@ -199,17 +218,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 	                        }
 	                    }, */
 						//showInLegend : false
-					}/*,
-					line: {
-						dashStyle: "Solid",
-						marker: {
-							enabled: false
-						}
-					} */
+					}
 				}
 			});
 			(function(b,a){if(!b){return}var c=b.Chart.prototype,d=b.Legend.prototype;b.extend(c,{legendSetVisibility:function(h){var i=this,k=i.legend,e,g,j,m=i.options.legend,f,l;if(m.enabled==h){return}m.enabled=h;if(!h){d.destroy.call(k);e=k.allItems;if(e){for(g=0,j=e.length;g<j;++g){e[g].legendItem=a}}k.group={}}c.render.call(i);if(!m.floating){f=i.scroller;if(f&&f.render){l=i.xAxis[0].getExtremes();f.render(l.min,l.max)}}},legendHide:function(){this.legendSetVisibility(false)},legendShow:function(){this.legendSetVisibility(true)},legendToggle:function(){this.legendSetVisibility(this.options.legend.enabled^true)}})}(Highcharts));
-
 
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -260,22 +272,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				self.removeFromDom();
 			});
 
-
-
-
-			/*var legend = this.chart.legend; 
-			if(legend.display) {
-	            legend.group.hide();
-	            legend.box.hide();
-	            legend.display = false;
-       		} else {
-	            legend.group.show();
-	            legend.box.show();
-	            legend.display = true;
-        	}*/
-
 			this.chart.setSize(width, height, true);
-			//model.set(seriesArr') = seriesArr;
+
+			this.setExtremes();
+
+
+		},
+		setExtremes: function() {
+			var now = new Date;
+			var min = this.model.getRangeToDate();
+			var max = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+
+			this.chart.xAxis[0].setExtremes(min, max);
 		},
 		addNewPoint: function(model) {
 
@@ -286,18 +294,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var shift = false;
 			//console.log(model.get('id'));
 			var sensorValue = model.get('value');
-			/*for (var i = 0; i < _seriesArr.length; i++) {
-				var elem = _seriesArr[i][0];
-				if (elem == model.get('id')) {
-					index = _seriesArr[i][2];
-				}
+
+			/*if (model.get('values').length > 10) {
+				shift = true;
 			} */
-
-			//if (index == 0) {var shift = true;}
-
-			//if (model.get('values').length > 10) {
-				//shift = true;
-			//}
 			//console.log(model.get('values'));
 
 			for (var seriesName in series) {
@@ -308,7 +308,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					break;
 				}
 			}
-
 
 			var x = model.get('lastTime');
 			var y = parseFloat(sensorValue);
@@ -321,18 +320,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				x: x,
 				y: y
 			};
-			//console.log(chart.series[index]);
-			/*if (chart.series[index]) {
-				if (chart.series[index].data.length > 10) {
-					shift = true;
-				}
-			} */
-			
 
 			if (chart.series[index])
 				chart.series[index].addPoint(Point, false, shift); //last point is for everyone\
 
 			shift = false;
+
+			this.setExtremes();
 
 		},
 		removeSeries: function(model) {
@@ -358,10 +352,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				}
 			}
 			chart.redraw();
-
 		},
 		rerender: function() {
-
 			for (var i = 0; i < this.elements.length; i++) {
 				this.elements.models[i].off('addPoint');
 			}
@@ -436,6 +428,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		redraw: function() {
 			this.chart.redraw();
+		},
+		changeRange: function() {
+
 		},
 		onresize: function(model) {
 			var dx = model.get('size')[0];

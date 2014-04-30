@@ -65,8 +65,6 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 								min: +this.get('min')
 							})
 						}
-
-
 						break;
 					}
 				case "valve":
@@ -469,15 +467,18 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			var axisObj = {
 				id: this.get('id') + '-axis',
 				title: {
-					text: this.get('name')
+					text: ""//this.get('name')
+					//align: 'middle',
+					//offset: 35
+					//y: -10
+					/*,
+					useHtml: true,
+					formatter: function() {
+						return ("<span class='datalabels'>" + this.y + "</span>");
+					}*/
 				},
-				lineWidth: 2,
-				lineColor: this.get('bgcolor')/*,
-				labels: {
-					align: 'left',
-					x: 3,
-					y: 16
-				} */
+				lineWidth: 2
+				//lineColor: this.get('bgcolor')
 			};
 
 			if (this.get('exp') !== true) {
