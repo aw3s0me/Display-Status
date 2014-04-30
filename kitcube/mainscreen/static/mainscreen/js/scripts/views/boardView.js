@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel','models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'views/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/sensorTableView', 'views/trendSensorView','models/trendSensorModel'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'views/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/sensorTableView', 'views/trendSensorView', 'models/trendSensorModel'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -41,11 +41,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			try {
 				this.viewSizeDetector = new sizeDetector(50, 32, 18, '#banner', '#footer');
 				this.viewSizeDetector.detectAllSizes();
-			}
-			catch (err) {
+			} catch (err) {
 				alert(err.message);
 			}
-			
+
 			var data = {};
 
 			if (!options.reinit) {
@@ -123,381 +122,30 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			return e;
 		},
 		insertFromCfg: function(prsObj) {
-			var self = this;
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
+				attr._id = _id;
 				switch (attr["type"]) {
 					case "sensor":
-						var newSensor = new Sensor({
-							id: _id,
-							name: attr["name"],
-							comment: attr["comment"],
-							unit: attr["unit"],
-							//value: attr[n],
-							sensorviewtype : "single",
-							max: attr["max"],
-							min: attr["min"],
-							precision: attr["precision"],
-							exp: attr["exp"],
-							server: attr["server"],
-							device: attr["device"],
-							dbname: attr["dbname"],
-							dbgroup: attr["dbgroup"],
-							mask: attr["mask"],
-							size: attr["size"],
-							coords: attr["coords"],
-							values: new Array(),
-							lastTime: new Date
-						});
-						//console.log(newSensor);
-						var newSensorView = new SensorView({
-							model: newSensor,
-							grid: this.grid
-						});
-						self.elements.singlesensors[_id] = newSensor;
-						self.sensors[_id] = newSensor;
-						self.views.singlesensors[_id] = newSensorView;
+						this.addSingleSensor(attr);
 						break;
 					case "sensortable":
-						var sensorgroups = attr['sensors'];
-						var collectionGroups = [];
-						var dbname = attr['dbname'];
-						var server = attr['server'];
-						var dbgroup = attr['dbgroup'];
-
-						for (var i = 0; i < sensorgroups.length; i++) {
-							var sensors = sensorgroups[i]['sensors'];
-
-							var newSensorCollection = undefined;
-							var sensorModelArr = [];
-							
-							for (var j = 0; j < sensors.length; j++) {
-								var sensorInfoObj = sensors[j];
-
-								if (attr["diffsensors"]) {
-									dbname = sensorInfoObj["dbname"];
-									server = sensorInfoObj["server"];
-									dbgroup = sensorInfoObj["dbgroup"];
-
-								}
-								var newSensor = new Sensor({
-									id: sensorInfoObj["id"],
-									name: sensorInfoObj["name"],
-									unit: sensorInfoObj["unit"],
-									max: sensorInfoObj["max"],
-									min: sensorInfoObj["min"],
-									sensorviewtype : "table",
-									sensortype: sensorInfoObj["sensortype"],
-									precision: sensorInfoObj["precision"],
-									exp: sensorInfoObj["exp"],
-									sibling: sensorInfoObj["sibling"],
-									server: server,
-									dbname: dbname,
-									dbgroup: dbgroup,
-									mask: sensorInfoObj["mask"],
-									values: new Array(),
-									lastTime: new Date
-								});
-								if (sensorInfoObj["id"] !== undefined) {
-									sensorModelArr.push(newSensor);
-									self.sensors[sensorInfoObj["id"]] = newSensor;
-								}
-							}
-
-							newSensorCollection = new SensorCollection(sensorModelArr, {
-								id: attr['sensors'][i]['name'],
-								group: attr['sensors'][i]['name']
-							});
-
-							collectionGroups.push(newSensorCollection);
-						}
-
-						var newSensorTableModel = new SensorTableModel({
-							id: _id,
-							size: attr['size'],
-							coords: attr['coords'],
-							cols: undefined,
-							groups: collectionGroups,
-							colids: attr['colids'],
-							colnames: attr['colnames'],
-							showheaders: attr['showheaders'],
-							name: attr['name'],
-							render: attr['render']
-						});
-
-						this.elements.tables[_id] = newSensorTableModel;
-
-						var newSensorTableView = new SensorTableView({
-							grid: this.grid,
-							model: newSensorTableModel
-
-						});
-
-						this.views.tables[_id] = newSensorTableView;
-
-						$(window).trigger('resize'); //because big text works only after resize event
+						this.addSensorTable(attr);
 						break;
 					case "sensorgroup":
-						var sensorArr = attr['sensors'];
-						var trendsArr = [];
-						var groupArr = [];
-						var sensorModelsArr = [];
-						var emptyCount = attr['empties'];
-
-						var dbname = attr['dbname'];
-						var server = attr['server'];
-						var dbgroup = attr['dbgroup'];
-
-						for (var i = 0 ; i < sensorArr.length; i++) {
-							var sensorObj = sensorArr[i];
-
-							if (sensorObj['type'] === 'empty') {
-								var newSensor = new Sensor({});
-
-								continue;
-							}
-
-							if (attr['diffsensors']) {
-								dbname = sensorObj['dbname'];
-								server = sensorObj['server'];
-								dbgroup = sensorObj['dbgroup'];
-							}
-
-							if (sensorObj['type'] === "trend") {
-								trendsArr.push(sensorObj);
-								continue;
-							}
-
-							var newSensor = new Sensor({
-								id: sensorObj["id"],
-								name: sensorObj["name"],
-								comment: sensorObj["comment"],
-								sensortype: sensorObj["sensortype"],
-								link: sensorObj["link"],
-								sensorviewtype : "group",
-								unit: sensorObj["unit"],
-								max: sensorObj["max"],
-								min: sensorObj["min"],
-								precision: sensorObj["precision"],
-								exp: sensorObj["exp"],
-								server: server,
-								device: sensorObj["device"],
-								norender: sensorObj["norender"],
-								dbname: dbname,
-								dbgroup: dbgroup,
-								mask: sensorObj["mask"],
-								size: sensorObj["size"],
-								coords: sensorObj["coords"],
-								values: new Array(),
-								lastTime: new Date,
-								factor: sensorObj["factor"]
-							});
-
-							if (self.sensors[sensorObj["id"]]) {
-								throw "This sensor already exists" + sensorObj["id"];
-							}
-
-							self.sensors[sensorObj["id"]] = newSensor;
-							sensorModelsArr.push(newSensor);
-						}
-
-						for (var sensorName in sensorModelsArr) {
-							var sensor = sensorModelsArr[sensorName];
-							var linkModel = undefined;
-
-							if (sensor.get('link') !== undefined) {
-								linkModel = self.sensors[sensor.get('link')];
-								if (!linkModel) {
-									throw "Wrong link: " + sensor.get('link') + " at: " + sensor.get('id');
-								}
-							}
-
-							var newSensorView = new SensorView({
-								model: sensor,
-								grid: this.grid,
-								group: true,
-								linkModel: linkModel
-							});
-
-							if (!sensor.get('norender')) {
-								//self.views.sensors[sensor.get('id')] = newSensorView;
-								groupArr.push(newSensorView);
-							}
-						}
-
-						var empties = undefined;
-
-						if (emptyCount > 0) {
-							empties = [];
-							while(emptyCount--) {
-								var newSensorView = new SensorView({
-									model: new Sensor({}),
-									grid: this.grid,
-									empty: true
-								});
-								empties.push(newSensorView);
-							}
-						}
-
-
-						for (var trendName in trendsArr) {
-							var trendObj = trendsArr[trendName];
-							var sensorModelId = trendObj["sensor"];
-							var sensorModel = self.sensors[sensorModelId];
-
-							if (!sensorModel) {
-								throw "Sensor of trend: " + trendObj["id"] + " is not defined";
-							}
-
-							var trendModel = new TrendSensorModel({
-								model: sensorModel,
-								range: trendObj["range"],
-								name: trendObj["name"],
-								id: trendObj["id"]
-							})
-							
-
-							var newTrendSensorView = new TrendSensorView({
-								model: trendModel,
-								group: true,
-								grid: this.grid
-							});
-
-							groupArr.push(newTrendSensorView);
-						}
-
-						var newSensorGroupModel = new SensorGroupModel({
-							id: _id,
-							name: attr['name'],
-							size: attr['size'],
-							coords: attr['coords'],
-							diffsensors: attr['diffsensors'],
-							collection: new SensorCollection(sensorModelsArr)
-						});
-
-						if (attr['diffsensors'] === false) {
-							newSensorGroupModel.set({
-								dbname: attr['dbname'],
-								dbgroup: attr['dbgroup'],
-								server: attr['server']
-							});
-						}
-
-						var newSensorGroupView = new SensorGroupView({
-							model: newSensorGroupModel,
-							grid: this.grid,
-							group: groupArr,
-							empties: empties
-						});
-
-						self.views.sensorgroups[_id] = newSensorGroupView;
-						self.elements.sensorgroups[_id] = newSensorGroupModel;
-						$(window).trigger('resize'); //because big text works only after resize event
+						this.addSensorGroup(attr);
 						break;
 					case "alarmlist":
-						var alarmList = []; //collection of alarms
-
-						var options = {
-							size: [],
-							coords: [],
-							cols: undefined
-						};
-						for (var alarmKey in attr) { //going from alarmlist object through elems
-							//console.log(alarmKey);
-							if (alarmKey === "type") { //except type
-								continue;
-							} else if (alarmKey === "size") {
-								options.size.push(attr[alarmKey][0]);
-								options.size.push(attr[alarmKey][1]);
-								continue;
-							} else if (alarmKey === "coords") {
-								options.coords.push(attr[alarmKey][0]);
-								options.coords.push(attr[alarmKey][1]);
-								continue;
-							} else if (alarmKey === "cols") {
-								options.cols = attr[alarmKey];
-								continue;
-							}
-							var alarmAttr = attr[alarmKey]; //get alarm element by key
-							var newAlarm = new Alarm({
-								id: alarmKey,
-								no: alarmAttr["no"],
-								module: alarmAttr["module"],
-								group: alarmAttr["group"],
-								app: alarmAttr["app"],
-								server: alarmAttr["server"],
-								dbname: alarmAttr["dbname"],
-								mask: alarmAttr["mask"],
-								lastDate: 'NAN', //not initialized, need to get from adei
-								delayedBy: 'NAN',
-								severity: 'NAN'
-							});
-
-							alarmList.push(newAlarm); //push to collection
-						};
-
-						var newAlarmCollection = new MyAlarmCollection(alarmList);
-						var newAlarmListModel = new AlarmListModel({
-							id: _id,
-							collection: newAlarmCollection,
-							size: options.size,
-							coords: options.coords,
-							cols: options.cols,
-							type: 'alarmlist'
-
-						});
-
-						//console.log(newAlarmCollection.id);
-						this.elements.alarms[_id] = newAlarmListModel;
-						var newAlarmListView = new AlarmListView({
-							model: newAlarmListModel,
-							grid: this.grid,
-						});
-						this.views.alarms[_id] = newAlarmListView;
+						this.addAlarmList(attr);
 						break;
 					case "chart":
-						var newChart = new Chart({
-							id: _id,
-							caption: attr["caption"],
-							charttype: attr["charttype"],
-							type: attr["type"],
-							link: attr["link"],
-							legend: attr["legend"],
-							linewidth: attr["width"],
-							size: attr["size"],
-							coords: attr["coords"],
-							puredata: {},
-							range: attr["startrange"],
-							scale: this.grid.getScale()
-						});
-
-						if (newChart.get('link')) {
-							var linkArr = newChart.get('link');
-							var sensArr = [];
-							for (var j = 0; j < linkArr.length; j++) {
-								var linkId = linkArr[j];
-								var sensorModel = this.sensors[linkId];
-								if (sensorModel)
-									sensArr.push(sensorModel);
-							}
-						}
-
-						var sensCollection = new SensorCollection(sensArr);
-						var newChartView = new ChartView({
-							model: newChart,
-							grid: this.grid,
-							elements: sensCollection,
-							allSensors: this.sensors
-						});
-						this.elements.charts[_id] = newChart;
-						this.views.charts[_id] = newChartView;
-
+						this.addChart(attr);
 						break;
 					default:
 						break;
 				}
 			}
-			//self.updateAllSensors();
+			var self = this;
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
 			}, 2000); //the only way to pass param */
@@ -856,21 +504,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				this.updateSensor(element);
 			}
 
-			/*for (var sensGrpId in this.elements.groups) {
-				var grpElement = this.elements.groups[sensGrpId];
-				var models = grpElement.get('collection').models;
-				for (var i = 0; i < models.length; i++) {
-					var elem = models[i];
-					elem.updateModel();
-				}
-			}
-
-			for (var sensTableGrpId in this.elements.tables) {
-				var tblElement = this.elements.tables[sensTableGrpId];
-				var groups = tblElement.groups;
-			} */
-
-			
 			for (var chartId in this.views.charts) {
 				var chartView = this.views.charts[chartId];
 				chartView.redraw();
@@ -895,70 +528,46 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 		change: function(NumX, NumY) {},
 		clear: function() {
 			this.container.empty();
-			/*this.container.empty();
-			this.maxSizeX = 0;
-			this.maxSizeY = 0;
-			this.nowCoordX = 0;
-			this.nowCoordY = 0;
-			this.grid = null;
-			this.viewSizeDetector = null;
-			this.elements.charts = {};
-			this.elements.alarms = {};
-			this.tabs = [];
-			this.elements.sensors = {};
-			for (var chartId in this.elements.charts) {
-				var chart = this.elements.charts[chartId].chart;
-				for (var i = 0; i < chart.series.length; i++) {
-					chart.series[i].setData([]);
-				}
-			}*/
-
-
 		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
 
-		    var fncname = /^[a-zA-Z0-9]+/.exec(fncstring);
-		    var args =  /\(([^)]+)/.exec(fncstring);
+			var fncname = /^[a-zA-Z0-9]+/.exec(fncstring);
+			var args = /\(([^)]+)/.exec(fncstring);
 
-		    fncname = fncname[0];
-		    if (args !== null)
-		        args = args[1].split(/\s*,\s*/);
+			fncname = fncname[0];
+			if (args !== null)
+				args = args[1].split(/\s*,\s*/);
 
-		    switch(fncname) {
-		        case "drawText":
-		            args[4] = /[^'"]+/.exec(args[4]);
-		            //var e = drawText(args[0], args[1], args[2], args[3], args[4], args[5]);
-		            break;
-		        case "drawSensor":
-		            //var e = drawSensor(args[0], args[1], args[2], args[3]);
-		            break;
-		        case "addSensor":
-		            args[2] = /[^'"]+/.exec(args[2]);
-		            //var e = addSensor(args[0], args[1], args[2], args[3]);
-		            break;
-		        case "updatePage":
-		            break;
-		        case "addSensorGroup":
-		            //addSensorGroup.call($('.canvas'), args[0], args[1], args[2], args[3], args[4]);
-		            break;
-		        case "loadCfg":
-		        	this.loadCfg(args[0]);
-		        	break;
-		        default:
-		            alert('function "' + fncname + '" not defined');
-		    }
+			switch (fncname) {
+				case "drawText":
+					args[4] = /[^'"]+/.exec(args[4]);
+					//var e = drawText(args[0], args[1], args[2], args[3], args[4], args[5]);
+					break;
+				case "drawSensor":
+					//var e = drawSensor(args[0], args[1], args[2], args[3]);
+					break;
+				case "addSensor":
+					args[2] = /[^'"]+/.exec(args[2]);
+					//var e = addSensor(args[0], args[1], args[2], args[3]);
+					break;
+				case "updatePage":
+					break;
+				case "addSensorGroup":
+					//addSensorGroup.call($('.canvas'), args[0], args[1], args[2], args[3], args[4]);
+					break;
+				case "loadCfg":
+					this.loadCfg(args[0]);
+					break;
+				default:
+					alert('function "' + fncname + '" not defined');
+			}
 		},
 		loadCfg: function(filename) {
 			var self = this;
 			var _data = undefined;
-			//this.elements = {};
-
-			for (var modelSectionName in this.elements) {
-				var modelSection = this.elements[modelSectionName];
-				modelSection = {};
-			}
-
+			this.sensors = null;
+			this.elements = null;
 
 			for (var viewSectionName in this.views) {
 				var viewSection = this.views[viewSectionName];
@@ -967,25 +576,398 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 					view.removeFromDom();
 
 				}
-
 				viewSection = {};
-			}
+			} 
+			this.views = null;
+
 			$.ajax({
 				url: 'static/mainscreen/tempcfg/' + filename.replace('\"', ""),
 				async: false,
 				dataType: 'text',
-				success: function(data){
+				success: function(data) {
 					_data = data;
 				}
 			});
 
+			this.sensors = {};
+			this.views = {
+				singlesensors: {},
+				charts: {},
+				alarms: {},
+				sensorgroups: {},
+				tables: {}
+			};
+			this.elements = {
+				singlesensors: {},
+				charts: {},
+				alarms: {},
+				sensorgroups: {},
+				tables: {}
+			}
 
-			console.log(_data);
-			this.initialize({aceText: _data, reinit: true});
+			this.initialize({
+				aceText: _data,
+				reinit: true
+			});
+		},
+		addSingleSensor: function(attr) {
+			var newSensor = new Sensor({
+				id: attr._id,
+				name: attr["name"],
+				comment: attr["comment"],
+				unit: attr["unit"],
+				//value: attr[n],
+				sensorviewtype: "single",
+				max: attr["max"],
+				min: attr["min"],
+				precision: attr["precision"],
+				exp: attr["exp"],
+				server: attr["server"],
+				device: attr["device"],
+				dbname: attr["dbname"],
+				dbgroup: attr["dbgroup"],
+				mask: attr["mask"],
+				size: attr["size"],
+				coords: attr["coords"],
+				values: new Array(),
+				lastTime: new Date
+			});
+			//console.log(newSensor);
+			var newSensorView = new SensorView({
+				model: newSensor,
+				grid: this.grid
+			});
+			this.elements.singlesensors[attr._id] = newSensor;
+			this.sensors[attr._id] = newSensor;
+			this.views.singlesensors[attr._id] = newSensorView;
+		},
+		addSensorTable: function(attr) {
+			var sensorgroups = attr['sensors'];
+			var collectionGroups = [];
+			var dbname = attr['dbname'];
+			var server = attr['server'];
+			var dbgroup = attr['dbgroup'];
+
+			for (var i = 0; i < sensorgroups.length; i++) {
+				var sensors = sensorgroups[i]['sensors'];
+
+				var newSensorCollection = undefined;
+				var sensorModelArr = [];
+
+				for (var j = 0; j < sensors.length; j++) {
+					var sensorInfoObj = sensors[j];
+
+					if (attr["diffsensors"]) {
+						dbname = sensorInfoObj["dbname"];
+						server = sensorInfoObj["server"];
+						dbgroup = sensorInfoObj["dbgroup"];
+
+					}
+					var newSensor = new Sensor({
+						id: sensorInfoObj["id"],
+						name: sensorInfoObj["name"],
+						unit: sensorInfoObj["unit"],
+						max: sensorInfoObj["max"],
+						min: sensorInfoObj["min"],
+						sensorviewtype: "table",
+						sensortype: sensorInfoObj["sensortype"],
+						precision: sensorInfoObj["precision"],
+						exp: sensorInfoObj["exp"],
+						sibling: sensorInfoObj["sibling"],
+						server: server,
+						dbname: dbname,
+						dbgroup: dbgroup,
+						mask: sensorInfoObj["mask"],
+						values: new Array(),
+						lastTime: new Date
+					});
+					if (sensorInfoObj["id"] !== undefined) {
+						sensorModelArr.push(newSensor);
+						this.sensors[sensorInfoObj["id"]] = newSensor;
+					}
+				}
+
+				newSensorCollection = new SensorCollection(sensorModelArr, {
+					id: attr['sensors'][i]['name'],
+					group: attr['sensors'][i]['name']
+				});
+
+				collectionGroups.push(newSensorCollection);
+			}
+
+			var newSensorTableModel = new SensorTableModel({
+				id: attr._id,
+				size: attr['size'],
+				coords: attr['coords'],
+				cols: undefined,
+				groups: collectionGroups,
+				colids: attr['colids'],
+				colnames: attr['colnames'],
+				showheaders: attr['showheaders'],
+				name: attr['name'],
+				render: attr['render']
+			});
+
+			this.elements.tables[attr._id] = newSensorTableModel;
+
+			var newSensorTableView = new SensorTableView({
+				grid: this.grid,
+				model: newSensorTableModel
+			});
+
+			this.views.tables[attr._id] = newSensorTableView;
+
+			$(window).trigger('resize'); //because big text works only after resize event
+		},
+		addChart: function(attr) {
+			var newChart = new Chart({
+				id: attr._id,
+				caption: attr["caption"],
+				charttype: attr["charttype"],
+				type: attr["type"],
+				link: attr["link"],
+				legend: attr["legend"],
+				linewidth: attr["width"],
+				size: attr["size"],
+				coords: attr["coords"],
+				puredata: {},
+				range: attr["startrange"],
+				scale: this.grid.getScale()
+			});
+
+			if (newChart.get('link')) {
+				var linkArr = newChart.get('link');
+				var sensArr = [];
+				for (var j = 0; j < linkArr.length; j++) {
+					var linkId = linkArr[j];
+					var sensorModel = this.sensors[linkId];
+					if (sensorModel)
+						sensArr.push(sensorModel);
+				}
+			}
+
+			var sensCollection = new SensorCollection(sensArr);
+			var newChartView = new ChartView({
+				model: newChart,
+				grid: this.grid,
+				elements: sensCollection,
+				allSensors: this.sensors
+			});
+			this.elements.charts[attr._id] = newChart;
+			this.views.charts[attr._id] = newChartView;
+		},
+		addSensorGroup: function(attr) {
+			var sensorArr = attr['sensors'];
+			var trendsArr = [];
+			var groupArr = [];
+			var sensorModelsArr = [];
+			var emptyCount = attr['empties'];
+
+			var dbname = attr['dbname'];
+			var server = attr['server'];
+			var dbgroup = attr['dbgroup'];
+
+			for (var i = 0; i < sensorArr.length; i++) {
+				var sensorObj = sensorArr[i];
+
+				if (attr['diffsensors']) {
+					dbname = sensorObj['dbname'];
+					server = sensorObj['server'];
+					dbgroup = sensorObj['dbgroup'];
+				}
+
+				if (sensorObj['type'] === "trend") {
+					trendsArr.push(sensorObj);
+					continue;
+				}
+
+				var newSensor = new Sensor({
+					id: sensorObj["id"],
+					name: sensorObj["name"],
+					comment: sensorObj["comment"],
+					sensortype: sensorObj["sensortype"],
+					link: sensorObj["link"],
+					sensorviewtype: "group",
+					unit: sensorObj["unit"],
+					max: sensorObj["max"],
+					min: sensorObj["min"],
+					precision: sensorObj["precision"],
+					exp: sensorObj["exp"],
+					server: server,
+					device: sensorObj["device"],
+					norender: sensorObj["norender"],
+					dbname: dbname,
+					dbgroup: dbgroup,
+					mask: sensorObj["mask"],
+					size: sensorObj["size"],
+					coords: sensorObj["coords"],
+					values: new Array(),
+					lastTime: new Date,
+					factor: sensorObj["factor"]
+				});
+
+				if (this.sensors[sensorObj["id"]]) {
+					throw "This sensor already exists" + sensorObj["id"];
+				}
+
+				this.sensors[sensorObj["id"]] = newSensor;
+				sensorModelsArr.push(newSensor);
+			}
+
+			for (var sensorName in sensorModelsArr) {
+				var sensor = sensorModelsArr[sensorName];
+				var linkModel = undefined;
+
+				if (sensor.get('link') !== undefined) {
+					linkModel = this.sensors[sensor.get('link')];
+					if (!linkModel) {
+						throw "Wrong link: " + sensor.get('link') + " at: " + sensor.get('id');
+					}
+				}
+
+				var newSensorView = new SensorView({
+					model: sensor,
+					grid: this.grid,
+					group: true,
+					linkModel: linkModel
+				});
+
+				if (!sensor.get('norender')) {
+					//self.views.sensors[sensor.get('id')] = newSensorView;
+					groupArr.push(newSensorView);
+				}
+			}
+
+			var empties = undefined;
+
+			if (emptyCount > 0) {
+				empties = [];
+				while (emptyCount--) {
+					var newSensorView = new SensorView({
+						model: new Sensor({}),
+						grid: this.grid,
+						empty: true
+					});
+					empties.push(newSensorView);
+				}
+			}
+
+			for (var trendName in trendsArr) {
+				var trendObj = trendsArr[trendName];
+				var sensorModelId = trendObj["sensor"];
+				var sensorModel = this.sensors[sensorModelId];
+
+				if (!sensorModel) {
+					throw "Sensor of trend: " + trendObj["id"] + " is not defined";
+				}
+
+				var trendModel = new TrendSensorModel({
+					model: sensorModel,
+					range: trendObj["range"],
+					name: trendObj["name"],
+					id: trendObj["id"]
+				})
 
 
-			//this.clear();
+				var newTrendSensorView = new TrendSensorView({
+					model: trendModel,
+					group: true,
+					grid: this.grid
+				});
+
+				groupArr.push(newTrendSensorView);
+			}
+
+			var newSensorGroupModel = new SensorGroupModel({
+				id: attr._id,
+				name: attr['name'],
+				size: attr['size'],
+				coords: attr['coords'],
+				diffsensors: attr['diffsensors'],
+				collection: new SensorCollection(sensorModelsArr)
+			});
+
+			if (attr['diffsensors'] === false) {
+				newSensorGroupModel.set({
+					dbname: attr['dbname'],
+					dbgroup: attr['dbgroup'],
+					server: attr['server']
+				});
+			}
+
+			var newSensorGroupView = new SensorGroupView({
+				model: newSensorGroupModel,
+				grid: this.grid,
+				group: groupArr,
+				empties: empties
+			});
+
+			this.views.sensorgroups[attr._id] = newSensorGroupView;
+			this.elements.sensorgroups[attr._id] = newSensorGroupModel;
+			$(window).trigger('resize'); //because big text works only after resize event
+		},
+		addAlarmList: function(attr) {
+			var alarmList = []; //collection of alarms
+
+			var options = {
+				size: [],
+				coords: [],
+				cols: undefined
+			};
+			for (var alarmKey in attr) { //going from alarmlist object through elems
+				//console.log(alarmKey);
+				if (alarmKey === "type") { //except type
+					continue;
+				} else if (alarmKey === "size") {
+					options.size.push(attr[alarmKey][0]);
+					options.size.push(attr[alarmKey][1]);
+					continue;
+				} else if (alarmKey === "coords") {
+					options.coords.push(attr[alarmKey][0]);
+					options.coords.push(attr[alarmKey][1]);
+					continue;
+				} else if (alarmKey === "cols") {
+					options.cols = attr[alarmKey];
+					continue;
+				}
+				var alarmAttr = attr[alarmKey]; //get alarm element by key
+				var newAlarm = new Alarm({
+					id: alarmKey,
+					no: alarmAttr["no"],
+					module: alarmAttr["module"],
+					group: alarmAttr["group"],
+					app: alarmAttr["app"],
+					server: alarmAttr["server"],
+					dbname: alarmAttr["dbname"],
+					mask: alarmAttr["mask"],
+					lastDate: 'NAN', //not initialized, need to get from adei
+					delayedBy: 'NAN',
+					severity: 'NAN'
+				});
+
+				alarmList.push(newAlarm); //push to collection
+			};
+
+			var newAlarmCollection = new MyAlarmCollection(alarmList);
+			var newAlarmListModel = new AlarmListModel({
+				id: attr._id,
+				collection: newAlarmCollection,
+				size: options.size,
+				coords: options.coords,
+				cols: options.cols,
+				type: 'alarmlist'
+
+			});
+
+			//console.log(newAlarmCollection.id);
+			this.elements.alarms[attr._id] = newAlarmListModel;
+			var newAlarmListView = new AlarmListView({
+				model: newAlarmListModel,
+				grid: this.grid,
+			});
+			this.views.alarms[attr._id] = newAlarmListView;
 		}
+
 	});
 
 	// 'jquery ', 'underscore ', 'backbone ' will not be accessible in the global scope
