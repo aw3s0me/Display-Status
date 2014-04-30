@@ -39,7 +39,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			dbgroup: undefined,
 			norender: false,
 			mask: undefined,
-			values: undefined,
+			values: [],
 			exp: false,
 			size: [2, 2],
 			coords: [0, 0],
@@ -241,10 +241,25 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					case "noval":
 						{
 							var val = this.get('value');
+							var exp = this.get('exp');
+							var precision = this.get('precision');
 							if (val === this.get('min')) {
 								this.set({
 									valUnit: "---",
 									bgcolor: "#F5025B"
+								});
+							}
+							else {
+								var valueToInsert = undefined;
+								if (_isNumber(val) && _isNumber(precision)) {
+									valueToInsert = exp? val.toExponential(precision) : val.toFixed(precision);
+								}
+								else {
+									valueToInsert = val;
+								}
+
+								this.set({
+									valUnit: valueToInsert
 								});
 							}
 							break;
@@ -254,16 +269,18 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							var val = this.get('value') * this.get('factor');
 							var valueToInsert = "NaN";
 							var exp = this.get('exp');
-							if (this.get('name') === "-8V") {
+
+							if (this.get('name') === "XHV CP Jacket") {
 								var a = 1;
 								console.log(val);
 								console.log(this.get('value'));
+								console.log(_isNumber(val));
 							}
 							
 							var type = this.get('sensorviewtype');
 							if (type === "table") {
 								if (_isNumber(precision)) {
-									if (_isExponent(val) && exp) {
+									if (exp) {
 										valueToInsert = val.toExponential(precision) + " " + this.get('unit');
 									}
 									else {
@@ -277,8 +294,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							}
 							else {
 								if (_isNumber(precision)) {
-									if (_isExponent(val) && exp) {
-										valueToInsert = val.toPrecision(precision);
+									if (exp) {
+										valueToInsert = val.toExponential(precision);
 									}
 									else {
 										valueToInsert = val.toFixed(precision);
@@ -411,6 +428,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					var x = mom.valueOf();
 					var y = parseFloat(values[values.length - 1]);
 					//if (self.get('values').length > 10) {self.get('values').shift();}
+
 					var array = self.get('values').slice(0); //cloning of array, because backbone works with only one instance
 					var valToPush = [x, y];
 
@@ -471,9 +489,11 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					}
 				}
 				else {
+					var precision = (self.get('precision') > 2 ) ? 2: self.get('precision');
+
 					axisObj.labels = {
 						formatter: function() {
-							return Highcharts.numberFormat(this.value, self.get('precision'));
+							return Highcharts.numberFormat(this.value, precision);
 						}
 					}
 				}

@@ -123,7 +123,7 @@
                         "mask": "74",
                         "unit": "mbar",
                         "name": "Ion Gauge",
-                        "precision": 2,
+                        "precision": 1,
                         "exp": true
                     },
                     {
@@ -131,7 +131,7 @@
                         "mask": "66",
                         "unit": "mbar",
                         "name": "CCG",
-                        "precision": 2,
+                        "precision": 1,
                         "exp": true,
                         "sensortype": "noval"
 
@@ -141,7 +141,9 @@
                         "mask": "68",
                         "unit": "",
                         "name": "CEP",
-                        "sensortype": "noval"
+                        "sensortype": "noval",
+                        "exp": true,
+                        "precision": 1
                     },
                     {
                         "id": "sensid16",
@@ -151,7 +153,7 @@
                         "precision": 2
                     },
                     {
-                        "id": "sensid22",
+                        "id": "sensid17",
                         "mask": "12",
                         "unit": "%",
                         "name": "Ion Gauge"
@@ -160,14 +162,18 @@
                         "id": "sensid19",
                         "mask": "67",
                         "unit": "mbar",
-                        "name": "CCG"
+                        "name": "CCG",
+                        "exp": true,
+                        "precision": 1
                     },
                     {
                         "id": "sensid20",
                         "mask": "69",
                         "unit": "",
                         "name": "CEP",
-                        "sensortype": "noval"
+                        "sensortype": "noval",
+                        "exp": true,
+                        "precision": 1
 
                     },
                     {

@@ -255,6 +255,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s0.innerHTML = newSensor.get('name');
 			s0.className = "sensorName";
 			s0.style.fontWeight = 'bold';
+			s0.style.lineHeight = 15*scale + 'px';
 
 			var s1 = document.createElement('div');
 			s1.style.position = 'absolute';
@@ -436,6 +437,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			sensorDiv.css('background-color', this.model.get('bgcolor'));
 		},
 		onchangevalue: function(model) {
+			if (model.get('name') === "XHV CP Jacket") {
+				var a = 1;
+			}
+
 			var sensorDiv = this.container;
 			var sensortype = model.get('sensortype');
 			var valToInsert = model.get('valUnit');
