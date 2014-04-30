@@ -1,7 +1,93 @@
 {% load static %}
 
+<head>
 <link rel='stylesheet' href="{% static 'griddisplay/css/style.css' %}">
-<link rel='text/javascript' href="{% static 'griddisplay/js/grid.js' %}">
+<script type='text/javascript' src="{% static 'griddisplay/js/jquery/jquery-1.11.0.js' %}"></script>
+<script type='text/javascript' src="{% static 'griddisplay/js/common.js' %}"></script>
+<script type='text/javascript' src="{% static 'griddisplay/js/widget.js' %}"></script>
+<script type='text/javascript' src="{% static 'griddisplay/js/grid.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        var canvasWidth = $(window).width();
+        var canvasHeight = $(window).height() 
+                - $('.banner').css('height').toNum()
+                - $('.footer').css('height').toNum();
+        console.log(canvasWidth);
+        $('.canvas').initial(canvasWidth, canvasHeight, 84, 44);
+
+        var s =  new text();
+        
+        s.init(20).setText('Temperature');
+        $('.canvas').addWidget(s,0,0);
+
+        s.init(20).setText('Vacuum');
+        $('.canvas').addWidget(s,17,0);
+
+        s.init(20).setText('Magnet');
+        $('.canvas').addWidget(s,34,0);
+
+        s.init(20).setText('Source & HV');
+        $('.canvas').addWidget(s,0,23);
+
+        s.init(20).setText('Amrel LV');
+        $('.canvas').addWidget(s,17,23);
+
+        s.init(20).setText('Veto');
+        $('.canvas').addWidget(s,34,23);
+
+        var a = 8;
+        var b = 5;
+        for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 4; j++) {
+            var s = new sensor().init(a,b).setClass('tile');
+            $('.canvas').addWidget(s,a*i,b*j+1);
+        }
+        }
+
+        for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 4; j++) {
+            var s = new sensor().init(a,b).setClass('tile');
+            $('.canvas').addWidget(s,a*i+2*a+1,b*j+1);
+        }
+        }
+
+        for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 4; j++) {
+            var s = new sensor().init(a,b).setClass('tile');
+            $('.canvas').addWidget(s,a*i+4*a+2,b*j+1);
+        }
+        }
+
+
+        for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 4; j++) {
+            var s = new sensor().init(a,b).setClass('tile');
+            $('.canvas').addWidget(s,a*i,b*j+b*4+4);
+        }
+        }
+
+        for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 4; j++) {
+            var s = new sensor().init(a,b).setClass('tile');
+            $('.canvas').addWidget(s,a*i+a*2+1,b*j+b*4+4);
+        }
+        }
+
+        for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 4; j++) {
+            var s = new sensor().init(a,b).setClass('tile');
+            $('.canvas').addWidget(s,a*i+a*4+2,b*j+b*4+4);
+        }
+        }
+
+        var s = new sensor().init(31,22).setClass('tile');
+        $('.canvas').addWidget(s,53,0);
+
+        var s = new sensor().init(31,22).setClass('tile');
+        $('.canvas').addWidget(s,53,22);
+    });
+</script>
+</head>
 
 <div class='wrapper'>
     <div class='banner'>

@@ -33,18 +33,18 @@ body {
 .canvas {
     position: relative;
     font-family: arial;
-    background: #aabbcc;
-    border: 5px solid #bbbbbb;
+    background: #fff;
+    border: 5px solid #eee;
     margin: auto;
     overflow: auto;
 }
 
 .tile {
     color: white;
-    position: relative;
+    position: absolute;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background: #338aFF;
+    background: #eee;//#338aFF;
     border: 3px solid white;
     padding: 0px;
     margin: 0px;
