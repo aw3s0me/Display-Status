@@ -68,30 +68,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			newSortableContainer.css('top', unitY + 'px');
 			newSortableContainer.css('height', unitY * (dy - 1) + 'px');
 			newSortableContainer.css('width', unitX * dx + 'px' )
-			newSortableContainer.addClass('sortable_container').sortable(
-				/*activate: function(event, ui) {
-					if (event.ctrlKey) {
-						event.preventDefault();
-						ui.item.trigger('sortSensor');
-					}
-					console.log(ui);
-					//if (ctrl)
-				} */
-				/*sort: function(event, ui) {
-					if (event.ctrlKey) {
-						event.preventDefault();
-						ui.item.trigger('sortSensor');
-					}
-				},*/
-				/*start: function(event, ui) {
-					if (event.ctrlKey) {
-						//event.preventDefault();
-						ui.item.trigger('sortSensor');
-					}
-				} */
-			);
-
-
+			newSortableContainer.addClass('sortable_container').sortable();
 
     		if (this.group !== undefined) {
     			for (var i = 0 ; i < this.group.length; i++) {
@@ -101,6 +78,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
     				if (newSensorView.isTrend) {
     					trendChartInitArr.push(newSensorView);
     				}
+    				newSensorView.on('removing', this.onSensorRemoving, this);
     			}
     			if (this.empties) {
     				for (var i = 0; i < this.empties.length; i++) {
@@ -178,8 +156,17 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 
 		},
 		removeFromDom: function() {
-			//this.remove()
+			for (var i = 0; i < this.group.length; i++) {
+				var sensorView = this.group[i];
+				sensorView.removeFromDom();
+			}
 			this.container.parent().remove();
+			this.remove();
+			this.unbind(); 
+		},
+		onSensorRemoving: function(model) {
+			var collection = this.model.get('collection');
+			collection.removeModel(model);
 		},
 		setContainer: function(sensorView) {
 			var divElem = sensorView.getContainer();
@@ -197,7 +184,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			divElem.css('width', dx * unitSizeX + 'px');
 			divElem.css('height', dy * unitSizeY + 'px');
 
-
 			//sensorModel.set({ bgcolor: color });
 			//sensorModel.trigger('changebgcolor', sensorModel);
 
@@ -205,59 +191,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 
 			//divElem.addClass('widget');
 			divElem.addClass('subtile');
-			/*.draggable({
-				grid: [unitSizeX, unitSizeY],
-				containment: "parent",
-				stop: function() {
-					var scale = this.grid.getScale();
-					var unitSizeX = this.grid.getUnitSizes().width * scale;
-					var unitSizeY = this.grid.getUnitSizes().height * scale;
-
-					var newCoordX = parseInt(parseFloat(this.style.left) / unitSizeX);
-					var newCoordY = parseInt(parseFloat(this.style.top) / unitSizeY); 	
-					model.set({coords: [newCoordX, newCoordY]});
-					console.log(newCoordX, newCoordY);
-				}
-			})
-			.resizable({
-				grid:unitSizeX,
-				//containment: 'parent',
-				handles: 'ne, se',
-				//helper: 'ui-resizable-helper',
-				start: function(event, ui) {
-
-				},
-				resize: function( event, ui) {
-					var scale = this.grid.getScale();
-					var unitSize = this.grid.getUnitSizes().width * scale;
-
-					var oldWidth = model.get('size')[0];
-					var oldHeight = model.get('size')[1];
-
-					var newWidth = parseInt(ui.size.width / unitSize);
-					var newHeight = parseInt(ui.size.height / unitSize);
-
-					if (oldWidth === newWidth && oldHeight === newHeight) {
-						return;
-					}
-				},
-				stop: function(event, ui) {
-					var scale = this.grid.getScale();
-					var unitSize = this.grid.getUnitSizes().width * scale;
-
-					var oldWidth = model.get('size')[0];
-					var oldHeight = model.get('size')[1];
-
-					var newWidth = Math.round(ui.size.width / unitSize);
-					var newHeight = Math.round(ui.size.height / unitSize);
-					//alert(newWidth, newHeight);
-					if (oldWidth === newWidth && oldHeight === newHeight) {
-						return;
-					}
-					model.set({ size: [newWidth, newHeight]});
-					model.trigger('resize', model);
-				}
-			}); */
 
 			return divElem;
 

@@ -11,7 +11,8 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			diffsensors: true,
 			dbgroup: undefined,
 			dbname: undefined,
-			server: undefined
+			server: undefined,
+			cfgObj: null
 		},
 		initialize: function() {
 			//console.log("model created");
@@ -20,6 +21,36 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			});
 		},
 		serToJSON: function() {
+			var collection = this.get('collection').models;
+
+			var cfg = this.get('cfgObj');
+
+			if (!cfg) {
+				cfg = this.serFromModel();
+			} else {
+				delete cfg['_id'];
+
+				cfg['size'] = this.get('size');
+				cfg['coords'] = this.get('coords');
+				cfg['sensors'] = [];
+
+				for (var i = 0; i < collection.length; i++) {
+					var sensor = collection[i];
+					var jsonSensorAttr = {};
+					var options = {
+						'diffsensors': this.get('diffsensors'),
+						'type': 'group'
+					}
+
+					jsonSensorAttr = sensor.serToJSON(options);
+
+					cfg['sensors'].push(jsonSensorAttr);
+				}
+			}
+
+			return cfg;
+		},
+		serFromModel: function() {
 			var collection = this.get('collection').models;
 
 			var jsonAttr = {
@@ -44,7 +75,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				var sensor = collection[i];
 				var jsonSensorAttr = {};
 				var options = {
-					'diffsensors' : this.get('diffsensors'),
+					'diffsensors': this.get('diffsensors'),
 					'type': 'group'
 				}
 
@@ -53,12 +84,10 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				jsonAttr['sensors'].push(jsonSensorAttr);
 			}
 
-			console.log(jsonAttr);
-
 			return jsonAttr;
 		}
 	});
 
 	return SensorGroupModel;
 
-}); 
+});

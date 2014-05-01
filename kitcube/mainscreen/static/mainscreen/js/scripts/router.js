@@ -78,7 +78,7 @@ define([
 				//tabContainer.remove();
 				//this.boardViewTabs[numTab].board = new BoardView({aceText : text});
 				console.log('exists');
-				curBoard.reinitWithOptions({aceText : text});
+				//curBoard.reinitWithOptions({aceText : text});
 				if ($("#kitcube-console").val() !== undefined)
 					$("#kitcube-console").hide();
 				if (container.val() !== undefined) {

@@ -77,7 +77,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.container.find('.close').click(function(event){
 				event.stopImmediatePropagation();
-				self.container.remove();
+				self.removeFromDom();
+				//event.stopImmediatePropagation();
+				//self.container.remove();
 				return;
 			}); 
 
@@ -226,6 +228,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 
 			this.container.css('background-color', this.model.get('bgcolor'));
+
+			var self = this;
+			this.container.find('.close').click(function(event){
+				event.stopImmediatePropagation();
+				self.removeFromDom();
+				return;
+			});
+
 		},
 		renderGrouped: function() {
 			var newSensor = this.model;
@@ -376,7 +386,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//console.log('updated');
 		},
 		removeFromDom: function() {
+			this.trigger('removing', this.model);
+			this.model.trigger('removing', this.model);
+			if (this.linkModel !== undefined) {
+				this.linkModel.trigger('removing', this.linkModel);
+			}
 			this.container.remove();
+			this.remove();
+			this.unbind();
 		},
 		onresize: function(model) {
 

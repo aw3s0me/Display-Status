@@ -34,19 +34,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.model.on('resize', this.onresize, this);
 			this.render();
 
-			/*this.container.parent().click(function(event){
-				var elems = $('.canvas').find('.activeSensor');
-				for (var elem in elems) {
-					console.log(elem);
-				}
-			});
-
-			this.container.click(function(event){
-				var elems = $('.canvas').find('.activeSensor');
-				for (var elem in elems) {
-					console.log(elem);
-				}
-			}); */
 			this.container.find('.addChartBtn').click(function(event){
 				var elems = $('.canvas').find('.activeSensor');
 				var dataSeries = [];
@@ -61,6 +48,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					var sensorModel = _allSensors[id];
 					sensorModel.on('addPoint', self.addNewPoint, self);
 					sensorModel.on('deleteSensor', self.removeSeries, self);
+					sensorModel.on('removing', self.onSensorRemoving, self);
 					if (!sensorModel) {
 						throw "Cant add sensor";
 					} 
@@ -88,21 +76,14 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 									yaxis.update({
 										lineColor: color
 									});
-
-
 									break;
-									//break;
 								}
 							} 
 							break;
 						}
-					}
-
-
-					
+					}				
 				}
 				self.chart.redraw();
-
 			});
 
 			this.container.find('.legendChartBtn').click(function(event){
@@ -116,7 +97,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				}
 				
 			});
-			//this.container.parent().find().remove();
 		},
 		render: function() {
 			//load html template
@@ -449,6 +429,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			this.chart.setSize(width, height, true);
 
+		},
+		onSensorRemoving: function(model) {
+			this.removeSeries(model);
 		}
 	});
 

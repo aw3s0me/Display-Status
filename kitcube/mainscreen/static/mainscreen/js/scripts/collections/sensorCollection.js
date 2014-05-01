@@ -75,6 +75,21 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 				};
 			}
 			return obj;
+		},
+		removeModel: function(model) {
+			var models = this.models;
+			var link = model.get('link');
+			model.trigger('destroy', model);
+			//this.remove(model);
+			for (var i = 0; i < models.length; i++) {
+				if (link === models[i].id) {
+					models.splice(i, 1);
+					continue;
+				}
+				if (model === models[i]) {
+					models.splice(i, 1);
+				}
+			}
 
 		}
 

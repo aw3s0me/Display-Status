@@ -12,12 +12,24 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			showheaders: false,
 			render: "table",
 			minsize: [2, 2],
-			scrolling: false
+			scrolling: false,
+			cfgObj: null
 		},
 		initialize: function() {
 			//options || (options = {});
 		},
 		serToJSON: function() {
+			var cfg = this.get('cfgObj');
+			if (!cfg) {
+				cfg = this.serFromModel();
+			}
+
+			cfg['size'] = this.get('size');
+			cfg['coords'] = this.get('coords');
+
+			return cfg;
+		},
+		serFromModel: function() {
 			var listClone = this.clone();
 			listClone.unset('id', {silent: true});
 

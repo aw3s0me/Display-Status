@@ -47,7 +47,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			valUnit: "NaN",
 			link: undefined,
 			factor: 1,
-			linecolor: undefined
+			linecolor: undefined,
+			cfgObj: null
 		},
 		initialize: function() {
 			//console.log("model created");
@@ -427,9 +428,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					var y = parseFloat(values[values.length - 1]);
 					//if (self.get('values').length > 10) {self.get('values').shift();}
 
-					var array = self.get('values').slice(0); //cloning of array, because backbone works with only one instance
+					//var array = self.get('values').slice(0); //cloning of array, because backbone works with only one instance
 					var valToPush = [x, y];
-
+					var array = self.get('values');
 					array.push(valToPush);
 					self.set({
 						'value': y,
@@ -514,6 +515,26 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			return 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + this.get('server') + '&db_name=' + this.get('dbname') + '&db_group=' + this.get('dbgroup') + '&db_mask=' + this.get('mask') + '&window=-1';
 		},
 		serToJSON: function(options) {
+			var cfg = this.get('cfgObj');
+
+			if (!cfg) 
+				cfg = this.serFromModel(options);
+			else {
+				if (cfg['_id']) {
+					delete cfg['_id'];
+				}
+
+				if (options) {
+					if (options['type'] !== 'group') {
+						cfg['size'] = this.get('size');
+						cfg['coords'] = this.get('coords');
+					}
+				}
+			}
+
+			return cfg;
+		},
+		serFromModel: function(options) {
 			var sensorClone = this.clone();
 
 			if (options) {
@@ -565,7 +586,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					silent: true
 				});
 			}
-			
+
 			sensorClone.unset('values', {
 				silent: true
 			});

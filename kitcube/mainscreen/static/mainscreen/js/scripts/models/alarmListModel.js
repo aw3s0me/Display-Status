@@ -6,7 +6,8 @@ define(['jquery', 'underscore', 'backbone', 'collections/alarmCollection'], func
 			size: [],
 			coords: [],
 			cols: undefined,
-			collection: undefined
+			collection: undefined,
+			cfgObj: {}
 		},
 		initialize: function() {
 			//options || (options = {});

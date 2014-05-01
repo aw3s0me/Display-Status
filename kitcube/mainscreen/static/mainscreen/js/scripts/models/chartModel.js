@@ -17,10 +17,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			rangeToDate: undefined,
 			scale: 1,
 			border: 1,
-			radius: 0
+			radius: 0,
+			cfgObj: {}
 		},
 		initialize: function() {
-			//console.log("model created");
 			this.on('change: module', function() {
 				//do smth
 			});
@@ -127,25 +127,23 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			chart.borderRadius = this.get('radius');
 			chart.borderWidth = this.get('border');
 
-			/*chart.events = {
-				load: function(event) {
-					this.yAxis[0].update({
-						lineColor: this.series[0].color
-					});
-				}
-			}*/
-
 			return chart;
-
 		},
 		serToJSON: function() {
-			var chartClone = this.clone();
-			chartClone.unset('id', {silent: true});
-			chartClone.unset('seriesArr', {silent: true});
-			chartClone.unset('puredata', {silent: true});
-			chartClone.unset('sensorModels', {silent: true});
+			var cfg = this.get('cfgObj');
+			delete cfg['_id'];
+			cfg['size'] = this.get('size');
+			cfg['coords'] = this.get('coords');
 
-			return _.clone(chartClone.attributes);
+			if (cfg['range'] !== this.get('range') && cfg['range'] !== undefined) {
+				cfg['range'] = this.get('range');
+			}
+
+			if (this.get('link') !== []) {
+				cfg['link'] = this.get('link');
+			}
+
+			return cfg;
 		}
 	});
 

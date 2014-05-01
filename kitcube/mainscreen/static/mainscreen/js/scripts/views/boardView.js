@@ -83,9 +83,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			var prsObj = myParser.parseJson(textToParse);
 			this.insertFromCfg(prsObj);
 		},
-		submitTest: function() {
-
-		},
 		toggleGrid: function() {
 			var holder = $("#tab1");
 			var attr = holder.attr('grid');
@@ -122,39 +119,48 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			return e;
 		},
 		insertFromCfg: function(prsObj) {
+			var singleSensorsToAdd = [];
+			var sensorGroupsToAdd = [];
+			var sensorTablesToAdd = [];
+			var alarmListsToAdd = [];
+			var chartsToAdd = [];
+
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
 				attr._id = _id;
 				switch (attr["type"]) {
 					case "sensor":
-						this.addSingleSensor(attr);
+						singleSensorsToAdd.push(attr);
 						break;
 					case "sensortable":
-						this.addSensorTable(attr);
+						sensorTablesToAdd.push(attr);
 						break;
 					case "sensorgroup":
-						this.addSensorGroup(attr);
+						sensorGroupsToAdd.push(attr);
 						break;
 					case "alarmlist":
-						this.addAlarmList(attr);
+						alarmListsToAdd.push(attr);
 						break;
 					case "chart":
-						this.addChart(attr);
+						chartsToAdd.push(attr);
 						break;
 					default:
 						break;
 				}
 			}
+
+			this.addAllSingleSensors(singleSensorsToAdd);
+			this.addAllSensorGroups(sensorGroupsToAdd);
+			this.addAllTables(sensorTablesToAdd);
+			this.addAllAlarmLists(alarmListsToAdd);
+			this.addAllCharts(chartsToAdd);
+
 			var self = this;
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
 			}, 2000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
-			//var PriorityQueue = require('queue');
-
-			//var renderQueue = new PriorityQueue(function(a, b) {return a.priority - b.priority;});
-
 
 			this.updSensorsInterval = window.clearInterval(this.updSensorsInterval);
 
@@ -167,14 +173,18 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 
 			var newElements = {
 				singlesensors: {},
+				charts: {},
 				alarms: {},
-				charts: {}
+				sensorgroups: {},
+				tables: {}
 			}
 
 			var newViews = {
 				singlesensors: {},
+				charts: {},
 				alarms: {},
-				charts: {}
+				sensorgroups: {},
+				tables: {}
 			}
 
 			for (var _id in prsObj) {
@@ -630,7 +640,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				size: attr["size"],
 				coords: attr["coords"],
 				values: new Array(),
-				lastTime: new Date
+				lastTime: new Date,
+				cfgObj: attr
 			});
 			//console.log(newSensor);
 			var newSensorView = new SensorView({
@@ -705,7 +716,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				colnames: attr['colnames'],
 				showheaders: attr['showheaders'],
 				name: attr['name'],
-				render: attr['render']
+				render: attr['render'],
+				cfgObj: attr
 			});
 
 			this.elements.tables[attr._id] = newSensorTableModel;
@@ -732,7 +744,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				coords: attr["coords"],
 				puredata: {},
 				range: attr["startrange"],
-				scale: this.grid.getScale()
+				scale: this.grid.getScale(),
+				cfgObj: attr
 			});
 
 			if (newChart.get('link')) {
@@ -803,7 +816,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 					coords: sensorObj["coords"],
 					values: new Array(),
 					lastTime: new Date,
-					factor: sensorObj["factor"]
+					factor: sensorObj["factor"],
+					cfgObj: sensorObj
 				});
 
 				if (this.sensors[sensorObj["id"]]) {
@@ -811,6 +825,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				}
 
 				this.sensors[sensorObj["id"]] = newSensor;
+				newSensor.on('removing', function() {
+					delete this.sensors[newSensor.get('id')];
+				}, this);
 				sensorModelsArr.push(newSensor);
 			}
 
@@ -884,7 +901,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				size: attr['size'],
 				coords: attr['coords'],
 				diffsensors: attr['diffsensors'],
-				collection: new SensorCollection(sensorModelsArr)
+				collection: new SensorCollection(sensorModelsArr),
+				cfgObj: attr
 			});
 
 			if (attr['diffsensors'] === false) {
@@ -903,6 +921,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			});
 
 			this.views.sensorgroups[attr._id] = newSensorGroupView;
+			newSensorGroupView.on('removing', function() {
+				//delete this.elements.sensorgroups[attr._id];
+				delete this.views.sensorgroups[attr._id];
+			}, this);
+
 			this.elements.sensorgroups[attr._id] = newSensorGroupModel;
 			$(window).trigger('resize'); //because big text works only after resize event
 		},
@@ -955,7 +978,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				size: options.size,
 				coords: options.coords,
 				cols: options.cols,
-				type: 'alarmlist'
+				type: 'alarmlist',
+				cfgObj: attr
 
 			});
 
@@ -966,8 +990,38 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				grid: this.grid,
 			});
 			this.views.alarms[attr._id] = newAlarmListView;
+		},
+		//need refactoring
+		addAllCharts: function(arr) {
+			for (var i = 0; i < arr.length; i++) {
+				var attr = arr[i];
+				this.addChart(attr);
+			}
+		},
+		addAllSingleSensors: function(arr) {
+			for (var i = 0; i < arr.length; i++) {
+				var attr = arr[i];
+				this.addSingleSensor(attr);
+			}
+		},
+		addAllAlarmLists: function(arr) {
+			for (var i = 0; i < arr.length; i++) {
+				var attr = arr[i];
+				this.addAlarmList(attr);
+			}
+		},
+		addAllSensorGroups: function(arr) {
+			for (var i = 0; i < arr.length; i++) {
+				var attr = arr[i];
+				this.addSensorGroup(attr);
+			}
+		},
+		addAllTables: function(arr) {
+			for (var i = 0; i < arr.length; i++) {
+				var attr = arr[i];
+				this.addSensorTable(attr);
+			}
 		}
-
 	});
 
 	// 'jquery ', 'underscore ', 'backbone ' will not be accessible in the global scope
