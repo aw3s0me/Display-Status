@@ -695,6 +695,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 					if (sensorInfoObj["id"] !== undefined) {
 						sensorModelArr.push(newSensor);
 						this.sensors[sensorInfoObj["id"]] = newSensor;
+						newSensor.on('removing', function(){
+							if (this.sensors) {
+								delete this.sensors[sensorInfoObj["id"]];
+							}
+						}, this);
 					}
 				}
 
@@ -729,6 +734,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 
 			this.views.tables[attr._id] = newSensorTableView;
 
+			newSensorTableModel.on('removing', function() {
+				if (this.elements) {
+					this.elements.tables[attr._id] = null;
+					this.views.tables[attr._id] = null;
+				}
+			}, this);
 			$(window).trigger('resize'); //because big text works only after resize event
 		},
 		addChart: function(attr) {

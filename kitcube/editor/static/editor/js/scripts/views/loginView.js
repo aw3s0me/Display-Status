@@ -5,11 +5,30 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html'], functi
 		el: undefined,
 		initialize: function() {
 			this.render();
-			
+
 		},
 		render: function() {
 			var compiledTemplate = _.template(LoginTemplate, {});
 			this.container.append(compiledTemplate);
+			this.el = $('#loginForm');
+		},
+		hide: function() {
+			this.el.hide();
+		},
+		show: function() {
+			this.el.show();
+		},
+		isHidden: function() {
+			if (this.el.is(':hidden')) {
+				return true;
+			} else
+				return false;
+		},
+		isShown: function() {
+			if (this.el.is(':hidden')) {
+				return false;
+			} else
+				return true;
 		}
 
 

@@ -18,10 +18,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			if (options.model) {
 				this.model = options.model;
 			}
-			
-
 			this.groups = this.model.get('groups');
-
 			
 			if (this.model.get('render') === "grid") {
 				rendertype = "grid";
@@ -34,7 +31,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 				}
 				this.renderJqGrid();
 				this.model.on('resize', this.onresizeGrid, this);
-
 
 				return;
 			}
@@ -167,8 +163,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			$('th.ui-th-column div').css('height', 'auto !important');
 			$('th.ui-th-column div').css('white-space', 'normal !important'); 
 
-			
-			
 			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
 			this.prevGboxHeight = gboxHeight;
 			var finalGridHeight = this.container.height() - gboxHeight - 2;
@@ -184,7 +178,20 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			$('.ui-jqgrid .ui-jqgrid-bdiv').css('overflow-y', 'hidden');
 			$('.ui-jqgrid .ui-jqgrid-hdiv').css('overflow', 'hidden');
 			//$('.ui-jqgrid .ui-jqgrid-btable .jqgrow td').css('height', 0 * scale + 'px !important');
-			
+
+			var s3 = document.createElement('div');
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 12 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 4 * scale + 'px';
+			s3.innerHTML = "<b>x</b>";
+			s3.style.color = "black";
+			s3.style.cursor = "pointer";
+			this.container.append(s3);
+			var self = this;
+			$(s3).click(function(event) {
+				self.removeFromDom();
+			});
 		},
 		renderTable: function() {
 			var sensorGroupCollection = this.model.get('groups');
@@ -308,6 +315,21 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 			//var colCount = newTable.find('tbody tr:first td').length;]
 			var colCount = newTable.find('tbody tr:first').children().length;
 			this.model.set({minsize: [colCount, rowCount]});
+
+			var s3 = document.createElement('div');
+			s3.style.position = 'absolute';
+			s3.style.fontSize = 12 * scale + 'px';
+			s3.style.right = 5 * scale + 'px';
+			s3.style.top = 2 * scale + 'px';
+			s3.innerHTML = "<b>x</b>";
+			s3.style.color = "black";
+			s3.style.cursor = "pointer";
+			this.container.append(s3);
+			var self = this;
+			$(s3).click(function(event) {
+				self.removeFromDom();
+			});
+
 		},
 		reloadView: function() {
 			this.container.find('table').trigger('reloadGrid');
@@ -340,8 +362,19 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel'], function
 		},
 		removeFromDom: function() {
 			//if (this.rendertype === "grid")
-
+			var sensorGroups = this.model.get('groups');
+			for (var i = 0; i < sensorGroups.length; i++) {
+				var models = sensorGroups[i].models;
+				for (var j = 0; j < models.length; j++) {
+					var sensor = models[j];
+					sensor.trigger('removing', sensor);
+					sensor.trigger('destroy', sensor);
+				}
+			}
 			this.container.parent().remove();
+			this.model.trigger('removing', this.model);
+			this.remove();
+			this.unbind();
 		},
 		onresizeTable: function(model) {
 			var dx = model.get('size')[0];

@@ -42,12 +42,12 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				cols: this.get('cols')
 			}
 
-			var collModels = this.get('collection').models;
+			/*var collModels = this.get('groups').models;
 
 			for (var i = 0; i < collModels.length; i++) {
 				var model = collModels[i];
 				jsonAttr[model.get('id')] = model.serToJSON();
-			}
+			} */
 
 			return jsonAttr;
 		}

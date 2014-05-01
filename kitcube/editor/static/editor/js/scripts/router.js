@@ -33,12 +33,28 @@ define([
 		mySettingsView: undefined,
 		myNavPanel: undefined,
 		showLoginView: function() {
-			if (this.myLoginView === undefined) {
-				this.myLoginView = new LoginView();
+			if (this.myLoginView.isHidden()) {
+				this.myLoginView.show();
+			}
+
+			if (this.myTextEditorView.isShown()) {
+				this.myTextEditorView.hide();
+			} 
+
+			if (this.myBoardViewContainer.isShown()) {
+				this.myBoardViewContainer.hide();
+			} 
+
+			if (this.mySettingsView.isShown()) {
+				this.mySettingsView.hide();
 			}
 
 		},
 		showTextEditorView: function() {
+			if (this.myLoginView.isShown()){
+				this.myLoginView.hide();
+			}
+
 			if (this.myTextEditorView.isHidden()) {
 				this.myTextEditorView.show();
 			} 
@@ -53,6 +69,10 @@ define([
 
 		},
 		showSettingsView: function() {
+			if (this.myLoginView.isShown()){
+				this.myLoginView.hide();
+			}
+
 			if (this.mySettingsView.isHidden()) {
 				this.mySettingsView.show();
 			} 
@@ -67,6 +87,11 @@ define([
 
 		},
 		showBoardView: function(id) {
+
+			if (this.myLoginView.isShown()){
+				this.myLoginView.hide();
+			}
+
 			if (this.myBoardViewContainer.isHidden()) {
 				this.myBoardViewContainer.show();
 			} 
@@ -102,7 +127,10 @@ define([
 		},
 		defaultAction: function(actions) {
 			// We have no matching route, lets just log what the URL was
-			console.log('No route:', actions);
+			if (!this.myLoginView) {
+				this.initialize();
+			}
+			this.showLoginView();
 		}
 	});
 
@@ -110,17 +138,25 @@ define([
 		var app_router = new AppRouter;
 		app_router.myNavPanel = new NavPanelView();
 
+		if (app_router.myLoginView === undefined) {
+			app_router.myLoginView = new LoginView();
+		}
+
 		if (app_router.myTextEditorView === undefined) {
 			app_router.myTextEditorView = new TextEditorView();
+			app_router.myTextEditorView.hide();
 		}
 
 		if (app_router.myBoardViewContainer === undefined) {
 			app_router.myBoardViewContainer = new BoardViewContainer();
+			app_router.myBoardViewContainer.hide();
 			app_router.myControlPanelView = new ControlPanelView();
+			app_router.myControlPanelView.hide();
 		}
 
 		if (app_router.mySettingsView === undefined) {
 			app_router.mySettingsView = new SettingsView();
+			app_router.mySettingsView.hide();
 		}
 
 		Backbone.history.start();
