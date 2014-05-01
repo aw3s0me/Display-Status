@@ -766,6 +766,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				elements: sensCollection,
 				allSensors: this.sensors
 			});
+			newChart.on('removing', function() {
+				if (this.elements) {
+					delete this.elements.charts[attr._id];
+					delete this.views.charts[attr._id];
+				}
+			}, this);
+
 			this.elements.charts[attr._id] = newChart;
 			this.views.charts[attr._id] = newChartView;
 		},
@@ -826,7 +833,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 
 				this.sensors[sensorObj["id"]] = newSensor;
 				newSensor.on('removing', function() {
-					delete this.sensors[newSensor.get('id')];
+					if (this.sensors) 
+						delete this.sensors[newSensor.get('id')];
 				}, this);
 				sensorModelsArr.push(newSensor);
 			}
@@ -923,7 +931,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			this.views.sensorgroups[attr._id] = newSensorGroupView;
 			newSensorGroupView.on('removing', function() {
 				//delete this.elements.sensorgroups[attr._id];
-				delete this.views.sensorgroups[attr._id];
+				if (this.views) {
+					delete this.views.sensorgroups[attr._id];
+				}
+				
 			}, this);
 
 			this.elements.sensorgroups[attr._id] = newSensorGroupModel;

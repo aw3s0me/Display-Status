@@ -1,18 +1,20 @@
 define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], function($, _, Backbone, SensorCollection) {
 	var SensorGroupModel = Backbone.Model.extend({
-		defaults: {
-			id: undefined,
-			name: undefined,
-			type: "sensorgroup",
-			size: [],
-			coords: [],
-			bgcolor: undefined,
-			collection: undefined,
-			diffsensors: true,
-			dbgroup: undefined,
-			dbname: undefined,
-			server: undefined,
-			cfgObj: null
+		defaults: function(){
+			return {
+				id: undefined,
+				name: undefined,
+				type: "sensorgroup",
+				size: [],
+				coords: [],
+				bgcolor: undefined,
+				collection: undefined,
+				diffsensors: true,
+				dbgroup: undefined,
+				dbname: undefined,
+				server: undefined,
+				cfgObj: null
+			}	
 		},
 		initialize: function() {
 			//console.log("model created");

@@ -10,6 +10,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		grid: undefined,
 		chart: undefined,
 		elements: undefined,
+		model: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -49,6 +50,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					sensorModel.on('addPoint', self.addNewPoint, self);
 					sensorModel.on('deleteSensor', self.removeSeries, self);
 					sensorModel.on('removing', self.onSensorRemoving, self);
+					self.model.get('link').push(sensorModel.get('id'));
 					if (!sensorModel) {
 						throw "Cant add sensor";
 					} 
@@ -337,6 +339,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				}
 			}
 			chart.redraw();
+
+			model.off('addPoint', this.addNewPoint);
+			model.off('deleteSensor', this.removeSeries);
+			model.off('removing', this.onSensorRemoving);
+
 		},
 		rerender: function() {
 			for (var i = 0; i < this.elements.length; i++) {
@@ -408,14 +415,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		removeFromDom: function() {
 			this.container.parent().remove();
-			//this.grid.removeUnit(this.container.parent());
-			//console.log('removed chart');
+			this.remove();
+			this.unbind();
+			this.model.trigger('removing', this.model);
 		},
 		redraw: function() {
 			this.chart.redraw();
-		},
-		changeRange: function() {
-
 		},
 		onresize: function(model) {
 			var dx = model.get('size')[0];

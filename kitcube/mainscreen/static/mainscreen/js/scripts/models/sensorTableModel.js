@@ -1,19 +1,21 @@
 define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], function($, _, Backbone, SensorCollection) {
 	var SensorTableModel = Backbone.Model.extend({
-		defaults: {
-			id: undefined,
-			type: "sensortable",
-			size: [],
-			coords: [],
-			cols: undefined,
-			groups: undefined,
-			colids: undefined,
-			colnames: undefined,
-			showheaders: false,
-			render: "table",
-			minsize: [2, 2],
-			scrolling: false,
-			cfgObj: null
+		defaults: function() {
+			return {
+				id: undefined,
+				type: "sensortable",
+				size: [],
+				coords: [],
+				cols: undefined,
+				groups: undefined,
+				colids: undefined,
+				colnames: undefined,
+				showheaders: false,
+				render: "table",
+				minsize: [2, 2],
+				scrolling: false,
+				cfgObj: null
+			}
 		},
 		initialize: function() {
 			//options || (options = {});

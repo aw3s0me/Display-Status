@@ -1,13 +1,15 @@
 define(['jquery', 'underscore', 'backbone', 'collections/alarmCollection'], function($, _, Backbone) {
 	var AlarmList = Backbone.Model.extend({
-		defaults: {
-			id: undefined,
-			type: "alarmlist",
-			size: [],
-			coords: [],
-			cols: undefined,
-			collection: undefined,
-			cfgObj: {}
+		defaults: function() {
+			return {
+				id: undefined,
+				type: "alarmlist",
+				size: [],
+				coords: [],
+				cols: undefined,
+				collection: undefined,
+				cfgObj: null
+			}
 		},
 		initialize: function() {
 			//options || (options = {});

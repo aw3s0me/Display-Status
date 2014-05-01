@@ -387,11 +387,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		},
 		removeFromDom: function() {
 			this.trigger('removing', this.model);
+			this.container.remove();
 			this.model.trigger('removing', this.model);
 			if (this.linkModel !== undefined) {
 				this.linkModel.trigger('removing', this.linkModel);
 			}
-			this.container.remove();
 			this.remove();
 			this.unbind();
 		},

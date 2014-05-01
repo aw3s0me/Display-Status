@@ -1,80 +1,88 @@
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 	var Chart = Backbone.Model.extend({
-		defaults: {
-			id: undefined,
-			caption: "",
-			type: "chart",
-			charttype: undefined,
-			link: [],
-			models: [],
-			seriesArr: [],
-			legend: undefined,
-			linewidth: undefined,
-			size: [],
-			coords: [],
-			puredata: {},
-			range: "2-min",
-			rangeToDate: undefined,
-			scale: 1,
-			border: 1,
-			radius: 0,
-			cfgObj: {}
+		defaults: function() {
+			return {
+				id: undefined,
+				caption: "",
+				type: "chart",
+				charttype: undefined,
+				link: [],
+				models: [],
+				seriesArr: [],
+				legend: undefined,
+				linewidth: undefined,
+				size: [],
+				coords: [],
+				puredata: {},
+				range: "2-min",
+				rangeToDate: undefined,
+				scale: 1,
+				border: 1,
+				radius: 0,
+				cfgObj: {}
+			}
 		},
 		initialize: function() {
 			this.on('change: module', function() {
 				//do smth
 			});
-			
+
 		},
 		getXAxisObj: function() {
 			var xAxis = {};
 			xAxis.type = 'datetime';
 
 
-			switch(this.get('range')) {
-				case "2-min": {
-					xAxis.dateTimeLabelFormats = {
-						hour: '%H:%M'
+			switch (this.get('range')) {
+				case "2-min":
+					{
+						xAxis.dateTimeLabelFormats = {
+							hour: '%H:%M'
+						}
+						break;
 					}
-					break;
-				}
-				case "2-hours": {
-					xAxis.dateTimeLabelFormats = {
-						hour: '%H:%M'
+				case "2-hours":
+					{
+						xAxis.dateTimeLabelFormats = {
+							hour: '%H:%M'
+						}
+						break;
 					}
-					break;
-				}
-				case "1-day": {
-					xAxis.dateTimeLabelFormats = {
-						hour: '%a %H:%M'
+				case "1-day":
+					{
+						xAxis.dateTimeLabelFormats = {
+							hour: '%a %H:%M'
+						}
+						break;
 					}
-					break;
-				}
-				case "10-days": {
-					xAxis.dateTimeLabelFormats = {
-						day: '%a'
+				case "10-days":
+					{
+						xAxis.dateTimeLabelFormats = {
+							day: '%a'
+						}
+						break;
 					}
-					break;
-				}
-				case "4-months": {
-					xAxis.dateTimeLabelFormats = {
-						month: '%b'
+				case "4-months":
+					{
+						xAxis.dateTimeLabelFormats = {
+							month: '%b'
+						}
+						break;
 					}
-					break;
-				}
-				default: {
-					xAxis.dateTimeLabelFormats = {
-						millisecond: '%H:%M:%S.%L',
-						second: '%H:%M:%S',
-						minute: '%H:%M',
-						hour: '%H:%M',
-						day: '%e. %b',
-						week: '%e. %b',
-						month: '%b \'%y',
-						year: '%Y'
+				default:
+					{
+						xAxis.dateTimeLabelFormats = {
+							millisecond: '%H:%M:%S.%L',
+							second: '%H:%M:%S',
+							minute: '%H:%M',
+							hour: '%H:%M',
+							day: '%e. %b',
+							week: '%e. %b',
+							month: '%b \'%y',
+							year: '%Y'
+						}
+						break;
 					}
-					break;
-				}
 			}
 
 			return xAxis;
@@ -82,33 +90,39 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		getRangeToDate: function() {
 			var now = new Date;
 			var min = undefined;
-			switch(this.get('range')) {
-				case "2-min": {
-					min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds());
-					break;
-				}
-				case "2-hours": {
-					min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 2, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+			switch (this.get('range')) {
+				case "2-min":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "2-hours":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 2, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 
-					break;
-				}
-				case "1-day": {
-					min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-					break;
-				}
-				case "10-days": {
-					min =  Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 10, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "1-day":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "10-days":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 10, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 
-					break;
-				}
-				case "4-months": {
-					min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 4, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-					break;
-				}
-				default: {
-					min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds());
-					break;
-				}
+						break;
+					}
+				case "4-months":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 4, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				default:
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
 			}
 			return min;
 		},
@@ -121,7 +135,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 
 			if (this.get('caption') === "") {
-				chart.marginTop = 30*this.get('scale');
+				chart.marginTop = 30 * this.get('scale');
 			}
 
 			chart.borderRadius = this.get('radius');
