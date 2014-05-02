@@ -152,8 +152,12 @@ body {
   border: 1px solid black;
 }
 
-.activeSensor {
-  border: 2px solid yellow;
+.activeSensor1 {
+  border: 3px dotted yellow;
+}
+
+.activeSensor2 {
+  border: 3px dotted green;
 }
 
 .addChartBtn {
@@ -161,6 +165,7 @@ body {
   //height: 10%;
   color: black;
 }
+
 
 .legendChartBtn {
   //height: 10%;
@@ -170,6 +175,19 @@ body {
 .datalabels {
   background-color:white;
   z-index:9999!important;  
+}
+
+.chartAdded1 {
+  border: 3px solid yellow;
+}
+
+.chartAdded2 {
+  border: 3px solid green;
+}
+
+.chartControlPanel.rangeDropdown {
+  width: 100px;
+  height: 100px;
 }
 
 /*.sensorName {

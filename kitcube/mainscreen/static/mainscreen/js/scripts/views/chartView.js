@@ -36,14 +36,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.render();
 
 			this.container.find('.addChartBtn').click(function(event){
-				var elems = $('.canvas').find('.activeSensor');
+				var elems = $('.canvas').find('.activeSensor1');
+				var elems2 = $('.canvas').find('.activeSensor2');
 				var dataSeries = [];
 				var index = undefined;
 				var series = self.chart.series;
-				console.log(elems);
+				//console.log(elems);
 				for (var i = 0; i < elems.length; i++) {
 					var jqElement = elems[i];
-					var circle = $(jqElement).find('.chartCircle');
+					//var circle = $(jqElement).find('.chartCircle');
 					//var id = jqElement.attr('id');
 					var id = jqElement.getAttribute('id');
 					var sensorModel = _allSensors[id];
@@ -69,10 +70,57 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						if (id === sensorModel.get('id')) {
 							index = seriesObject._i;
 							color = seriesObject.color;
-							circle.css('background-color', color);
+							//circle.css('background-color', color);
 
-							$(jqElement).removeClass('activeSensor');
-							$(jqElement).addClass('chartAdded');
+							$(jqElement).removeClass('activeSensor1');
+							$(jqElement).addClass('chartAdded1');
+							var axisId = seriesObject.yAxis.userOptions.id;
+							for (var j = 0; j < self.chart.yAxis.length; j++) {
+								var yaxis = self.chart.yAxis[j];
+								if (yaxis.userOptions.id === axisId) {
+									//yaxis.options.lineColor = color;
+									yaxis.update({
+										lineColor: color
+									});
+									break;
+								}
+							} 
+							break;
+						}
+					}				
+				}
+				for (var i = 0; i < elems2.length; i++) {
+					var jqElement = elems2[i];
+					//var circle = $(jqElement).find('.chartCircle');
+					//var id = jqElement.attr('id');
+					var id = jqElement.getAttribute('id');
+					var sensorModel = _allSensors[id];
+					sensorModel.on('addPoint', self.addNewPoint, self);
+					sensorModel.on('deleteSensor', self.removeSeries, self);
+					sensorModel.on('removing', self.onSensorRemoving, self);
+					self.model.get('link').push(sensorModel.get('id'));
+					self.model.get('models').push(sensorModel);
+					if (!sensorModel) {
+						throw "Cant add sensor";
+					} 
+					var seriesObject = sensorModel.getChartProperties();
+					var axisObject = sensorModel.getChartAxisInfo({
+						axislabels: self.model.get('axislabels')
+					});
+					var color = undefined;
+					self.chart.addAxis(axisObject);
+					self.chart.addSeries(seriesObject, false);
+
+					for (var seriesName in series) {
+						var seriesObject = series[seriesName];
+						var id = seriesObject.userOptions.id;
+						if (id === sensorModel.get('id')) {
+							index = seriesObject._i;
+							color = seriesObject.color;
+							//circle.css('background-color', color);
+
+							$(jqElement).removeClass('activeSensor2');
+							$(jqElement).addClass('chartAdded2');
 							var axisId = seriesObject.yAxis.userOptions.id;
 							for (var j = 0; j < self.chart.yAxis.length; j++) {
 								var yaxis = self.chart.yAxis[j];
@@ -230,6 +278,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.chart.legendHide();
 
 			var chartControlPanel = $('<div></div>');
+			chartControlPanel.addClass('chartControlPanel');
 			chartControlPanel.css('top', 10 * scale + 'px');
 			//chartControlPanel.css('width', '100%');
 			chartControlPanel.css('right', 14 * scale + 'px');
@@ -266,16 +315,32 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				self.resetChart();
 			});
 
+			//var chooseRange = $('<select style="width: 100px;"></select>');
+			var chooseRange = $('<div class="dropdown rangeDropdown"><ul class="dropdown-menu" role="menu"><li><a href="#">Action</a></li><li><a href="#">Another action</a></li><li><a href="#">Something else here</a></li><li class="divider"></li><li><a href="#">Separated link</a></li></ul></div>');
+
+			//chooseRange.data('placeholder', 'Select Range..');
+			//chooseRange.append('<option>OLOlo</option>');
+			//chooseRange.append('<option>Nanan</option>');
+
+			chartControlPanel.append(chooseRange);
 			chartControlPanel.append(addBtn);
 			chartControlPanel.append(resetBtn);
 			chartControlPanel.append(legendBtn);
+			
+
+			
 
 			this.container.find('.highcharts-container').append(chartControlPanel);
 
 			this.chart.setSize(width, height, true);
 
 			this.setExtremes();
+			//chooseRange.chosen();
 
+			/*chooseRange.chosen({
+				disable_search_threshold: 1,
+				width: '80%'
+			});*/
 
 		},
 		setExtremes: function() {

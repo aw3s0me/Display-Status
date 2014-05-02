@@ -45,34 +45,39 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.container.mousedown(function(event) {
 				if (event.ctrlKey) {
-					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
-						self.container.addClass('activeSensor');
+					if (!self.container.hasClass('activeSensor1') && !self.container.hasClass('chartAdded1')) {
+						self.container.addClass('activeSensor1');
 						return;
 					}
-					if (self.container.hasClass('chartAdded')) {
-						self.container.find('.chartCircle').css('background-color', 'grey');
-						self.container.removeClass('chartAdded');
+					if (self.container.hasClass('activeSensor1')) {
+						self.container.removeClass('activeSensor1');
+					}
+					if (self.container.hasClass('chartAdded1')) {
+						//self.container.find('.chartCircle').css('background-color', 'grey');
+						self.container.removeClass('chartAdded1');
 						self.model.trigger('deleteSensor', self.model);	
 					}
 				}
-			});
-
-			this.container.find('.chartCircle').click(function(event) {
-				if (event.ctrlKey) {
-					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
-						self.container.addClass('activeSensor');
+				if (event.shiftKey) {
+					if (!self.container.hasClass('activeSensor2') && !self.container.hasClass('chartAdded2')) {
+						self.container.addClass('activeSensor2');
 						return;
 					}
-					if (self.container.hasClass('chartAdded')) {
-						self.container.find('.chartCircle').css('background-color', 'grey');
-						self.container.removeClass('chartAdded');
-						self.model.trigger('deleteSensor', self.model);
+					if (self.container.hasClass('activeSensor2')) {
+						self.container.removeClass('activeSensor2');
 					}
-
-					//console.log('control pushed');
-					//console.log(self.container)
-					//self.container.toggleClass("activeSensor");
+					if (self.container.hasClass('chartAdded2')) {
+						//self.container.find('.chartCircle').css('background-color', 'grey');
+						self.container.removeClass('chartAdded2');
+						self.model.trigger('deleteSensor', self.model);	
+					}
 				}
+				if (self.container.hasClass('activeSensor2') && self.container.hasClass('activeSensor1')) {
+					self.container.css('outline', '2px solid white');
+				}
+
+
+
 			});
 
 			this.container.find('.close').click(function(event){
@@ -321,13 +326,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s3.innerHTML = "<b>x</b>";
 			s3.className = "close";
 			
-			var s5 = document.createElement('div');
+			/*var s5 = document.createElement('div');
 			s5.style.position = 'absolute';
 			s5.style.left = 5 * scale + 'px';
 			s5.style.top = 30 * scale + 'px';
 			s5.style.width = 10 * scale + 'px';
 			s5.style.height = 10 * scale + 'px';
-			s5.className = "chartCircle";
+			s5.className = "chartCircle"; */
 
 			this.container.append(s0);
 			this.container.append(s1);
@@ -463,7 +468,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			$('#c' + this.model.get('id')).text(valToInsert);
 		},
 		onremovedfromchart: function() {
-			this.container.find('.chartCircle').css('background-color', 'grey');
+			//this.container.find('.chartCircle').css('background-color', 'grey');
 			this.container.removeClass('chartAdded');
 		}
 	});

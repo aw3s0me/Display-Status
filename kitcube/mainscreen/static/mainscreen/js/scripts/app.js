@@ -8,6 +8,7 @@ define([
   'kitgrid',
   'yaml',
   'jqgrid',
+  'chosen',
   //'jquerysort',
   //'fittext',
   //'slabtext',
@@ -26,13 +27,13 @@ define([
   //'views/menuRight',
   'views/txtEditorView',
   'router', // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ momentw, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, chosen,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ momentw, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {
 
       Router.initialize();
-      
+
 
       document.location.href = '#board';
 
