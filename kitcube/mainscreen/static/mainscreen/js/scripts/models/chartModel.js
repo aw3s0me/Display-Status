@@ -158,6 +158,26 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 
 			return cfg;
+		},
+		removeModel: function(modelId){
+			var link = this.get('link');
+			var models = this.get('models');
+
+			for (var i = 0; i < link.length; i++) {
+				if (modelId === link[i]) {
+					link.splice(i, 1);
+					break;
+				} 
+			}
+
+			for (var i = 0; i < models.length; i++) {
+				if (modelId === models[i].get('id')) {
+					models.splice(i, 1);
+					break;
+				}
+			}
+
+			return;
 		}
 	});
 

@@ -37,6 +37,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('resize', this.onresize, this);
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
+			this.model.on('removedFromChart', this.onremovedfromchart, this);
 
 			this.model.updateModel();
 			//var now = new Date;
@@ -66,7 +67,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 						self.container.find('.chartCircle').css('background-color', 'grey');
 						self.container.removeClass('chartAdded');
 						self.model.trigger('deleteSensor', self.model);
-						
 					}
 
 					//console.log('control pushed');
@@ -461,6 +461,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		onchangevaluelink: function(model) {
 			var valToInsert = model.get('valUnit');
 			$('#c' + this.model.get('id')).text(valToInsert);
+		},
+		onremovedfromchart: function() {
+			this.container.find('.chartCircle').css('background-color', 'grey');
+			this.container.removeClass('chartAdded');
 		}
 	});
 

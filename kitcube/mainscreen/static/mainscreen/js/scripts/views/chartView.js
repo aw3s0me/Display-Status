@@ -51,6 +51,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					sensorModel.on('deleteSensor', self.removeSeries, self);
 					sensorModel.on('removing', self.onSensorRemoving, self);
 					self.model.get('link').push(sensorModel.get('id'));
+					self.model.get('models').push(sensorModel);
 					if (!sensorModel) {
 						throw "Cant add sensor";
 					} 
@@ -102,6 +103,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		render: function() {
 			//load html template
+			var self = this;
 			var model = this.model;
 			var dataToChart = this.elements.paramToChart();
 			this.container = $("<div id='" + model.get('id') + "'></div>");
@@ -225,39 +227,48 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			this.chart.legendHide();
 
-			var s5 = $('<button>Add</button>');
-			s5.css('top', 5 * scale + 'px');
-			s5.css('left', 5 * scale + 'px');
-			s5.css('font-size', 10 * scale + 'px');
-			s5.button();
-			s5.addClass('addChartBtn');
+			var chartControlPanel = $('<div></div>');
+			chartControlPanel.css('top', 10 * scale + 'px');
+			//chartControlPanel.css('width', '100%');
+			chartControlPanel.css('left', 10 * scale + 'px');
+			chartControlPanel.css('position', 'absolute');
+			
+			var addBtn = $('<button>Add</button>');
+			addBtn.css('font-size', 10 * scale + 'px');
+			addBtn.button();
+			addBtn.addClass('addChartBtn');
 
-			this.container.append(s5);
+			var legendBtn = $('<button>Legend</button>');
+			legendBtn.css('font-size', 10 * scale + 'px');
+			legendBtn.button();
+			legendBtn.addClass('legendChartBtn');
 
-			var s6 = $('<button>Legend</button>');
-			s6.css('top', 5 * scale + 'px');
-			s6.css('right', 17 * scale + 'px');
-			s6.css('font-size', 10 * scale + 'px');
-			s6.css('z-index', '2 !important');
-			s6.button();
-			s6.addClass('legendChartBtn');
+			var closeBtn = document.createElement('div');
+			closeBtn.style.position = 'absolute';
+			closeBtn.style.fontSize = 12 * scale + 'px';
+			closeBtn.style.right = 5 * scale + 'px';
+			closeBtn.style.top = 4 * scale + 'px';
+			closeBtn.innerHTML = "<b>x</b>";
+			closeBtn.className = "close";
 
-			this.container.find('.highcharts-container').append(s6);
-
-			var closeDiv = document.createElement('div');
-			closeDiv.style.position = 'absolute';
-			closeDiv.style.fontSize = 12 * scale + 'px';
-			closeDiv.style.right = 5 * scale + 'px';
-			closeDiv.style.top = 4 * scale + 'px';
-			closeDiv.innerHTML = "<b>x</b>";
-			closeDiv.className = "close";
-
-			this.container.find('.highcharts-container').append(closeDiv);
-			var self = this;
-
-			$(closeDiv).click(function(event) {
+			this.container.find('.highcharts-container').append(closeBtn);
+			$(closeBtn).click(function(event) {
 				self.removeFromDom();
 			});
+
+			var resetBtn = $('<button>Reset</button>');
+			resetBtn.addClass('resetChartBtn');
+			resetBtn.css('fontSize', 10 * scale + 'px');
+			resetBtn.button();
+			$(resetBtn).click(function(event) {
+				self.resetChart();
+			});
+
+			chartControlPanel.append(addBtn);
+			chartControlPanel.append(resetBtn);
+			chartControlPanel.append(legendBtn);
+
+			this.container.find('.highcharts-container').append(chartControlPanel);
 
 			this.chart.setSize(width, height, true);
 
@@ -321,6 +332,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var id = model.get('id');
 			var series = chart.series;
 			var index = undefined;
+			model.off('addPoint', this.addNewPoint);
+			model.off('deleteSensor', this.removeSeries);
+			model.off('removing', this.onSensorRemoving);
+			this.model.removeModel(model.get('id'));
+
 			for (var seriesName in series) {
 				var seriesObject = series[seriesName];
 				var id = seriesObject.userOptions.id;
@@ -333,17 +349,14 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 							yaxis.remove();
 						}
 					}
-					seriesObject.remove();
+					seriesObject.remove(true);
 					//index = seriesObject._i;
-					break;
+					//break;
 				}
 			}
-			chart.redraw();
+			//chart.redraw();
 
-			model.off('addPoint', this.addNewPoint);
-			model.off('deleteSensor', this.removeSeries);
-			model.off('removing', this.onSensorRemoving);
-
+			
 		},
 		rerender: function() {
 			for (var i = 0; i < this.elements.length; i++) {
@@ -437,6 +450,33 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		onSensorRemoving: function(model) {
 			this.removeSeries(model);
+		},
+		resetChart: function() {
+			//console.log('reset');
+			var models = _.clone(this.model.get('models'));
+			var length = models.length;
+
+			/*for (var i = 0; i < length; i++) {
+				this.removeSeries(models[i]);
+			} */
+
+			for (var i = 0; i < models.length; i++) {
+				models[i].trigger('removedFromChart');
+				models[i].off('addPoint', this.addNewPoint);
+				models[i].off('deleteSensor', this.removeSeries);
+				models[i].off('removing', this.onSensorRemoving);
+				this.model.removeModel(models[i].get('id'));
+			}
+
+			while(this.chart.series.length > 0)
+   				this.chart.series[0].remove(); 
+
+   			while(this.chart.yAxis.length > 0)
+   				this.chart.yAxis[0].remove();
+
+   			console.log(this.chart);
+   			chart.redraw();
+
 		}
 	});
 
