@@ -56,7 +56,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						throw "Cant add sensor";
 					} 
 					var seriesObject = sensorModel.getChartProperties();
-					var axisObject = sensorModel.getChartAxisInfo();
+					var axisObject = sensorModel.getChartAxisInfo({
+						axislabels: self.model.get('axislabels')
+					});
 					var color = undefined;
 					self.chart.addAxis(axisObject);
 					self.chart.addSeries(seriesObject, false);
@@ -230,7 +232,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var chartControlPanel = $('<div></div>');
 			chartControlPanel.css('top', 10 * scale + 'px');
 			//chartControlPanel.css('width', '100%');
-			chartControlPanel.css('left', 10 * scale + 'px');
+			chartControlPanel.css('right', 14 * scale + 'px');
 			chartControlPanel.css('position', 'absolute');
 			
 			var addBtn = $('<button>Add</button>');
@@ -475,7 +477,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
    				this.chart.yAxis[0].remove();
 
    			console.log(this.chart);
-   			chart.redraw();
+   			this.chart.redraw();
+
+		},
+		addAdeiChart: function(models) {
 
 		}
 	});

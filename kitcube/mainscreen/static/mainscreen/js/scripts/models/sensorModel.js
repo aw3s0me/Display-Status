@@ -21,7 +21,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	var Sensor = Backbone.Model.extend({
 		defaults: {
 			id: undefined,
-			name: undefined,
+			name: "",
 			type: "sensor",
 			sensortype: "default",
 			sensorviewtype: undefined,
@@ -463,12 +463,13 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				lineWidth: 3 */
 			}
 		},
-		getChartAxisInfo: function() {
+		getChartAxisInfo: function(options) {
 			var self = this;
+			var axislabels = options.axislabels;
 			var axisObj = {
 				id: this.get('id') + '-axis',
-				title: {
-					text: ""//this.get('name')
+				//title: {
+					//text: ""//this.get('name')
 					//align: 'middle',
 					//offset: 35
 					//y: -10
@@ -477,10 +478,26 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					formatter: function() {
 						return ("<span class='datalabels'>" + this.y + "</span>");
 					}*/
-				},
+				//},
 				lineWidth: 2
 				//lineColor: this.get('bgcolor')
 			};
+
+			if (axislabels === false) {
+				axisObj.title = {
+					text: ""
+				}
+			}
+			else {
+				var text = this.get('name');
+				if (this.get('unit') !== "") {
+					text += " (" + this.get('unit') + ")";
+				}
+
+				axisObj.title = {
+					text: text
+				}
+			}
 
 			if (this.get('exp') !== true) {
 				if (this.get('precision') === undefined) {

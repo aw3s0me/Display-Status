@@ -19,7 +19,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				scale: 1,
 				border: 1,
 				radius: 0,
-				cfgObj: {}
+				cfgObj: null,
+				axislabels: true
 			}
 		},
 		initialize: function() {

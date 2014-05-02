@@ -756,7 +756,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				puredata: {},
 				range: attr["startrange"],
 				scale: this.grid.getScale(),
-				cfgObj: attr
+				cfgObj: attr,
+				axislabels: attr['axislabels']
 			});
 
 			if (newChart.get('link')) {
