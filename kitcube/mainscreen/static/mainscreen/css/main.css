@@ -114,18 +114,6 @@ body {
 .ui-resizable-se {position: absolute; bottom: 0px; right: 0px; }
 .ui-resizable-ne {position: absolute; top: 0px; right: 0px; }
 
-#btnLogin {
-  float: right;
-}
-
-#btnText {
-  float: right;
-}
-
-#btnBoard {
-  float: right;
-}
-
 .group {
     position: absolute;
     background: rgba(100,200,100,0.7);
@@ -270,3 +258,49 @@ body {
 
 /* SLABTEXT END */
 
+#navBarKitcube {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#navBarContainer {
+  text-align:center; 
+  vertical-align: middle;
+}
+
+/*@media (max-width: 768px) {
+  .btn-responsive {
+    //padding:2px 4px;
+    font-size:60%;
+    line-height: 1;
+  }
+  .input-responsive {
+    font-size: 70%;
+    line-height: 1;
+  }
+  .demo-logo {
+    font-size: 90%;
+  }
+  #navBarKitcube {
+    width: 80%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .btn-responsive {
+    //padding:4px 9px;
+    font-size:70%;
+    line-height: 1.2;
+  }
+  .input-responsive {
+    font-size: 80%;
+    line-height: 1.2;
+  }
+  .demo-logo {
+    font-size: 95%;
+  }
+  #navBarKitcube {
+    width: 80%;
+  }
+} */

@@ -32,6 +32,7 @@ define([
     $(document).ready(function($) {
 
       Router.initialize();
+      
 
       document.location.href = '#board';
 
