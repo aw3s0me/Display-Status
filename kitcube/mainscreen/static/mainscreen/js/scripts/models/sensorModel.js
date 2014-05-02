@@ -451,8 +451,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			})
 		},
 		getChartProperties: function() {
-			return {
-				"name": this.get('name'),
+			var seriesName = this.get('name');
+
+			var chartProp = {
 				"data": this.get('values'),
 				//"type": 'scatter',
 				"id": this.get('id'),
@@ -462,6 +463,14 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				},
 				lineWidth: 3 */
 			}
+
+			if (this.get('unit') !== "") {
+				seriesName += " (" + this.get('unit') + ")"; 
+			}
+
+			chartProp.name = seriesName;
+			
+			return chartProp;
 		},
 		getChartAxisInfo: function(options) {
 			var self = this;
