@@ -7,7 +7,7 @@ require.config({
     "backbone": "vendor/backbone-amd/backbone",
     //Flat-ui part
     "bootstrap": "vendor/bootstrap/dist/js/bootstrap",
-    "flatui-app": "vendor/flat-ui-official/js/application",
+    //"flatui-app": "vendor/flat-ui-official/js/application",
     //Text Editor part
     "ace": "vendor/ace/build/src-min/ace",
     //There goes my helpers
@@ -72,7 +72,7 @@ require.config({
         "jquery"
       ]
     },
-    "flatui-app": {
+    /*"flatui-app": {
       deps: [
         "jquery",
         "jqueryui",
@@ -84,7 +84,7 @@ require.config({
         "vendor/flat-ui-official/js/jquery.placeholder",
         "vendor/flat-ui-official/js/jquery.tagsinput"
       ]
-    },
+    },*/
     kitgrid: {
       deps: [
         "jquery"//,

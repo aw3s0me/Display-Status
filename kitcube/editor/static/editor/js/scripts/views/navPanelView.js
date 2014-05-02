@@ -17,7 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/navPanel.html'], fun
 				},
 				function() {
 					$('a', $(this)).stop().animate({
-						'marginLeft': '-85px'
+						'marginLeft': '-40px'
 					}, 200);
 				}
 			);
