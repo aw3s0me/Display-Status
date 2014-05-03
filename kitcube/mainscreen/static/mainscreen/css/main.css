@@ -162,9 +162,9 @@ body {
 }
 
 .activeSensor2 {
-  border-bottom: 2px dotted orange;
-  border-left: 2px dotted orange;
-  //outline: 2px solid orange;
+  border-bottom: 2px dotted white;
+  border-left: 2px dotted white;
+  //outline: 2px solid white;
 }
 
 .addChartBtn {
@@ -190,18 +190,29 @@ body {
 }
 
 .chartAdded2 {
-  border-bottom: 2px solid orange;
-  border-left: 2px solid orange;
-  //outline: 2px solid orange;
+  border-bottom: 2px solid white;
+  border-left: 2px solid white;
+  //outline: 2px solid white;
+}
+
+.sensUnit2 {
+  color: white;
 }
 
 .chartAdded {
   border: 2px solid yellow;
 }
 
-.chartControlPanel.rangeDropdown {
+.rangeContainer {
+  //  position: absolute;
+  //z-index: 10;
+}
+
+.rangeDropdown {
   width: 100px;
-  height: 100px;
+  height: 20px;
+  position: relative;
+  //z-index: 10;
 }
 
 /*.sensorName {

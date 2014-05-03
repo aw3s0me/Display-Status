@@ -1,7 +1,9 @@
 {
     "sensorgroup1": {
         "type": "sensorgroup",
-        "name": "Magnet Pinch/Detector",
+        "name": "Magnet",
+        "groupname1": "Pinch",
+        "groupname2": "Detector",
         "size": [16, 3],
         "coords": [0, 0],
         "diffsensors": false,
@@ -404,7 +406,9 @@
     },
     "sensorgroup8": {
         "type": "sensorgroup",
-        "name": "Veto Peltier 1/Veto Peltier 2",
+        "name": "Veto",
+        "groupname1": "Peltier 1",
+        "groupname2": "Peltier 2",
         "size": [16, 3],
         "coords": [0, 12],
         "diffsensors": false,

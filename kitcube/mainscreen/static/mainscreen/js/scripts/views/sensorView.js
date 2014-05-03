@@ -332,13 +332,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				s5.className += " slab";
 				s5.className += " bigtext";
 				s5.style.paddingRight = 6 * scale + 'px';
+				$(s5).css('color', 'white');
 				tempDiv.css('width', $(s5).width());
 				tempDiv.css('height', $(s5).height());
 				$(s5).bigtext({
 					maxfontsize: maxFont
 				});
 				this.container.append(s5);
-				s2.innerHTML = this.linkModel.get('unit') + "/" + s2.innerHTML;
+				s2.innerHTML = "<span class='sensUnit2'>" + this.linkModel.get('unit') + "</span>" + "/" + s2.innerHTML;
 				this.container.attr('id2', this.linkModel.get('id'));
 			}
 

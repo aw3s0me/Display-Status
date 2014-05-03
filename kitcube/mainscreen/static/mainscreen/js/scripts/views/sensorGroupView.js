@@ -47,13 +47,42 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'views/se
 			this.container = $('<div></div>');
 			this.container.attr('id', newSensorGroup.get('id'));
 
-			var s0 = document.createElement('div');
-    		s0.style.position = 'absolute';
-    		s0.style.fontSize = 30*scale+'px';
-    		s0.style.left = 5*scale + 'px';
-    		s0.style.fontWeight = 'bold';
-    		s0.innerHTML = newSensorGroup.get("name");
-    		this.container.append($(s0));
+			var nameDiv = $('<div></div>');
+    		nameDiv.css('position', 'absolute');
+    		nameDiv.css('font-size', 30*scale+'px');
+    		nameDiv.css('left', 5*scale + 'px');
+    		nameDiv.css('font-weight', 'bold');
+    		
+    		nameDiv.css('width', '100%');
+
+    		var tableName = $('<table></table>');
+    		var tr;
+    		var tr2;
+    		if (this.model.get('groupname1') !== undefined && this.model.get('groupname2') !== undefined) {
+    			tr = '<tr>' + '<td rowspan="2">' + this.model.get('name') + "&nbsp&nbsp" + '</td>';
+    			//groupNameDiv.append(this.model.get('groupname1') + "<p>" + this.model.get('groupname2') + "</p>");
+    			//$(nameDiv).append(groupNameDiv);
+    			tr += '<td class="groupName">' + this.model.get('groupname1') + '</td>';
+    			tr2 = '<tr>' + '<td class="groupName">' + this.model.get('groupname2') + '</td>' +'</tr>';
+    			tableName.append(tr + tr2);
+    			nameDiv.append(tableName);
+    			tableName.find('.groupName').css('font-weight', 'bold');
+    			tableName.find('.groupName').css('font-size', 17*scale + 'px');
+
+    		}
+    		else {
+    			nameDiv.text(newSensorGroup.get("name"));
+    		}
+
+    		/*var groupNameDiv = $('<span></span>');
+    		groupNameDiv.css('font-size', 15 * scale + 'px');
+    		groupNameDiv.css('font-weight', 'bold');
+    		groupNameDiv.css('background-color', 'white');
+    		groupNameDiv.css('width', '50%'); */
+    		
+    		this.container.append(nameDiv);
+
+
 
 			/*this.container[0].style.position = 'absolute';
 			this.container[0].style.fontSize = 1.8*scale +'em';

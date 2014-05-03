@@ -922,7 +922,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 				coords: attr['coords'],
 				diffsensors: attr['diffsensors'],
 				collection: new SensorCollection(sensorModelsArr),
-				cfgObj: attr
+				cfgObj: attr,
+				groupname1: attr["groupname1"],
+				groupname2: attr["groupname2"]
 			});
 
 			if (attr['diffsensors'] === false) {

@@ -400,13 +400,21 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			});
 
 			//var chooseRange = $('<select style="width: 100px;"></select>');
-			var chooseRange = $('<div class="dropdown rangeDropdown"><ul class="dropdown-menu" role="menu"><li><a href="#">Action</a></li><li><a href="#">Another action</a></li><li><a href="#">Something else here</a></li><li class="divider"></li><li><a href="#">Separated link</a></li></ul></div>');
+			var chooseContainer = $('<div class="rangeContainer"></div>');
+			var chooseRange = $('<select class="rangeDropdown"></select>');
+			var element1 = $('<option value="volvo">Volvo</option>');
+			var element2 = $('<option value="saab">Saab</option>');
+			chooseContainer.append(chooseRange);
+			chooseRange.append(element1);
+			chooseRange.append(element2);
 
 			//chooseRange.data('placeholder', 'Select Range..');
 			//chooseRange.append('<option>OLOlo</option>');
 			//chooseRange.append('<option>Nanan</option>');
 
-			chartControlPanel.append(chooseRange);
+			//chartControlPanel.append(chooseRange);
+			chartControlPanel.append(chooseContainer);
+
 			chartControlPanel.append(addBtn);
 			chartControlPanel.append(resetBtn);
 			chartControlPanel.append(legendBtn);
