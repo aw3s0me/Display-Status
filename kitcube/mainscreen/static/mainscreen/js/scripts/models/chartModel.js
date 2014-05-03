@@ -179,6 +179,16 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 
 			return;
+		},
+		isLinked: function(modelId) {
+			var link = this.get('link');
+			for (var i = 0; i < link.length; i++) {
+				if (link[i] === modelId) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 	});
 

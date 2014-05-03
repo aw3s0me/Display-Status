@@ -1,0 +1,74 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1537" measuredH="797" mockupW="1477" mockupH="793">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="189" y="55" w="1348" h="742" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>A%20Web%20Page%0Ahttp%3A//Kitcube-Status.com/%23editor</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="189" y="130" w="1348" h="52" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::SubTitle" x="189" y="137" w="-1" h="-1" measuredW="347" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Kitcube-Canvas%20template%20editor</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Button" x="1412" y="143" w="-1" h="-1" measuredW="63" measuredH="27" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Logout</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Canvas" x="239" y="241" w="25" h="39" measuredW="100" measuredH="70" zOrder="4" locked="false" isInGroup="-1"/>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Canvas" x="239" y="280" w="25" h="39" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Canvas" x="239" y="319" w="25" h="39" measuredW="100" measuredH="70" zOrder="6" locked="false" isInGroup="-1"/>
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Arrow" x="131" y="195" w="83" h="58" measuredW="150" measuredH="100" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text/>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Label" x="60" y="182" w="-1" h="-1" measuredW="48" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Nav%20bar</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::RoundButton" x="1490" y="140" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%3F</text>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Label" x="771" y="4" w="213" h="-1" measuredW="219" measuredH="36" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>28</size>
+        <text>Text%20Editor%20Page%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::FieldSet" x="264" y="223" w="1226" h="508" measuredW="200" measuredH="170" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Text%20Editor</text>
+      </controlProperties>
+    </control>
+    <control controlID="25" controlTypeID="com.balsamiq.mockups::Label" x="60" y="20" w="-1" h="-1" measuredW="61" measuredH="21" zOrder="12" locked="false" isInGroup="-1"/>
+    <control controlID="26" controlTypeID="com.balsamiq.mockups::ComboBox" x="1314" y="195" w="-1" h="-1" measuredW="91" measuredH="24" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Config%20list</text>
+      </controlProperties>
+    </control>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::Button" x="1412" y="194" w="-1" h="-1" measuredW="52" measuredH="27" zOrder="14" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Save</text>
+      </controlProperties>
+    </control>
+    <control controlID="35" controlTypeID="com.balsamiq.mockups::TextArea" x="462" y="247" w="852" h="448" measuredW="200" measuredH="140" zOrder="15" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>16777215</borderColor>
+        <color>0</color>
+        <text>---%0A%20%20sensor1%3A%20%0A%20%20%20%20type%3A%20%22text%22%0A%20%20%20%20name%3A%20%22brightness%20temperature%22%0A%20%20%20%20device%3A%20%22HATPRO%22%0A%20%20%20%20group%3A%20%22Data_080_RPG_nc_l1b%22%0A%20%20%20%20sensor%3A%20%22L1B.BRIGHT.TEMP%22%0A%20%20%20%20server%3A%20%22server_elv90%22%0A%20%20%20%20method%3A%20%22%22%0A%20%20%20%20source%3A%20%22file%22%0A%20%20%20%20coords%3A%20%0A%20%20%20%20%20%20-%201%0A%20%20%20%20%20%20-%201%0A%20%20%20%20size%3A%20%0A%20%20%20%20%20%20-%201%0A%20%20%20%20%20%20-%201%0A%20%20sensor2%3A%20%0A%20%20%20%20type%3A%20%22text%22%0A%20%20%20%20name%3A%20%22brightness%20temp.%20IR%22%0A%20%20%20%20device%3A%20%22HATPRO%22%0A%20%20%20%20group%3A%20%22Data_080_RPG_nc_l1b%22%0A%20%20%20%20sensor%3A%20%22L1B.BRIGHT.TEMP.IR%22%0A%20%20%20%20server%3A%20%22server_elv90%22%0A%20%20%20%20method%3A%20%22%22%0A%20%20%20%20source%3A%20%22file%22%0A%20%20%20%20coords%3A%20%0A%20%20%20%20%20%20-%201%0A%20%20%20%20%20%20-%202%0A%20%20%20%20size%3A%20%0A%20%20%20%20%20%20-%201%0A%20%20%20%20%20%20-%201%0A%20%20sensor3%3A%20%0A%20%20%20%20type%3A%20%22text%22%0A%20%20%20%20name%3A%20%22water-vapor%20content%22%0A%20%20%20%20device%3A%20%22HATPRO%22%0A%20%20%20%20group%3A%20%22Data_080_RPG_nc_l2a%22%0A%20%20%20%20sensor%3A%20%22L2A.ATM.WAT.VAP.CNT%22%0A%20%20%20%20server%3A%20%22server%22%0A%20%20%20%20method%3A%20%22%22%0A%20%20%20%20source%3A%20%22file%22%0A%20%20%20%20coords%3A%20%0A%20%20%20%20%20%20-%201%0A%20%20%20%20%20%20-%203%0A%20%20%20%20size%3A%20%0A%20%20%20%20%20%20-%201%0A%20%20%20%20%20%20-%201%0A%20%20sensor4%3A%20%0A%20%20%20%20type%3A%20%22text%22%0A%20%20%20%20name%3A%20%22liquid-water%20content%22%0A%20%20%20%20device%3A%20%22HATPRO%22%0A%20%20%20%20group%3A%20%22Data_080_RPG_nc_l2a%22%0A%20%20%20%20sensor%3A%20%22L2A.ATM.LIQ.WAT.CNT%22%0A%20%20%20%20server%3A%20%22server%22%0A%20%20%20%20method%3A%20%22%22%0A%20%20%20%20source%3A%20%22file%22%0A%20%20%20%20coords%3A%20%0A%20%20%20%20%20%20-%201%0A%20%20%20%20%20%20-%204%0A%20%20%20%20size%3A%20%0A%20%20%20%20%20%20-%201%0A%20%20%20%20%20%20-%201%0A%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="36" controlTypeID="com.balsamiq.mockups::VerticalScrollBar" x="1313" y="248" w="-1" h="447" measuredW="16" measuredH="100" zOrder="16" locked="false" isInGroup="-1"/>
+    <control controlID="37" controlTypeID="com.balsamiq.mockups::HorizontalScrollBar" x="462" y="694" w="852" h="-1" measuredW="100" measuredH="16" zOrder="17" locked="false" isInGroup="-1"/>
+    <control controlID="39" controlTypeID="com.balsamiq.mockups::ComboBox" x="1223" y="195" w="-1" h="-1" measuredW="80" measuredH="24" zOrder="18" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Projects</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

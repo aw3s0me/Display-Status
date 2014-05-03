@@ -131,7 +131,7 @@ body {
     background: #137;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    border: 1px solid red;
+    border: 1px solid black;
     z-index: 2;
     font-weight: bold;
 
@@ -152,12 +152,19 @@ body {
   border: 1px solid black;
 }
 
+.activeSensor {
+  border: 2px dotted yellow;
+}
+
 .activeSensor1 {
-  border: 3px dotted yellow;
+  border-top: 2px dotted yellow;
+  border-right: 2px dotted yellow;
 }
 
 .activeSensor2 {
-  border: 3px dotted green;
+  border-bottom: 2px dotted orange;
+  border-left: 2px dotted orange;
+  //outline: 2px solid orange;
 }
 
 .addChartBtn {
@@ -178,11 +185,18 @@ body {
 }
 
 .chartAdded1 {
-  border: 3px solid yellow;
+  border-top: 2px solid yellow;
+  border-right: 2px solid yellow;
 }
 
 .chartAdded2 {
-  border: 3px solid green;
+  border-bottom: 2px solid orange;
+  border-left: 2px solid orange;
+  //outline: 2px solid orange;
+}
+
+.chartAdded {
+  border: 2px solid yellow;
 }
 
 .chartControlPanel.rangeDropdown {

@@ -21,6 +21,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				this.linkModel = options.linkModel;
 				this.linkModel.on('change:bgcolor', this.onchangebgcolor, this);
 				this.linkModel.on('change:value', this.onchangevaluelink, this);
+				this.linkModel.on('removedFromChart', this.onremovedfromchart, this);
 			}
 			if (options.group === true) {
 				this.isGrouped = true;
@@ -43,42 +44,64 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//var now = new Date;
 			//this.model.getAdeiDataRange(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds()));
 
-			this.container.mousedown(function(event) {
-				if (event.ctrlKey) {
-					if (!self.container.hasClass('activeSensor1') && !self.container.hasClass('chartAdded1')) {
-						self.container.addClass('activeSensor1');
-						return;
+			if (this.linkModel !== undefined) {
+				this.container.mousedown(function(event) {
+					if (event.ctrlKey) {
+						if (!self.container.hasClass('activeSensor1') && !self.container.hasClass('chartAdded1')) {
+							self.container.addClass('activeSensor1');
+							return;
+						}
+						if (self.container.hasClass('activeSensor1')) {
+							self.container.removeClass('activeSensor1');
+						}
+						if (self.container.hasClass('chartAdded1')) {
+							//self.container.find('.chartCircle').css('background-color', 'grey');
+							self.container.removeClass('chartAdded1');
+							self.model.trigger('deleteSensor', self.model);	
+						}
 					}
-					if (self.container.hasClass('activeSensor1')) {
-						self.container.removeClass('activeSensor1');
+					else if (event.shiftKey) {
+						if (!self.container.hasClass('activeSensor2') && !self.container.hasClass('chartAdded2')) {
+							self.container.addClass('activeSensor2');
+							return;
+						}
+						if (self.container.hasClass('activeSensor2')) {
+							self.container.removeClass('activeSensor2');
+						}
+						if (self.container.hasClass('chartAdded2')) {
+							//self.container.find('.chartCircle').css('background-color', 'grey');
+							self.container.removeClass('chartAdded2');
+							self.linkModel.trigger('deleteSensor', self.linkModel);	
+						}
 					}
-					if (self.container.hasClass('chartAdded1')) {
-						//self.container.find('.chartCircle').css('background-color', 'grey');
-						self.container.removeClass('chartAdded1');
-						self.model.trigger('deleteSensor', self.model);	
+					/*if (self.container.hasClass('activeSensor2') && self.container.hasClass('activeSensor1')) {
+						self.container.css('outline', '2px solid white');
+					}*/
+				
+				});
+			}
+			else {
+				this.container.mousedown(function(event) {
+					if (event.ctrlKey || event.shiftKey) {
+						if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
+							self.container.addClass('activeSensor');
+							return;
+						}
+						if (self.container.hasClass('activeSensor')) {
+							self.container.removeClass('activeSensor');
+						}
+						if (self.container.hasClass('chartAdded')) {
+							//self.container.find('.chartCircle').css('background-color', 'grey');
+							self.container.removeClass('chartAdded');
+							self.model.trigger('deleteSensor', self.model);	
+						}
 					}
-				}
-				if (event.shiftKey) {
-					if (!self.container.hasClass('activeSensor2') && !self.container.hasClass('chartAdded2')) {
-						self.container.addClass('activeSensor2');
-						return;
-					}
-					if (self.container.hasClass('activeSensor2')) {
-						self.container.removeClass('activeSensor2');
-					}
-					if (self.container.hasClass('chartAdded2')) {
-						//self.container.find('.chartCircle').css('background-color', 'grey');
-						self.container.removeClass('chartAdded2');
-						self.model.trigger('deleteSensor', self.model);	
-					}
-				}
-				if (self.container.hasClass('activeSensor2') && self.container.hasClass('activeSensor1')) {
-					self.container.css('outline', '2px solid white');
-				}
-
-
-
-			});
+					/*if (self.container.hasClass('activeSensor2') && self.container.hasClass('activeSensor1')) {
+						self.container.css('outline', '2px solid white');
+					}*/
+				
+				});
+			}
 
 			this.container.find('.close').click(function(event){
 				event.stopImmediatePropagation();
@@ -316,6 +339,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				});
 				this.container.append(s5);
 				s2.innerHTML = this.linkModel.get('unit') + "/" + s2.innerHTML;
+				this.container.attr('id2', this.linkModel.get('id'));
 			}
 
 			var s3 = document.createElement('div');
@@ -469,6 +493,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		},
 		onremovedfromchart: function() {
 			//this.container.find('.chartCircle').css('background-color', 'grey');
+			this.container.removeClass('chartAdded1');
+			this.container.removeClass('chartAdded2');
 			this.container.removeClass('chartAdded');
 		}
 	});
