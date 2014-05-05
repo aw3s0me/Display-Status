@@ -21,13 +21,8 @@ define([
   "kit.sizeDetector",
   "kit.parser",
   "kit.dataDownloader",
-  'views/boardView',
-  //'views/menuLeft',
-  //'views/userPanel',
-  //'views/menuRight',
-  'views/txtEditorView',
   'router', // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, chosen,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ momentw, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, chosen,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ moment, sizeDet, parser, dataDownloader, Router) {
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {

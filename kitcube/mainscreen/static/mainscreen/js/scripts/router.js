@@ -4,11 +4,11 @@ define([
 	'underscore',
 	'backbone',
 	'kit.sizeDetector',
-	'views/boardView',
-	'views/loginView',
-	'views/controlPanelView',
-	'views/txtEditorView',
-	'views/settingsView'
+	'views/pres/boardView',
+	'views/pres/loginView',
+	'views/pres/controlPanelView',
+	'views/pres/txtEditorView',
+	'views/pres/settingsView'
 ], function($, _, Backbone, sizeDetector, BoardView, LoginView, ControlPanelView, TextEditorView, SettingsView ) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
