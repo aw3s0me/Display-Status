@@ -1,17 +1,19 @@
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 	var Alarm = Backbone.Model.extend({
-		defaults: {
-			id: undefined,
-			no: undefined,
-			module: undefined,
-			group: undefined,
-			app: undefined,
-			server: undefined,
-			dbname: undefined,
-			mask: undefined,
-			lastDate: undefined,
-			delayedBy: undefined,
-			severity: undefined
+		defaults: function() {
+			return {
+				id: undefined,
+				no: undefined,
+				module: undefined,
+				group: undefined,
+				app: undefined,
+				server: undefined,
+				dbname: undefined,
+				mask: undefined,
+				lastDate: undefined,
+				delayedBy: undefined,
+				severity: undefined
+			}
 		},
 		initialize: function() {
 			//console.log("model created");

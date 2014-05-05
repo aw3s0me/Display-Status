@@ -363,7 +363,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			var chartControlPanel = $('<div></div>');
 			chartControlPanel.addClass('chartControlPanel');
-			chartControlPanel.css('top', 10 * scale + 'px');
+			chartControlPanel.css('top', 14 * scale + 'px');
 			//chartControlPanel.css('width', '100%');
 			chartControlPanel.css('right', 14 * scale + 'px');
 			chartControlPanel.css('position', 'absolute');

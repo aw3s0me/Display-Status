@@ -21,6 +21,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 				//$('#txtEditor').css('margin-top', marginTop + 'px');
 				//$('#txtEditor').css('height', this.viewSizeDetector.boardSizePx.height + 'px');
 				//$('#txtEditor').css('width', this.viewSizeDetector.boardSizePx.width + 'px');
+
+				$('#txtEditor').css('height', $(window).height + 'px');
 				
 				this.externEditor.resize();
 				this.externEditor.setTheme("ace/theme/monokai");
