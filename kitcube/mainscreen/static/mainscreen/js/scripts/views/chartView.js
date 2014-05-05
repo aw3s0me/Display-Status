@@ -400,20 +400,36 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			});
 
 			//var chooseRange = $('<select style="width: 100px;"></select>');
+			var cntr = $('<div class="cntr"></div>');
 			var chooseContainer = $('<div class="rangeContainer"></div>');
+			chooseContainer.css('top', 10 * scale + 'px');
+			chooseContainer.css('left', 10 * scale + 'px');
+			//chooseContainer.css('position', 'absolute');
+			//chooseContainer.css('z-index', '2');
 			var chooseRange = $('<select class="rangeDropdown"></select>');
-			var element1 = $('<option value="volvo">Volvo</option>');
-			var element2 = $('<option value="saab">Saab</option>');
 			chooseContainer.append(chooseRange);
-			chooseRange.append(element1);
-			chooseRange.append(element2);
+			chooseRange.append('<option value="90d">90 day</option>');
+			chooseRange.append('<option value="30d">30 day</option>');
+			chooseRange.append('<option value="14d">14 day</option>');
+			chooseRange.append('<option value="7d">7 day</option>');
+			chooseRange.append('<option value="3d">3 day</option>');
+			chooseRange.append('<option value="24h">24 hour</option>');
+			chooseRange.append('<option value="8h">8 hour</option>');
+			chooseRange.append('<option value="3h">3 hour</option>');
+			chooseRange.append('<option value="1h">1 hour</option>');
+			chooseRange.append('<option selected="selected" value="15m">15 min</option>');
 
-			//chooseRange.data('placeholder', 'Select Range..');
-			//chooseRange.append('<option>OLOlo</option>');
-			//chooseRange.append('<option>Nanan</option>');
+			chooseRange.change(function() {
+				var value = $(this).val();
+				self.model.set({
+					range: value
+				});
+				self.setExtremes();
+				console.log(value);
+			});
 
-			//chartControlPanel.append(chooseRange);
-			chartControlPanel.append(chooseContainer);
+			this.container.append(cntr);
+			cntr.append(chooseContainer);
 
 			chartControlPanel.append(addBtn);
 			chartControlPanel.append(resetBtn);

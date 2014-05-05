@@ -204,15 +204,22 @@ body {
 }
 
 .rangeContainer {
-  //  position: absolute;
-  //z-index: 10;
+  position: relative;
+  z-index: 2;
 }
 
 .rangeDropdown {
   width: 100px;
   height: 20px;
-  position: relative;
+  position: absolute;
+  color: black;
   //z-index: 10;
+}
+
+.cntr {
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 /*.sensorName {

@@ -240,6 +240,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			s3.innerHTML = "<b>x</b>";
 			s3.className = "close";
 
+			var chooseContainer = $('<div class="rangeContainer"></div>');
+			chooseContainer.css('top', 0);
+			chooseContainer.css('left', 0);
+			//chooseContainer.css('position', 'absolute');
+			//chooseContainer.css('z-index', '2');
+			var chooseRange = $('<select class="rangeDropdown"></select>');
+			chooseContainer.append(chooseRange);
+			chooseRange.append('<option value="volvo">Volvo</option>');
+			chooseRange.append('<option value="saab">Saab</option>');
+
 			/*var s5 = document.createElement('div');
 			s5.style.position = 'absolute';
 			s5.style.left = 5 * scale + 'px';
@@ -253,6 +263,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.append(s1);
 			this.container.append(s2);
 			this.container.append(s3);
+			//this.container.append(chooseContainer);
 
 
 			this.container.css('background-color', this.model.get('bgcolor'));

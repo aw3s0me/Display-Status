@@ -525,7 +525,7 @@
         "charttype": "line",
         "size": [16, 9],
         "coords": [16, 0],
-        "startrange": "2-min",
+        "startrange": "15m",
         "axislabels": false
     },
     "chart2": {
@@ -534,7 +534,7 @@
         "charttype": "line",
         "size": [16, 9],
         "coords": [16, 9],
-        "startrange": "2-min",
+        "startrange": "15m",
         "axislabels": true
     }
 } 

@@ -35,35 +35,45 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 
 			switch (this.get('range')) {
-				case "2-min":
+				case "2m":
+				case "15m":
 					{
 						xAxis.dateTimeLabelFormats = {
 							hour: '%H:%M'
 						}
 						break;
 					}
-				case "2-hours":
+				case "1h":
+				case "2h":
+				case "3h":
+				case "8h":
 					{
 						xAxis.dateTimeLabelFormats = {
 							hour: '%H:%M'
 						}
 						break;
 					}
-				case "1-day":
+				case "24h":
+				case "1d":
 					{
 						xAxis.dateTimeLabelFormats = {
 							hour: '%a %H:%M'
 						}
 						break;
 					}
-				case "10-days":
+				case "30d":
+				case "14d":
+				case "7d":
+				case "3d":
+				case "10d":
 					{
 						xAxis.dateTimeLabelFormats = {
 							day: '%a'
 						}
 						break;
 					}
-				case "4-months":
+				case "3months":
+				case "4months":
 					{
 						xAxis.dateTimeLabelFormats = {
 							month: '%b'
@@ -92,29 +102,58 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var now = new Date;
 			var min = undefined;
 			switch (this.get('range')) {
-				case "2-min":
+				case "2m":
 					{
 						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
 					}
-				case "2-hours":
+				case "15m":
 					{
-						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 2, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 15, now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
 					}
-				case "1-day":
+				case "2h":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 2, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "3h":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 3, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "8h":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours() - 8, now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "24h":
+				case "1d":
 					{
 						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
 					}
-				case "10-days":
+				case "7d":
 					{
-						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 10, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 7, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
 					}
-				case "4-months":
+				case "10d":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 10, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "14d":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 14, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "3months":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 3, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "4months":
 					{
 						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 4, now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
