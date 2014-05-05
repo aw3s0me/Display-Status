@@ -138,6 +138,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 1, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
 					}
+				case "3d":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 3, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
 				case "7d":
 					{
 						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 7, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
@@ -151,6 +156,16 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				case "14d":
 					{
 						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 14, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "30d":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 30, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+						break;
+					}
+				case "90d":
+					{
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - 90, now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
 					}
 				case "3months":

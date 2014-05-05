@@ -21,6 +21,9 @@ define(['jquery', 'underscore', 'backbone', 'views/boardView', 'text!templates/b
 				board: newBoard
 			});
 		},
+		openTab: function(id) {
+
+		},
 		hide: function() {
 			this.el.hide();
 		},

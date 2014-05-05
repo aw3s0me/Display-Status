@@ -17,10 +17,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 				if ($('#txtEditor').val() !== undefined) {
 					$('#txtEditor')[0].style.fontSize = '14px';
 				}
-				//this.viewSizeDetector = new sizeDetector(50, 32, 16, '#banner', '#footer');
-				//this.viewSizeDetector.detectAllSizes();
-
-				//var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizePx.height) / 2;
 
 				//$('#txtEditor').css('margin-top', marginTop + 'px');
 				//$('#txtEditor').css('height', this.viewSizeDetector.boardSizePx.height + 'px');
@@ -30,6 +26,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 				this.externEditor.setTheme("ace/theme/monokai");
 				this.externEditor.getSession().setMode("ace/mode/yaml");
 				this.el = $('#txtEditContainer');
+
+				/* Some ajax code to load content + event listener */
+
+
 			}
 			},
 			hide: function() {

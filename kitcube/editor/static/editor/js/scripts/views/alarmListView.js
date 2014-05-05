@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 				this.model = options.model;
 			}
 			this.render();
-
+			this.model.on('resize', this.onresize, this);
 			//this.model.on("change", this.render);
 		},
 		render: function() {
@@ -129,10 +129,10 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
 			//$('#pager_center').css('width', newElement.width() - 6); 
-			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 40 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 25 * scale + 'px');
 			$('.ui-jqgrid .ui-jqgrid-pager').css('width', this.container.width() - 6);
 			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 40 * scale + 'px');
+			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 25 * scale + 'px');
 			$('th.ui-th-column div').css('height', 'auto !important');
 			$('th.ui-th-column div').css('white-space', 'normal !important');
 
@@ -218,12 +218,35 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmModel', 'collections/al
 
 			tableToChange.jqGrid('setGridHeight', finalGridHeight);
 			tableToChange.jqGrid('setGridWidth', finalGridWidth, true);
-			console.log(finalGridHeight, finalGridWidth);
 			this.jqgridElem.trigger('reloadGrid');
 		},
 		removeFromDom: function() {
 			this.grid.removeUnit(this.container.parent());
 			console.log('removed alarm');
+		},
+		onresize: function(model) {
+			var dx = model.get('size')[0];
+			var dy = model.get('size')[1];
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var scale = this.grid.getScale();
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+			var tableToChange = this.container.find('.jqgridtable');
+			var gboxHeight = undefined;
+			if (this.prevGboxHeight !== undefined) {
+				gboxHeight = this.prevGboxHeight;
+			}
+			else {
+				gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
+			}
+
+			var finalGridHeight = height - gboxHeight - 2;
+			var finalGridWidth = width - 1;
+
+			tableToChange.jqGrid('setGridHeight', finalGridHeight);
+			tableToChange.jqGrid('setGridWidth', finalGridWidth, true);
+			this.jqgridElem.trigger('reloadGrid');
 		}
 	});
 	return AlarmListView;
