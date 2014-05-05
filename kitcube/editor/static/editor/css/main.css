@@ -149,6 +149,8 @@ input[value*="Google"]:focus {
     border: 1px solid #ddd;
     width: 100%;
     margin: 0 auto;
+    top: 10%;
+    height: 500px;
     /*min-height: 100px; */
 }
 
@@ -158,6 +160,7 @@ input[value*="Google"]:focus {
     margin: 0 auto;
     margin-top: 10px;
     background: white;
+    height: 700px;
 }
 
 #saveTxt {
