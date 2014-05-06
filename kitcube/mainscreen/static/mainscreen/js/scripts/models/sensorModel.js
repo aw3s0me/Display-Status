@@ -7,6 +7,11 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	var _max3State = 1.5;
 	var _minNoneState = 0;
 	var _defbgcolor;
+	var _defalarmcolor = '#E51400';
+	//var _defokcolor = '#40bf40';
+	var _defokcolor = '#20c62e';
+	var _defmiddlecolor = '#1bb2e2';
+	//var _defmiddlecolor = '#75c6ef';
 
 	function _isNumber(n) {
   		return !isNaN(parseFloat(n)) && isFinite(n);
@@ -43,7 +48,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			exp: false,
 			size: [2, 2],
 			coords: [0, 0],
-			bgcolor: '#338fff',
+			bgcolor: '#1bb2e2',
 			valUnit: "NaN",
 			link: undefined,
 			factor: 1,
@@ -166,10 +171,10 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 							var val = this.get('value'); 
 							if (val > this.get('min')) {
-								this.set({bgcolor: "#66D97B", valUnit: "YES"});
+								this.set({bgcolor: _defokcolor, valUnit: "YES"});
 							}
 							else {
-								this.set({bgcolor: "#F5025B", valUnit: "NO"});
+								this.set({bgcolor: _defalarmcolor, valUnit: "NO"});
 							}
 							break;
 						}
@@ -179,17 +184,17 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								this.set({
 									valUnit: "OPEN",
-									bgcolor: "#66D97B"
+									bgcolor: _defokcolor
 								});
 							} else if (val < this.get('max')) {
 								this.set({
 									valUnit: "SHORT",
-									bgcolor: "#4280D6"
+									bgcolor: _defokcolor
 								});
 							} else if (val === 0) {
 								this.set({
 									valUnit: "---",
-									bgcolor: "#F5025B"
+									bgcolor: _defalarmcolor
 								});
 							}
 							break;
@@ -202,17 +207,17 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								value = "INV"; //"INVALID"
 								this.set({
-									bgcolor: "#F5025B"
+									bgcolor: _defalarmcolor
 								});
 							} else if (val < this.get('max')) {
 								value = "MID"; //Full = "MIDDLE"
 								this.set({
-									bgcolor: "#4280D6"
+									bgcolor: _defmiddlecolor
 								});
 							} else {
 								value = (val > this.get('max')) ? "IN" : "OUT";
 								this.set({
-									bgcolor: "#66D97B"
+									bgcolor: _defokcolor
 								});
 							}
 							this.set({
@@ -227,12 +232,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								this.set({
 									valUnit: "DIS", //Full = "DIS"
-									bgcolor: "#F5025B"
+									bgcolor: _defalarmcolor
 								});
 							} else {
 								this.set({
 									valUnit: "ENAB", //Full = "ENABLED"
-									bgcolor: "#66D97B"
+									bgcolor: _defokcolor
 								});
 							}
 							break;
@@ -245,7 +250,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val === this.get('min')) {
 								this.set({
 									valUnit: "---",
-									bgcolor: "#F5025B"
+									bgcolor: _defalarmcolor
 								});
 							}
 							else {
@@ -315,7 +320,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							} else {
 								if (val < this.get('min') || val > this.get('max')) {
 									this.set({
-										bgcolor: "#F5025B"
+										bgcolor: _defalarmcolor
 									});		
 								} else {
 									this.set({

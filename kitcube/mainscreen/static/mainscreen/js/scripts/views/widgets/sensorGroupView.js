@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel'], function($, _, Backbone, SensorGroupModel, SensorView) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel'], function($, _, Backbone, SensorGroupModel) {
 	var SensorGroupView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,

@@ -6,16 +6,17 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 		externEditor: null,
 		viewSizeDetector: null,
 		initialize: function() {
-			this.editor = $('#txtEditor').val();
+			this.editor = $('#txtEditorPlaceholder').val();
 			if (this.editor === undefined) {
 				var data = {};
 				var self = this;
 				var compiledTemplate = _.template(textEditorTemplate, data);
 				this.appendElem.append(compiledTemplate);
 
-				this.externEditor = ace.edit('txtEditor');
-				if ($('#txtEditor').val() !== undefined) {
-					$('#txtEditor')[0].style.fontSize = '14px';
+				this.externEditor = ace.edit('txtEditorPlaceholder');
+				if ($('#txtEditorPlaceholder').val() !== undefined) {
+					$('#txtEditorPlaceholder').css('font-size', '14px');
+					$('#txtEditorPlaceholder').css('height', '800px');
 				}
 
 				//$('#txtEditor').css('margin-top', marginTop + 'px');

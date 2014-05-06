@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'text!templates/sensor.html', 'views/sensorView', 'views/chartView', 'views/alarmListView', 'views/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/sensorTableView', 'views/trendSensorView', 'models/trendSensorModel'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, sensorTemplate, SensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel) {
 	if (!String.prototype.format) {
 		String.prototype.format = function() {
 			var args = arguments;
@@ -10,7 +10,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
-		elContainer: undefined,
+		el: undefined,
 		maxSizeX: 0,
 		maxSizeY: 0,
 		nowCoordX: 0,
@@ -69,7 +69,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			$('.canvas').data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 
 			this.grid = new kitGrid("#tab1");
-			this.elContainer = $("#tab1");
+			this.$el = $("#tab1");
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			});
@@ -537,7 +537,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 		},
 		change: function(NumX, NumY) {},
 		clear: function() {
-			this.container.empty();
+			this.$el.empty();
 		},
 		submitTest: function() {
 			fncstring = $('#testfunction').val();
@@ -854,20 +854,28 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			for (var sensorName in sensorModelsArr) {
 				var sensor = sensorModelsArr[sensorName];
 				var linkModel = undefined;
+				var newSensorView;
 
 				if (sensor.get('link') !== undefined) {
 					linkModel = this.sensors[sensor.get('link')];
 					if (!linkModel) {
 						throw "Wrong link: " + sensor.get('link') + " at: " + sensor.get('id');
 					}
+					newSensorView = new DoubleSensorView({
+						model: sensor,
+						grid: this.grid,
+						group: false,
+						linkModel: linkModel
+					});
 				}
-
-				var newSensorView = new SensorView({
-					model: sensor,
-					grid: this.grid,
-					group: true,
-					linkModel: linkModel
-				});
+				else {
+					newSensorView = new SingleSensorView({
+						model: sensor,
+						grid: this.grid,
+						group: false,
+						linkModel: linkModel
+					});
+				}
 
 				if (!sensor.get('norender')) {
 					//self.views.sensors[sensor.get('id')] = newSensorView;
@@ -880,7 +888,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/board.ht
 			if (emptyCount > 0) {
 				empties = [];
 				while (emptyCount--) {
-					var newSensorView = new SensorView({
+					var newSensorView = new EmptySensorView({
 						model: new Sensor({}),
 						grid: this.grid,
 						empty: true

@@ -10,13 +10,13 @@ define([
   "kit.sizeDetector",
   "kit.parser",
   "kit.dataDownloader",
-  'views/boardView',
+  //'views/boardView',
   //'views/menuLeft',
   //'views/userPanel',
   //'views/menuRight',
-  'views/txtEditorView',
+  //'views/txtEditorView',
   'router', // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, BoardView, TextEditorView, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, Router) {
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {

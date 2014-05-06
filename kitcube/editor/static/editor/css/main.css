@@ -5,6 +5,7 @@ body {
   padding: 0;
   height: 100%;
   //overflow: hidden;
+  font-family: 'Open Sans', sans-serif;
 }
 
 #wrapper {
@@ -149,9 +150,14 @@ input[value*="Google"]:focus {
     border: 1px solid #ddd;
     width: 100%;
     margin: 0 auto;
-    top: 10%;
-    height: 500px;
+    //margin-top: 10%;
     /*min-height: 100px; */
+}
+#txtEditorPlaceholder {
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 #txtEditContainer {
@@ -160,25 +166,32 @@ input[value*="Google"]:focus {
     margin: 0 auto;
     margin-top: 10px;
     background: white;
-    height: 700px;
+    //margin-bottom: 20px;
 }
 
-#saveTxt {
-    margin-right: 15px;
-    margin-top: 6px;
-    float: right;
+#txtEditContainer.row {
+   border: 2px solid #ddd;
 }
 
-#txtProjects {
-    float: right;
-    margin-top: 6px;
-    margin-right: 80px;
+.txtControlPanel {
+  margin-right: 20px;
+  margin-top: 10px;
+  text-align: right;
 }
 
-#txtCfgs {
-    float: right;
-    margin-top: 6px;
-    margin-right: 10px;
+//#saveTxt {
+  margin-right: 15px;
+  margin-top: 6px;
+}
+
+//#txtProjects {
+  margin-top: 6px;
+  margin-right: 80px;
+}
+
+//#txtCfgs {
+  margin-top: 6px;
+  margin-right: 10px;
 }
 
 /* TextEditorView CSS TEMPLATE END */
@@ -187,7 +200,9 @@ input[value*="Google"]:focus {
 /* SettingsView CSS TEMPLATE BEGIN */
 
 .settPanel {
+    text-align: right;
     height: 40%;
+    margin-right: 20px;
 }
 
 #settingsContainer {
@@ -204,11 +219,11 @@ input[value*="Google"]:focus {
 }
 
 #cfgProjectList {
-    float:right;
+    //float:right;
 }
 
 #saveCfg {
-    float: right;
+    //float: right;
 }
 
 #cfgOptions {
@@ -283,6 +298,12 @@ input[value*="Google"]:focus {
 
 /* Control Panel CSS TEMPLATE END */
 
+#projDropdown {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 /* BoardView CSS TEMPLATE START */
 
 #boardContainer {
@@ -299,6 +320,10 @@ input[value*="Google"]:focus {
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+#boardContainer.navTabs {
+  width: 90%;
 }
 
 
@@ -468,6 +493,7 @@ ul#navPanel .goSettingsBtn a {
     border: 1px solid black;
     z-index: 2;
     font-weight: bold;
+
 
 }
 .sensorVal {
