@@ -1,19 +1,22 @@
 {% load static %}
 
 <head>
-<link rel='stylesheet' href="{% static 'griddisplay/css/style.css' %}">
-<script type='text/javascript' src="{% static 'griddisplay/js/jquery/jquery-1.11.0.js' %}"></script>
-<script type='text/javascript' src="{% static 'griddisplay/js/common.js' %}"></script>
+<link rel="stylesheet" href="{% static 'griddisplay/css/style.css' %}">
+<script type="text/javascript" src="{% static 'griddisplay/js/lib/vendor/require.js' %}" data-main="{% static 'griddisplay/js/main' %}"></script>
+<!--
+<script src="griddisplay/js/lib/require/require-2.1.11.js" data-main='app'></script>
+<script type='text/javascript' src="{% static 'griddisplay/js/lib/underscore/underscore-1.6.0.js' %}"></script>
+<script type='text/javascript' src="{% static 'griddisplay/js/lib/backbone/backbone-1.1.2.js' %}"></script>
 <script type='text/javascript' src="{% static 'griddisplay/js/widget.js' %}"></script>
 <script type='text/javascript' src="{% static 'griddisplay/js/grid.js' %}"></script>
+<script type='text/javascript' src="{% static 'griddisplay/js/canvas.js' %}"></script>
+-->
 <script>
+        /*
     $(document).ready(function() {
-        var canvasWidth = $(window).width();
-        var canvasHeight = $(window).height() 
-                - $('.banner').css('height').toNum()
-                - $('.footer').css('height').toNum();
-        console.log(canvasWidth);
         $('.canvas').initial(canvasWidth, canvasHeight, 84, 44);
+
+        console.log(canvasWidth);
 
         var s =  new text();
         
@@ -86,6 +89,7 @@
         var s = new sensor().init(31,22).setClass('tile');
         $('.canvas').addWidget(s,53,22);
     });
+        */
 </script>
 </head>
 
