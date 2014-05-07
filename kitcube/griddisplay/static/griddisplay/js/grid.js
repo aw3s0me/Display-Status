@@ -1,30 +1,22 @@
 (function($) {
     $.fn.initial = function(availWidth, availHeight, sizeX, sizeY) {
-        var unit0 = 50,
-            wgt = availWidth * 0.96,
+        var wgt = availWidth * 0.96,
             hgt = availHeight * 0.96,
-            scale1 = wgt/ (sizeX*unit0),
-            scale2 = hgt/ (sizeY*unit0),
-            scale = Math.floor( 
-                        ((scale2 < scale1) ? scale2 : scale1)*100 
-                        ) /100,
-            margintop = (availHeight - sizeY*unit0*scale)/2.;
+            unitX = Math.round(10*(wgt / sizeX))/10,
+            unitY = Math.round(10*(hgt / sizeY))/10,
+            unit0 = (unitY < unitX) ? unitY : unitX,
+            margintop = (availHeight - unit0*sizeY)/2.;
 
         this.css('margin-top', margintop + 'px');
-        this.css('height', sizeY*unit0*scale + 'px');
-        this.css('width', sizeX*unit0*scale + 'px');
+        this.css('height', sizeY*unit0 + 'px');
+        this.css('width', sizeX*unit0 + 'px');
 
-        this.attr('scaled', 'scaled');
-        this.data('gridUnitX', unit0*scale);
-        this.data('gridUnitY', unit0*scale);
+        this.data('gridUnit', unit0);
         this.data('gridSizeX', sizeX);
         this.data('gridSizeY', sizeY);
-        this.data('scale', scale);
-        this.data('unit0', unit0);
 
         console.log('gridSize', sizeX, sizeY);
-        console.log('unitX/Y', unit0*scale);
-        console.log('scale', scale1, scale2, scale);
+        console.log('unitX/Y', unit0);
     };
 
     $.fn.toggleGrid = function() {
