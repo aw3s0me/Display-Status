@@ -27,15 +27,42 @@ ALLOWED_HOSTS = []
 
 SITE_ID = 1
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 # Site information
 TITLE = 'Kitcube Status'
 DESCRIPTION = 'Summary of Kitcube Experiment'
 
 # Application definition
+
 REST_FRAMEWORK = {
-    'PAGINATE_BY': 10
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
+"""
+#OAuth with rest_frmework provide
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.OAuth2Authentication',
+        #'rest_framework.authentication.SessionAuthentication',
+    ),
+}
+"""
+
+
+#Scopes that app will know
+OAUTH_PROVIDER = {
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
+
+    #'provider',
+    #'provider.oauth2',
 
 INSTALLED_APPS = (
     'django.contrib.admin', 
@@ -46,8 +73,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'mainscreen',
     'editor',
+    'oauth2_provider',
     'rest_framework',
     'snippets'
 )
@@ -59,6 +88,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 )
 
 ROOT_URLCONF = 'kitcube.urls'
@@ -69,10 +99,24 @@ WSGI_APPLICATION = 'kitcube.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'temp.db',
+    }
+}
+"""
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'db.sqlite3',                      # Or path to database file if using sqlite3.
+        # The following settings are not used with sqlite3:
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '',                      # Set to empty string for default.
     }
 }
 

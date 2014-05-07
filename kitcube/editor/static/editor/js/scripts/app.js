@@ -20,6 +20,14 @@ define([
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {
+      var csrfToken = $('meta[name="csrf_token"]').attr('content');
+      console.log(csrfToken);
+      $(document).ajaxSend(function(event, xhr, settings) {
+        /* stuff to do before an AJAX request is sent */
+        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+      });
+      
+
 
       Router.initialize();
 

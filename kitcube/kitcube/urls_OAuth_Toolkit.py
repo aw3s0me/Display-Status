@@ -22,19 +22,12 @@ router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 
-"""
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-"""
-
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'kitcube.views.home', name='home'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^snippets/', include('snippets.urls')),
-    #url(r'^', include(router.urls)),
-    #url(r'^', include(router.urls)),
-    #url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
+    url(r'^', include(router.urls)),
     url(r'^$', include('mainscreen.urls')),
     url(r'^editor/', include('editor.urls')),
     url(r'^admin/', include(admin.site.urls)),

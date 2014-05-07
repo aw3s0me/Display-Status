@@ -16,7 +16,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 				this.externEditor = ace.edit('txtEditorPlaceholder');
 				if ($('#txtEditorPlaceholder').val() !== undefined) {
 					$('#txtEditorPlaceholder').css('font-size', '14px');
-					$('#txtEditorPlaceholder').css('height', '800px');
+					//$('#txtEditor').css('height', '200px');
+					$('#txtEditor').css('height', '90%');
 				}
 
 				//$('#txtEditor').css('margin-top', marginTop + 'px');

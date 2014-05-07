@@ -7,6 +7,7 @@
   <title>{{ title }}</title>
   <meta name="description" 
           content="{{ description }}">
+  <meta name="csrf_token" content="{{csrf_token}}">
   <link href={% static "editor/css/bootstrap.min.css" %} rel="stylesheet">
   <link href={% static "editor/css/main.css" %} rel="stylesheet">
   <link href={% static "editor/js/scripts/vendor/jqgrid/css/ui.jqgrid.css" %} rel="stylesheet"> 
@@ -26,7 +27,6 @@
  
 <body>
   <div id="wrapper">
-    <div id="content">
       <div id="banner" class="demo-headline">
         <h1 class="demo-logo">
           <div class="logo"></div>
@@ -36,17 +36,16 @@
         <div id="loginPanel">
           <div class="btn-group btn-group-lg btn-group-justified">
             <a role="button" class="btn btn-default">Help</a>
-            <a role="button" class="btn btn-default">Login</a>
+            <a role="button" class="btn btn-default" href="#login">Login</a>
             <a role="button" class="btn btn-default">Panel</a>
           </div>
         </div>
       </div>
       <div id="container"></div>
-      <div id="footer" class="shadow">
-        <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
-      </div>
-    </div>
   </div>
+  <footer id="footer">
+    <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
+  </footer>
   <script data-main="../static/editor/js/scripts/main.js" src={% static "editor/js/scripts/vendor/requirejs/require.js" %}></script> 
 </body>
 </html>
