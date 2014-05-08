@@ -38,6 +38,7 @@ DESCRIPTION = 'Summary of Kitcube Experiment'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -78,7 +79,10 @@ INSTALLED_APPS = (
     'editor',
     'oauth2_provider',
     'rest_framework',
-    'snippets'
+    'snippets',
+    'rest_framework.authtoken',
+    'social.apps.django_app.default',
+    'social'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -90,6 +94,41 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
+                               "django.core.context_processors.debug",
+                               "django.core.context_processors.i18n",
+                               "django.core.context_processors.media",
+                               "django.core.context_processors.static",
+                               "django.core.context_processors.request",
+                               "django.contrib.messages.context_processors.messages",
+                               'social.apps.django_app.context_processors.backends',
+                               'social.apps.django_app.context_processors.login_redirect',)
+"""
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+"""
+SOCIAL_AUTH_FACEBOOK_KEY = '878474398845176'
+SOCIAL_AUTH_FACEBOOK_SECRET = '4e85e75092dbb0c2fe2aad0d45b8b687'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '74899432743.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'rP_1Eh5hpkY1yHADfs3NQ25f'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
+
+AUTHENTICATION_BACKENDS = (
+      'social.backends.open_id.OpenIdAuth',
+      'social.backends.facebook.FacebookOAuth2',
+      'social.backends.facebook.FacebookAppOAuth',
+      'social.backends.google.GoogleOpenId',
+      'social.backends.google.GoogleOAuth2',
+      'social.backends.google.GoogleOAuth',
+      'social.backends.twitter.TwitterOAuth',
+      'django.contrib.auth.backends.ModelBackend',
+  )
 
 ROOT_URLCONF = 'kitcube.urls'
 

@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
+from editor.oauthauth import ObtainAuthToken
+
 admin.autodiscover()
 
 from rest_framework import viewsets, routers
@@ -31,7 +33,10 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'kitcube.views.home', name='home'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-token/login/(?P<backend>[^/]+)/$', ObtainAuthToken.as_view()),
     url(r'^snippets/', include('snippets.urls')),
+    #url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    #url(regex=r'^accounts/login/$',view='django.contrib.auth.views.login',kwargs={'template_name': 'example/login.html'}),
     #url(r'^', include(router.urls)),
     #url(r'^', include(router.urls)),
     #url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),

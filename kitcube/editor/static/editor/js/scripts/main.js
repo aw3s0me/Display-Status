@@ -1,6 +1,6 @@
 require.config({
   paths: {
-    "jquery": "vendor/jquery/jquery.min", //DO NOT SPECIFY EXTENSION 
+    "jquery": "vendor/jquery/dist/jquery.min", //DO NOT SPECIFY EXTENSION 
     "jqueryui": "vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min",
     //MVC part
     "underscore": "vendor/underscore-amd/underscore",
@@ -27,7 +27,8 @@ require.config({
     "bigtext": "vendor/bigtext/src/bigtext",
     "momentjs": "vendor/momentjs/min/moment.min",
     "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
-    "tabdrop": "vendor/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min"
+    "tabdrop": "vendor/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min",
+    "oauthio": "vendor/oauth.io/dist/oauth.min"
   },
   shim: {
     backbone: {

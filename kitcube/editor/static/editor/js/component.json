@@ -2,8 +2,8 @@
 	"name": "Kitcube status dimension",
 	"version": "0.0.1",
 	"dependencies": {
-		"jquery": "1.10.2",
-		"jquery-ui": null,
+		"jquery": "1.11.0",
+		"jquery-ui": "1.10.4",
 		"backbone-amd": null,
 		"underscore-amd": "1.5.2",
 		"requirejs": "2.1.11",
@@ -16,6 +16,13 @@
 		"highcharts.com": "3.0.9",
 		"jqueryui-touch-punch": null,
 		"jquery-minicolors": null,
-		"bootstrap-tabdrop" : null
+		"bootstrap-tabdrop" : null,
+		"jqueryui-touch-punch": null,
+		"FitText.js": null,
+		"jsonlint": null,
+		"slabText": null,
+		"momentjs": null,
+		"backgrid": null,
+		"oauth.io": null
 	} 
 }		

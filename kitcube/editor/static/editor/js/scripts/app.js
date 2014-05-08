@@ -10,13 +10,14 @@ define([
   "kit.sizeDetector",
   "kit.parser",
   "kit.dataDownloader",
+  "oauthio",
   //'views/boardView',
   //'views/menuLeft',
   //'views/userPanel',
   //'views/menuRight',
   //'views/txtEditorView',
   'router', // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, OAutha, Router) {
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {
@@ -26,7 +27,9 @@ define([
         /* stuff to do before an AJAX request is sent */
         xhr.setRequestHeader('X-CSRFToken', csrfToken);
       });
-      
+
+      OAuth.initialize('4caAw7s25v0glGlJEoQgbBjCxkU');
+      console.log(OAuth)
 
 
       Router.initialize();
