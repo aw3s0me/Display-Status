@@ -86,26 +86,34 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 	                    		console.log(data);
 	                    	}
 	                    })
-	                    
-	                    /*$scope.login.working = true;
-	 
-	                    loginService.loginUser(loginPromise);
-
-	                    loginPromise.success(function () {
-	                      $scope.login = { working: false };
-	                    });
-
-	                    loginPromise.finally(function () {
-	                      $scope.login.working = false;
-	                    }); */
-	 
+	                     
 	                }
 
 
 				});
 			});
 			$('#loginGoogle').click(function(event) {
-				OAuth.popup('google', function(error, result) {
+				OAuth.popup('google', function(err, success) {
+					if (err) {
+ 
+	                }
+	                else {
+	                    var token = "Token " + success.access_token;
+	                    console.log(token);
+	 
+	                    //var loginPromise = $http({method:'POST', url: '/api-token/login/' + backend + '/', headers: {'Authorization': token}});
+	                    $.ajax({
+	                    	url: '/api-token/login/google/',
+	                    	method: 'POST',
+	                    	data: {'Authorization': token},
+	                    	headers: {'Authorization': token},
+	                    	success: function(data) {
+	                    		console.log('SUCCESS!');
+	                    		console.log(data);
+	                    	}
+	                    })
+	                     
+	                }
 				  //handle error with error
 				  //use result.access_token in your API request
 				});
