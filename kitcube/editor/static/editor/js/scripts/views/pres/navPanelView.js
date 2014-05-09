@@ -21,28 +21,27 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/navPanel.html'], fun
 					}, 200);
 				}
 			);
+			this.el = $('#navPanel');
 			//$(element).chosen();
 		},
-			hide: function() {
-				this.el.hide();
-			},	
-			show: function() {
-				this.el.show();
-			},
-			isHidden: function() {
-				if(this.el.is(':hidden')) {
-					return true;
-				}
-				else 
-					return false;
-			},
-			isShown: function() {
-				if(this.el.is(':hidden')) {
-					return false;
-				}
-				else 
-					return true;
-			}
+		hide: function() {
+			this.el.hide();
+		},
+		show: function() {
+			this.el.show();
+		},
+		isHidden: function() {
+			if (this.el.is(':hidden')) {
+				return true;
+			} else
+				return false;
+		},
+		isShown: function() {
+			if (this.el.is(':hidden')) {
+				return false;
+			} else
+				return true;
+		}
 	})
 
 	return NavPanelView;

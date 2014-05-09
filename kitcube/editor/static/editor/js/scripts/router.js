@@ -17,8 +17,11 @@ define([
 		routes: {
 			// Define some URL routes
 			'editor': 'showTextEditorView',
+			//'editor/p:proj/conf/:confid': 'showTextEditorViewId',
+			'editor/:proj/:conf': 'showTextEditorViewId',
 			'board/:id': 'showBoardView',
 			'settings': 'showSettingsView',
+			'settings/:proj/:conf': 'showSettingsViewId',
 			//'control': 'showControlPanelView',
 			'login': 'showLoginView',
 			'register': 'showRegisterView',
@@ -52,6 +55,12 @@ define([
 
 			this.showView(this.views.myTextEditorView);
 		},
+		showSettingsViewId: function(proj, confid) {
+			console.log("id routing sett", proj, confid);
+		},
+		showTextEditorViewId: function(proj, confid) {
+			console.log("id routing text", proj, confid);
+		},
 		showBoardView: function(){
 			if (this.views.myBoardViewContainer === undefined) {
 				this.views.myBoardViewContainer = new BoardViewContainer();
@@ -76,14 +85,16 @@ define([
 
 		},
 		showControlPanelView: function(){
-
-
 			this.showView(this.views.myControlPanelView);
 		},
 		showLoginView: function(){
 			if (this.views.myLoginView === undefined) {
 				this.views.myLoginView = new LoginView();
 			}
+
+			/*if (this.views.myNavPanelView !== undefined) {
+				this.views.myNavPanelView.hide();
+			}*/
 
 			this.showView(this.views.myLoginView);
 		},

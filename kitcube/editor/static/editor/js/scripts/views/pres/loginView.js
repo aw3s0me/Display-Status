@@ -74,17 +74,25 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 	                else {
 	                    var token = "Token " + success.access_token;
 	                    console.log(token);
-	 
 	                    //var loginPromise = $http({method:'POST', url: '/api-token/login/' + backend + '/', headers: {'Authorization': token}});
 	                    $.ajax({
 	                    	url: '/api-token/login/facebook/',
 	                    	method: 'POST',
+	                    	//method: 'GET',
 	                    	data: {'Authorization': token},
-	                    	headers: {'Authorization': token},
+	                    	headers: {
+	                    		'Authorization': token,
+	                    		'authorization': token
+	                    	},
 	                    	success: function(data) {
 	                    		console.log('SUCCESS!');
 	                    		console.log(data);
-	                    	}
+	                    	},
+	                    	//beforeSend: function(xhr, settings) { xhr.setRequestHeader('Authorization','Bearer ' + token); } 
+	                    	beforeSend: function(xhr, settings) { 
+	                    		xhr.setRequestHeader('Authorization', token); 
+	                    		xhr.setRequestHeader('authorization', token); 
+	                    	} 
 	                    })
 	                     
 	                }
@@ -106,7 +114,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 	                    	url: '/api-token/login/auth/',
 	                    	method: 'POST',
 	                    	data: {'Authorization': token},
-	                    	headers: {'Authorization': token},
+	                    	headers: {'Authorization': token, },
 	                    	success: function(data) {
 	                    		console.log('SUCCESS!');
 	                    		console.log(data);

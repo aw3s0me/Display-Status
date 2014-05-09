@@ -255,7 +255,10 @@ input[value*="Google"]:focus {
 
 /* SettingsView CSS TEMPLATE END */
 
-
+#settDivName {
+  margin-left: 4%;
+  position: absolute;
+}
 
 
 

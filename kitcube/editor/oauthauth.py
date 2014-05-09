@@ -7,29 +7,52 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view, throttle_classes
 from social.apps.django_app.utils import strategy
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework import HTTP_HEADER_ENCODING
 
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from django.views.decorators.csrf import csrf_exempt
 import pdb
 import logging
 
+def get_authorization_header(request):
+    """
+    Return request's 'Authorization:' header, as a bytestring.
+
+    Hide some test client ickyness where the header can be unicode.
+    """
+    auth = request.META.get('HTTP_AUTHORIZATION', b'')
+    if type(auth) == type(''):
+        # Work around django test client oddness
+        auth = auth.encode(HTTP_HEADER_ENCODING)
+    return auth
+
 class ObtainAuthToken(APIView):
+    print "TEST"
     throttle_classes = ()
     permission_classes = ()
     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
     renderer_classes = (renderers.JSONRenderer,)
     serializer_class = AuthTokenSerializer
     model = Token
-    logger = logging.getLogger(__name__)
-    # Accept backend as a parameter and 'auth' for a login / pass
-    def post(self, request, backend):
-        serializer = self.serializer_class(data=request.DATA)
-        pdb.set_trace()
+    print "End of Fn"
+    #pdb.set_trace()
+    #logger = logging.getLogger(__name__)
+    # Accept backend as a parameter and 'auth' for a login / pass\
 
+    def get(self, request, format=None):
+        print "Inside GET"
+        return None
+    def post(self, request, backend):
+        print request.DATA
+        print "inside POST"
+        serializer = self.serializer_class(data=request.DATA)
+        #pdb.set_trace()
+        
         print request
-        logger.error('eee')
+        #logger.error('eee')
         if backend == 'auth':
             if serializer.is_valid():
                 token, created = Token.objects.get_or_create(user=serializer.object['user'])
