@@ -12,6 +12,8 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+import pdb
+import logging
 
 class ObtainAuthToken(APIView):
     throttle_classes = ()
@@ -20,16 +22,19 @@ class ObtainAuthToken(APIView):
     renderer_classes = (renderers.JSONRenderer,)
     serializer_class = AuthTokenSerializer
     model = Token
-
+    logger = logging.getLogger(__name__)
     # Accept backend as a parameter and 'auth' for a login / pass
     def post(self, request, backend):
         serializer = self.serializer_class(data=request.DATA)
+        pdb.set_trace()
 
+        print request
+        logger.error('eee')
         if backend == 'auth':
             if serializer.is_valid():
                 token, created = Token.objects.get_or_create(user=serializer.object['user'])
-                #return Response({'token': token.key})
-                return "debug"
+                return Response({'token': token.key})
+                #return "debug"
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             #return 'BAD'
 
@@ -37,7 +42,7 @@ class ObtainAuthToken(APIView):
             # Here we call PSA to authenticate like we would if we used PSA on server side.
             user = register_by_access_token(request, backend)
             #user = None
-
+            pdb.set_trace()
             # If user is active we get or create the REST token and send it back with user data
             if user and user.is_active:
                 token, created = Token.objects.get_or_create(user=user)
@@ -48,7 +53,7 @@ class ObtainAuthToken(APIView):
 def register_by_access_token(request, backend):
     backend = request.strategy.backend
     auth = get_authorization_header(request).split()
-
+    pdb.set_trace()
     if not auth or auth[0].lower() != b'token':
         msg = 'No token header provided.'
         return msg

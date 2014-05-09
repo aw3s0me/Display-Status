@@ -11,13 +11,14 @@ define([
   "kit.parser",
   "kit.dataDownloader",
   "oauthio",
+  'minicolors',
   //'views/boardView',
   //'views/menuLeft',
   //'views/userPanel',
   //'views/menuRight',
   //'views/txtEditorView',
   'router', // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, OAutha, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, OAutha, minicolors, Router) {
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {

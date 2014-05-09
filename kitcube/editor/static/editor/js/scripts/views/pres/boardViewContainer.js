@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'text!templates/pres/boardContainer.html', 'text!templates/pres/boardContainerProjects.html'], function($, _, Backbone, BoardViewContainer, DropDownProjects) {
+define(['jquery', 'underscore', 'backbone', 'text!templates/pres/boardContainer.html', 'text!templates/pres/boardContainerProjects.html', 'views/pres/controlPanelView'], function($, _, Backbone, BoardViewContainer, DropDownProjects, ControlPanelView) {
 
 	var newBoardViewContainer = Backbone.View.extend({
 		container: $('#container'),
@@ -7,6 +7,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/boardContainer.
 		tabs: [],
 		curTab: undefined,
 		projDrop: undefined,
+		controlPanel: undefined,
 		initialize: function() {
 			this.render();
 		},
@@ -21,6 +22,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/boardContainer.
 
 			$(".nav-tabs").css('width', $('#boardContainer').width());
 			this.el = $('#boardContainer');
+			this.controlPanel = new ControlPanelView();
+			this.el.hide();
+			this.controlPanel.hide();
 		},
 		addTab: function(newBoard) {
 			tabs.push({
@@ -34,6 +38,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/boardContainer.
 		hide: function() {
 			this.el.hide();
 			this.projDrop.hide();
+			if (this.controlPanel) {
+				this.controlPanel.hide();
+			}
+
 		},
 		show: function() {
 			this.el.show();

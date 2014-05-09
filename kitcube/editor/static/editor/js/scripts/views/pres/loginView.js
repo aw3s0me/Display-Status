@@ -103,7 +103,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 	 
 	                    //var loginPromise = $http({method:'POST', url: '/api-token/login/' + backend + '/', headers: {'Authorization': token}});
 	                    $.ajax({
-	                    	url: '/api-token/login/google/',
+	                    	url: '/api-token/login/auth/',
 	                    	method: 'POST',
 	                    	data: {'Authorization': token},
 	                    	headers: {'Authorization': token},
@@ -128,6 +128,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 			this.container.append(compiledTemplate);
 			this.el = $('#loginFormDiv');
 			this.form = this.el.find('#loginForm');
+			this.hide();
 		},
 		hide: function() {
 			this.el.hide();

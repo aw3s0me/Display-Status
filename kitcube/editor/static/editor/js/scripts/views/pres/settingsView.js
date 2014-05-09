@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'minicolors' , 'text!templates/settings.html'], function($, _, Backbone, minicolors, SettingsTemplate) {
+define(['jquery', 'underscore', 'backbone', 'text!templates/settings.html'], function($, _, Backbone, SettingsTemplate) {
 
 	var settingsView = Backbone.View.extend({
 		container: $('#container'),
@@ -11,6 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'minicolors' , 'text!templates/setti
 			this.container.append(compiledTemplate);
 			$('#picker').minicolors();
 			this.el = $("#settingsContainer");
+			this.el.hide();
 		},
 		hide: function() {
 			this.el.hide();

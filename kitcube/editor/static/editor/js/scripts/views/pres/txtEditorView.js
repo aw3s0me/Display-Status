@@ -30,7 +30,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 				this.externEditor.setTheme("ace/theme/monokai");
 				this.externEditor.getSession().setMode("ace/mode/yaml");
 				this.el = $('#txtEditContainer');
-
+				this.el.hide();
 				/* Some ajax code to load content + event listener */
 
 
