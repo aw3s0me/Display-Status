@@ -1,24 +1,20 @@
-define(
-    ['jquery', 'underscore'], 
-    function() {
-        var CanvasView = Backbone.View.extend({
-            el: '.canvas',
-
-            initialize: function() {
-                this.render();
-            },
-
-            render: function() {
-                var that = this;
-                $.get('templates/griddisplay/canvas.html', function() {
-                    var template = _.template({});
-                    that.$el.html(template);
-                }, 'html');
-            }
+define([
+    'views/CanvasView',
+], function(CanvasView) {
+    /*
+    var init = function () {
+        $(document).ready(function() {
+            var canvasWidth = $(window).width();
+            var canvasHeight = $(window).height()
+                    - $('.banner').css('height').toNum()
+                    - $('.footer').css('height').toNum();
+            console.log(canvasWidth, canvasHeight);
         });
-
+    };
+    */
+    var init = function() {
         var canvas = new CanvasView();
-
-        return {};
-    }
-);
+        canvas.init();
+    };
+    return {init: init};
+});

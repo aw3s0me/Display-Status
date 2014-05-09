@@ -1,23 +1,40 @@
 require.config({
     paths: {
-        'jquery': 'lib/vendor/jquery',
-        'underscore': 'lib/vendor/underscore',
-        'test': 'lib/test',
-        'common': 'lib/common',
+        'text': 'libs/require/text',
+        'models': 'modules/models',
+        'views': 'modules/views',
+        'collections': 'modules/collections',
+        'templates': 'templates',
+        'jquery': 'libs/jquery/jquery',
+        'underscore': 'libs/underscore/underscore',
+        'Backbone': 'libs/backbone/backbone',
+        'common': 'libs/common',
+    },
+/*
+    shim: {
+        'underscore': {
+            'exports': '_'
+        },
+        'backbone': {
+            'deps': ['jquery', 'underscore'],
+            'exports': 'Backbone'
+        },
     }
+*/
 });
 
-require(['test'], function(test) {
+require(['modules/test'], function(test) {
     test.test();
 });
 
-require(['jquery', 'common'], function() {
-    $(document).ready(function() {
-        var canvasWidth = $(window).width();
-        var canvasHeight = $(window).height()
-                    - $('.banner').css('height').toNum()
-                    - $('.footer').css('height').toNum();
-        console.log(canvasWidth, canvasHeight);
-    });
+/*
+require(['modules/views/CanvasView'], function(CanvasView) {
+    var canvas = new CanvasView();
+    canvas.init();
+});
+*/
+
+require(['modules/canvas'], function(canvas) {
+    canvas.init();
 });
 
