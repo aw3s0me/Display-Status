@@ -129,16 +129,26 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
-
+"""
 AUTHENTICATION_BACKENDS = (
-      'social.backends.open_id.OpenIdAuth',
+    'social.backends.open_id.OpenIdAuth',
       'social.backends.facebook.FacebookOAuth2',
-      #'social.backends.facebook.FacebookAppOAuth',
       'social.backends.google.GoogleOpenId',
       'social.backends.google.GoogleOAuth2',
       'social.backends.google.GoogleOAuth',
       'social.backends.twitter.TwitterOAuth',
       'django.contrib.auth.backends.ModelBackend',
+  )
+"""
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.open_id.OpenIdAuth',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
+    #'social.backends.google.GoogleOAuth2Backend',
+    #'social.backends.google.GoogleOAuthBackend',
+    #'social.backends.google.GoogleBackend',
+    'django.contrib.auth.backends.ModelBackend',
   )
 
 SOCIAL_AUTH_PIPELINE = (
