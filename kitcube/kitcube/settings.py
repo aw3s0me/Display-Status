@@ -108,6 +108,9 @@ REST_FRAMEWORK = {
     )
 }
 """
+
+SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'facebook', 'google-oauth2',)
+
 SOCIAL_AUTH_FACEBOOK_KEY = '878474398845176'
 SOCIAL_AUTH_FACEBOOK_SECRET = '4e85e75092dbb0c2fe2aad0d45b8b687'
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
@@ -133,9 +136,10 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = (
     'social.backends.open_id.OpenIdAuth',
       'social.backends.facebook.FacebookOAuth2',
-      'social.backends.google.GoogleOpenId',
-      'social.backends.google.GoogleOAuth2',
       'social.backends.google.GoogleOAuth',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.google.GoogleOpenId',
+    'social.backends.google.GooglePlusAuth',
       'social.backends.twitter.TwitterOAuth',
       'django.contrib.auth.backends.ModelBackend',
   )
@@ -145,9 +149,6 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.open_id.OpenIdAuth',
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.google.GoogleOAuth2',
-    #'social.backends.google.GoogleOAuth2Backend',
-    #'social.backends.google.GoogleOAuthBackend',
-    #'social.backends.google.GoogleBackend',
     'django.contrib.auth.backends.ModelBackend',
   )
 

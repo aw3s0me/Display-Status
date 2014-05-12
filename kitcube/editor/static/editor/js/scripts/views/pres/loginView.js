@@ -54,16 +54,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 				}) 
 				return false;
 			});
-			/*
-			$('#loginFacebook').click(function(event) {
-				OAuth.popup('facebook', function(err, result) { // or OAuth.callback
-				  // handle error with err
-				  // call the API with the jQuery's $.ajax style:
-				  result.get('/me').done(function(data) {
-				    // data is the API call's response. e.g. data.name for your facebook's fullname.
-				  });
-				});
-			}); */
 			$('#loginFacebook').click(function(event) {
 				OAuth.popup('facebook', function(err, success) {
 				  // handle error with err
@@ -104,7 +94,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 	 
 	                    //var loginPromise = $http({method:'POST', url: '/api-token/login/' + backend + '/', headers: {'Authorization': token}});
 	                    $.ajax({
-	                    	url: '/api-token/login/google/',
+	                    	//url: '/api-token/login/google/',
+	                    	url: '/api-token/login/google-oauth2/',
 	                    	method: 'POST',
 	                    	data: {'Authorization': token},
 	                    	headers: {'Authorization': token, },

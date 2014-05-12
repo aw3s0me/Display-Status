@@ -135,9 +135,65 @@ input[value*="Google"]:focus {
     background: #0078a6;
 }
 
-</div>
-
 /* LoginView CSS TEMPLATE END */
+
+/* Register Form Begin */
+
+#registerFormDiv {
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 120px;
+}
+
+#registerFormDiv h2 {
+    text-shadow: 0 1px 0 #27ae60;
+    font-size: 1.62em;
+    //color: #2ecc71;
+    color: black;
+    display: block;
+    width: 100%;
+    padding-bottom: .4em;
+    margin-bottom: .6em;
+    border-bottom: 2px solid #2ecc71;
+    /*box-shadow*/
+    -webkit-box-shadow: 0 1px 0 #27ae60;
+    -moz-box-shadow: 0 1px 0 #27ae60;
+    box-shadow: 0 1px 0 #27ae60;
+}
+
+#registerFormDiv a {
+    color: black;
+}
+
+#registerFormDiv input[type="text"],
+#registerFormDiv input[type="submit"],
+#registerFormDiv input[type="password"]
+{
+    clear: both;
+    float: left;
+    display: block;
+    border: 1px solid #ccc;
+    background: #ebebeb;
+    margin: 6px 0;
+    padding: 4px 10px;
+    width: 100%;
+    height: 34px;
+    outline: 0;
+    color: #34495e;
+    font-size: 14px;
+}
+
+#registerFormDiv input[type=submit] {
+    background: #27ae60;
+    //background: #e5e5e5;
+    color: #ecf0f1;
+    border: 0;
+    border-bottom: 2px solid #2ecc71;
+    margin: 10px 0 0;
+}
+
+
+/* Register Form End */
 
 /* TextEditorView CSS TEMPLATE START */
 
