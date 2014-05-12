@@ -4,6 +4,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib import admin
 from editor.oauthauth import ObtainAuthToken
 from editor.oauthauth import RegisterView
+from editor.oauthauth import LoginView
 
 admin.autodiscover()
 
@@ -36,6 +37,7 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token/login/(?P<backend>[^/]+)/$', ObtainAuthToken.as_view()),
     url(r'^api-token/register/', RegisterView.as_view()),
+    url(r'^api-token/login_reg/', LoginView.as_view()),
     url(r'^snippets/', include('snippets.urls')),
     #url(r'^', include(router.urls)),
     url(r'^$', include('mainscreen.urls')),

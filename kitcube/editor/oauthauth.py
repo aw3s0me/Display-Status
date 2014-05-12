@@ -35,6 +35,8 @@ def get_authorization_header(request):
         auth = auth.encode(HTTP_HEADER_ENCODING)
     return auth
 
+
+#auth with OAuth users (updating and creating tokens)
 class ObtainAuthToken(APIView):
     throttle_classes = ()
     permission_classes = ()
@@ -47,7 +49,7 @@ class ObtainAuthToken(APIView):
         if backend == 'auth':
             if serializer.is_valid():
                 token, created = Token.objects.get_or_create(user=serializer.object['user'])
-                return Response({'token': token.key})
+                return Response({'token': token.key}) #return only updated token
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             # Here we call PSA to authenticate like we would if we used PSA on server side.
@@ -57,7 +59,8 @@ class ObtainAuthToken(APIView):
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key})
 
-@strategy()
+#Python social auth validation. sends request to backend to validate it
+@strategy() #strategy framework to getting backend
 def register_by_access_token(request, backend):
     backend = request.strategy.backend
 
@@ -73,6 +76,8 @@ def register_by_access_token(request, backend):
     user = backend.do_auth(access_token)
     return user
 
+
+#for registered users
 class RegisterView(APIView):
     throttle_classes = ()
     permission_classes = ()
@@ -92,17 +97,22 @@ class RegisterView(APIView):
         data = json.loads(request.body)
         serialized = UserSerializer(data=data)
         if serialized.is_valid():
+            if len(serialized.init_data['password']) < 5:
+                return Response('Password_length', status=status.HTTP_411_LENGTH_REQUIRED)
+            if len(serialized.init_data['username']) < 5:
+                return Response('Username_length', status=status.HTTP_411_LENGTH_REQUIRED)
+
             if serialized.init_data['password'] != serialized.init_data['confPassword']:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response('Password_matches', status=status.HTTP_400_BAD_REQUEST)
             
             if User.objects.filter(username=serialized.init_data['username']).exists(): 
-                print "EXISTS USERNAME"
-                User.objects.get(username=serialized.init_data['username']).delete()
-                #return Response('Username_exists', status.HTTP_409_CONFLICT)
+                #print "EXISTS USERNAME"
+                #User.objects.get(username=serialized.init_data['username']).delete()
+                return Response('Username_exists', status.HTTP_409_CONFLICT)
             if User.objects.filter(email=serialized.init_data['email']).exists():
-                print "EXISTS EMAIL"
-                User.objects.get(email=serialized.init_data['email']).delete()
-                #return Response('Email_exists', status.HTTP_409_CONFLICT)
+                #print "EXISTS EMAIL"
+                #User.objects.get(email=serialized.init_data['email']).delete()
+                return Response('Email_exists', status.HTTP_409_CONFLICT)
 
             user = User.objects.create_user(
                 serialized.init_data['username'],
@@ -111,7 +121,45 @@ class RegisterView(APIView):
             )
             #user.groups = 'users'
             user.save()
-            serialized_user = UserSerializer(user)
-            return Response(serialized_user.data, status=status.HTTP_201_CREATED)
+
+            if user and user.is_active:
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key}, status=status.HTTP_201_CREATED)
         else:
             return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
+
+#to login user
+class LoginView(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    #parser_classes = {'formprs': parsers.FormParser,'partprs': parsers.MultiPartParser,'jsonprs': parsers.JSONParser}
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+    userSerializer_class = UserSerializer
+    model = Token
+    def post(self, request):
+        pdb.set_trace()
+        data = json.loads(request.body)
+        """
+        if len(data['password']) < 5:
+            return Response('Password_length', status=status.HTTP_411_LENGTH_REQUIRED)
+        if len(data['username']) < 5:
+            return Response('Username_length', status=status.HTTP_411_LENGTH_REQUIRED)
+        """
+        if not User.objects.filter(username=data['username']).exists(): 
+            return Response('User doesnt exist', status=status.HTTP_404_NOT_FOUND)
+        user = User.objects.get(username=data['username'])
+        if user.check_password(data['password']):
+            if user and user.is_active:
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key})
+            else:
+                return Response('User_not_active', status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response('Wrong_pswd', status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+

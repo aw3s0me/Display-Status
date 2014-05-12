@@ -24,21 +24,22 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 					password : $(this).find('#username').val()
 				}
 				var user = new UserModel();
+				var dataToSend = JSON.stringify($(this).serializeObject());
 				/*if (user.validate(credential)) {
 					throw "Credential error";
 				}*/
-				user.set({
-					username: credential.username,
-					password: credential.password
-				})
-				var url = 'users/';
+				
 				console.log(self.form.serialize())
 				$.ajax({
 					type: 'POST',
-					url: url,
-					data: self.form.serialize(),
+					url: '/api-token/login_reg/',
+					data: dataToSend,
 					success: function(data) {
 						console.log(data);
+						user.set({
+							username: credential.username,
+							password: credential.password
+						})
 					}
 				}) 
 				return false;
