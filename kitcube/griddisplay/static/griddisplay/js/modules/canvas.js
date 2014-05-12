@@ -5,7 +5,8 @@ define([
     canvas = new CanvasView();
 
     var init = function() {
-        canvas.render(60, 40).togglegrid();
+        canvas.render(40, 20).togglegrid();
+        //canvas.togglegrid();
     };
 
     var togglegrid = function() {

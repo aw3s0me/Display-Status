@@ -38,7 +38,7 @@ define([
 
         render: function(sizeX, sizeY){
             this.initgrid(sizeX, sizeY);
-            //this.$el.html(this.template);
+
             var unit = this.$el.data('gridUnit');
             var gridtpl = _.template(gridTemplate);
             for (var i = 0; i < sizeX; i++) {
@@ -48,7 +48,8 @@ define([
                     }));
                 }
             }
-            console.log(unit);
+
+            this.$el.attr('grid', 'grid');
             return this;
         },
 
