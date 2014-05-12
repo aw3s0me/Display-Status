@@ -21,7 +21,6 @@ class GroupViewSet(viewsets.ModelViewSet):
 	required_scopes = ['groups']
 	model = Group
 
-
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
@@ -37,17 +36,11 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token/login/(?P<backend>[^/]+)/$', ObtainAuthToken.as_view()),
     url(r'^api-token/register/', RegisterView.as_view()),
-    #url(r'^api-token/login/(?P<backend>[^/]+)/$', 'editor.oauthauth.ObtainAuthToken'),
     url(r'^snippets/', include('snippets.urls')),
-    #url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
-    #url(regex=r'^accounts/login/$',view='django.contrib.auth.views.login',kwargs={'template_name': 'example/login.html'}),
     #url(r'^', include(router.urls)),
-    #url(r'^', include(router.urls)),
-    #url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
     url(r'^$', include('mainscreen.urls')),
     url(r'^editor/', include('editor.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 )
 
 #urlpatterns += staticfiles_urlpatterns()

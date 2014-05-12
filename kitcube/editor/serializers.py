@@ -10,8 +10,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-	projects = serializers.PrimaryKeyRelatedField(many=True)
+	#projects = serializers.PrimaryKeyRelatedField(many=True)
 
 	class Meta:
 		model = User
-		fields = ('id', 'username', 'projects')
+		#fields = ('id', 'username', 'projects')
+		fields = ('id', 'username', 'password', 'email')

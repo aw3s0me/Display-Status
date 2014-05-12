@@ -9,22 +9,19 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.render();
 
 			$('#registerForm').on('submit', function(event) {
+				event.preventDefault();
+				//var dataToSend = self.form.serialize();
+				var dataToSend = JSON.stringify($(this).serializeObject());
+
 				$.ajax({
 					url: '/api-token/register/',
 					type: 'POST',
-					dataType: 'text',
-					data: {param1: 'value1'},
+					data: dataToSend,
+					success: function(data){
+						console.log(data);
+						console.log('success registration!');
+					}
 				})
-				.done(function() {
-					console.log("success");
-				})
-				.fail(function() {
-					console.log("error");
-				})
-				.always(function() {
-					console.log("complete");
-				});
-				
 			});
 
 		},
