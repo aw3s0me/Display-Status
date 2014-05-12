@@ -41,7 +41,7 @@
         w.e.style.left = px * this.data('gridUnitX') + 'px'; 
         w.e.style.top  = py * this.data('gridUnitY') + 'px';
         this.append(w.e.outerHTML);
-        return this;
+       return this;
     };
 
-}(jQuery));
+(jQuery));

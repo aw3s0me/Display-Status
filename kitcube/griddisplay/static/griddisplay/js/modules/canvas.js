@@ -1,20 +1,19 @@
 define([
     'views/CanvasView',
-], function(CanvasView) {
-    /*
-    var init = function () {
-        $(document).ready(function() {
-            var canvasWidth = $(window).width();
-            var canvasHeight = $(window).height()
-                    - $('.banner').css('height').toNum()
-                    - $('.footer').css('height').toNum();
-            console.log(canvasWidth, canvasHeight);
-        });
-    };
-    */
+    'views/SensorView',
+], function(CanvasView, SensorView) {
+    canvas = new CanvasView();
+
     var init = function() {
-        var canvas = new CanvasView();
-        canvas.init();
+        canvas.render(60, 40).togglegrid();
     };
-    return {init: init};
+
+    var togglegrid = function() {
+        canvas.togglegrid();
+    };
+
+    return {
+        init: init,
+        toggle: togglegrid,
+    };
 });
