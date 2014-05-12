@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models/userModel'], function($, _, Backbone, LoginTemplate, UserModel) {
+define(['jquery', 'underscore', 'backbone', 'text!templates/login.html'], function($, _, Backbone, LoginTemplate) {
 
 	var loginView = Backbone.View.extend({
 		container: $('#container'),
@@ -23,7 +23,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 					username : $(this).find('#password').val(),
 					password : $(this).find('#username').val()
 				}
-				var user = new UserModel();
+				//var user = new UserModel();
 				var dataToSend = JSON.stringify($(this).serializeObject());
 				/*if (user.validate(credential)) {
 					throw "Credential error";
@@ -36,10 +36,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 					data: dataToSend,
 					success: function(data) {
 						console.log(data);
-						user.set({
-							username: credential.username,
-							password: credential.password
-						})
+						self.onSuccessLogin(data);
 					}
 				}) 
 				return false;
@@ -60,8 +57,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 	                    	method: 'POST',
 	                    	data: {'Authorization': token},
 	                    	success: function(data) {
-	                    		console.log('SUCCESS!');
 	                    		console.log(data);
+	                    		self.onSuccessLogin(data);
 	                    	},
 	                    	beforeSend: function(xhr, settings) { 
 	                    		xhr.setRequestHeader('Authorization', token); 
@@ -90,8 +87,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 	                    	data: {'Authorization': token},
 	                    	headers: {'Authorization': token, },
 	                    	success: function(data) {
-	                    		console.log('SUCCESS!');
 	                    		console.log(data);
+	                    		self.onSuccessLogin(data);
 	                    	},
 	                    	beforeSend: function(xhr, settings) { 
 	                    		xhr.setRequestHeader('Authorization', token); 
@@ -132,6 +129,19 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/login.html', 'models
 				return false;
 			} else
 				return true;
+		},
+		onSuccessLogin: function(loginInfo) {
+			user = window.activeSessionUser;
+			user.set({
+				username: loginInfo.name,
+				//password: loginInfo.password,
+				token: loginInfo.token,
+				id: loginInfo.id,
+				logged_in: true,
+				role: loginInfo.userRole
+			});
+			$.cookie('access_token', user.get('token'));
+			window.location.href = "#board";
 		}
 
 

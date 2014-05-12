@@ -23,6 +23,7 @@
 		"slabText": null,
 		"momentjs": null,
 		"backgrid": null,
-		"oauth.io": null
+		"oauth.io": null,
+		"jquery-cookie": null
 	} 
 }		

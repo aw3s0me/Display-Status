@@ -12,13 +12,15 @@ define([
   "kit.dataDownloader",
   "oauthio",
   'minicolors',
+  'cookie',
   //'views/boardView',
   //'views/menuLeft',
   //'views/userPanel',
   //'views/menuRight',
   //'views/txtEditorView',
   'router', // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, OAutha, minicolors2, Router) {
+  'models/userModel',
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, OAutha, minicolors2, Cookie, Router, UserModel) {
   var initialize = function() {
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {
@@ -49,6 +51,7 @@ define([
       OAuth.initialize('4caAw7s25v0glGlJEoQgbBjCxkU');
       console.log(OAuth)
 
+      window.activeSessionUser = new UserModel();
 
       Router.initialize();
 

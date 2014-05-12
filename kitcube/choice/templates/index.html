@@ -1,0 +1,31 @@
+<html>
+<head>
+	<title>
+		Status-display
+	</title>
+</head>
+<body>
+<div id="projSign">
+	<h1>Welcome to Status display</h1>
+</div>
+<div id="dropDownDiv" class="cd-select">
+<select name="projects" id="projectDropDown">
+	<option value="-1" selected>Choose a project</option>
+	{% for project in projects %}
+		<option value="{{project.title}}" </option>
+	{% endfor %}
+</select>
+<div id="btnDiv">
+	<a id="btnGo">Go</a>
+</div>
+</div>	
+<script type="text/javascript" src="js/jquery.dropdown.js"></script>
+<script>
+	$(function() {
+		$('#projectDropDown').dropdown({
+			gutter: 5
+		});
+	})
+</script>
+</body>
+</html>

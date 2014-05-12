@@ -9,3 +9,13 @@ class Project(models.Model):
 	addition_date = models.DateTimeField(auto_now_add=True)
 	changed_date = models.DateTimeField(auto_now=True)
 
+	def __str__(self):
+		return self.title
+
+class Config(models.Model):
+	projects = models.ManyToManyField(Project)
+	title = models.CharField(max_length = 200)
+	description = models.TextField()
+
+	def __str__(self):
+		return self.title

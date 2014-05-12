@@ -1,13 +1,20 @@
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
-	var User = Backbone.Model.extend({
+	var UserModel = Backbone.Model.extend({
 		defaults: function() {
 			return {
-				id: undefined,
-				username: undefined,
-				password: undefined
+				id: 0,
+				username: "",
+				//password: "",
+				token: "",
+				role: "",
+				logged_in: false
 			}
 		},
 		initialize: function(){
+			var self = this;
+			this.on('logout', function() {
+				self.onlogout();
+			})
 		},
 		validate: function(attrs){
 			if (attrs.username === "" || attrs.username === undefined || attrs.username.length < 4) {
@@ -18,8 +25,26 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 			else
 				return false;
+		},
+		isAuthorized: function(){
+			return Boolean(this.get('token'));
+		},
+		url: function() {
+			return 'user/';
+		},
+		onlogout: function() {
+			this.resetSession();
+		},
+		onerror: function() {
+			this.resetSession();
+		},
+		resetSession: function() {
+			this.clear();
+			this.set(this.defaults);
+			$.removeCookie('access_token');
+			window.location.href = '#login';
 		}
 	});
 
-	return User;
+	return UserModel;
 });

@@ -2,9 +2,10 @@ from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
-from editor.oauthauth import ObtainAuthToken
-from editor.oauthauth import RegisterView
-from editor.oauthauth import LoginView
+from editor.authentication import ObtainAuthToken
+from editor.authentication import RegisterView
+from editor.authentication import LoginView
+from editor.authentication import LogoutView
 
 admin.autodiscover()
 
@@ -38,6 +39,7 @@ urlpatterns = patterns('',
     url(r'^api-token/login/(?P<backend>[^/]+)/$', ObtainAuthToken.as_view()),
     url(r'^api-token/register/', RegisterView.as_view()),
     url(r'^api-token/login_reg/', LoginView.as_view()),
+    url(r'^api-token/logout/', LogoutView.as_view()),
     url(r'^snippets/', include('snippets.urls')),
     #url(r'^', include(router.urls)),
     url(r'^$', include('mainscreen.urls')),

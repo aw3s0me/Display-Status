@@ -88,7 +88,6 @@ class RegisterView(APIView):
     model = Token
     #@permission_classes((AllowAny,))
     def post(self, request, format=None):
-        pdb.set_trace()
         #data = self.parser_classes['jsonprs'].parse(request)
         #data = JSONParser().parse(request)
         #serialized = UserSerializer(data=data)
@@ -128,7 +127,7 @@ class RegisterView(APIView):
         else:
             return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
 
-#to login user
+#to login user that were registered without backend
 class LoginView(APIView):
     throttle_classes = ()
     permission_classes = ()
@@ -138,7 +137,6 @@ class LoginView(APIView):
     userSerializer_class = UserSerializer
     model = Token
     def post(self, request):
-        pdb.set_trace()
         data = json.loads(request.body)
         """
         if len(data['password']) < 5:
@@ -159,6 +157,15 @@ class LoginView(APIView):
             return Response('Wrong_pswd', status=status.HTTP_400_BAD_REQUEST)
 
 
+class LogoutView(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+    userSerializer_class = UserSerializer
+    model = Token
+    def get(self, request):
+        return Response({'User': ''})
 
 
 

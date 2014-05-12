@@ -28,7 +28,8 @@ require.config({
     "momentjs": "vendor/momentjs/min/moment.min",
     "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
     "tabdrop": "vendor/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min",
-    "oauthio": "vendor/oauth.io/dist/oauth.min"
+    "oauthio": "vendor/oauth.io/dist/oauth.min",
+    "cookie": "vendor/jquery-cookie/jquery.cookie"
   },
   shim: {
     backbone: {
@@ -120,6 +121,11 @@ require.config({
         "jquery",
         "bootstrap"
       ]
+    },
+    cookie: {
+    	deps: [
+    		"jquery"
+    	]
     }
   }
 });
