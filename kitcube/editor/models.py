@@ -6,6 +6,7 @@ class Project(models.Model):
 	owner = models.ForeignKey('auth.User', related_name = 'projects')
 	#configs = CommaSeparatedIntegerField(max_length = 200)
 	title = models.CharField(max_length = 200)
+	link = models.CharField(max_length=20)
 	description = models.TextField()
 	addition_date = models.DateTimeField(auto_now_add=True)
 	changed_date = models.DateTimeField(auto_now=True)
@@ -13,9 +14,9 @@ class Project(models.Model):
 	def __str__(self):
 		return self.title
 	@classmethod
-	def create(self, ownerid, title, desc):
+	def create(self, ownerid, title, link, desc):
 		owner = User.objects.get(pk=ownerid)
-		book = self(owner=owner, title=title, description=desc)
+		book = self(owner=owner, title=title, link=link, description=desc)
 		return book
 
 class Config(models.Model):

@@ -53,7 +53,7 @@ h1 {
 }
 
 #dropDownDiv {
-	font-size: 25px;
+	font-size: 22px;
 }
 
 /*#dropRow div {
@@ -112,7 +112,7 @@ h1 {
 	line-height: 60px;
 	color: #999;
 	font-weight: 700;
-	font-size: 16px;
+	//font-size: 16px;
 	background: #fff;
 	display: block;
 	//padding: 0 50px 0 30px;

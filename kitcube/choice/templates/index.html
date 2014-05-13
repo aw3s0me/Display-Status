@@ -21,7 +21,7 @@
 		<select id="cd-dropdown" name="cd-dropdown" class="cd-select">
 			<option value="-1" selected>Choose a project</option>
 			{% for project in projects %}
-				<option value="{{project.id}}">{{project.title}}</option>
+				<option value="{{project.id}}" data="{{project.link}}">{{project.title}}</option>
 			{% endfor %}
 		</select>
 		</div>	
@@ -35,12 +35,38 @@
 <script type="text/javascript" src={% static "choice/js/dropdown.js" %}></script> 
 <script>
 	$(function() {
+		var list = {};
+		$('#cd-dropdown option').each(function() {
+			var value = $(this).val();
+			var link = $(this).attr('data');
+			var text = $(this).text();
+			list[link] = {
+				value: value,
+				text: text
+			};
+
+		})
 		$('#cd-dropdown').dropdown({
 			gutter: 5
 		});
-
+		console.log(list)
 		$('#btnGo').click(function(event) {
-			window.location.href = "/katrin/";
+			var span = $('.cd-dropdown').children('span');
+			var text = span.text();
+			console.log(text);
+			var link = undefined;
+			for (var val in list) {
+				var elem = list[val];
+				console.log(elem)
+				if (elem.text === text) {
+					link = val;
+					break;
+				}
+			}
+
+			console.log(span);
+			console.log(link);
+			window.location.href = "/" + link + "/";
 		});
 	})
 </script>
