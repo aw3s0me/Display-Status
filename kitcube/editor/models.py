@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Project(models.Model):
@@ -11,6 +12,11 @@ class Project(models.Model):
 
 	def __str__(self):
 		return self.title
+	@classmethod
+	def create(self, ownerid, title, desc):
+		owner = User.objects.get(pk=ownerid)
+		book = self(owner=owner, title=title, description=desc)
+		return book
 
 class Config(models.Model):
 	projects = models.ManyToManyField(Project)

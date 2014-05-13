@@ -6,6 +6,7 @@ from editor.authentication import ObtainAuthToken
 from editor.authentication import RegisterView
 from editor.authentication import LoginView
 from editor.authentication import LogoutView
+from choice import views
 
 admin.autodiscover()
 
@@ -42,7 +43,8 @@ urlpatterns = patterns('',
     url(r'^api-token/logout/', LogoutView.as_view()),
     url(r'^snippets/', include('snippets.urls')),
     #url(r'^', include(router.urls)),
-    url(r'^$', include('mainscreen.urls')),
+    url(r'katrin/', include('mainscreen.urls')),
+    url(r'^$', 'choice.views.render_choice'),
     url(r'^editor/', include('editor.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

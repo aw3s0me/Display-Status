@@ -1,33 +1,46 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>
-		Status-display
+		Welcome to Status-display
 	</title>
+	<link href={% static "choice/css/main.css" %} rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
-<div id="projSign">
-	<h1>Welcome to Status display</h1>
+<div id="wrapper">
+	<div id="projSign">
+		<h1>Welcome to Status display</h1>
+	</div>
+	<div id="dropRow">
+		<div id="dropDownDiv">
+		<select id="cd-dropdown" name="cd-dropdown" class="cd-select">
+			<option value="-1" selected>Choose a project</option>
+			{% for project in projects %}
+				<option value="{{project.id}}">{{project.title}}</option>
+			{% endfor %}
+		</select>
+		</div>	
+		<div id="btnDiv">
+			<a id="btnGo">Go</a>
+		</div>
+	</div>
 </div>
-<div id="dropDownDiv" class="cd-select">
-<select name="projects" id="projectDropDown">
-	<option value="-1" selected>Choose a project</option>
-	{% for project in projects %}
-		<option value="{{project.title}}" </option>
-	{% endfor %}
-</select>
-<div id="btnDiv">
-	<a id="btnGo">Go</a>
-</div>
-</div>	
-<script type="text/javascript" src="js/jquery.dropdown.js"></script>
+<script type="text/javascript" src={% static "choice/js/vendor/jquery.min.js" %}></script> 
+<script type="text/javascript" src={% static "choice/js/vendor/modernizr.js" %}></script>
+<script type="text/javascript" src={% static "choice/js/dropdown.js" %}></script> 
 <script>
 	$(function() {
-		$('#projectDropDown').dropdown({
+		$('#cd-dropdown').dropdown({
 			gutter: 5
 		});
 
 		$('#btnGo').click(function(event) {
-			/* Act on the event */
+			window.location.href = "/katrin/";
 		});
 	})
 </script>
