@@ -6,7 +6,9 @@ from editor.authentication import ObtainAuthToken
 from editor.authentication import RegisterView
 from editor.authentication import LoginView
 from editor.authentication import LogoutView
-from choice import views
+#from editor.views import mainscreen_index
+from mainscreen.views import mainscreen_index
+from choice import views as ChoiceViews
 
 admin.autodiscover()
 
@@ -42,8 +44,13 @@ urlpatterns = patterns('',
     url(r'^api-token/login_reg/', LoginView.as_view()),
     url(r'^api-token/logout/', LogoutView.as_view()),
     url(r'^snippets/', include('snippets.urls')),
-    #url(r'^', include(router.urls)),
-    url(r'katrin/', include('mainscreen.urls')),
+    #url(r'^', mainscreen_index, name='index'),
+    #url(r'katrin/', include('mainscreen.urls')),
+    url(r'katrin/', mainscreen_index, {'name' : 'index', 'projname' : 'katrin'}),
+    url(r'kitcube/', mainscreen_index, {'name' : 'index', 'projname' : 'kitcube'}),
+    #url(r'^(?P<projname>\w{1,20})$', include('mainscreen.urls')),
+    #url(r'^(?!editor)|(?P<projname>[^/]+)/$', mainscreen_index, name='index'),
+    #url(r'^(.(?!editor))*$', mainscreen_index, name='index'),
     url(r'^$', 'choice.views.render_choice'),
     url(r'^editor/', include('editor.urls')),
     url(r'^admin/', include(admin.site.urls)),

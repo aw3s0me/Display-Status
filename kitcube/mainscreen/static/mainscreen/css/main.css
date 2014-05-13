@@ -350,3 +350,11 @@ body {
     width: 80%;
   }
 } */
+
+.kitcube_banner {
+	background: url(../images/banner/kitcube.jpg) #005D57 no-repeat;
+}
+
+.katrin_banner {
+	background: url(../images/banner/katrin.png) #005D57 no-repeat;
+}

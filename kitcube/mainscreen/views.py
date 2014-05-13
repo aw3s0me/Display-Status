@@ -5,6 +5,9 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
+from django.template import Context, Template, loader
+from editor.models import Project
+import pdb
 #from mainscreen.models import Config
 #from mainscreen.serializers import ConfigSerializer
 
@@ -17,10 +20,31 @@ class JSONResponse(HttpResponse):
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
 
-def index(request):
+def get_image_url(projname):
+    project = Project.objects.get(link=projname)
+    return project.banner
+
+def mainscreen_index(request, projname=None, name=None):
+    print projname
+    print name
+    #pdb.set_trace()
+    if projname == 'katrin':
+        banner = loader.get_template('mainscreen/katrin_banner.html')
+        #if we need to get image from database
+        #banner_html = banner.render(Context({'banner_image': get_image_url(projname), 'MEDIA_URL': settings.MEDIA_URL}))
+        banner_html = banner.render(Context({}))
+    elif projname == 'kitcube':
+        banner = loader.get_template('mainscreen/kitcube_banner.html')
+        #banner_html = banner.render(Context({'banner_image': get_image_url(projname), 'MEDIA_URL': settings.MEDIA_URL}))
+        banner_html = banner.render(Context({}))
+    else:
+        banner = loader.get_template('mainscreen/def_banner.html')
+        banner_html = banner.render(Context({}))
+
     data = {
         'title': getattr(settings, 'TITLE'),
-        'description': getattr(settings, 'DESCRIPTION')
+        'description': getattr(settings, 'DESCRIPTION'),
+        'banner': banner_html,
     }
     response = render_to_response('mainscreen/index.html', data, context_instance=RequestContext(request))
     
