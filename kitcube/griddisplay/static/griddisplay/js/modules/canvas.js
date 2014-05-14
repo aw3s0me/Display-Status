@@ -1,20 +1,16 @@
 define([
     'views/CanvasView',
-    'views/SensorView',
-], function(CanvasView, SensorView) {
+    'views/WidgetView',
+], function(CanvasView, WidgetView) {
     canvas = new CanvasView();
+    widget = new WidgetView({el: '.canvas'});
 
     var init = function() {
-        canvas.render(40, 20).togglegrid();
-        //canvas.togglegrid();
-    };
-
-    var togglegrid = function() {
-        canvas.togglegrid();
+        canvas.render(2, 1).togglegrid();
+        widget.render();
     };
 
     return {
         init: init,
-        toggle: togglegrid,
     };
 });

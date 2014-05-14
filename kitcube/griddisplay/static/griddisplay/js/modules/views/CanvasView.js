@@ -5,14 +5,20 @@ define([
     'text!templates/canvas/layout.html', 
     'text!templates/canvas/grid.html', 
     'common',
-], function($, _, Backbone, layoutTemplate, gridTemplate) {
+], function($, _, Backbone, layoutTemplate, gridTemplate, WidgetModel) {
 
     var CanvasView =  Backbone.View.extend({
         el: '.canvas',
 
         template: _.template(layoutTemplate, {id: 'test'}),
 
-        initgrid: function(sizeX, sizeY) {
+        render: function(sizeX, sizeY){
+            this.initcanvas(sizeX, sizeY);
+            this.initgrid();
+            return this;
+        },
+
+        initcanvas: function(sizeX, sizeY) {
             var canvasWidth = $(window).width(),
                 canvasHeight = $(window).height()
                     - $('.banner').css('height').toNum()
@@ -31,26 +37,25 @@ define([
             this.$el.css('height', sizeY*unit0 + 'px');
             this.$el.css('width', sizeX*unit0 + 'px');
 
-            this.$el.data('gridUnit', unit0);
-            this.$el.data('gridSizeX', sizeX);
-            this.$el.data('gridSizeY', sizeY);
+            this.$el.data('canvasUnit', unit0);
+            this.$el.data('canvasSizeX', sizeX);
+            this.$el.data('canvasSizeY', sizeY);
         },
 
-        render: function(sizeX, sizeY){
-            this.initgrid(sizeX, sizeY);
-
-            var unit = this.$el.data('gridUnit');
-            var gridtpl = _.template(gridTemplate);
+        initgrid: function() {
+            var unit = this.$el.data('canvasUnit');
+            var sizeX = this.$el.data('canvasSizeX');
+            var sizeY = this.$el.data('canvasSizeY');
+            var template = _.template(gridTemplate);
             for (var i = 0; i < sizeX; i++) {
                 for(var j = 0; j < sizeY; j++) {
-                    this.$el.append(gridtpl({
-                        top: j*unit, left: i*unit, width: unit, height: unit
+                    this.$el.append(template({
+                        top: j*unit, left: i*unit, // position
+                        width: unit, height: unit  // size 
                     }));
                 }
             }
-
             this.$el.attr('grid', 'grid');
-            return this;
         },
 
         togglegrid: function() {
@@ -65,6 +70,16 @@ define([
                 return this;
             }
         },
+
+        /*
+        addWidget: function(pos, size, template, data) {
+            data.posleft = pos.x;
+            data.postop = pos.y;
+            data.sizex = size.x;
+            data.sizey = size.y;
+            this.$el.append(_template(template, data));
+        },
+        */
 
         init: function(){
         },
