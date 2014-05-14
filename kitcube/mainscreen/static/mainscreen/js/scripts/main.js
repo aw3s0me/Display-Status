@@ -41,7 +41,8 @@ require.config({
     //"bigtext": "vendor/bigtext"
     "bigtext": "vendor/bigtext/src/bigtext",
     "momentjs": "vendor/momentjs/min/moment.min",
-    "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min"
+    "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
+    "oauthio": "vendor/oauth.io/dist/oauth.min"
     //"regression": "vendor/highcharts_trendline/regression"
   },
   shim: {

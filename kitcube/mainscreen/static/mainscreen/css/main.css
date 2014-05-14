@@ -363,13 +363,19 @@ body {
 
 /* LoginView CSS TEMPLATE BEGIN */
 
-.loginHref {
+#userBlock {
 	float: right;
+}
+
+.loginHref {
 	margin-right: 10px;
-	display: block;
 	color: #000;
 	cursor: pointer;
 	text-decoration: none;
+}
+
+#userStatus {
+	display: none;
 }
 
 .loginlbl {
@@ -404,7 +410,7 @@ body {
 }
 
 #loginFormDiv a {
-    color: black;
+    color: #27ae60;
 }
 
 .reglbl {
@@ -414,6 +420,8 @@ body {
 .forgetlbl {
 	margin-top: -5px;
 }
+
+
 
 #loginFormDiv input[type="text"],
 #loginFormDiv input[type="submit"],

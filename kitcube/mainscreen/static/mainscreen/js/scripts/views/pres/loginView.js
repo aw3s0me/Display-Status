@@ -103,6 +103,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				logged_in: true,
 				role: loginInfo.userRole
 			});
+
+			
+			
 			//$.cookie('access_token', user.get('token'));
 			window.location.href = "#board";
 		}

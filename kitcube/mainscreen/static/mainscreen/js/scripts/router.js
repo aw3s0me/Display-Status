@@ -15,10 +15,11 @@ define([
 		routes: {
 			// Define some URL routes
 			//'editor': 'showTextEditorView',
-			'': 'showBoardView',
+			'board': 'showBoardView',
 			//'settings': 'showSettingsView',
 			//'control': 'showControlPanelView',
 			'login': 'showLoginView',
+			'logout': 'doLogout',
 			'register': 'showRegisterView',
 			'onresize/:x/ycoord:y': 'resizeBoard',
 			'onchange/:x/ycoord:y': 'changeUnitNumber',
@@ -32,7 +33,7 @@ define([
 		getCfg: function() {
 			var text;
 			$.ajax({
-				url: '../static/mainscreen/tempcfg/empty.json',
+				url: '../static/mainscreen/tempcfg/fullempty.json',
 				async: false,
 				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 				success: function(data){
@@ -40,7 +41,6 @@ define([
 				}
 			});	
 			return text;
-
 		},
 		showView: function(view) {
 			if (this.views.current != undefined) {
@@ -56,6 +56,17 @@ define([
 
 			this.showView(this.views.myBoardViewContainer);
 
+			if (!window.activeSessionUser.get('logged_in')) {
+				$('.loginHref').text('Login');
+				$('.loginHref').attr('href', '#login');
+			}
+			else {
+				var curUser = window.activeSessionUser;
+				$('.loginHref').text('Logout');
+				$('.loginHref').attr('href', '#logout');
+				$('#userStatus').css('display', 'block');
+				$('#userStatus').text('Welcome! ' + curUser.get('username'));
+			}
 			/*var numTab = (id === undefined)? 0 : parseInt(id);
 			var text = this.myTextEditorView.externEditor.getSession().getValue();
 			if (!this.boardViewTabs[numTab]) {
@@ -102,7 +113,12 @@ define([
 			this.showView(this.views.myLoginView);
 
 			$('.loginHref').text('Board');
-			$('.loginHref').attr('href', '');
+			$('.loginHref').attr('href', '#board');
+		},
+		doLogout: function() {
+			if (this.views.myLoginView !== undefined && window.activeSessionUser.get('logged_in')) {
+				this.views.myLoginView.logout();
+			}
 		},
 		showRegisterView: function(){
 			if (this.views.myRegisterView === undefined) {
