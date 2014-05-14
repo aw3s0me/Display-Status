@@ -31,6 +31,7 @@ define([
 		loginView: undefined,
 		controlPanelView: undefined,
 		settingsView: undefined,
+		boardView: undefined,
 		showTextEditorView: function() {
 			if ($("#board-container").val() !== undefined) {
 				$("#board-container").hide();
@@ -47,7 +48,11 @@ define([
 			//show it
 		},
 		showBoardView: function(id) {
-			var numTab = (id === undefined)? 0 : parseInt(id);
+			this.boardView.container.show();
+			if ($("#kitcube-console").val() !== undefined) //if console still opened
+				$("#kitcube-console").hide();
+
+			/*var numTab = (id === undefined)? 0 : parseInt(id);
 			var text = this.myTextEditorView.externEditor.getSession().getValue();
 			if (!this.boardViewTabs[numTab]) {
 				//if tab doesnt exist so create
@@ -84,7 +89,7 @@ define([
 				if (container.val() !== undefined) {
 					container.show();
 				}
-			}	
+			}	*/
 		},
 		changeUnitNumber: function(x, y) {
 			if (self.boardView !== undefined)
@@ -105,9 +110,11 @@ define([
 	var initialize = function() {
 		var app_router = new AppRouter;
 		app_router.myTextEditorView = new TextEditorView();
-
+		app_router.loginView = new LoginView();
+		var text = app_router.myTextEditorView.externEditor.getSession().getValue();
+		app_router.boardView = new BoardView({aceText : text})
 		//app_router.boardView.initialize(); //2times creates board SHIIT
-		/*app_router.loginView = new LoginView();
+		/*
 		app_router.controlPanelView = new ControlPanelView();
 		app_router.settingsView = new SettingsView(); */
 
