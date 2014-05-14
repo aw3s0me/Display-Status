@@ -365,6 +365,9 @@ body {
 
 #userBlock {
 	float: right;
+	display: inline;
+	font-weight: bold;
+	font-size: 20px;
 }
 
 .loginHref {
@@ -375,15 +378,15 @@ body {
 }
 
 #userStatus {
-	display: none;
+	margin-right: 10px;
 }
 
 .loginlbl {
 	padding-top: 10px;
 }
 
-.loginHref:hover, .loginHref:after, .loginHref:hover:after {
-	color: #333;
+.loginHref:hover {
+	color: grey;
 	text-decoration: none;
 }
 

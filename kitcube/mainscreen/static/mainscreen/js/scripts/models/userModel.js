@@ -7,7 +7,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				//password: "",
 				token: "",
 				role: "",
-				logged_in: false
+				logged_in: false,
+				group: ""
 			}
 		},
 		initialize: function(){

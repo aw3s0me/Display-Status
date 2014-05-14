@@ -45,6 +45,7 @@ def mainscreen_index(request, projname=None, name=None):
         'title': getattr(settings, 'TITLE'),
         'description': getattr(settings, 'DESCRIPTION'),
         'banner': banner_html,
+        'project': projname,
     }
     response = render_to_response('mainscreen/index.html', data, context_instance=RequestContext(request))
     

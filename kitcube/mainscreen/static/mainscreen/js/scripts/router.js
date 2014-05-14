@@ -64,8 +64,7 @@ define([
 				var curUser = window.activeSessionUser;
 				$('.loginHref').text('Logout');
 				$('.loginHref').attr('href', '#logout');
-				$('#userStatus').css('display', 'block');
-				$('#userStatus').text('Welcome! ' + curUser.get('username'));
+				$('#userStatus').text('Welcome! ' + curUser.get('username') + ',');
 			}
 			/*var numTab = (id === undefined)? 0 : parseInt(id);
 			var text = this.myTextEditorView.externEditor.getSession().getValue();
@@ -118,6 +117,10 @@ define([
 		doLogout: function() {
 			if (this.views.myLoginView !== undefined && window.activeSessionUser.get('logged_in')) {
 				this.views.myLoginView.logout();
+				var curUser = window.activeSessionUser;
+				$('.loginHref').text('Login');
+				$('.loginHref').attr('href', '#login');
+				$('#userStatus').text('');
 			}
 		},
 		showRegisterView: function(){

@@ -11,14 +11,14 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				$("#formContainer").toggleClass('closed');
 			});
 
-			this.form.on('submit',function(event) {
+			this.form.on('submit', function(event) {
 				event.preventDefault();
 				var credential = {
-					username : $(this).find('#password').val(),
-					password : $(this).find('#username').val()
+					username: $(this).find('#password').val(),
+					password: $(this).find('#username').val()
 				}
 				var dataToSend = JSON.stringify($(this).serializeObject());
-				
+
 				console.log(self.form.serialize())
 				$.ajax({
 					type: 'POST',
@@ -28,31 +28,32 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 						console.log(data);
 						self.onSuccessLogin(data);
 					}
-				}) 
+				})
 				return false;
 			});
 			$('#loginFacebook').click(function(event) {
 				OAuth.popup('facebook', function(err, success) {
 					if (err) {
- 
-	                }
-	                else {
-	                    var token = "Token " + success.access_token;
-	                    console.log(token);
-	                    $.ajax({
-	                    	url: '/api-token/login/facebook/',
-	                    	method: 'POST',
-	                    	data: {'Authorization': token},
-	                    	success: function(data) {
-	                    		console.log(data);
-	                    		self.onSuccessLogin(data);
-	                    	},
-	                    	beforeSend: function(xhr, settings) { 
-	                    		xhr.setRequestHeader('Authorization', token); 
-	                    	} 
-	                    })
-	                     
-	                }
+
+					} else {
+						var token = "Token " + success.access_token;
+						console.log(token);
+						$.ajax({
+							url: '/api-token/login/facebook/',
+							method: 'POST',
+							data: {
+								'Authorization': token
+							},
+							success: function(data) {
+								console.log(data);
+								self.onSuccessLogin(data);
+							},
+							beforeSend: function(xhr, settings) {
+								xhr.setRequestHeader('Authorization', token);
+							}
+						})
+
+					}
 
 
 				});
@@ -60,31 +61,34 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			$('#loginGoogle').click(function(event) {
 				OAuth.popup('google', function(err, success) {
 					if (err) {
- 
-	                }
-	                else {
-	                    var token = "Token " + success.access_token;
-	                    console.log(token);
-	 	                $.ajax({
-	                    	//url: '/api-token/login/google/',
-	                    	url: '/api-token/login/google-oauth2/',
-	                    	method: 'POST',
-	                    	data: {'Authorization': token},
-	                    	headers: {'Authorization': token, },
-	                    	success: function(data) {
-	                    		console.log(data);
-	                    		self.onSuccessLogin(data);
-	                    	},
-	                    	beforeSend: function(xhr, settings) { 
-	                    		xhr.setRequestHeader('Authorization', token); 
-	                    	}
-	                    })
-	                     
-	                }
-				  //handle error with error
-				  //use result.access_token in your API request
+
+					} else {
+						var token = "Token " + success.access_token;
+						console.log(token);
+						$.ajax({
+							//url: '/api-token/login/google/',
+							url: '/api-token/login/google-oauth2/',
+							method: 'POST',
+							data: {
+								'Authorization': token
+							},
+							headers: {
+								'Authorization': token,
+							},
+							success: function(data) {
+								console.log(data);
+								self.onSuccessLogin(data);
+							},
+							beforeSend: function(xhr, settings) {
+								xhr.setRequestHeader('Authorization', token);
+							}
+						})
+
+					}
+					//handle error with error
+					//use result.access_token in your API request
 				});
-			}); 
+			});
 
 		},
 		render: function() {
@@ -92,6 +96,29 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			this.container.append(compiledTemplate);
 			this.el = $('#loginFormDiv');
 			this.form = this.el.find('#formContainer');
+		},
+		logout: function() {
+			var user = window.activeSessionUser;
+			if (!user.get('logged_in')) {
+				return;
+			}
+			var token = user.get('token');
+			//var dataToSend = JSON.stringify({'token': token});
+			$.ajax({
+				//url: '/api-token/login/google/',
+				url: '/api-token/logout/',
+				method: 'GET',
+				//data: dataToSend,
+				headers: {
+					'Authorization': token,
+				},
+				success: function(data) {
+					user.trigger('logout');
+				},
+				beforeSend: function(xhr, settings) {
+					xhr.setRequestHeader('Authorization', token);
+				}
+			})
 		},
 		onSuccessLogin: function(loginInfo) {
 			user = window.activeSessionUser;
@@ -101,11 +128,12 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				token: loginInfo.token,
 				id: loginInfo.id,
 				logged_in: true,
-				role: loginInfo.userRole
+				role: loginInfo.userRole,
+				group: loginInfo.group
 			});
 
-			
-			
+
+
 			//$.cookie('access_token', user.get('token'));
 			window.location.href = "#board";
 		}

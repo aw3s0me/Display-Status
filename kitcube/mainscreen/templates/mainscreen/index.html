@@ -8,6 +8,8 @@
   <title>{{ title }}</title>
   <meta name="description" 
           content="{{ description }}">
+  <meta name="project" content="{{project}}">
+  <meta name="csrf_token" content="{{csrf_token}}">
   <link href={% static "mainscreen/css/bootstrap.min.css" %} rel="stylesheet">
   <link href={% static "mainscreen/css/main.css" %} rel="stylesheet">
   <link href={% static "mainscreen/js/scripts/vendor/jqgrid/css/ui.jqgrid.css" %} rel="stylesheet"> 
@@ -28,7 +30,7 @@
   <div id="wrapper">
     <div id="content">
     	{{ banner }}
-    	<span id="userBlock"><span id="userStatus"></span><span id="loginSpan"><a class="loginHref" href="#login">Login</a></span></span>
+    	<span id="userBlock"><label id="userStatus"></label><a class="loginHref" href="#login">Login</a></span>
       <!-- <div id="banner" class="demo-headline">
         <h1 class="demo-logo">
           <div class="logo"></div>

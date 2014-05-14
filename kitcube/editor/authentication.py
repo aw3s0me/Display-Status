@@ -147,7 +147,16 @@ class LoginView(APIView):
         if not User.objects.filter(username=data['username']).exists(): 
             return Response('User doesnt exist', status=status.HTTP_404_NOT_FOUND)
         user = User.objects.get(username=data['username'])
+        pdb.set_trace()
         if user.check_password(data['password']):
+            groupname = data['group']
+            if not Group.objects.filter(username=groupname).exists(): 
+                return Response('Group hasnt been specified correctly', status=status.HTTP_400_BAD_REQUEST)
+            else:
+                group = Group.objects.get(name=groupname).user_set.all()
+                if not user in group:
+                    return Response('User is not in group', status=status.HTTP_400_BAD_REQUEST)
+
             if user and user.is_active:
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key})
@@ -165,6 +174,20 @@ class LogoutView(APIView):
     userSerializer_class = UserSerializer
     model = Token
     def get(self, request):
+        #data = json.loads(request.body)
+        auth = get_authorization_header(request).split()
+        pdb.set_trace()
+        if not auth or auth[0].lower() != b'token':
+            msg = 'No token header provided.'
+        if len(auth) == 1:
+            msg = 'Invalid token header. No credentials provided.'
+        if not msg:
+            return Response('Invalid token header', status=status.HTTP_400_BAD_REQUEST)
+        key=auth[0]
+        if not Token.objects.filter(key=key).exists(): 
+            return Response('Group hasnt been specified correctly', status=status.HTTP_400_BAD_REQUEST)
+        else:
+            Token.objects.get(key=key).delete()
         return Response({'User': ''})
 
 
