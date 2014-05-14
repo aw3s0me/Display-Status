@@ -361,155 +361,115 @@ body {
 
 /* Login form */
 
-#loginFormDiv {
-	position: absolute;
-	right: 0;
+/* LoginView CSS TEMPLATE BEGIN */
+
+.loginHref {
+	float: right;
+	margin-right: 10px;
 	display: block;
-	height: 200px;
-	width: 300px;
-	z-index: 1000;
-	//border: 1px solid #e5e5e5;
+	color: #000;
+	cursor: pointer;
+	text-decoration: none;
 }
 
-#formSign {
-	font-size: 14px;
-	font-weight: 700;
-	//padding: 20px 32px;
-	background: none;
-	margin: 0 !important;	
-	text-align: center;
-	margin-top: -20px;
-	margin-bottom: 20px;
-	//border-bottom: ;
+.loginlbl {
+	padding-top: 10px;
 }
 
-#formContainer
-{
-	border: 1px solid #e5e5e5;
-    height:90%;
-    border-bottom-right-radius: 5px;
-	background: #f6f9fc;
-	border-top: 1px solid #e5e5e5;
-	padding: 32px;
-	line-height: 1.8em;
-	font-size: 13px;
-	word-wrap: break-word;
+.loginHref:hover, .loginHref:after, .loginHref:hover:after {
+	color: #333;
+	text-decoration: none;
+}
+
+#loginFormDiv {
+    width: 30%;
+    margin: auto;
+    margin-top: 120px;
+}
+
+#loginFormDiv h2 {
+    text-shadow: 0 1px 0 #27ae60;
+    font-size: 1.62em;
+    //color: #2ecc71;
+    color: black;
+    display: block;
+    width: 100%;
+    padding-bottom: .4em;
+    margin-bottom: .6em;
+    border-bottom: 2px solid #2ecc71;
+    /*box-shadow*/
+    -webkit-box-shadow: 0 1px 0 #27ae60;
+    -moz-box-shadow: 0 1px 0 #27ae60;
+    box-shadow: 0 1px 0 #27ae60;
+}
+
+#loginFormDiv a {
+    color: black;
+}
+
+.reglbl {
+    padding-top : 8px;
+    display: inline-block;
+}
+.forgetlbl {
+	margin-top: -5px;
 }
 
 #loginFormDiv input[type="text"],
 #loginFormDiv input[type="submit"],
 #loginFormDiv input[type="password"]
 {
-	margin: 0 auto;
-	margin-bottom: 10px;
     clear: both;
     float: left;
     display: block;
-    //border: 1px solid #ccc;
-    border: 1px solid #bfbfbf;
-    background: white;
-    //margin: 6px 0;
+    border: 1px solid #ccc;
+    background: #ebebeb;
+    margin: 6px 0;
     padding: 4px 10px;
-    width: 90%;
+    width: 100%;
     height: 34px;
     outline: 0;
     color: #34495e;
     font-size: 14px;
-    webkit-border-radius: 3px;
-    border-radius: 3px;
 }
 
-.checkboxDiv {
-	float: none;
-	margin: 0;
-	cursor: auto;
-	text-align: left;
-	font-size: 13px;
-	line-height: 13px;
-	display: block;
-	position: relative;
-	-webkit-user-select: none;
-	position: relative;
-	//top: 135px;
-	//right: 150px;
-}
-#loginFormDiv label {
-	margin-bottom: 10px !important;
-	margin-left: 10px;
-	float: left;
+#loginFormDiv input[type=submit] {
+    background: #27ae60;
+    //background: #e5e5e5;
+    color: #ecf0f1;
+    border: 0;
+    border-bottom: 2px solid #2ecc71;
+    margin: 10px 0 0;
 }
 
-#loginFormDiv input[type="checkbox"] {
-	font-size: 13px;
-	color: #3d464d;
-	font-weight: normal;
-	-webkit-appearance: checkbox;
-	box-sizing: border-box;
-	float: left;
-	vertical-align: middle;
-	padding-bottom: 10px;
+#loginFormDiv input[value*="Facebook"] {
+    background: #3b5998;
+    border-color: #1f4189;
+    width: 50%;
+    float: left;
+    clear: none;
+    margin-left: 0;
 }
 
-/*#loginFormDiv.remember {
-	text-align: left;
-	font-size: 13px;
-	line-height: 13px;
-	color: #3d464d;
-	font-weight: normal;
-	float: left;
-} */
-
-#LoginButton
-{
-    border-width: 2px;
-	float: none;
-	//width: 284px;
-	text-align: center !important;
-	font-size: 15px;
-	font-weight: bold;
-	height: 25px;
-	background: -webkit-gradient(linear, left top, left bottom, from(#168add), to(#007ee5));
-	background: -moz-linear-gradient(top, #168add, #007ee5);
-	border: 1px solid #0c6ebe;
-	color: white;
-	cursor: pointer;
-	overflow: visible;
-	text-decoration: none;
-	vertical-align: middle;
-}
-/* Login form end */
-
-a.sb, .sb a, a.sb:before, .sb a:before, a.sb:after, .sb a:after {
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	width: 32px;
-	height: 32px;
-	background-repeat: no-repeat;
-	background-position: center center;
-	text-indent: -900em;
-	color: #333;
-	text-decoration: none;
-	line-height: 100%;
-	white-space: nowrap;
-	display: inline-block;
-	position: relative;
-	vertical-align: middle;
-	margin: 0 2px 5px 0;
-	background-color: #ececec;
-	border: solid 1px #b8b8b9;
-	-webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 1px 0 rgba(0,0,0,.1);
-	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 1px 0 rgba(0,0,0,.1);
-	box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 1px 0 rgba(0,0,0,.1);
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
+#loginFormDiv input[value*="Google"] {
+    background: #0396c7;
+    border-color: #0078a6;
+    width: 50%;
+    float: left;
+    clear: none;
 }
 
-.fb_login {
-	background-image: url(../images/login/fb_black.png);
+#loginFormDiv input[value*="Facebook"]:active,
+#loginFormDiv input[value*="Facebook"]:focus {
+    color: #ecf0f1;
+    background: #1f4189;
 }
 
-.google_login {
-	background-image: url(../images/login/google_black.png);
+input[value*="Google"]:active,
+input[value*="Google"]:focus {
+    color: #ecf0f1;
+    background: #0078a6;
 }
+
+/* LoginView CSS TEMPLATE END */
+

@@ -1,23 +1,17 @@
 define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], function($, _, Backbone, LoginTemplate) {
 
 	var loginView = Backbone.View.extend({
-		container: $('#banner'),
+		container: $('#board-container'),
 		el: undefined,
 		form: undefined,
 		initialize: function() {
 			var self = this;
 			this.render();
-			console.log(this.form);
 			$('#LoginButton').click(function(event) {
-				if ($("#formContainer").is(":hidden")){
-                    $("#formContainer").slideDown("fast");
-                }
-                else{
-                    $("#formContainer").slideUp("fast");
-                }
+				$("#formContainer").toggleClass('closed');
 			});
 
-			/*this.form.on('submit',function(event) {
+			this.form.on('submit',function(event) {
 				event.preventDefault();
 				var credential = {
 					username : $(this).find('#password').val(),
@@ -90,36 +84,14 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				  //handle error with error
 				  //use result.access_token in your API request
 				});
-			}); */
+			}); 
 
 		},
-		/*events: {
-			'submit #loginForm': 'onLogin'
-		},*/
 		render: function() {
 			var compiledTemplate = _.template(LoginTemplate, {});
 			this.container.append(compiledTemplate);
 			this.el = $('#loginFormDiv');
 			this.form = this.el.find('#formContainer');
-			//this.hide();
-		},
-		hide: function() {
-			this.el.hide();
-		},
-		show: function() {
-			this.el.show();
-		},
-		isHidden: function() {
-			if (this.el.is(':hidden')) {
-				return true;
-			} else
-				return false;
-		},
-		isShown: function() {
-			if (this.el.is(':hidden')) {
-				return false;
-			} else
-				return true;
 		},
 		onSuccessLogin: function(loginInfo) {
 			user = window.activeSessionUser;
@@ -131,7 +103,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				logged_in: true,
 				role: loginInfo.userRole
 			});
-			$.cookie('access_token', user.get('token'));
+			//$.cookie('access_token', user.get('token'));
 			window.location.href = "#board";
 		}
 

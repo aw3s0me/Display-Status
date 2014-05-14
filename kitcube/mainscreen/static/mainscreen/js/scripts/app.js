@@ -28,9 +28,7 @@ define([
     $(document).ready(function($) {
 
       Router.initialize();
-
-
-      document.location.href = '#board';
+      //document.location.href = '#board';
 
       $("#btnBoard").click(function(){
           document.location.href = '#board/0';

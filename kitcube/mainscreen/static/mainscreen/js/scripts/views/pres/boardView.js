@@ -69,7 +69,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			$('.canvas').data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 
 			this.grid = new kitGrid("#tab1");
-			this.$el = $("#tab1");
+			this.el = $("#tab1");
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			});
@@ -158,7 +158,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var self = this;
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
-			}, 2000); //the only way to pass param */
+			}, 10000); //the only way to pass param */
 		},
 		reinitWithOptions: function(options) {
 

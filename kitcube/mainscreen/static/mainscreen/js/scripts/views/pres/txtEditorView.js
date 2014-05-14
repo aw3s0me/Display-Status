@@ -1,7 +1,7 @@
 define(['jquery', 'underscore', 'backbone', 'text!templates/pres/txtEditor.html'], function($, _, Backbone, textEditorTemplate) {
 	var txtEditorView = Backbone.View.extend({
 		el: 'kitcube-console',
-		appendElem: $('#kitcube-container'),
+		container: $('#kitcube-container'),
 		externEditor: null,
 		initialize: function(options) {
 			/*var url;
@@ -13,7 +13,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/txtEditor.html'
 				var self = this;
 				var data = {};
 				var compiledTemplate = _.template(textEditorTemplate, data);
-				this.appendElem.append(compiledTemplate);
+				this.container.append(compiledTemplate);
 				this.externEditor = ace.edit('kitcube-console');
 				if ($('#kitcube-console').val() !== undefined) {
 					$('#kitcube-console')[0].style.fontSize = '14px';
@@ -43,6 +43,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/txtEditor.html'
 					//url: 'static/mainscreen/cfg/demo.json',
 					//url: 'static/mainscreen/cfg/katrincfgcharttiles.json',
 					url: '../static/mainscreen/tempcfg/empty.json',
+					//url: '../static/mainscreen/tempcfg/fullempty.json',
 					//url: 'static/mainscreen/tempcfg/table.json',
 					async: false,
 					dataType: 'text', //explicitly requesting the xml as text, rather than an xml document

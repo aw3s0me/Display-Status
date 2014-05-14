@@ -6,51 +6,55 @@ define([
 	'kit.sizeDetector',
 	'views/pres/boardView',
 	'views/pres/loginView',
-	'views/pres/controlPanelView',
-	'views/pres/txtEditorView',
-	'views/pres/settingsView'
-], function($, _, Backbone, sizeDetector, BoardView, LoginView, ControlPanelView, TextEditorView, SettingsView ) {
+	'views/pres/registerView'
+	//'views/pres/controlPanelView',
+	//'views/pres/txtEditorView',
+	//'views/pres/settingsView'
+], function($, _, Backbone, sizeDetector, BoardView, LoginView, RegisterView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
-			'editor': 'showTextEditorView',
-			'board/:id': 'showBoardView',
-			'settings': 'showSettingsView',
-			'control': 'showControlPanelView',
+			//'editor': 'showTextEditorView',
+			'': 'showBoardView',
+			//'settings': 'showSettingsView',
+			//'control': 'showControlPanelView',
 			'login': 'showLoginView',
+			'register': 'showRegisterView',
 			'onresize/:x/ycoord:y': 'resizeBoard',
 			'onchange/:x/ycoord:y': 'changeUnitNumber',
 			// Default
 			'*actions': 'defaultAction'
 		},
-		myTextEditorView: undefined,
 		self: this,
 		tabCount: 0,
 		boardViewTabs: [],
 		curTab: undefined,
-		loginView: undefined,
-		controlPanelView: undefined,
-		settingsView: undefined,
-		boardView: undefined,
-		showTextEditorView: function() {
-			if ($("#board-container").val() !== undefined) {
-				$("#board-container").hide();
-				if (this.curTab) {
-					var newText = this.curTab.serializeToJson();
-					this.myTextEditorView.externEditor.getSession().setValue(newText);
+		getCfg: function() {
+			var text;
+			$.ajax({
+				url: '../static/mainscreen/tempcfg/empty.json',
+				async: false,
+				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
+				success: function(data){
+					text = data;
 				}
-				
-			}
-			if ($("#kitcube-console").val() !== undefined)
-				$("#kitcube-console").show();
+			});	
+			return text;
+
 		},
-		showSettingsView: function() {
-			//show it
+		showView: function(view) {
+			if (this.views.current != undefined) {
+				$(this.views.current.el).hide();
+			}
+			this.views.current = view;
+			$(this.views.current.el).show();
 		},
 		showBoardView: function(id) {
-			this.boardView.container.show();
-			if ($("#kitcube-console").val() !== undefined) //if console still opened
-				$("#kitcube-console").hide();
+			if (this.views.myBoardViewContainer === undefined) {
+				this.views.myBoardViewContainer = new BoardView({aceText: this.getCfg()});
+			}
+
+			this.showView(this.views.myBoardViewContainer);
 
 			/*var numTab = (id === undefined)? 0 : parseInt(id);
 			var text = this.myTextEditorView.externEditor.getSession().getValue();
@@ -91,14 +95,26 @@ define([
 				}
 			}	*/
 		},
+		showLoginView: function() {
+			if (this.views.myLoginView === undefined) {
+				this.views.myLoginView = new LoginView();
+			}
+			this.showView(this.views.myLoginView);
+
+			$('.loginHref').text('Board');
+			$('.loginHref').attr('href', '');
+		},
+		showRegisterView: function(){
+			if (this.views.myRegisterView === undefined) {
+				this.views.myRegisterView = new RegisterView();
+			}
+
+			this.showView(this.views.myRegisterView);
+		},
 		changeUnitNumber: function(x, y) {
-			if (self.boardView !== undefined)
-				self.boardView.change(x, y);
 		},
 		resizeBoard: function(x, y) {
-			console.log('resizeBoard2');
-			if (self.boardView !== undefined)
-				self.boardView.resize(x, y);
+
 		},
 		defaultAction: function(actions) {
 			// We have no matching route, lets just log what the URL was
@@ -109,14 +125,9 @@ define([
 
 	var initialize = function() {
 		var app_router = new AppRouter;
-		app_router.myTextEditorView = new TextEditorView();
-		app_router.loginView = new LoginView();
-		var text = app_router.myTextEditorView.externEditor.getSession().getValue();
-		app_router.boardView = new BoardView({aceText : text})
-		//app_router.boardView.initialize(); //2times creates board SHIIT
-		/*
-		app_router.controlPanelView = new ControlPanelView();
-		app_router.settingsView = new SettingsView(); */
+		app_router.views = {
+			myBoardViewContainer : new BoardView({aceText: app_router.getCfg()})
+		}
 
 		Backbone.history.start();
 	};
