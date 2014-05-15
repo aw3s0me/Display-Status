@@ -157,6 +157,11 @@ require.config({
       deps: [
         "jquery"
       ]
+    },
+    oauthio: {
+      deps: [
+        "jquery"
+      ]
     }/*,
     regression: {
       deps: [

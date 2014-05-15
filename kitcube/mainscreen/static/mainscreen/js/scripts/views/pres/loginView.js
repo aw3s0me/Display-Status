@@ -7,9 +7,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 		initialize: function() {
 			var self = this;
 			this.render();
-			$('#LoginButton').click(function(event) {
-				$("#formContainer").toggleClass('closed');
-			});
 
 			this.form.on('submit', function(event) {
 				event.preventDefault();
@@ -17,9 +14,17 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 					username: $(this).find('#password').val(),
 					password: $(this).find('#username').val()
 				}
-				var dataToSend = JSON.stringify($(this).serializeObject());
+				var dataToSend = $(this).serializeObject();
+				dataToSend['group'] = $('meta[name="project"]').attr('content');
+				dataToSend = JSON.stringify(dataToSend);
 
-				console.log(self.form.serialize())
+				var csrfToken = $('meta[name="csrf_token"]').attr('content');
+				console.log(csrfToken);
+				$(document).ajaxSend(function(event, xhr, settings) {
+					/* stuff to do before an AJAX request is sent */
+					xhr.setRequestHeader('X-CSRFToken', csrfToken);
+				});
+				
 				$.ajax({
 					type: 'POST',
 					url: '/api-token/login_reg/',
@@ -95,7 +100,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			var compiledTemplate = _.template(LoginTemplate, {});
 			this.container.append(compiledTemplate);
 			this.el = $('#loginFormDiv');
-			this.form = this.el.find('#formContainer');
+			this.form = this.el.find('#loginForm');
 		},
 		logout: function() {
 			var user = window.activeSessionUser;

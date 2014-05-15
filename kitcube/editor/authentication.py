@@ -138,6 +138,7 @@ class LoginView(APIView):
     model = Token
     def post(self, request):
         data = json.loads(request.body)
+        pdb.set_trace()
         """
         if len(data['password']) < 5:
             return Response('Password_length', status=status.HTTP_411_LENGTH_REQUIRED)
@@ -150,7 +151,7 @@ class LoginView(APIView):
         pdb.set_trace()
         if user.check_password(data['password']):
             groupname = data['group']
-            if not Group.objects.filter(username=groupname).exists(): 
+            if not Group.objects.filter(name=groupname).exists(): 
                 return Response('Group hasnt been specified correctly', status=status.HTTP_400_BAD_REQUEST)
             else:
                 group = Group.objects.get(name=groupname).user_set.all()
@@ -176,7 +177,7 @@ class LogoutView(APIView):
     def get(self, request):
         #data = json.loads(request.body)
         auth = get_authorization_header(request).split()
-        pdb.set_trace()
+        #pdb.set_trace()
         if not auth or auth[0].lower() != b'token':
             msg = 'No token header provided.'
         if len(auth) == 1:
