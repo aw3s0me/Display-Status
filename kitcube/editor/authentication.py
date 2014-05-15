@@ -19,6 +19,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
+#from editor.validation import validate_user as validate_user
 import logging
 import json
 import pdb
@@ -35,6 +36,13 @@ def get_authorization_header(request):
         auth = auth.encode(HTTP_HEADER_ENCODING)
     return auth
 
+def is_empty(any_structure):
+    if any_structure:
+        print('Structure is not empty.')
+        return False
+    else:
+        print('Structure is empty.')
+        return True
 
 #auth with OAuth users (updating and creating tokens)
 class ObtainAuthToken(APIView):
@@ -127,6 +135,29 @@ class RegisterView(APIView):
         else:
             return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
 
+def validate_user(data):
+    errors = {}
+    groupname = data['group']
+    group = Group.objects.get(name=groupname).user_set.all()
+    if not User.objects.filter(username=data['username']).exists(): 
+        errors['username'] = 'User doesnt exist'
+        #errros['password'] = 'Wrong password'
+    else:
+        user = User.objects.get(username=data['username'])
+        if not user.check_password(data['password']):
+            errors['password'] = 'Wrong password'
+        if not Group.objects.filter(name=groupname).exists(): 
+            raise 'Group hasnt been specified correctly'
+            #errors['group'] = 'Group hasnt been specified correctly'
+        if not user in group:
+            errors['group'] = 'User is not in this group'
+    if len(data['password']) < 5:
+        errors['password'] = 'Password length should be more than 5'
+    if len(data['username']) < 5:
+        errors['username'] = 'Username length should be more than 5'
+    
+    return errors
+
 #to login user that were registered without backend
 class LoginView(APIView):
     throttle_classes = ()
@@ -138,33 +169,18 @@ class LoginView(APIView):
     model = Token
     def post(self, request):
         data = json.loads(request.body)
-        pdb.set_trace()
-        """
-        if len(data['password']) < 5:
-            return Response('Password_length', status=status.HTTP_411_LENGTH_REQUIRED)
-        if len(data['username']) < 5:
-            return Response('Username_length', status=status.HTTP_411_LENGTH_REQUIRED)
-        """
-        if not User.objects.filter(username=data['username']).exists(): 
-            return Response('User doesnt exist', status=status.HTTP_404_NOT_FOUND)
-        user = User.objects.get(username=data['username'])
-        pdb.set_trace()
-        if user.check_password(data['password']):
-            groupname = data['group']
-            if not Group.objects.filter(name=groupname).exists(): 
-                return Response('Group hasnt been specified correctly', status=status.HTTP_400_BAD_REQUEST)
-            else:
-                group = Group.objects.get(name=groupname).user_set.all()
-                if not user in group:
-                    return Response('User is not in group', status=status.HTTP_400_BAD_REQUEST)
-
+        #pdb.set_trace()
+        
+        errors = validate_user(data)
+        if is_empty(errors):
+            user = User.objects.get(username=data['username'])
             if user and user.is_active:
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key})
             else:
-                return Response('User_not_active', status=status.HTTP_400_BAD_REQUEST)
+                return Response('user is not active', status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response('Wrong_pswd', status=status.HTTP_400_BAD_REQUEST)
+            return Response(errors)
 
 
 class LogoutView(APIView):

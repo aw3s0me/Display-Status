@@ -482,5 +482,30 @@ input[value*="Google"]:focus {
     background: #0078a6;
 }
 
+#loginValidation {
+	display: none;
+	width: 30%;
+	border: 1px solid;
+	margin: 0 auto;
+	padding:15px 10px 15px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	background-image: url(../images/icons/validation.png);
+	color: #ff0000;
+	background-color: #FFBABA;
+}
+
+.invalid_input {
+	//background-color: ;
+	border: 2px solid #f08080 !important;
+	background-color: #FFBABA !important;
+}
+
+.valid_input {
+	//background-color: #adff2f;
+	border-color: #adff2f !important;
+	background-color: #DFF2BF !important;
+}
+
 /* LoginView CSS TEMPLATE END */
 

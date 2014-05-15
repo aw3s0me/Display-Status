@@ -24,14 +24,18 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 					/* stuff to do before an AJAX request is sent */
 					xhr.setRequestHeader('X-CSRFToken', csrfToken);
 				});
-				
+
 				$.ajax({
 					type: 'POST',
 					url: '/api-token/login_reg/',
 					data: dataToSend,
 					success: function(data) {
 						console.log(data);
-						self.onSuccessLogin(data);
+						if (data.username !== undefined && data.id !== undefined)
+							self.onSuccessLogin(data);
+						else {
+							self.onError(data);
+						}
 					}
 				})
 				return false;
@@ -136,11 +140,36 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				role: loginInfo.userRole,
 				group: loginInfo.group
 			});
-
-
-
 			//$.cookie('access_token', user.get('token'));
 			window.location.href = "#board";
+		},
+		onError: function(errorInfo) {
+			var div = $('#loginValidation');
+			div.show();
+			div.empty();
+			for (var errorName in errorInfo) {
+				var error = errorInfo[errorName];
+				var errorLi = $('<li></li>');
+				errorLi.text(error);
+				div.append(errorLi);
+			}
+
+			if (errorInfo.username !== undefined || errorInfo.group !== undefined) {
+				this.form.find('#username').addClass('invalid_input');
+				this.form.find('#password').addClass('invalid_input');
+				return;
+			}
+			else {
+				this.form.find('#username').addClass('valid_input');
+			}
+
+			if (errorInfo.password !== undefined) {
+				this.form.find('#password').addClass('invalid_input');
+			}
+			else {
+				this.form.find('#password').addClass('valid_input');
+			}
+
 		}
 
 
