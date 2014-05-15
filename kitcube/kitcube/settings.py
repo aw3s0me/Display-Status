@@ -250,3 +250,13 @@ STATICFILES_FINDERS = (
 #EMAIL REGISTRATION PARAMETERS
 
 ACCOUNT_ACTIVATION_DAYS = 2
+DEFAULT_FROM_EMAIL = 'akorovin00@gmail.com'
+#EMAIL_HOST = 'localhost'
+#EMAIL_PORT = 1025
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'fugeem90@gmail.com'
+EMAIL_HOST_PASSWORD = 'Shikarnyi123'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

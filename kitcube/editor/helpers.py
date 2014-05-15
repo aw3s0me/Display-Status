@@ -1,9 +1,18 @@
 from rest_framework.response import Response
 from rest_framework import HTTP_HEADER_ENCODING
+from django.utils.crypto import get_random_string
 
 import json
 import pdb
 
+
+HASH_CHARACTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+
+def generate_new_hash_with_length(length):
+    """
+    Generates a random string with the alphanumerical character set and given length.
+    """
+    return get_random_string(length, HASH_CHARACTERS)
 
 def get_authorization_header(request):
     """

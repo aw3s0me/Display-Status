@@ -2,7 +2,7 @@ You are receiving this email because you have signed up for an account at {{ sit
 
 To activate your account, please visit the following page:
 
-http://{{ site.domain }}{% url 'registration_activate' activation_key %}
+http://{{ site.domain }}{% url 'editor.registration.activate_user' activation_key %}
 
 This page will expire in {{ expiration_days }} day{{ expiration_days|pluralize }}.
 

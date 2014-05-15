@@ -10,6 +10,7 @@ from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import status
 from helpers import is_empty
+from helpers import generate_new_hash_with_length
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -17,6 +18,9 @@ from rest_framework.authtoken.models import Token
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from editor.models import NewUserEntry
+from django.conf import settings
+from django.contrib.sites.models import get_current_site
+
 import json
 import pdb
 import re
@@ -41,21 +45,39 @@ def validate_user(data):
         errors['email'] = 'Email exists'
     return errors
 
+def create_user(data, link):
+    serialized = UserSerializer(data=data)
+    user = User.objects.create_user(
+        username=serialized.init_data['username'],
+        email=serialized.init_data['email'],
+        password=serialized.init_data['password'],
+    )
+    user.is_active=False
+    user.save()
+    NewUserEntry.objects.get_or_create(username=user.username,link=link)
+
+#'http:/ipetd1.ipe.kit.edu:8000/api-token/email_register/' link root
 class SendMailView(APIView):
+    model = User
     def post(self, request, format=None):  
+        pdb.set_trace()
         data = json.loads(request.body)
         errors = validate_user(data)
         if not is_empty(errors):
-            return Response(errors, HTTP_400_BAD_REQUEST)
-        ctx_dict = {'activation_key': self.activation_key, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS}
-        subject = render_to_string('registration/activation_email_subject.txt', ctx_dict)
+            return Response(errors, status.HTTP_400_BAD_REQUEST)
+        link=generate_new_hash_with_length(20)
+        site=get_current_site(request)
+        ctx_dict = {'activation_key': link, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': site}
+        subject = render_to_string('editor/../mail/activation_email_subject.txt', ctx_dict)
             # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
-        message_text = render_to_string('registration/activation_email.txt', ctx_dict)
-        message_html = render_to_string('registration/activation_email.html', ctx_dict)
-        msg = EmailMultiAlternatives(subject, message_text, settings.DEFAULT_FROM_EMAIL, [self.user.email])
-        msg.attach_alternative(message_html, "text/html")
+        message_text = render_to_string('editor/../mail/activation_email.txt', ctx_dict)
+        #message_html = render_to_string('editor/../mail/activation_email.html', ctx_dict)
+        msg = EmailMultiAlternatives(subject, message_text, settings.DEFAULT_FROM_EMAIL, [data['email']])
+        #msg.attach_alternative(message_html, "text/html")
         msg.send()
+        
+        #create_user(data)
         return Response('Please activate user via mail', status=status.HTTP_201_CREATED)
 
 @api_view(['GET', 'POST'])
@@ -78,14 +100,7 @@ class RegisterView(APIView):
     model = Token
     #@permission_classes((AllowAny,))
     def post(self, request, url):
-        serialized = UserSerializer(data=data)
-
-        user = User.objects.create_user(
-            serialized.init_data['username'],
-            serialized.init_data['email'],
-            serialized.init_data['password'],
-        )
-        user.save()
+        
 
         if user and user.is_active:
             token, created = Token.objects.get_or_create(user=user)
