@@ -23,8 +23,9 @@ define([
 	"kit.parser",
 	"kit.dataDownloader",
 	"models/userModel",
+	'cookie',
 	'router', // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, chosen, OAuthio,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ moment, sizeDet, parser, dataDownloader, UserModel, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, chosen, OAuthio,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ moment, sizeDet, parser, dataDownloader, UserModel, Cookie, Router) {
 	var initialize = function() {
 		// Pass in our Router module and call it's initialize function
 		$(document).ready(function($) {

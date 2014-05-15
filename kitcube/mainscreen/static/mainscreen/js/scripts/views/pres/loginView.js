@@ -31,7 +31,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 					data: dataToSend,
 					success: function(data) {
 						console.log(data);
-						if (data.username !== undefined && data.id !== undefined)
+						if (data.name !== undefined && data.id !== undefined)
 							self.onSuccessLogin(data);
 						else {
 							self.onError(data);
@@ -108,6 +108,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 		},
 		logout: function() {
 			var user = window.activeSessionUser;
+			var self = this;
 			if (!user.get('logged_in')) {
 				return;
 			}
@@ -123,6 +124,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				},
 				success: function(data) {
 					user.trigger('logout');
+					self.form.find('#username').removeClass('valid_input');
+					self.form.find('#username').removeClass('invalid_input');
+					self.form.find('#password').removeClass('invalid_input');
+					self.form.find('#password').removeClass('valid_input');
 				},
 				beforeSend: function(xhr, settings) {
 					xhr.setRequestHeader('Authorization', token);
@@ -130,6 +135,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			})
 		},
 		onSuccessLogin: function(loginInfo) {
+			$('#loginValidation').empty();
+			$('#loginValidation').hide();
 			user = window.activeSessionUser;
 			user.set({
 				username: loginInfo.name,

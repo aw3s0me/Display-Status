@@ -246,3 +246,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+
+#EMAIL REGISTRATION PARAMETERS
+
+ACCOUNT_ACTIVATION_DAYS = 2

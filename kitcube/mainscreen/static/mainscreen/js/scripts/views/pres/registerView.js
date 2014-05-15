@@ -1,7 +1,7 @@
 define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html', 'models/userModel'], function($, _, Backbone, RegisterTemplate, UserModel) {
 
 	var registerView = Backbone.View.extend({
-		container: $('#container'),
+		container: $('#board-container'),
 		el: undefined,
 		form: undefined,
 		initialize: function() {
@@ -11,7 +11,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			$('#registerForm').on('submit', function(event) {
 				event.preventDefault();
 				//var dataToSend = self.form.serialize();
-				var dataToSend = JSON.stringify($(this).serializeObject());
+				var dataToSend = $(this).serializeObject();
+				dataToSend['group'] = $('meta[name="project"]').attr('content');
+				dataToSend = JSON.stringify(dataToSend);
 
 				$.ajax({
 					url: '/api-token/register/',
@@ -31,7 +33,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.container.append(compiledTemplate);
 			this.el = $('#registerFormDiv');
 			this.form = this.el.find('#registerForm');
-			this.hide();
 		},
 		hide: function() {
 			this.el.hide();

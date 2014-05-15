@@ -2,10 +2,10 @@ from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
-from editor.authentication import ObtainAuthToken
-from editor.authentication import RegisterView
-from editor.authentication import LoginView
-from editor.authentication import LogoutView
+from editor.socialAuth import ObtainAuthToken
+from editor.registration import RegisterView
+from editor.login import LoginView
+from editor.login import LogoutView
 #from editor.views import mainscreen_index
 from mainscreen.views import mainscreen_index
 from choice import views as ChoiceViews
@@ -41,8 +41,11 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token/login/(?P<backend>[^/]+)/$', ObtainAuthToken.as_view()),
     url(r'^api-token/register/', RegisterView.as_view()),
+    #url(r'^api-token/confirm_register/', 'editor.authentication.confirm_register'),
+    #url(r'^api-token/email_register_form/(?P<link>[^/]+)/$', 'editor.authentication.send_email'),
     url(r'^api-token/login_reg/', LoginView.as_view()),
     url(r'^api-token/logout/', LogoutView.as_view()),
+    #url(r'^api-token/get_user/', 'editor.authentication.get_user_by_token'),
     url(r'^snippets/', include('snippets.urls')),
     #url(r'^', mainscreen_index, name='index'),
     #url(r'katrin/', include('mainscreen.urls')),

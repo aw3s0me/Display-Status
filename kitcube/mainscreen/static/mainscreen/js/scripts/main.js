@@ -42,7 +42,8 @@ require.config({
     "bigtext": "vendor/bigtext/src/bigtext",
     "momentjs": "vendor/momentjs/min/moment.min",
     "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
-    "oauthio": "vendor/oauth.io/dist/oauth.min"
+    "oauthio": "vendor/oauth.io/dist/oauth.min",
+    "cookie": "vendor/jquery-cookie/jquery.cookie"
     //"regression": "vendor/highcharts_trendline/regression"
   },
   shim: {
@@ -159,6 +160,11 @@ require.config({
       ]
     },
     oauthio: {
+      deps: [
+        "jquery"
+      ]
+    },
+    cookie: {
       deps: [
         "jquery"
       ]

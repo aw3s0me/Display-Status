@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 class Project(models.Model):
@@ -27,3 +28,8 @@ class Config(models.Model):
 
 	def __str__(self):
 		return self.title
+
+class NewUserEntry(models.Model):
+	username = models.CharField(max_length=200)
+	link = models.CharField(max_length=200)
+	expiration_date = models.DateTimeField(auto_now=True)
