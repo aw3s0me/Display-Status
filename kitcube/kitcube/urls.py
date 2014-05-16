@@ -3,6 +3,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
 from editor.socialAuth import ObtainAuthToken
+#from editor.socialAuth import OAuthRegisterEmailView
 from editor.registration import SendMailView
 from editor.registration import ActivateUserView
 from editor.registration import TestRendering
@@ -43,6 +44,7 @@ urlpatterns = patterns('',
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api-token/login/(?P<backend>[^/]+)/$', ObtainAuthToken.as_view()),
     url(r'^api-token/register/', SendMailView.as_view()),
+    #url(r'^api-token/register-oauth/', OAuthRegisterEmailView.as_view()),
     #url(r'^api-token/confirm_register/', 'editor.authentication.confirm_register'),
     url(r'^api-token/email_register/(?P<link>[^/]+)/$', ActivateUserView.as_view(), name='activate'),
     url(r'^api-token/login_reg/', LoginView.as_view()),

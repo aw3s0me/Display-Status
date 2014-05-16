@@ -23,8 +23,40 @@ from django.core.mail import send_mail
 import logging
 import json
 import pdb
+import re
+EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
+def validate_email(email):
+    errors = {}
+    if not EMAIL_REGEX.match(data['email']):
+        errors['email'] = 'Email should be similar to pattern <foo@example.com>'
+    if User.objects.filter(email=data['email']).exists():
+        errors['email'] = 'Email exists'
+    return errors
 
+"""
+class OAuthRegisterEmailView(APIView):
+    permission_classes = ()
+    throttle_classes = ()
+    renderer_classes = (renderers.JSONRenderer, )
+    def post(self, request, backend):
+        data = json.loads(request.body)
+        mail_adress = data['email']
+        errors = validate_email(mail_adress)
+        if not is_empty(errors):
+            return Response(errors)
+        link=generate_new_hash_with_length(20)
+        site=get_current_site(request)
+        ctx_dict = {'activation_key': link, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': site}
+        subject = render_to_string('editor/../mail/activation_email_subject.txt', ctx_dict)
+            # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        message_text = render_to_string('editor/../mail/activation_email.txt', ctx_dict)
+        #message_html = render_to_string('editor/../mail/activation_email.html', ctx_dict)
+        msg = EmailMultiAlternatives(subject, message_text, settings.DEFAULT_FROM_EMAIL, [data['email']])
+        #msg.attach_alternative(message_html, "text/html")
+        msg.send()
+"""
 
 #auth with OAuth users (updating and creating tokens)
 class ObtainAuthToken(APIView):

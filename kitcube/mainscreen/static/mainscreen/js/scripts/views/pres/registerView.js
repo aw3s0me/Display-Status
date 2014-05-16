@@ -4,6 +4,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 		container: $('#board-container'),
 		el: undefined,
 		form: undefined,
+		mailOAuthForm: undefined,
 		initialize: function() {
 			var self = this;
 			this.render();
@@ -42,6 +43,66 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.on('hide', function(event) {
 				self.clear();
 			});
+/*
+			$('#registerFacebook').click(function(event) {
+				OAuth.popup('facebook', function(err, success) {
+					if (err) {
+
+					} else {
+						var token = "Token " + success.access_token;
+						console.log(token);
+						$.ajax({
+							url: '/api-token/register-oauth/facebook/',
+							method: 'POST',
+							data: {
+								'Authorization': token
+							},
+							success: function(data) {
+								console.log(data);
+								self.onSuccessLogin(data);
+							},
+							beforeSend: function(xhr, settings) {
+								xhr.setRequestHeader('Authorization', token);
+							}
+						})
+
+					}
+
+
+				});
+			});
+			$('#registerGoogle').click(function(event) {
+				OAuth.popup('google', function(err, success) {
+					if (err) {
+
+					} else {
+						var token = "Token " + success.access_token;
+						console.log(token);
+						$.ajax({
+							//url: '/api-token/login/google/',
+							url: '/api-token/register-oauth/google-oauth2/',
+							method: 'POST',
+							data: {
+								'Authorization': token
+							},
+							headers: {
+								'Authorization': token,
+							},
+							success: function(data) {
+								console.log(data);
+								self.onSuccessLogin(data);
+							},
+							beforeSend: function(xhr, settings) {
+								xhr.setRequestHeader('Authorization', token);
+							}
+						})
+
+					}
+					//handle error with error
+					//use result.access_token in your API request
+				});
+			}); */
+
 
 		},
 		render: function() {
@@ -49,6 +110,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.container.append(compiledTemplate);
 			this.el = $('#registerWrapper');
 			this.form = this.el.find('#registerForm');
+			this.mailOAuthForm = this.el.find('#mailForm');
 		},
 		onSuccessRegistration: function(data) {
 			var div = $('#registerValidationDiv');
