@@ -510,10 +510,16 @@ input[value*="Google"]:focus {
 
 /* Register Form Begin */
 
+#registerWrapper {
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 120px;
+}
+
 #registerFormDiv {
-    width: 30%;
-    margin: 0 auto;
-    margin-top: 120px;
+    //width: 30%;
+    height: 295px;
+    
 }
 
 #registerFormDiv h2 {
@@ -565,7 +571,6 @@ input[value*="Google"]:focus {
 
 .registerValidation {
   display: none;
-  width: 30%;
   border: 1px solid;
   margin: 0 auto;
   padding:15px 10px 15px 50px;
@@ -578,7 +583,7 @@ input[value*="Google"]:focus {
 
 .activationCompletedDiv {
   display: none;
-  width: 30%;
+  width: 100%;
   border: 1px solid;
   margin: 0 auto;
   padding:15px 10px 15px 50px;
