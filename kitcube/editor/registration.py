@@ -9,8 +9,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import status
-from helpers import is_empty
-from helpers import generate_new_hash_with_length
+from helpers import is_empty,generate_new_hash_with_length,get_first
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -20,11 +19,14 @@ from django.template.loader import render_to_string
 from editor.models import NewUserEntry
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
+from django.shortcuts import render_to_response
+from mainscreen.views import get_banner
 
 import json
 import pdb
 import re
 EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
+
 
 def validate_user(data):
     errors = {}
@@ -52,15 +54,22 @@ def create_user(data, link):
         email=serialized.init_data['email'],
         password=serialized.init_data['password'],
     )
+    groupname = data['group']
+    if not Group.objects.filter(name=groupname):
+        raise 'Group doesn\t exists'
+    group = Group.objects.get(name=groupname)
+    user.groups.add(group)
     user.is_active=False
     user.save()
-    NewUserEntry.objects.get_or_create(username=user.username,link=link)
+    #pdb.set_trace()
+    get, created = NewUserEntry.objects.get_or_create(username=user.username,link=link)
+    #created.save()
 
 #'http:/ipetd1.ipe.kit.edu:8000/api-token/email_register/' link root
 class SendMailView(APIView):
     model = User
     def post(self, request, format=None):  
-        pdb.set_trace()
+        #pdb.set_trace()
         data = json.loads(request.body)
         errors = validate_user(data)
         if not is_empty(errors):
@@ -77,17 +86,46 @@ class SendMailView(APIView):
         #msg.attach_alternative(message_html, "text/html")
         msg.send()
         
-        #create_user(data)
+        create_user(data, link)
         return Response('Please activate user via mail', status=status.HTTP_201_CREATED)
 
-@api_view(['GET', 'POST'])
-def activate_user(request, link):
-    if not NewUserEntry.objects.filter(link=link).exists():
-        return Response('Wrong or expired link', status=status.HTTP_400_BAD_REQUEST)
-    username = NewUserEntry.objects.get(link=link).username
-    if not User.objects.filter(username=username):
-        raise 'User hasnt been created'
-    return User.objects.get(username=username)
+def render_activation_completed(user):
+    group = Group.objects.get(user.groups)
+
+
+class ActivateUserView(APIView):
+    model = User
+    def get(self, request, link):
+        #pdb.set_trace()
+        if not NewUserEntry.objects.filter(link=link).exists():
+            return Response('Wrong or expired link', status=status.HTTP_400_BAD_REQUEST)
+        entry = NewUserEntry.objects.get(link=link)
+        username = entry.username
+        if not User.objects.filter(username=username):
+            raise 'User hasnt been created'
+        user = User.objects.get(username=username)
+        user.is_active = True
+        user.save()
+        entry.delete()
+        data = {
+            'title': getattr(settings, 'TITLE'),
+            'description': getattr(settings, 'DESCRIPTION'),
+            'username': username
+        }
+        response = render_to_response('mainscreen/activation_completed.html', data)
+        return response
+
+class TestRendering(APIView):
+    model = User
+    def get(self, request):
+        data = {
+            'title': getattr(settings, 'TITLE'),
+            'description': getattr(settings, 'DESCRIPTION'),
+            'username': 'Allah'
+        }
+        response = render_to_response('mainscreen/activation_completed.html', data)
+        return response
+
 
 #for registered users
 class RegisterView(APIView):

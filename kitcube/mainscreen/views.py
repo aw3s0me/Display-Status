@@ -24,10 +24,7 @@ def get_image_url(projname):
     project = Project.objects.get(link=projname)
     return project.banner
 
-def mainscreen_index(request, projname=None, name=None):
-    print projname
-    print name
-    #pdb.set_trace()
+def get_banner(projname):
     if projname == 'katrin':
         banner = loader.get_template('mainscreen/katrin_banner.html')
         #if we need to get image from database
@@ -40,6 +37,14 @@ def mainscreen_index(request, projname=None, name=None):
     else:
         banner = loader.get_template('mainscreen/def_banner.html')
         banner_html = banner.render(Context({}))
+    return banner_html
+
+def mainscreen_index(request, projname=None, name=None):
+    print projname
+    print name
+    #pdb.set_trace()
+    
+    banner_html = get_banner(projname)
 
     data = {
         'title': getattr(settings, 'TITLE'),

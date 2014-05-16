@@ -33,3 +33,6 @@ def is_empty(any_structure):
     else:
         print('Structure is empty.')
         return True
+
+def get_first(qs):
+    return qs.objects.all()[:1].get()
