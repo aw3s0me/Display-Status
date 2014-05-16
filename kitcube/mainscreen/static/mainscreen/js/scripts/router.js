@@ -53,7 +53,7 @@ define([
 			if (this.views.myBoardViewContainer === undefined) {
 				this.views.myBoardViewContainer = new BoardView({aceText: this.getCfg()});
 			}
-
+			
 			this.showView(this.views.myBoardViewContainer);
 
 			if (!window.activeSessionUser.get('logged_in')) {

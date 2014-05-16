@@ -68,12 +68,15 @@ def create_user(data, link):
 #'http:/ipetd1.ipe.kit.edu:8000/api-token/email_register/' link root
 class SendMailView(APIView):
     model = User
+    throttle_classes = ()
+    permission_classes = ()
+    renderer_classes = (renderers.JSONRenderer,)
     def post(self, request, format=None):  
         #pdb.set_trace()
         data = json.loads(request.body)
         errors = validate_user(data)
         if not is_empty(errors):
-            return Response(errors, status.HTTP_400_BAD_REQUEST)
+            return Response(errors)
         link=generate_new_hash_with_length(20)
         site=get_current_site(request)
         ctx_dict = {'activation_key': link, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': site}

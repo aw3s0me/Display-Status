@@ -147,7 +147,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				role: loginInfo.userRole,
 				group: loginInfo.group
 			});
-			//$.cookie('access_token', user.get('token'));
+			$.cookie('access_token', user.get('token'));
 			window.location.href = "#board";
 		},
 		onError: function(errorInfo) {
