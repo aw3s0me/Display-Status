@@ -45,6 +45,7 @@ define([
 		showView: function(view) {
 			if (this.views.current != undefined) {
 				$(this.views.current.el).hide();
+				this.views.current.trigger('hide');
 			}
 			this.views.current = view;
 			$(this.views.current.el).show();
@@ -53,7 +54,7 @@ define([
 			if (this.views.myBoardViewContainer === undefined) {
 				this.views.myBoardViewContainer = new BoardView({aceText: this.getCfg()});
 			}
-			
+
 			this.showView(this.views.myBoardViewContainer);
 
 			if (!window.activeSessionUser.get('logged_in')) {

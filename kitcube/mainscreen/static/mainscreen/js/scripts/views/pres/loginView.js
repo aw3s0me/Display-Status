@@ -98,6 +98,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 					//use result.access_token in your API request
 				});
 			});
+			this.on('hide', function(event) {
+				self.clear();
+			});
 
 		},
 		render: function() {
@@ -177,6 +180,14 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				this.form.find('#password').addClass('valid_input');
 			}
 
+		},
+		clear: function() {
+			this.form.find('#username').removeClass('valid_input');
+			this.form.find('#password').removeClass('valid_input');
+			this.form.find('#username').removeClass('invalid_input');
+			this.form.find('#password').removeClass('invalid_input');
+			$('#loginValidation').empty();
+			$('#loginValidation').hide();
 		}
 
 

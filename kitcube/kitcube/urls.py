@@ -3,7 +3,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
 from editor.socialAuth import ObtainAuthToken
-from editor.registration import RegisterView
 from editor.registration import SendMailView
 from editor.registration import ActivateUserView
 from editor.registration import TestRendering

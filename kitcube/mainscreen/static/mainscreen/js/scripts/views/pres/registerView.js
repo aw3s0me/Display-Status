@@ -39,6 +39,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 				})
 			});
 
+			this.on('hide', function(event) {
+				self.clear();
+			});
+
 		},
 		render: function() {
 			var compiledTemplate = _.template(RegisterTemplate, {});
@@ -101,6 +105,18 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 				this.form.find('.password').addClass('valid_input');
 				this.form.find('.confPassword').addClass('valid_input');
 			}
+		},
+		clear: function() {
+			this.form.find('.username').removeClass('valid_input');
+			this.form.find('.email').removeClass('valid_input');
+			this.form.find('.password').removeClass('valid_input');
+			this.form.find('.confPassword').removeClass('valid_input');
+			this.form.find('.username').removeClass('invalid_input');
+			this.form.find('.email').removeClass('invalid_input');
+			this.form.find('.password').removeClass('invalid_input');
+			this.form.find('.confPassword').removeClass('invalid_input');
+			$('#registerValidationDiv').empty();
+			$('#registerValidationDiv').hide();
 		}
 
 /*

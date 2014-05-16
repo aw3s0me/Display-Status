@@ -92,9 +92,6 @@ class SendMailView(APIView):
         create_user(data, link)
         return Response('Please activate user via mail', status=status.HTTP_201_CREATED)
 
-def render_activation_completed(user):
-    group = Group.objects.get(user.groups)
-
 
 class ActivateUserView(APIView):
     model = User
@@ -128,26 +125,3 @@ class TestRendering(APIView):
         }
         response = render_to_response('mainscreen/activation_completed.html', data)
         return response
-
-
-#for registered users
-class RegisterView(APIView):
-    throttle_classes = ()
-    permission_classes = ()
-    #parser_classes = {'formprs': parsers.FormParser,'partprs': parsers.MultiPartParser,'jsonprs': parsers.JSONParser}
-    renderer_classes = (renderers.JSONRenderer,)
-    serializer_class = AuthTokenSerializer
-    userSerializer_class = UserSerializer
-    model = Token
-    #@permission_classes((AllowAny,))
-    def post(self, request, url):
-        
-
-        if user and user.is_active:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
