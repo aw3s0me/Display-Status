@@ -32,4 +32,4 @@ class Config(models.Model):
 class NewUserEntry(models.Model):
 	username = models.CharField(max_length=200)
 	link = models.CharField(max_length=200)
-	expiration_date = models.DateTimeField(auto_now=True)
+	expiration_date = models.DateTimeField(auto_now=True) #confusion. should be registration date
