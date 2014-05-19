@@ -78,7 +78,8 @@ INSTALLED_APPS = (
     'snippets',
     'rest_framework.authtoken',
     'social.apps.django_app.default',
-    'social'
+    'social',
+    'provider',
 )
 
 MIDDLEWARE_CLASSES = (

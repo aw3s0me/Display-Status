@@ -2,14 +2,12 @@ from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
-from editor.socialAuth import ObtainAuthToken
-#from editor.socialAuth import OAuthRegisterEmailView
-from editor.registration import SendMailView
-from editor.registration import ActivateUserView
-from editor.registration import TestRendering
-from editor.login import LoginView
-from editor.login import LogoutView
-#from editor.views import mainscreen_index
+from provider.user.socialAuth import ObtainAuthToken
+from provider.user.registration import SendMailView
+from provider.user.registration import ActivateUserView
+from provider.user.registration import TestRendering
+from provider.user.login import LoginView
+from provider.user.login import LogoutView
 from mainscreen.views import mainscreen_index
 from choice import views as ChoiceViews
 

@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, renderers
 from rest_framework.parsers import JSONParser
-from editor.serializers import UserSerializer
+from serializers import UserSerializer
 from helpers import get_authorization_header
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view, throttle_classes

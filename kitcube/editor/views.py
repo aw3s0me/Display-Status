@@ -3,11 +3,11 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.conf import settings
 from rest_framework.generics import (ListCreateAPIView, RetrieveUpdateDestroyAPIView)
-from editor.models import Project
-from editor.serializers import ProjectSerializer
-from editor.permissions import IsOwnerOrReadOnly
+from provider.datamgmt.models import Project
+from provider.datamgmt.serializers import ProjectSerializer
+from provider.user.permissions import IsOwnerOrReadOnly
 from django.contrib.auth.models import User
-from editor.serializers import UserSerializer
+from provider.user.serializers import UserSerializer
 from django.core.context_processors import csrf
 from django.middleware.csrf import get_token
 from rest_framework.decorators import api_view
@@ -38,60 +38,6 @@ def index(request):
     #response['Access-Control-Allow-Credentials'] = 'true'
     return response  
 
-
-class ProjectMixin(object):
-    queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
-    permission_classes = (IsOwnerOrReadOnly, )
-    def pre_save(self, obj):
-        obj.owner = self.request.user
-
-class ProjectList(ProjectMixin, ListCreateAPIView):
-    pass
-
-class ProjectDetail(ProjectMixin, RetrieveUpdateDestroyAPIView):
-    pass
-
-class UserMixin(object):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-class UserList(UserMixin, ListCreateAPIView):
-    pass
-
-class UserDetail(UserMixin, RetrieveUpdateDestroyAPIView):
-    pass
-
-class AuthorizeUser():
-    authorization_link = None
-    def post(self, request, *args, **kwargs):
-        kwargs['authorization_link'] = request.GET.get('authorization_link', None)
-
-class PointsViewSet(viewsets.ModelViewSet):
-    def get(self, request, *args, **kwargs):
-        return Response()
-
-class ProjectViewSet(viewsets.ModelViewSet):
-    def getlist(self, request, *args, **kwargs):
-        projects = Project.objects.all()
-        serializer = ProjectSerializer(projects, many=True)
-        return Response(serializer.data)
-
-
-"""
-@api_view(['GET', 'POST'])
-def project_list(request):
-    if request.method == 'GET':
-        projects = Project.objects.all()
-        serializer = ProjectSerializer(projects, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = ProjectSerializer(data=request.DATA)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.data, status = status.HTTP_BAD_REQUEST)
-"""
 
 #Refreshing the Token
 

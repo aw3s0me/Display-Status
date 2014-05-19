@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.template import Context, Template, loader
-from editor.models import Project
+from provider.datamgmt.models import Project
 import pdb
 #from mainscreen.models import Config
 #from mainscreen.serializers import ConfigSerializer

@@ -1,11 +1,11 @@
 from django.conf.urls import patterns, url
-from editor import views
+from provider.datamgmt.views import * 
+from editor.views import index
 
 urlpatterns = patterns('',
-    url(r'^$', views.index, name='index'),
-    url(r'^projects/$', views.ProjectList.as_view()),
-    url(r'^projects/(?P<pk>[0-9]+)/$', views.ProjectDetail.as_view()),
-    url(r'^users/$', views.UserList.as_view()),
-    url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view())
+    url(r'^$', index, name='index'),
+    url(r'^projects/$', ProjectListView.as_view()),
+    url(r'^projects/(?P<pk>[0-9]+)/$', ProjectDetailView.as_view()),
 )
+
 

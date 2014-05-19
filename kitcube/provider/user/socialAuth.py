@@ -11,7 +11,7 @@ from social.backends.google import GoogleOAuth2
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import HTTP_HEADER_ENCODING
 from rest_framework import status
-from editor.serializers import UserSerializer
+from serializers import UserSerializer
 from helpers import get_authorization_header
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save

@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, renderers
 from rest_framework.parsers import JSONParser
-from editor.serializers import UserSerializer
+from serializers import UserSerializer
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -16,7 +16,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from editor.models import NewUserEntry
+from models import NewUserEntry
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.shortcuts import render_to_response
