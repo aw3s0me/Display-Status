@@ -3,11 +3,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib.auth.models import User, Group
 from django.contrib import admin
 from provider.user.socialAuth import ObtainAuthToken
-from provider.user.registration import SendMailView
-from provider.user.registration import ActivateUserView
-from provider.user.registration import TestRendering
-from provider.user.login import LoginView
-from provider.user.login import LogoutView
+from provider.user.registration import SendMailView, ActivateUserView, TestRendering
+from provider.user.login import LoginView, LogoutView
+from provider.datamgmt.views import *
 from mainscreen.views import mainscreen_index
 from choice import views as ChoiceViews
 
@@ -58,6 +56,13 @@ urlpatterns = patterns('',
     #url(r'^(.(?!editor))*$', mainscreen_index, name='index'),
     url(r'^$', 'choice.views.render_choice'),
     url(r'^editor/', include('editor.urls')),
+    url(r'^projects/$', ProjectListView.as_view()),
+    url(r'^katrin/projects/$', ProjectDetailView.as_view(), {'projname' : 'katrin'}),
+    url(r'^kitcube/projects/$', ProjectDetailView.as_view(), {'projname' : 'kitcube'}),
+    url(r'^katrin/configs/$', ConfigListView.as_view(), {'projname' : 'katrin'}),
+    url(r'^katrin/configs/(?P<confname>[0-9]+)/$', ConfigDetailView.as_view(), {'projname' : 'katrin'}),
+    url(r'^kitcube/configs/$', ConfigListView.as_view(), {'projname' : 'kitcube'}),
+    url(r'^kitcube/configs/(?P<confname>[0-9]+)/$', ConfigDetailView.as_view(), {'projname' : 'kitcube'}),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^test/', TestRendering.as_view()),
 )
