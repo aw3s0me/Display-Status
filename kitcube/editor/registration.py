@@ -150,5 +150,6 @@ class TestRendering(APIView):
             'username': 'Allah',
             'redirect_to': 'katrin',
         }
-        response = render_to_response('mainscreen/activation_completed.html', data)
+        #response = render_to_response('mainscreen/activation_completed.html', data)
+        response = render_to_response('mainscreen/activation_failed.html', data)
         return response

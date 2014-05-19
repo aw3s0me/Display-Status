@@ -30,6 +30,7 @@ define([
 		tabCount: 0,
 		boardViewTabs: [],
 		curTab: undefined,
+		views: {},
 		getCfg: function() {
 			var text;
 			$.ajax({
@@ -145,9 +146,12 @@ define([
 
 	var initialize = function() {
 		var app_router = new AppRouter;
-		app_router.views = {
+
+		//var start_url = 
+
+		/*app_router.views = {
 			myBoardViewContainer : new BoardView({aceText: app_router.getCfg()})
-		}
+		} */
 
 		Backbone.history.start();
 	};
