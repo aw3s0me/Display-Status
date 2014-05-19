@@ -119,6 +119,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			div.text('Activation link sent to your mail!');
 			div.removeClass('registerValidation');
 			div.addClass('activationCompletedDiv');
+			div.show();
 			this.makeAllValid();
 		},
 		makeAllValid: function() {

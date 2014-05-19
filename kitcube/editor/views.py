@@ -26,6 +26,9 @@ def index(request):
     #request.META["CSRF_COOKIE_USED"] = True
     #data.update(csrf(request))
     #print "TEST INDEX"
+    #request.COOKIES.get('logged_in_status') #work with cookie
+
+
     response = render_to_response('editor/index.html', data)#, context_instance=RequestContext(request))
     
     #response['Access-Control-Allow-Origin'] = '*'  

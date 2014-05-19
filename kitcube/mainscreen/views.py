@@ -43,7 +43,7 @@ def mainscreen_index(request, projname=None, name=None):
     print projname
     print name
     #pdb.set_trace()
-    
+    #request.COOKIES.get('logged_in_status')  work with cookie here if logged give user
     banner_html = get_banner(projname)
 
     data = {
