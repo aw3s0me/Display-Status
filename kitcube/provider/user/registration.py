@@ -63,7 +63,7 @@ def create_user(data, link):
     user.groups.add(group)
     user.is_active=False
     user.save()
-    pdb.set_trace()
+    #pdb.set_trace()
     until_valid_datetime = datetime.now() + timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
     #redirect to proj is just groupname. Appends in url like localhost/projname/
     get, created = NewUserEntry.objects.get_or_create(username=user.username,link=link, valid_until_date=until_valid_datetime, redirect_to_proj=groupname)
@@ -126,7 +126,7 @@ class ActivateUserView(APIView):
         user.is_active = True
         user.save()
         entry.delete()
-        pdb.set_trace()
+        #pdb.set_trace()
         activation_time = entry.valid_until_date
         data = {
             'title': getattr(settings, 'TITLE'),

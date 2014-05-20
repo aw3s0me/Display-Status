@@ -138,7 +138,7 @@ define([
 
 		app_router.showView(app_router.views.myLoginView);
 
-		app_router.views.myNavPanelView = new NavPanelView();
+		//app_router.views.myNavPanelView = new NavPanelView();
 
 		Backbone.history.start();
 	};

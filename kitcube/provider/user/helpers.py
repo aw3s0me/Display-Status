@@ -8,8 +8,6 @@ import pdb
 
 HASH_CHARACTERS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
- 
-
 def generate_new_hash_with_length(length):
     """
     Generates a random string with the alphanumerical character set and given length.

@@ -23,6 +23,7 @@ define([
 			'register': 'showRegisterView',
 			'onresize/:x/ycoord:y': 'resizeBoard',
 			'onchange/:x/ycoord:y': 'changeUnitNumber',
+			'test': 'testPermissions',
 			// Default
 			'*actions': 'defaultAction'
 		},
@@ -31,6 +32,30 @@ define([
 		boardViewTabs: [],
 		curTab: undefined,
 		views: {},
+		testPermissions: function() {
+			var user = window.activeSessionUser;
+			if (!user.get('logged_in')) {
+				return;
+			}
+			data = {
+				title: "Katrein",
+				description: "Katrein status display",
+				username: user.get('username'),
+				token: user.get('token')
+			}
+			data = JSON.stringify(data);
+
+			$.ajax({
+				url: 'http://localhost:8000/kitcube/projectinfo/',
+				type: 'POST',
+				dataType: 'json',
+				data: data,
+				success: function(data) {
+					console.log(data);
+				}
+			})
+			
+		},	
 		getCfg: function() {
 			var text;
 			$.ajax({
