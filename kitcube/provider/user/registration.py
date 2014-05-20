@@ -20,7 +20,6 @@ from models import NewUserEntry
 from django.conf import settings
 from django.contrib.sites.models import get_current_site
 from django.shortcuts import render_to_response
-from mainscreen.views import get_banner
 import threading
 import time #for profiling
 import json

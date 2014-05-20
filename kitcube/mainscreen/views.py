@@ -7,18 +7,10 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from django.template import Context, Template, loader
 from provider.datamgmt.models import Project
+from provider.user.userValidation import is_user_valid_obj
 import pdb
 #from mainscreen.models import Config
 #from mainscreen.serializers import ConfigSerializer
-
-class JSONResponse(HttpResponse):
-    """
-    An HttpResponse that renders its content into JSON.
-    """
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
 
 def get_image_url(projname):
     project = Project.objects.get(link=projname)
@@ -39,19 +31,35 @@ def get_banner(projname):
         banner_html = banner.render(Context({}))
     return banner_html
 
+def render_user_block(user=None):
+    if user == None:
+        userblock = loader.get_template('mainscreen/notloggeduserblock.html')
+        userblock_html = userblock.render(Context({}))
+    else:
+        userblock = loader.get_template('mainscreen/loggeduserblock.html')
+        userblock_html = userblock.render(Context({'username': user.username}))
+    return userblock_html
+
+
 def mainscreen_index(request, projname=None, name=None):
     print projname
     print name
-    #pdb.set_trace()
-    #request.COOKIES.get('logged_in_status')  work with cookie here if logged give user
+    
     banner_html = get_banner(projname)
-
     data = {
         'title': getattr(settings, 'TITLE'),
         'description': getattr(settings, 'DESCRIPTION'),
         'banner': banner_html,
         'project': projname,
     }
+    #pdb.set_trace()
+    tokenkey = request.COOKIES.get('access_token')
+    if tokenkey and (len(tokenkey) > 0):
+        user = is_user_valid_obj(tokenkey, projname)
+        if user:
+            data['userblock'] = render_user_block(user)
+    else:
+        data['userblock'] = render_user_block()
     response = render_to_response('mainscreen/index.html', data, context_instance=RequestContext(request))
     
     response['Access-Control-Allow-Origin'] = '*'  
@@ -60,25 +68,3 @@ def mainscreen_index(request, projname=None, name=None):
     response['Access-Control-Allow-Headers'] = '*'  
     response['Access-Control-Allow-Credentials'] = 'true'
     return response  
-
-"""
-@csrf_exempt
-def configfile(request, pk):
-    try:
-        config = Config.objects.get(pk=pk)
-    except Config.DoesNotExist:
-        return HttpResponse(status=404)
-    if request.method == 'GET':
-        serializer = ConfigSerializer(config)
-        return JSONResponse(serializer.data)
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = ConfigSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JSONResponse(serializer.data, status=201)
-        return JSONResponse(serializer.errors, status=400)
-
-
-    return request
-"""

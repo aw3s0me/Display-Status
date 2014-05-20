@@ -142,8 +142,28 @@ define([
 			$('.loginHref').attr('href', '#board');
 		},
 		doLogout: function() {
-			if (this.views.myLoginView !== undefined && window.activeSessionUser.get('logged_in')) {
-				this.views.myLoginView.logout();
+			if (window.activeSessionUser.get('logged_in')) {
+				var user = window.activeSessionUser;
+				if (!user.get('logged_in')) {
+					return;
+				}
+				var token = user.get('token');
+				//var dataToSend = JSON.stringify({'token': token});
+				$.ajax({
+					//url: '/api-token/login/google/',
+					url: '/api-token/logout/',
+					method: 'GET',
+					//data: dataToSend,
+					headers: {
+						'Authorization': token,
+					},
+					success: function(data) {
+						user.trigger('logout');
+					},
+					beforeSend: function(xhr, settings) {
+						xhr.setRequestHeader('Authorization', token);
+					}
+				})
 				var curUser = window.activeSessionUser;
 				$('.loginHref').text('Login');
 				$('.loginHref').attr('href', '#login');

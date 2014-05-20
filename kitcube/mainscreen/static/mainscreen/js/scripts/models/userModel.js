@@ -43,7 +43,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.clear();
 			this.set(this.defaults);
 			$.removeCookie('access_token');
-			window.location.href = '#login';
+			//window.location.href = '#login';
 		}
 	});
 

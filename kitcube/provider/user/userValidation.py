@@ -17,3 +17,18 @@ def is_user_valid(tokenKey, groupname):
     else:
         return False
 
+def is_user_valid_obj(tokenKey, groupname):
+    if not Token.objects.filter(key=tokenKey).exists():
+        return False
+    token = Token.objects.get(key=tokenKey)
+    if not User.objects.filter(id=token.user_id).exists():
+        return False
+    user = User.objects.get(id=token.user_id)
+    if not Group.objects.filter(name=groupname).exists(): 
+        return False
+    group = Group.objects.get(name=groupname).user_set.all()
+    if user and user.is_active and (user in group):
+        return user
+    else:
+        return False
+

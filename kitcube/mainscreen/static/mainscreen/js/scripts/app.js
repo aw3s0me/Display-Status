@@ -26,6 +26,21 @@ define([
 	'cookie',
 	'router', // Request router.js
 ], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, chosen, OAuthio,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ moment, sizeDet, parser, dataDownloader, UserModel, Cookie, Router) {
+	var initialize_user = function() {
+		var token = $.cookie('access_token');
+		window.activeSessionUser = new UserModel();
+		if (token && token.length > 0) {
+			var username = $('#userStatus').find('span').text();
+			var group = $('meta[name="project"]').attr('content');
+			window.activeSessionUser.set({
+				username: username,
+				token: token,
+				logged_in: true,
+				group: group
+			})
+		}
+	}
+
 	var initialize = function() {
 		// Pass in our Router module and call it's initialize function
 		$(document).ready(function($) {
@@ -63,7 +78,7 @@ define([
 			OAuth.initialize('4caAw7s25v0glGlJEoQgbBjCxkU');
 			console.log(OAuth)
 
-			window.activeSessionUser = new UserModel();
+			initialize_user();
 
 			Router.initialize();
 			//document.location.href = '#board';
