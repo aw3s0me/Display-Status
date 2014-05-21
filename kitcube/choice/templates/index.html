@@ -29,6 +29,9 @@
 			<a id="btnGo">Go</a>
 		</div>
 	</div>
+	<div id="tooltip">
+		<h3></h3>
+	</div> 
 </div>
 <script type="text/javascript" src={% static "choice/js/vendor/jquery.min.js" %}></script> 
 <script type="text/javascript" src={% static "choice/js/vendor/modernizr.js" %}></script>
@@ -36,6 +39,7 @@
 <script>
 	$(function() {
 		var list = {};
+		var existlist = ['katrin', 'kitcube'];
 		$('#cd-dropdown option').each(function() {
 			var value = $(this).val();
 			var link = $(this).attr('data');
@@ -63,7 +67,16 @@
 					break;
 				}
 			}
-
+			if (!(existlist.indexOf(link) != -1)) {
+				console.log(link);
+				if (link == 'undefined' || link == undefined) {
+					$('#tooltip').find('h3').text('Please, choose project');
+				}
+				else {
+					$('#tooltip').find('h3').text(text + ' project doesn\'t exist, please choose another one');
+				}
+				return;
+			}
 			console.log(span);
 			console.log(link);
 			window.location.href = "/" + link + "/";

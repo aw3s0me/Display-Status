@@ -75,7 +75,7 @@ class SendMailView(APIView):
     permission_classes = ()
     renderer_classes = (renderers.JSONRenderer,)
     def post(self, request, format=None):  
-        #pdb.set_trace()
+        pdb.set_trace()
         data = json.loads(request.body)
         errors = validate_user(data)
         if not is_empty(errors):
@@ -83,10 +83,10 @@ class SendMailView(APIView):
         link=generate_new_hash_with_length(20)
         site=get_current_site(request)
         ctx_dict = {'activation_key': link, 'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS, 'site': site}
-        subject = render_to_string('editor/../mail/activation_email_subject.txt', ctx_dict)
+        subject = render_to_string('provider/../mail/activation_email_subject.txt', ctx_dict)
             # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
-        message_text = render_to_string('editor/../mail/activation_email.txt', ctx_dict)
+        message_text = render_to_string('provider/../mail/activation_email.txt', ctx_dict)
         #message_html = render_to_string('editor/../mail/activation_email.html', ctx_dict)
         msg = EmailMultiAlternatives(subject, message_text, settings.DEFAULT_FROM_EMAIL, [data['email']])
         #msg.attach_alternative(message_html, "text/html")

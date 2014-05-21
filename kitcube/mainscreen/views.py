@@ -32,6 +32,7 @@ def get_banner(projname):
     return banner_html
 
 def render_user_block(user=None):
+    #pdb.set_trace()
     if user == None:
         userblock = loader.get_template('mainscreen/notloggeduserblock.html')
         userblock_html = userblock.render(Context({}))
@@ -58,6 +59,8 @@ def mainscreen_index(request, projname=None, name=None):
         user = is_user_valid_obj(tokenkey, projname)
         if user:
             data['userblock'] = render_user_block(user)
+        else:
+            data['userblock'] = render_user_block()
     else:
         data['userblock'] = render_user_block()
     response = render_to_response('mainscreen/index.html', data, context_instance=RequestContext(request))

@@ -587,7 +587,7 @@ input[value*="Google"]:focus {
   padding:15px 10px 15px 50px;
   background-repeat: no-repeat;
   background-position: 10px center;
-  background-image: url(../images/icons/completed.png);
+  background-image: url(../images/icons/validation.png);
   color: #ff0000;
   background-color: #FFBABA;
 }

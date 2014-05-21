@@ -32,6 +32,9 @@ define([
 		if (token && token.length > 0) {
 			var username = $('#userStatus').find('span').text();
 			var group = $('meta[name="project"]').attr('content');
+			if (!username.length || !group.length) {
+				return;
+			}
 			window.activeSessionUser.set({
 				username: username,
 				token: token,

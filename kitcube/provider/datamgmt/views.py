@@ -34,7 +34,7 @@ class ProjectDetailView(APIView):
     renderer_classes = (renderers.JSONRenderer,)
     def post(self, request, projname):  
         data = json.loads(request.body)
-        pdb.set_trace()
+        #pdb.set_trace()
         if data['username'] and (len(data['username']) > 0) and data['token'] and (len(data['token']) > 0):
             if not is_user_valid(data['token'], projname):
                 return Response('User is not valid', status=status.HTTP_400_BAD_REQUEST)
@@ -54,8 +54,8 @@ class ProjectDetailView(APIView):
         #data = json.loads(request.body)
         if not Project.objects.filter(link=projname).exists():
             return Response('Doesn\'t exists', status=status.HTTP_404_NOT_FOUND)
-        projToSerialize = Project.objects.get(link=projname)
-        project = ProjectSerializer(projToSerialize)
+        proj_to_serialize = Project.objects.get(link=projname)
+        project = ProjectSerializer(proj_to_serialize)
         return Response(project.data, status=status.HTTP_200_OK)
 
 class ConfigListView(APIView):

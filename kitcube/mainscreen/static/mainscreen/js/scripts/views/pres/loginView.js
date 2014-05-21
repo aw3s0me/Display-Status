@@ -46,13 +46,16 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 
 					} else {
 						var token = "Token " + success.access_token;
-						console.log(token);
+						var group = $('meta[name="project"]').attr('content');
+						var dataToSend = {
+							'Authorization': token,
+							'group': group
+						}
+						dataToSend = JSON.stringify(dataToSend);
 						$.ajax({
 							url: '/api-token/login/facebook/',
 							method: 'POST',
-							data: {
-								'Authorization': token
-							},
+							data: dataToSend,
 							success: function(data) {
 								console.log(data);
 								self.onSuccessLogin(data);
@@ -73,14 +76,18 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 
 					} else {
 						var token = "Token " + success.access_token;
+						var group = $('meta[name="project"]').attr('content');
+						var dataToSend = {
+							'Authorization': token,
+							'group': group
+						}
+						dataToSend = JSON.stringify(dataToSend);
 						console.log(token);
 						$.ajax({
 							//url: '/api-token/login/google/',
 							url: '/api-token/login/google-oauth2/',
 							method: 'POST',
-							data: {
-								'Authorization': token
-							},
+							data: dataToSend,
 							headers: {
 								'Authorization': token,
 							},
@@ -186,8 +193,11 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			this.form.find('#password').removeClass('valid_input');
 			this.form.find('#username').removeClass('invalid_input');
 			this.form.find('#password').removeClass('invalid_input');
+			this.form.find('#username').val('');
+			this.form.find('#password').val('');
 			$('#loginValidation').empty();
 			$('#loginValidation').hide();
+
 		}
 
 

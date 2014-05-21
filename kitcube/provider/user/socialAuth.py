@@ -68,6 +68,8 @@ class ObtainAuthToken(APIView):
     model = Token
     def post(self, request, backend):
         serializer = self.serializer_class(data=request.DATA)
+        data = json.loads(request.body)
+        pdb.set_trace()
         if backend == 'auth':
             if serializer.is_valid():
                 token, created = Token.objects.get_or_create(user=serializer.object['user'])
@@ -78,6 +80,12 @@ class ObtainAuthToken(APIView):
             user = register_by_access_token(request, backend)
             # If user is active we get or create the REST token and send it back with user data
             if user and user.is_active:
+                #add to group this guy
+                groupname = data['group']
+                if not Group.objects.filter(name=groupname):
+                    raise 'Group doesn\t exists'
+                group = Group.objects.get(name=groupname)
+                user.groups.add(group)
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key})
 
@@ -95,6 +103,7 @@ def register_by_access_token(request, backend):
         return msg
  
     access_token=auth[1]
+    pdb.set_trace()
     user = backend.do_auth(access_token)
     return user
 
