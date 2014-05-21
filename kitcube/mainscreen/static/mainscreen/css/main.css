@@ -390,14 +390,14 @@ body {
 }
 
 #loginFormDiv {
-    width: 30%;
+    width: 27%;
     margin: auto;
-    margin-top: 120px;
+    margin-top: 150px;
 }
 
 #loginFormDiv h2 {
     text-shadow: 0 1px 0 #27ae60;
-    font-size: 1.62em;
+    font-size: 40px;
     //color: #2ecc71;
     color: black;
     display: block;
@@ -416,7 +416,7 @@ body {
 }
 
 .reglbl {
-    padding-top : 8px;
+    padding-top : 12px;
     display: inline-block;
 }
 .forgetlbl {
@@ -425,9 +425,9 @@ body {
 
 
 
-#loginFormDiv input[type="text"],
-#loginFormDiv input[type="submit"],
-#loginFormDiv input[type="password"]
+#loginForm input[type="text"],
+#loginForm input[type="submit"],
+#loginForm input[type="password"]
 /*#registerFormDiv input[type="text"],*/
 /*#registerFormDiv input[type="submit"],*/
 {
@@ -439,54 +439,54 @@ body {
     margin: 6px 0;
     padding: 4px 10px;
     width: 100%;
-    height: 34px;
+    height: 70px;
     outline: 0;
     color: #34495e;
-    font-size: 14px;
+    font-size: 24px;
 }
 
-#loginFormDiv input[type=submit]
+#loginForm input[type=submit]
 /*#registerFormDiv input[type=submit]*/ {
     background: #27ae60;
     //background: #e5e5e5;
     color: #ecf0f1;
     border: 0;
     border-bottom: 2px solid #2ecc71;
-    margin: 10px 0 0;
+    margin: 22px 0 0;
+    height: 60px;
 }
 
-#loginFormDiv input[value*="Facebook"]
-/*#registerFormDiv input[value*="Facebook"]*/ {
-    background: #3b5998;
-    border-color: #1f4189;
-    width: 50%;
-    float: left;
-    clear: none;
-    margin-left: 0;
+#loginFormDiv input[value*="Facebook"] {
+  background: url(../images/login/fb_logo_min.png) no-repeat;
+  cursor: pointer;
+  width: 90px;
+  height: 90px;
 }
 
-#loginFormDiv input[value*="Google"]
-/*#registerFormDiv input[value*="Google"]*/ {
-    background: #0396c7;
-    border-color: #0078a6;
-    width: 50%;
-    float: left;
-    clear: none;
+#loginFormDiv input[value*="Google"] {
+  background: url(../images/login/google_logo_min.png) no-repeat;
+  cursor: pointer;
 }
 
-#loginFormDiv input[value*="Facebook"]:active,
-/*#registerFormDiv input[value*="Facebook"]:active, */
-#loginFormDiv input[value*="Facebook"]:focus
-/*#registerFormDiv input[value*="Facebook"]:focus*/ {
-    color: #ecf0f1;
-    background: #1f4189;
+#loginFacebook {
+  background: url(../images/login/fb_logo_min.png) no-repeat;
+  cursor: pointer;
+  padding-left: 40px;
+  padding-top: 38px;
+  background-size:35px 37px;
+  margin-top: 10px;
+  float: right
 }
 
-input[value*="Google"]:active,
-input[value*="Google"]:focus {
-    color: #ecf0f1;
-    background: #0078a6;
+#loginGoogle {
+  background: url(../images/login/google_logo_min.png) no-repeat;
+  cursor: pointer;
+  padding-left: 40px;
+  padding-top: 38px;
+  margin-top: 10px;
+  float: right;
 }
+
 
 #loginValidation {
 	display: none;
