@@ -69,7 +69,7 @@ class ObtainAuthToken(APIView):
     def post(self, request, backend):
         serializer = self.serializer_class(data=request.DATA)
         data = json.loads(request.body)
-        pdb.set_trace()
+        #pdb.set_trace()
         if backend == 'auth':
             if serializer.is_valid():
                 token, created = Token.objects.get_or_create(user=serializer.object['user'])
@@ -103,7 +103,7 @@ def register_by_access_token(request, backend):
         return msg
  
     access_token=auth[1]
-    pdb.set_trace()
+    #pdb.set_trace()
     user = backend.do_auth(access_token)
     return user
 

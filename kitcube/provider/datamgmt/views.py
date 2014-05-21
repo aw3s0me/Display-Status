@@ -50,7 +50,7 @@ class ProjectDetailView(APIView):
         project.save()
         return Response(None, status=status.HTTP_202_ACCEPTED)
     def get(self, request, projname):  
-        pdb.set_trace()
+        #pdb.set_trace()
         #data = json.loads(request.body)
         if not Project.objects.filter(link=projname).exists():
             return Response('Doesn\'t exists', status=status.HTTP_404_NOT_FOUND)
