@@ -335,7 +335,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 			});
 
-			this.updateModel();
+			//this.updateModel();
 
 		},
 		getAdeiDataRange: function(range) {
@@ -420,6 +420,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		updateModel: function() {
 			var data = {};
 			var self = this;
+
 			$.ajax({
 				type: "GET",
 				url: self.getDbUrl(),
@@ -452,6 +453,10 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
                    		console.log("Error at getting data from adei at: " + self.get('id'));
                    		throw "Error at getting data from adei at: " + self.get('id');
                		}
+         		},
+         		beforeSend: function(xhr, settings) {
+         			var csrfToken = $('meta[name="csrf_token"]').attr('content');
+         			xhr.setRequestHeader('X-CSRFToken', csrfToken);
          		}
 			})
 		},

@@ -65,9 +65,9 @@ def mainscreen_index(request, projname=None, name=None):
         data['userblock'] = render_user_block()
     response = render_to_response('mainscreen/index.html', data, context_instance=RequestContext(request))
     
-    response['Access-Control-Allow-Origin'] = '*'  
-    response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'  
-    response['Access-Control-Max-Age'] = '1000'  
-    response['Access-Control-Allow-Headers'] = '*'  
-    response['Access-Control-Allow-Credentials'] = 'true'
+    #response['Access-Control-Allow-Origin'] = '*'  
+    #response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'  
+    #response['Access-Control-Max-Age'] = '1000'  
+    #response['Access-Control-Allow-Headers'] = '*'  
+    #response['Access-Control-Allow-Credentials'] = 'true'
     return response  
