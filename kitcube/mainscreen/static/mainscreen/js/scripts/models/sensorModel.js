@@ -417,7 +417,20 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 			console.log(self.get('values'))
 		},
-		updateModel: function() {
+		updateModel: function(value, time) {
+			var self = this;
+			var array = self.get('values');
+			var valToPush = [time, value];
+			array.push(valToPush);
+			self.set({
+				'value': value,
+				'lastTime': time,
+				'values': array
+			});
+
+			self.trigger('addPoint', self);
+		},
+		/*updateModel: function() {
 			var data = {};
 			var self = this;
 
@@ -453,14 +466,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
                    		console.log("Error at getting data from adei at: " + self.get('id'));
                    		throw "Error at getting data from adei at: " + self.get('id');
                		}
-         		}/*,
-         		beforeSend: function(xhr, settings) {
-         			var csrfToken = $('meta[name="csrf_token"]').attr('content');
-         			console.log(csrfToken);
-         			xhr.setRequestHeader('X-CSRFToken', csrfToken);
-         		}*/
+         		}
 			})
-		},
+		}, */
 		getChartProperties: function() {
 			var seriesName = this.get('name');
 

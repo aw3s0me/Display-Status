@@ -8,6 +8,33 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		};
 	}
 
+	var parseCSV = function(msg, masklength) {
+		var separator = ',';
+		var lineSeparator = '\r\n';
+        var rows = msg.split(lineSeparator);
+        var channelCount = rows[0].split(separator);
+        var dateTime = [];
+        var data = [];
+
+        for (var i = 1; i < rows.length - 1; i++)
+        {
+            var rowdata = rows[i].split(separator);
+            var time = window.db.dateHelper.splitTimeFromAny(rowdata[0]); //jest
+            time = (new Date(time)).getTime()/1000;
+            dateTime.push(time);
+            //for (var j = 0; j < rowdata.length - 1; j++)
+            for (var j = 0; j < masklength; j++)
+            {
+            		data.push(parseFloat(rowdata[j + 1]));             
+            }
+        }
+
+        return {
+        	values: data,
+        	time: dateTime
+        }
+	}
+
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
 		el: undefined,
@@ -17,6 +44,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		nowCoordY: 0,
 		grid: null,
 		viewSizeDetector: null,
+		settings: {
+
+		},
 		tabs: [],
 		sensors: {
 
@@ -131,6 +161,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
+				if (_id === "main") {
+					this.initSettings(attr);
+					continue;
+				}
+
 				attr._id = _id;
 				switch (attr["type"]) {
 					case "sensor":
@@ -193,6 +228,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
+
 				switch (attr["type"]) {
 					case "sensor":
 						var sensorModel = this.elements.singlesensors[_id];
@@ -513,9 +549,55 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			return serializeRes;
 		},
 		updateAllSensors: function() {
-			for (var sensId in this.sensors) {
-				var element = this.sensors[sensId];
-				this.updateSensor(element);
+			var dbname = this.settings['dbname'];
+			var dbgroup = this.settings['dbgroup'];
+			var server = this.settings['server'];
+			var result = undefined;
+			var self = this;
+
+			if (dbname && dbgroup && server) {
+				var masksToRequest = "";
+				var masks = [];
+
+
+				for (var sensId in this.sensors) {
+					var element = this.sensors[sensId];
+					masks.push(element.get('mask'));
+				}
+				masksToRequest = masks.join();
+
+				try
+				{
+					//http://katrin.kit.edu/adei/services/getdata.php?db_server=fpd&db_name=katrin_rep&db_group=0&db_mask=102,106,107,108,149,150,103,109,110,111,151,152,74,66,68,99,12,67,69,100,2,3,4,5,6,7,8,9,59,61,75,78,80,82,145,112,113,116,117,118,146,119,120,123,124,125,186,187,188,190,191,192,190,191,192&window=-1
+					var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=-1';
+					window.db.httpGetCsv(url, function(data) {
+						//var result = window.db.dataHandl.onMessageRecievedCsv(data);
+						result = parseCSV(data, masks.length);
+						console.log(result)
+						var index = 0;
+						for (var sensId in self.sensors) {
+							var element = self.sensors[sensId];
+
+							element.updateModel(result.values[index++], result.time);
+						}
+					})
+					
+
+					//window.db.getData(this.settings['server'], this.settings['dbname'], this.settings['dbgroup'], masksToRequest, '-1', 800, 'mean', function(obj)
+					//{
+						//console.log(obj);
+					//})
+		
+				}
+				catch(msg) {
+					console.log(msg)
+				}
+			}
+			else {
+				for (var sensId in this.sensors) {
+					var element = this.sensors[sensId];
+					this.updateSensor(element);
+				}
 			}
 
 			for (var chartId in this.views.charts) {
@@ -528,7 +610,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		},
 		updateSensor: function(sensorModel) {
 			sensorModel.updateModel();
-
 		},
 		alert: function(e) {
 			console.log(e);
@@ -623,6 +704,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				aceText: _data,
 				reinit: true
 			});
+		},
+		initSettings: function(attr) {
+			if (!attr['dbgroup'] || !attr['dbname'] || !attr['server']) {
+				console.log('Please specify fields dbgroup, dbname and server in configuration file');
+			} 
+			this.settings = attr;
 		},
 		addSingleSensor: function(attr) {
 			var newSensor = new Sensor({
@@ -798,10 +885,20 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var groupArr = [];
 			var sensorModelsArr = [];
 			var emptyCount = attr['empties'];
+			var dbname = undefined;
+			var server = undefined;
+			var dbgroup = undefined;
 
-			var dbname = attr['dbname'];
-			var server = attr['server'];
-			var dbgroup = attr['dbgroup'];
+			if (attr['diffgroups']) {
+				dbname = attr['dbname'];
+				server = attr['server'];
+				dbgroup = attr['dbgroup'];
+			}
+			else {
+				dbname = this.settings['dbname'];
+				server = this.settings['server'];
+				dbgroup = this.settings['dbgroup'];
+			}
 
 			for (var i = 0; i < sensorArr.length; i++) {
 				var sensorObj = sensorArr[i];

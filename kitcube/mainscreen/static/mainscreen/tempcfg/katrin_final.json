@@ -1,4 +1,9 @@
 {
+    "main": {
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd"
+    },
     "sensorgroup1": {
         "type": "sensorgroup",
         "name": "Magnet",
@@ -7,9 +12,7 @@
         "size": [6, 5],
         "coords": [2, 7],
         "diffsensors": false,
-        "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd",
+        "diffgroups": false,
         "sensors": [{
                         "id": "sensid1",
                         "mask": "102",
@@ -116,15 +119,13 @@
         "size": [8, 5],
         "coords": [1, 13],
         "diffsensors": false,
-        "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd",
+        "diffgroups": false,
         "sensors": [{
                         "id": "sensid13",
                         "mask": "74",
                         "unit": "mbar",
                         "name": "Ion Gauge",
-                        "precision": 5,
+                        "precision": 1,
                         "exp": true
                     },
                     {
@@ -132,7 +133,7 @@
                         "mask": "66",
                         "unit": "mbar",
                         "name": "CCG",
-                        "precision": 5,
+                        "precision": 1,
                         "exp": true,
                         "sensortype": "noval"
 
@@ -144,14 +145,14 @@
                         "name": "CEP",
                         "sensortype": "noval",
                         "exp": true,
-                        "precision": 5
+                        "precision": 1
                     },
                     {
                         "id": "sensid16",
                         "mask": "99",
                         "unit": "K",
                         "name": "CP Temp",
-                        "precision": 5
+                        "precision": 2
                     },
                     {
                         "id": "sensid17",
@@ -165,7 +166,7 @@
                         "unit": "mbar",
                         "name": "CCG",
                         "exp": true,
-                        "precision": 5
+                        "precision": 1
                     },
                     {
                         "id": "sensid20",
@@ -192,9 +193,7 @@
         "size": [8, 5],
         "coords": [10, 1],
         "diffsensors": false,
-        "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd",
+        "diffgroups": false,
         "sensors": [{
                         "id": "sensid22",
                         "mask": "2",
@@ -252,9 +251,7 @@
         "size": [8, 5],
         "coords": [1, 1],
         "diffsensors": false,
-        "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd",
+        "diffgroups": false,
         "empties": 1,
         "sensors": [{
                         "id": "sensid30",
@@ -307,9 +304,7 @@
         "size": [6, 5],
         "coords": [11, 7],
         "diffsensors": false,
-        "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd",
+        "diffgroups": false,
         "sensors": [{
                         "id": "sensid37",
                         "mask": "112",
@@ -408,11 +403,9 @@
         "groupname1": "Peltier 1",
         "groupname2": "Peltier 2",
         "size": [6, 5],
-        "coords": [11, 13],
+        "coords": [10, 13],
         "diffsensors": false,
-        "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd",
+        "diffgroups": false,
         "sensors": [{
                         "id": "sensid48",
                         "mask": "186",
@@ -520,8 +513,8 @@
         "width": 1,
         "type": "chart",
         "charttype": "line",
-        "size": [16, 9],
-        "coords": [19, 5],
+        "size": [16, 8],
+        "coords": [19, 1],
         "startrange": "15m",
         "axislabels": false
     },
@@ -530,7 +523,7 @@
         "type": "chart",
         "charttype": "line",
         "size": [16, 9],
-        "coords": [19, 11],
+        "coords": [19, 12],
         "startrange": "15m",
         "axislabels": true
     }

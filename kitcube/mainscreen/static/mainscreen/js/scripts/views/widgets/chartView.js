@@ -506,6 +506,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.setExtremes();
 
 		},
+		addAllSeries: function() {
+			var allModels = this.elements;
+			
+			
+
+		},
 		removeSeries: function(model) {
 			var chart = this.chart;
 			var id = model.get('id');
