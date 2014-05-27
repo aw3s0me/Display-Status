@@ -11,6 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		chart: undefined,
 		elements: undefined,
 		model: undefined,
+		board: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -25,6 +26,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			}
 			if (options.allSensors) {
 				_allSensors = options.allSensors;
+			}
+			if (options.board) {
+				this.board = options.board;
 			}
 
 			(function(b, a) {
@@ -81,12 +85,20 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.render();
 
 			this.container.find('.addChartBtn').click(function(event) {
-				var elems1Val = $('.canvas').find('.activeSensor1'); 
+				var elems1Val = $('.canvas').find('.activeSensor1');
 				var elems2Val = $('.canvas').find('.activeSensor2');
 				var elemsVal = $('.canvas').find('.activeSensor');
-				self.addSensorsToChart(elems1Val, 1); //add css property according to type
-				self.addSensorsToChart(elems2Val, 2);
-				self.addSensorsToChart(elemsVal, 0);
+
+				var elems = {
+					"0": elemsVal,
+					"1": elems1Val,
+					"2": elems2Val
+				}
+
+				self.addSensorsToChart(elems);
+				//self.addSensorsToChart(elems1Val, 1); //add css property according to type
+				//self.addSensorsToChart(elems2Val, 2);
+				//self.addSensorsToChart(elemsVal, 0);
 
 				self.chart.redraw();
 			});
@@ -102,12 +114,217 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			});
 		},
-		addSensorsToChart: function(elems, type) {
+		addNewPoint: function(model) {
+
+			var chart = this.chart;
+			var series = this.chart.series;
+			//console.log(chart);
+			var index = undefined; //index of series
+			var shift = false;
+			//console.log(model.get('id'));
+			var sensorValue = model.get('value');
+			var foundSeriesObj = null;
+
+			/*if (model.get('values').length > 10) {
+				shift = true;
+			} */
+			//console.log(model.get('values'));
+
+			for (var seriesName in series) {
+				var seriesObject = series[seriesName];
+				var id = seriesObject.userOptions.id;
+				if (id === model.get('id')) {
+					index = seriesObject._i;
+					foundSeriesObj = seriesObject;
+					break;
+				}
+			}
+
+			var x = model.get('lastTime');
+			var y = parseFloat(sensorValue);
+
+			if (y === undefined || x === undefined) {
+				return;
+			}
+
+			var Point = {
+				x: x,
+				y: y
+			};
+
+			if (foundSeriesObj) {
+				foundSeriesObj.addPoint(Point, false, shift);
+			}
+			//if (chart.series[index])
+			//chart.series[index].addPoint(Point, false, shift); //last point is for everyone\
+
+			shift = false;
+
+			this.setExtremes();
+
+		},
+		getIdsOfSensorType: function(elems, models, type) {
+			for (var i = 0; i < elems.length; i++) {
+				var jqElement = elems[i];
+				var id;
+
+				if (type === 2) {
+					id = jqElement.getAttribute('id2');
+				} else {
+					id = jqElement.getAttribute('id');
+				}
+				models.push(_allSensors[id]);
+			}
+		},
+		setSensorDataInChart: function(elems, type) {
+			var chart = this.chart;
+			var series = this.chart.series;
+			//console.log(chart);
+			var index = undefined; //index of series
+			var shift = false;
+			var self = this;
+			for (var i = 0; i < elems.length; i++) {
+				var jqElement = elems[i];
+				var id;
+				//var circle = $(jqElement).find('.chartCircle');
+				//var id = jqElement.attr('id');
+
+				if (type === 2) {
+					id = jqElement.getAttribute('id2');
+				} else {
+					id = jqElement.getAttribute('id');
+				}
+
+				var sensorModel = _allSensors[id];
+				sensorModel.on('addPoint', self.addNewPoint, self);
+				sensorModel.on('deleteSensor', self.removeSeries, self);
+				sensorModel.on('removing', self.onSensorRemoving, self);
+				self.model.get('link').push(sensorModel.get('id'));
+				self.model.get('models').push(sensorModel);
+				if (!sensorModel) {
+					throw "Cant add sensor";
+				}
+				var seriesObject = sensorModel.getChartProperties();
+				var axisObject = sensorModel.getChartAxisInfo({
+					axislabels: self.model.get('axislabels')
+				});
+				var color = undefined;
+				self.chart.addAxis(axisObject);
+				self.chart.addSeries(seriesObject, false);
+
+				for (var seriesName in series) {
+					var seriesObject = series[seriesName];
+					var id = seriesObject.userOptions.id;
+					if (id === sensorModel.get('id')) {
+						index = seriesObject._i;
+						color = seriesObject.color;
+						//circle.css('background-color', color);
+
+						switch (type) {
+							case 0:
+								$(jqElement).removeClass('activeSensor');
+								$(jqElement).addClass('chartAdded');
+								break;
+							case 1:
+								$(jqElement).removeClass('activeSensor1');
+								$(jqElement).addClass('chartAdded1');
+								break;
+							case 2:
+								$(jqElement).removeClass('activeSensor2');
+								$(jqElement).addClass('chartAdded2');
+								break;
+							case 12:
+								$(jqElement).removeClass('activeSensor1');
+								$(jqElement).addClass('chartAdded1');
+								$(jqElement).removeClass('activeSensor2');
+								$(jqElement).addClass('chartAdded2');
+								break;
+							default:
+								console.log('wrong type of a sensor at chartview');
+								throw 'wrong type of a sensor at chartview';
+								break;
+						}
+
+						var axisId = seriesObject.yAxis.userOptions.id;
+						for (var j = 0; j < self.chart.yAxis.length; j++) {
+							var yaxis = self.chart.yAxis[j];
+							if (yaxis.userOptions.id === axisId) {
+								//yaxis.options.lineColor = color;
+								yaxis.update({
+									lineColor: color
+								});
+								break;
+							}
+						}
+						break;
+					}
+				}
+			}
+		},
+		getDataForElements: function(typeObject) {
+			//console.log(model.get('id'));
+			var self = this;
+			var masks = [];
+			var server = this.board.settings['server'];
+			var dbname = this.board.settings['dbname'];
+			var dbgroup = this.board.settings['dbgroup'];
+			var models = [];
+			var windowObj = this.getWindow();
+			var start = parseInt(windowObj.start / 1000);
+			var end = parseInt(windowObj.end / 1000);
+			var windowUrl = start + "-" + end;
+
+			this.getIdsOfSensorType(typeObject["1"], models, 1);
+			this.getIdsOfSensorType(typeObject["2"], models, 2);
+			this.getIdsOfSensorType(typeObject["0"], models, 0);
+
+			for (var i = 0; i < models.length; i++) {
+				masks.push(models[i].get('mask'));
+			}
+
+			var masksToRequest = masks.join();
+
+			window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, 800, 'mean', function(obj) {
+				var data = obj.data;
+				for (var i = 0; i < data.length - 1; i++) {
+					
+				}
+
+
+				self.setSensorDataInChart(typeObject["1"], 1);
+				self.setSensorDataInChart(typeObject["2"], 2);
+				self.setSensorDataInChart(typeObject["0"], 0);
+				self.setExtremes();
+			});
+
+
+		},
+		addSensorsToChart: function(elems) {
+			this.getDataForElements(elems);
+		},
+		/*addSensorsToChart: function(elems, type) {
 			var self = this;
 			var dataSeries = [];
 			var index = undefined;
 			var series = self.chart.series;
-			
+
+			var elementsToGetPoints = [];
+
+			for (var i = 0; i < elems.length; i++) {
+				var jqElement = elems[i];
+				var id;
+
+				if (type === 2) {
+					id = jqElement.getAttribute('id2');
+				}
+				else {
+					id = jqElement.getAttribute('id');
+				}
+				elementsToGetPoints.push(_allSensors[id]);
+			}
+
+			self.getDataForElements(elementsToGetPoints);
+
 			for (var i = 0; i < elems.length; i++) {
 				var jqElement = elems[i];
 				var id;
@@ -166,8 +383,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 								$(jqElement).addClass('chartAdded2');
 								break;
 							default:
-								console.log('wrong type sensor at chartview');
-								throw 'wrong type sensor at chartview';
+								console.log('wrong type of a sensor at chartview');
+								throw 'wrong type of a sensor at chartview';
 								break;
 						}
 
@@ -186,7 +403,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					}
 				}
 			}
-		},
+		},*/
 		render: function() {
 			//load html template
 			var self = this;
@@ -450,66 +667,23 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			});*/
 
 		},
-		setExtremes: function() {
+		getWindow: function() {
 			var now = new Date;
 			var min = this.model.getRangeToDate();
 			var max = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-
-			this.chart.xAxis[0].setExtremes(min, max);
+			return {
+				start: min,
+				end: max
+			}
 		},
-		addNewPoint: function(model) {
-
-			var chart = this.chart;
-			var series = this.chart.series;
-			//console.log(chart);
-			var index = undefined; //index of series
-			var shift = false;
-			//console.log(model.get('id'));
-			var sensorValue = model.get('value');
-			var foundSeriesObj = null;
-
-			/*if (model.get('values').length > 10) {
-				shift = true;
-			} */
-			//console.log(model.get('values'));
-
-			for (var seriesName in series) {
-				var seriesObject = series[seriesName];
-				var id = seriesObject.userOptions.id;
-				if (id === model.get('id')) {
-					index = seriesObject._i;
-					foundSeriesObj = seriesObject;
-					break;
-				}
-			}
-
-			var x = model.get('lastTime');
-			var y = parseFloat(sensorValue);
-
-			if (y === undefined || x === undefined) {
-				return;
-			}
-
-			var Point = {
-				x: x,
-				y: y
-			};
-
-			if (foundSeriesObj) {
-				foundSeriesObj.addPoint(Point, false, shift);
-			}
-			//if (chart.series[index])
-				//chart.series[index].addPoint(Point, false, shift); //last point is for everyone\
-
-			shift = false;
-
-			this.setExtremes();
-
+		setExtremes: function() {
+			var windowObj = this.getWindow();
+			this.chart.xAxis[0].setExtremes(windowObj.start, windowObj.end);
 		},
 		addAllSeries: function() {
 			var allModels = this.elements;
-			
-			
+
+
 
 		},
 		removeSeries: function(model) {

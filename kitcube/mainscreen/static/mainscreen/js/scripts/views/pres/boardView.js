@@ -867,7 +867,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				model: newChart,
 				grid: this.grid,
 				elements: sensCollection,
-				allSensors: this.sensors
+				allSensors: this.sensors,
+				board: this
 			});
 			newChart.on('removing', function() {
 				if (this.elements) {
