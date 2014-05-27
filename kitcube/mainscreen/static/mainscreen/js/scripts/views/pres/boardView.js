@@ -39,7 +39,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			try {
-				this.viewSizeDetector = new sizeDetector(50, 30, 24, '#banner', '#footer');
+				this.viewSizeDetector = new sizeDetector(50, 32, 21, '#banner', '#footer');
 				this.viewSizeDetector.detectAllSizes();
 			} catch (err) {
 				alert(err.message);

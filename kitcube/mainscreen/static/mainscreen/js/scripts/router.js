@@ -59,7 +59,8 @@ define([
 		getCfg: function() {
 			var text;
 			$.ajax({
-				url: '../static/mainscreen/tempcfg/empty.json',
+				//url: '../static/mainscreen/tempcfg/empty.json',
+				url: '../static/mainscreen/tempcfg/katrin_final.json',
 				async: false,
 				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 				success: function(data){

@@ -128,7 +128,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel'], function
 				handles: 'ne, se',
 				//helper: 'ui-resizable-helper',
 				start: function(event, ui) {},
-				resize: function( event, ui) {},
+				resize: function( event, ui) {
+                    $(this).find('.sortable_container').css('width', $(this).css('width') + $(this).css('border-width'));
+                },
 				stop: function(event, ui) {
 					var model = self.model;
 					var unitSize = unitX;
