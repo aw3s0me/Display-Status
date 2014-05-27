@@ -453,11 +453,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
                    		console.log("Error at getting data from adei at: " + self.get('id'));
                    		throw "Error at getting data from adei at: " + self.get('id');
                		}
-         		},
+         		}/*,
          		beforeSend: function(xhr, settings) {
          			var csrfToken = $('meta[name="csrf_token"]').attr('content');
+         			console.log(csrfToken);
          			xhr.setRequestHeader('X-CSRFToken', csrfToken);
-         		}
+         		}*/
 			})
 		},
 		getChartProperties: function() {

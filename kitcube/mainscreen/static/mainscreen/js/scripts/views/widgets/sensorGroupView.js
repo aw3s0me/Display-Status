@@ -74,20 +74,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel'], function
     			nameDiv.text(newSensorGroup.get("name"));
     		}
 
-    		/*var groupNameDiv = $('<span></span>');
-    		groupNameDiv.css('font-size', 15 * scale + 'px');
-    		groupNameDiv.css('font-weight', 'bold');
-    		groupNameDiv.css('background-color', 'white');
-    		groupNameDiv.css('width', '50%'); */
-    		
     		this.container.append(nameDiv);
-
-
-
-			/*this.container[0].style.position = 'absolute';
-			this.container[0].style.fontSize = 1.8*scale +'em';
-    		this.container[0].style.left = 5*scale + 'px';
-    		this.container[0].innerHTML = newSensorGroup.get("name"); */
 
     		var unitX = this.grid.getUnitSizes().width * scale;
     		var unitY = this.grid.getUnitSizes().height * scale;
@@ -95,7 +82,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel'], function
     		var newSortableContainer = $('<span></span>');
 			newSortableContainer.css('left', 0 + 'px');
 			newSortableContainer.css('top', unitY + 'px');
-			newSortableContainer.css('height', unitY * (dy - 1) + 'px');
+			newSortableContainer.css('height', unitY * (dy) + 'px');
 			newSortableContainer.css('width', unitX * dx + 'px' )
 			newSortableContainer.addClass('sortable_container').sortable();
 
@@ -225,7 +212,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel'], function
 
 		},
 		onresize: function(model) {
-			var ololo = 1;
 		},
 		onchangebgcolor: function(model) {
 

@@ -52,7 +52,7 @@ define([
 			console.log(csrfToken);
 			$(document).ajaxSend(function(event, xhr, settings) {
 				/* stuff to do before an AJAX request is sent */
-				xhr.setRequestHeader('X-CSRFToken', csrfToken);
+				//xhr.setRequestHeader('X-CSRFToken', csrfToken);
 			});
 
 			var body = document.body,
@@ -82,7 +82,7 @@ define([
 			console.log(OAuth)
 
 			initialize_user();
-
+			$('#toggleGridButton').show();
 			Router.initialize();
 			//document.location.href = '#board';
 
@@ -98,7 +98,7 @@ define([
 				document.location.href = '#login';
 			});
 
-
+			
 
 		});
 	}

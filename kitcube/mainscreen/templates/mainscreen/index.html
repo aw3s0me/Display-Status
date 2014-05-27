@@ -12,6 +12,7 @@
   <meta name="csrf_token" content="{{csrf_token}}">
   <link href={% static "mainscreen/css/bootstrap.min.css" %} rel="stylesheet">
   <link href={% static "mainscreen/css/main.css" %} rel="stylesheet">
+  <link href={% static "mainscreen/css/widgets.css" %} rel="stylesheet">
   <link href={% static "mainscreen/js/scripts/vendor/jqgrid/css/ui.jqgrid.css" %} rel="stylesheet"> 
   <link href={% static "mainscreen/js/scripts/vendor/jquery-ui/themes/ui-lightness/jquery.ui.theme.css" %} rel="stylesheet"> 
   <link href={% static "mainscreen/js/scripts/vendor/slabText/css/slabtext.css" %} rel="stylesheet"> 
@@ -60,6 +61,7 @@
         </nav> -->
       <!-- </div> --> <!-- /demo-headline -->
       <div id="kitcube-container">
+        <button id="toggleGridButton">Toggle</button>
         <div id="board-container"> <!-- there should be tabs with boards -->
         </div>
       </div><!-- #kitcube-container -->

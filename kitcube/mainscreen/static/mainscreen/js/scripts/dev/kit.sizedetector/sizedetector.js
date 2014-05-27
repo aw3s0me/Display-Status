@@ -155,8 +155,10 @@ var sizeDetector = (function($) {
 	sizeDetector.prototype.detectBoardSizes = function() {
 		//find size for fullscreen
 	
-		this.boardSizePx.width = this.gridSize.width * this.scaledUnitSize;
-		this.boardSizePx.height = this.gridSize.height * this.scaledUnitSize;
+		//this.boardSizePx.width = this.gridSize.width * this.scaledUnitSize;
+		//this.boardSizePx.height = this.gridSize.height * this.scaledUnitSize;
+		this.boardSizePx.width = parseInt(this.maxGridSizes.width / this.scaledUnitSize);
+		this.boardSizePx.height = parseInt(this.maxGridSizes.height / this.scaledUnitSize);
 
 		if (this.boardSizePx.width === NaN || this.boardSizePx.height === NaN) {
 			throw "Error happened while detecting size of board";
@@ -200,75 +202,8 @@ var sizeDetector = (function($) {
 		console.log('notfullscreen');
 	};
 
-	/*sizeDetector.prototype.detectBlockCount = function() {
-		if (this.boardSize.width || this.boardSize.height) {
-			this.blockMargin = roundToEven(this.blockMargin);
-			this.blockCount.xCount = roundToEven(this.boardSize.width / (this.unitSize.width + this.blockMargin * 2));
-			this.blockCount.yCount = roundToEven(this.boardSize.height / (this.unitSize.height + this.blockMargin * 2));
-		}
-
-		return this.blockCount;
-	}; */
-
-	/*sizeDetector.prototype.detectBlockCount = function() {
-		this.blockMargin = roundToEven(this.blockMargin);
-		this.blockCount.xCount = roundToEven(this.boardSize.width / (this.unitSize.width + this.blockMargin * 2));
-		this.blockCount.yCount = roundToEven(this.boardSize.height / (this.unitSize.height + this.blockMargin * 2));
-
-		return this.blockCount;
-	};
-
-	sizeDetector.prototype.detectSizeOfBlocks = function() {
-		if (this.boardWidth || this.boardHeight) {
-			this.blockMargin = roundToEven(this.blockMargin);
-			this.unitSize.width = this.boardSize.width / this.blockCount.xCount;
-			this.unitSize.height = this.boardSize.height / this.blockCount.yCount;
-		}
-
-		return this.unitSize;
-	};
-
-	sizeDetector.prototype.detectAllSizes = function() {
-		detectBannerSize();
-		detectFooterSize();
-		detectBoardSize();
-	} */
-
 	sizeDetector.prototype.setScreen = function(wrapper, content, kicubeCanv) {
-		/*$('body').css({
-			height: this.screenSizeY
-		});
-		$('body').css({
-			width: this.screenSizeX
-		});
-		wrapper.css({
-			height: this.screenSizeY
-		});
-		wrapper.css({
-			width: this.screenSizeX
-		});
-		content.css({
-			width: this.screenSizeX
-		});
-		kicubeCanv.css('width', this.dx * this.xCount);
-		kicubeCanv.css('height', this.dy * this.yCount);
-		//kicubeCanv.css('margin-left', this.marginX);
-		//kicubeCanv.css('margin-bottom', this.marginY);
-		kicubeCanv.css('margin-left', 'auto');
-		kicubeCanv.css('margin-right', 'auto');
-		kicubeCanv.css('margin-bottom', this.marginY);
-		$('footer').css('margin-top', '50px');
-		kicubeCanv.children('.gridster').css('width', this.dx * this.xCount);
-		//kicubeCanv.css('min-height', this.dx * this.xCount);
-		//kicubeCanv.css()
-		kicubeCanv.children('.gridster').css('height', this.dy * this.yCount);
-		kicubeCanv.children('.gridster').children('ul').css('height', this.dy * this.yCount);
-		kicubeCanv.children('.gridster').children('ul').css('width', this.dx * this.xCount);
-		kicubeCanv.children('.gridster').css('height', this.dy * this.yCount);
-		kicubeCanv.children('.gridster').css('width', this.dx * this.xCount);
-		kicubeCanv.children('.gridster').children('ul').css('margin', 0);
-		$("#kitcube-console").css('height', this.dy * this.yCount);
-		$("#kitcube-console").css('min-height', this.dy * this.yCount); */
+
 	}
 
 	return sizeDetector;

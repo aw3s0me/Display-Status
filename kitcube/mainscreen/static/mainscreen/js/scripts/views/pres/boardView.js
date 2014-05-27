@@ -39,7 +39,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			try {
-				this.viewSizeDetector = new sizeDetector(50, 32, 18, '#banner', '#footer');
+				this.viewSizeDetector = new sizeDetector(50, 30, 24, '#banner', '#footer');
 				this.viewSizeDetector.detectAllSizes();
 			} catch (err) {
 				alert(err.message);
@@ -54,17 +54,21 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			$('.canvas').attr("id", "tab1");
 
-			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.boardSizePx.height) / 2;
+			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizes.height) / 2;
 			$('.canvas').css('margin-top', marginTop + 'px');
-			$('.canvas').css('height', this.viewSizeDetector.boardSizePx.height + 'px');
-			$('.canvas').css('width', this.viewSizeDetector.boardSizePx.width + 'px');
-			$('.canvas').data('height', this.viewSizeDetector.boardSizePx.height);
-			$('.canvas').data('width', this.viewSizeDetector.boardSizePx.width);
+			$('.canvas').css('height', this.viewSizeDetector.boardSizePx.height * this.viewSizeDetector.scaledUnitSize + 'px');
+			$('.canvas').css('width', this.viewSizeDetector.boardSizePx.width * this.viewSizeDetector.scaledUnitSize + 'px');
+			$('.canvas').data('height', this.viewSizeDetector.boardSizePx.height * this.viewSizeDetector.scaledUnitSize);
+			$('.canvas').data('width', this.viewSizeDetector.boardSizePx.width * this.viewSizeDetector.scaledUnitSize);
+			//$('.canvas').css('height', this.viewSizeDetector.maxGridSizes.height + 'px');
+			//$('.canvas').css('width', this.viewSizeDetector.maxGridSizes.width + 'px');
+			//$('.canvas').data('height', this.viewSizeDetector.maxGridSizes.height);
+			//$('.canvas').data('width', this.viewSizeDetector.maxGridSizes.width);
 
 			$('.canvas').data('gridUnitX', this.viewSizeDetector.unitSize);
 			$('.canvas').data('gridUnitY', this.viewSizeDetector.unitSize);
-			$('.canvas').data('gridSizeX', this.viewSizeDetector.gridSize.width);
-			$('.canvas').data('gridSizeY', this.viewSizeDetector.gridSize.height);
+			$('.canvas').data('gridSizeX', this.viewSizeDetector.boardSizePx.width);
+			$('.canvas').data('gridSizeY', this.viewSizeDetector.boardSizePx.height);
 			$('.canvas').data('scale', this.viewSizeDetector.scale);
 			$('.canvas').data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 
