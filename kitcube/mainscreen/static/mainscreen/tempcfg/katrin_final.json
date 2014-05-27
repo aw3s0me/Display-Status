@@ -124,7 +124,7 @@
                         "mask": "74",
                         "unit": "mbar",
                         "name": "Ion Gauge",
-                        "precision": 1,
+                        "precision": 5,
                         "exp": true
                     },
                     {
@@ -132,7 +132,7 @@
                         "mask": "66",
                         "unit": "mbar",
                         "name": "CCG",
-                        "precision": 1,
+                        "precision": 5,
                         "exp": true,
                         "sensortype": "noval"
 
@@ -144,14 +144,14 @@
                         "name": "CEP",
                         "sensortype": "noval",
                         "exp": true,
-                        "precision": 1
+                        "precision": 5
                     },
                     {
                         "id": "sensid16",
                         "mask": "99",
                         "unit": "K",
                         "name": "CP Temp",
-                        "precision": 2
+                        "precision": 5
                     },
                     {
                         "id": "sensid17",
@@ -165,7 +165,7 @@
                         "unit": "mbar",
                         "name": "CCG",
                         "exp": true,
-                        "precision": 1
+                        "precision": 5
                     },
                     {
                         "id": "sensid20",
@@ -521,7 +521,7 @@
         "type": "chart",
         "charttype": "line",
         "size": [16, 9],
-        "coords": [19, 1],
+        "coords": [19, 5],
         "startrange": "15m",
         "axislabels": false
     },

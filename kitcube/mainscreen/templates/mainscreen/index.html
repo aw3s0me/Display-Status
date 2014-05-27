@@ -74,7 +74,20 @@
 
   </div>
   <!-- java script -->
-  <script data-main="../static/mainscreen/js/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}></script> 
+  <script data-main="/static/mainscreen/js/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/dataStream.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/helpers/dateTimeFormat.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/helpers/dataHandler.js" %}>
+  </script> 
+  <!-- <script src={% static "mainscreen/js/scripts/dev/datacaching/backgrDataCacher.js" %}>
+  </script> -->
+  <script src={% static "mainscreen/js/scripts/dev/datacaching/dataCacher.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/datacaching/webSockets.js" %}>
+  </script> 
   
 </body>
 </html>
