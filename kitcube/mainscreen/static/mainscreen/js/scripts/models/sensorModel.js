@@ -24,36 +24,38 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	}
 
 	var Sensor = Backbone.Model.extend({
-		defaults: {
-			id: undefined,
-			name: "",
-			type: "sensor",
-			sensortype: "default",
-			sensorviewtype: undefined,
-			comment: undefined,
-			unit: "",
-			precision: undefined,
-			value: undefined,
-			lastTime: undefined,
-			max: undefined,
-			min: undefined,
-			alarm: undefined,
-			server: undefined,
-			//device: undefined,
-			dbname: undefined,
-			dbgroup: undefined,
-			norender: false,
-			mask: undefined,
-			values: [],
-			exp: false,
-			size: [2, 2],
-			coords: [0, 0],
-			bgcolor: '#1bb2e2',
-			valUnit: "NaN",
-			link: undefined,
-			factor: 1,
-			linecolor: undefined,
-			cfgObj: null
+		defaults: function() {
+			return {
+				id: undefined,
+				name: "",
+				type: "sensor",
+				sensortype: "default",
+				sensorviewtype: undefined,
+				comment: undefined,
+				unit: "",
+				precision: undefined,
+				value: undefined,
+				lastTime: undefined,
+				max: undefined,
+				min: undefined,
+				alarm: undefined,
+				server: undefined,
+				//device: undefined,
+				dbname: undefined,
+				dbgroup: undefined,
+				norender: false,
+				mask: undefined,
+				values: [],
+				exp: false,
+				size: [2, 2],
+				coords: [0, 0],
+				bgcolor: '#1bb2e2',
+				valUnit: "NaN",
+				link: undefined,
+				factor: 1,
+				linecolor: undefined,
+				cfgObj: null
+			}
 		},
 		initialize: function() {
 			//console.log("model created");
@@ -276,9 +278,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 							if (this.get('name') === "XHV CP Jacket") {
 								var a = 1;
-								console.log(val);
-								console.log(this.get('value'));
-								console.log(_isNumber(val));
+								//console.log(val);
+								//console.log(this.get('value'));
+								//console.log(_isNumber(val));
 							}
 							
 							var type = this.get('sensorviewtype');
@@ -434,12 +436,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			var self = this;
 			var array = [];
 			for (var i = 0; i < values.length; i++) {
-				var valToPush = [values[i], datetime[i]];
+				var valToPush = [datetime[i], values[i]];
 				array.push(valToPush);
 			}
 			self.set({
-				'value': values[,
-				'lastTime': time,
+				'value': values[values.length - 1],
+				'lastTime': datetime[datetime.length - 1],
 				'values': array
 			});
 

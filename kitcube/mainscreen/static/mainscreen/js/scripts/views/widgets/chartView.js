@@ -88,19 +88,16 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				var elems1Val = $('.canvas').find('.activeSensor1');
 				var elems2Val = $('.canvas').find('.activeSensor2');
 				var elemsVal = $('.canvas').find('.activeSensor');
+				elems = {};
 
-				var elems = {
-					"0": elemsVal,
-					"1": elems1Val,
-					"2": elems2Val
-				}
+				if (elemsVal) 
+					elems["0"] = elemsVal;
+				if (elems2Val)
+					elems["2"] = elems2Val;
+				if (elems1Val)
+					elems["1"] = elems1Val;
 
-				self.addSensorsToChart(elems);
-				//self.addSensorsToChart(elems1Val, 1); //add css property according to type
-				//self.addSensorsToChart(elems2Val, 2);
-				//self.addSensorsToChart(elemsVal, 0);
-
-				self.chart.redraw();
+				self.getDataForElements(elems);
 			});
 
 			this.container.find('.legendChartBtn').click(function(event) {
@@ -186,9 +183,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			for (var i = 0; i < elems.length; i++) {
 				var jqElement = elems[i];
 				var id;
-				//var circle = $(jqElement).find('.chartCircle');
-				//var id = jqElement.attr('id');
-
 				if (type === 2) {
 					id = jqElement.getAttribute('id2');
 				} else {
@@ -205,12 +199,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					throw "Cant add sensor";
 				}
 				var seriesObject = sensorModel.getChartProperties();
+				console.log(seriesObject);
+				console.log(sensorModel.get('values'));
 				var axisObject = sensorModel.getChartAxisInfo({
 					axislabels: self.model.get('axislabels')
 				});
 				var color = undefined;
 				self.chart.addAxis(axisObject);
-				self.chart.addSeries(seriesObject, false);
+				//self.chart.addSeries(seriesObject, false);
+				self.chart.addSeries(seriesObject);
 
 				for (var seriesName in series) {
 					var seriesObject = series[seriesName];
@@ -260,6 +257,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					}
 				}
 			}
+
 		},
 		getDataForElements: function(typeObject) {
 			//console.log(model.get('id'));
@@ -286,124 +284,25 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, 800, 'mean', function(obj) {
 				var data = obj.data;
+				var datetime = obj.dateTime;
 				for (var i = 0; i < data.length - 1; i++) {
-					
+					models[i].setDataModel(data[i], datetime);
 				}
 
+				if (typeObject["1"]) 
+					self.setSensorDataInChart(typeObject["1"], 1);
+				if (typeObject["2"]) 
+					self.setSensorDataInChart(typeObject["2"], 2);
+				if (typeObject["0"]) 
+					self.setSensorDataInChart(typeObject["0"], 0);
 
-				self.setSensorDataInChart(typeObject["1"], 1);
-				self.setSensorDataInChart(typeObject["2"], 2);
-				self.setSensorDataInChart(typeObject["0"], 0);
 				self.setExtremes();
+				self.redraw();
+				console.log(self.chart);
 			});
 
 
 		},
-		addSensorsToChart: function(elems) {
-			this.getDataForElements(elems);
-		},
-		/*addSensorsToChart: function(elems, type) {
-			var self = this;
-			var dataSeries = [];
-			var index = undefined;
-			var series = self.chart.series;
-
-			var elementsToGetPoints = [];
-
-			for (var i = 0; i < elems.length; i++) {
-				var jqElement = elems[i];
-				var id;
-
-				if (type === 2) {
-					id = jqElement.getAttribute('id2');
-				}
-				else {
-					id = jqElement.getAttribute('id');
-				}
-				elementsToGetPoints.push(_allSensors[id]);
-			}
-
-			self.getDataForElements(elementsToGetPoints);
-
-			for (var i = 0; i < elems.length; i++) {
-				var jqElement = elems[i];
-				var id;
-				//var circle = $(jqElement).find('.chartCircle');
-				//var id = jqElement.attr('id');
-
-				if (type === 2) {
-					id = jqElement.getAttribute('id2');
-				}
-				else {
-					id = jqElement.getAttribute('id');
-				}
-				
-				var sensorModel = _allSensors[id];
-				sensorModel.on('addPoint', self.addNewPoint, self);
-				sensorModel.on('deleteSensor', self.removeSeries, self);
-				sensorModel.on('removing', self.onSensorRemoving, self);
-				self.model.get('link').push(sensorModel.get('id'));
-				self.model.get('models').push(sensorModel);
-				if (!sensorModel) {
-					throw "Cant add sensor";
-				}
-				var seriesObject = sensorModel.getChartProperties();
-				var axisObject = sensorModel.getChartAxisInfo({
-					axislabels: self.model.get('axislabels')
-				});
-				var color = undefined;
-				self.chart.addAxis(axisObject);
-				self.chart.addSeries(seriesObject, false);
-
-				for (var seriesName in series) {
-					var seriesObject = series[seriesName];
-					var id = seriesObject.userOptions.id;
-					if (id === sensorModel.get('id')) {
-						index = seriesObject._i;
-						color = seriesObject.color;
-						//circle.css('background-color', color);
-
-						switch(type) {
-							case 0:
-								$(jqElement).removeClass('activeSensor');
-								$(jqElement).addClass('chartAdded');
-								break;
-							case 1:
-								$(jqElement).removeClass('activeSensor1');
-								$(jqElement).addClass('chartAdded1');
-								break;
-							case 2:
-								$(jqElement).removeClass('activeSensor2');
-								$(jqElement).addClass('chartAdded2');
-								break;
-							case 12:
-								$(jqElement).removeClass('activeSensor1');
-								$(jqElement).addClass('chartAdded1');
-								$(jqElement).removeClass('activeSensor2');
-								$(jqElement).addClass('chartAdded2');
-								break;
-							default:
-								console.log('wrong type of a sensor at chartview');
-								throw 'wrong type of a sensor at chartview';
-								break;
-						}
-
-						var axisId = seriesObject.yAxis.userOptions.id;
-						for (var j = 0; j < self.chart.yAxis.length; j++) {
-							var yaxis = self.chart.yAxis[j];
-							if (yaxis.userOptions.id === axisId) {
-								//yaxis.options.lineColor = color;
-								yaxis.update({
-									lineColor: color
-								});
-								break;
-							}
-						}
-						break;
-					}
-				}
-			}
-		},*/
 		render: function() {
 			//load html template
 			var self = this;

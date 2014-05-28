@@ -573,7 +573,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					window.db.httpGetCsv(url, function(data) {
 						//var result = window.db.dataHandl.onMessageRecievedCsv(data);
 						result = parseCSV(data, masks.length);
-						console.log(result)
+						//console.log(result)
 						var index = 0;
 						for (var sensId in self.sensors) {
 							var element = self.sensors[sensId];
@@ -590,7 +590,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		
 				}
 				catch(msg) {
-					console.log(msg)
+					//console.log(msg)
 				}
 			}
 			else {
@@ -602,7 +602,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			for (var chartId in this.views.charts) {
 				var chartView = this.views.charts[chartId];
-				chartView.redraw();
+				//chartView.redraw();
 				//chartView.setExtremes();
 			}
 
