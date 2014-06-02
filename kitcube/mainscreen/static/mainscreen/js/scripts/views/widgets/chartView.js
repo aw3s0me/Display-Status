@@ -286,6 +286,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			if (masksToRequest.length === 0) {
 				return;
 			}
+			console.log(masksToRequest);
 
 			try
 			{
@@ -294,11 +295,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					if (!obj) {
 						return;
 					}
+
 					var data = obj.data;
 					var datetime = obj.dateTime;
 					for (var i = 0; i < models.length; i++) {
 						if (data[i].length > 0) {
 							models[i].setDataModel(data[i], datetime);
+							console.log(models[i].get('mask'), data[i][0]);
 						}
 						//console.log(JSON.stringify(models[i].get('values')));
 					}

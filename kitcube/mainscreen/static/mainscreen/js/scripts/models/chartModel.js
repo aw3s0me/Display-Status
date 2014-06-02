@@ -154,27 +154,27 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					}
 				case "14d":
 					{
-						number = 570;
+						number = 670;
 						break;
 					}
 				case "30d":
 					{
-						number = 600;
+						number = 800;
 						break;
 					}
 				case "90d":
 					{
-						number = 800;
+						number = 1000;
 						break;
 					}
 				case "3months":
 					{
-						number = 800;
+						number = 1000;
 						break;
 					}
 				case "4months":
 					{
-						number = 800;
+						number = 1000;
 						break;
 					}
 				default:

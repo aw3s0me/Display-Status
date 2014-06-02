@@ -50,6 +50,7 @@ define([
 		$(document).ready(function($) {
 
 			window.db = new dataCacher('httpgetcsv', true, false, false, false);
+			//window.host = "http://katrin.kit.edu/adei-detector/";
 			window.host = "http://katrin.kit.edu/adei/";
 			
 			/*try
