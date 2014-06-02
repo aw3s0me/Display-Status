@@ -422,17 +422,18 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		updateModel: function(value, time) {
 			var self = this;
 			var array = self.get('values');
+			console.log(time)
 			//var valToPush = [time, value];
 			var valToPush = {
-				x: time,
-				y: 0
-				//y: value
+				x: time * 1000,
+				//y: 0
+				y: value
 			}
 			array.push(valToPush);
 			self.set({
 				'value': value,
 				'lastTime': time,
-				'values': array
+				//'values': array
 			});
 
 			self.trigger('addPoint', self);

@@ -309,7 +309,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						self.setSensorDataInChart(typeObject["2"], 2);
 					if (typeObject["0"]) 
 						self.setSensorDataInChart(typeObject["0"], 0); 
-					//self.setExtremes();
+					self.setExtremes();
 					//self.redraw();
 					console.log(self.chart);
 				});
@@ -569,6 +569,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				self.model.set({
 					range: value
 				});
+				self.onChangeTimeRange();
 				//self.setExtremes();
 				console.log(value);
 			});
@@ -619,6 +620,76 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		setExtremes: function() {
 			var windowObj = this.getWindow();
 			this.chart.xAxis[0].setExtremes(windowObj.start, windowObj.end);
+		},
+		onChangeTimeRange: function() {
+			var models = this.model.get('models');
+			var self = this;
+			var masks = [];
+			var server = this.board.settings['server'];
+			var dbname = this.board.settings['dbname'];
+			var dbgroup = this.board.settings['dbgroup'];
+			var windowObj = this.getWindow();
+			console.log(windowObj);
+			var start = parseInt(windowObj.start / 1000);
+			var end = parseInt(windowObj.end / 1000);
+			var windowUrl = start + "-" + end;
+			var nubmerOfPoints = this.model.getNumberOfPoints();
+			var series = this.chart.series;
+
+			if (!models || !models.length) {
+				console.log('empty');
+				return;
+			}
+
+			for (var i = 0; i < models.length; i++) {
+				masks.push(models[i].get('mask'));
+			}
+
+			var masksToRequest = masks.join();
+			if (masksToRequest.length === 0) {
+				return;
+			}
+
+			try
+			{
+				window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
+					if (!obj) {
+						return;
+					}
+					var data = obj.data;
+					console.log(data)
+					var datetime = obj.dateTime;
+					for (var i = 0; i < models.length; i++) {
+						var model = models[i];
+						if (data[i].length > 0) {
+							console.log(model.get('values'));
+							model.setDataModel(data[i], datetime);
+							console.log(model.get('values'));
+						}
+						for (var i = 0; i < series.length; i++) {
+							var seriesObject = series[i];
+							var id = seriesObject.userOptions.id;
+							if (id === model.get('id')) {
+								seriesObject.data = {};
+								console.log(model.get('values'))
+								//seriesObject.data = model.get('values');
+								seriesObject.setData(model.get('values'));
+								break;
+							}
+						}
+						//console.log(JSON.stringify(models[i].get('values')));
+					}
+
+
+					self.setExtremes();
+					self.redraw();
+					console.log(self.chart);
+				});
+			}
+			catch(msg) {
+				console.log(msg);
+			}
+
 		},
 		addAllSeries: function() {
 			var allModels = this.elements;

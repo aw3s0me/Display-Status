@@ -581,7 +581,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						for (var sensId in self.sensors) {
 							var element = self.sensors[sensId];
 
-							element.updateModel(result.values[index++], result.time);
+							element.updateModel(result.values[index++], result.time[0]);
 						}
 					})
 					
