@@ -98,6 +98,93 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			return xAxis;
 		},
+		getNumberOfPoints: function() {
+			var number = undefined;
+			switch (this.get('range')) {
+				case "2m":
+					{
+						number = 200;
+						break;
+					}
+				case "15m":
+					{
+						number = 200;
+						break;
+					}
+				case "1h":
+					{
+						number = 300;
+						break;
+					}
+				case "2h":
+					{
+						number = 500;
+						break;
+					}
+				case "3h":
+					{
+						number = 500;
+						break;
+					}
+				case "8h":
+					{
+						number = 500;
+						break;
+					}
+				case "24h":
+				case "1d":
+					{
+						number = 500;
+						break;
+					}
+				case "3d":
+					{
+						number = 560;
+						break;
+					}
+				case "7d":
+					{
+						number = 560;
+						break;
+					}
+				case "10d":
+					{
+						number = 570;
+						break;
+					}
+				case "14d":
+					{
+						number = 570;
+						break;
+					}
+				case "30d":
+					{
+						number = 600;
+						break;
+					}
+				case "90d":
+					{
+						number = 800;
+						break;
+					}
+				case "3months":
+					{
+						number = 800;
+						break;
+					}
+				case "4months":
+					{
+						number = 800;
+						break;
+					}
+				default:
+					{
+						number = 500;
+						break;
+					}
+			}
+			return number;
+		},
 		getRangeToDate: function() {
 			var now = new Date;
 			var min = undefined;
@@ -219,7 +306,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			return cfg;
 		},
-		removeModel: function(modelId){
+		removeModel: function(modelId) {
 			var link = this.get('link');
 			var models = this.get('models');
 
@@ -227,7 +314,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				if (modelId === link[i]) {
 					link.splice(i, 1);
 					break;
-				} 
+				}
 			}
 
 			for (var i = 0; i < models.length; i++) {

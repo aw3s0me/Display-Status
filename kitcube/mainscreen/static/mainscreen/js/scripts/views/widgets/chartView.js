@@ -4,7 +4,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 	var _allSensors = undefined;
 	var _isLegendShown = false;
 
-
 	var ChartView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
@@ -272,6 +271,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var start = parseInt(windowObj.start / 1000);
 			var end = parseInt(windowObj.end / 1000);
 			var windowUrl = start + "-" + end;
+			var nubmerOfPoints = this.model.getNumberOfPoints();
 
 			this.getIdsOfSensorType(typeObject["1"], models, 1);
 			this.getIdsOfSensorType(typeObject["2"], models, 2);
@@ -289,7 +289,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			try
 			{
-				window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, 800, 'mean', function(obj) {
+				window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
 					console.log(obj);
 					if (!obj) {
 						return;

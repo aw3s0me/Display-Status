@@ -198,6 +198,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
 			}, 10000); //the only way to pass param */
+
+			self.updateAllSensors();
+
 		},
 		reinitWithOptions: function(options) {
 

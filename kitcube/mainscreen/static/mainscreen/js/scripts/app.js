@@ -8,7 +8,8 @@ define([
 	'kitgrid',
 	'yaml',
 	'jqgrid',
-	'chosen',
+	//'chosen',
+	'oauthio',
 	//'jquerysort',
 	//'fittext',
 	//'slabtext',
@@ -18,14 +19,14 @@ define([
 	//'vendor/momentjs/min/moment.min',
 	'momentjs',
 	//'fittext',
-	'oauthio',
 	"kit.sizeDetector",
 	"kit.parser",
 	"kit.dataDownloader",
-	"models/userModel",
 	'cookie',
-	'router', // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, chosen, OAuthio,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ moment, sizeDet, parser, dataDownloader, UserModel, Cookie, Router) {
+	"models/userModel",
+	'cacher',
+	'router' // Request router.js
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*chosen,*/ OAuthio,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ moment, sizeDet, parser, dataDownloader, JqCookie, UserModel, Cacher, Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -51,7 +52,7 @@ define([
 			window.db = new dataCacher('httpgetcsv', true, false, false, false);
 			window.host = "http://katrin.kit.edu/adei/";
 			
-			try
+			/*try
 			{
 				db.getData('fpd', 'katrin_rep', '0', '0,1,2,3,4,5', '1399896662-1401106262', 800, 'mean', function(obj)
 				{
@@ -61,7 +62,7 @@ define([
 			}
 			catch(msg) {
 				console.log(msg)
-			}
+			} */
 
 		
 

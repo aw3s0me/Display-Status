@@ -440,12 +440,14 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		setDataModel: function(values, datetime) {
 			var self = this;
 			var array = [];
+			var mom = moment.utc();
+			var x = mom.valueOf();
 			for (var i = 0; i < values.length; i++) {
 				//var valToPush = [datetime[i], values[i]];
 				var valToPush = {
-					x: datetime[i],
-					y: 0
-					//y: values[i]
+					x: datetime[i] * 1000,
+					//y: 0
+					y: values[i]
 				}
 				array.push(valToPush);
 			}

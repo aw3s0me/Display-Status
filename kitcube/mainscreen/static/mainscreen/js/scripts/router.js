@@ -3,14 +3,13 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'kit.sizeDetector',
 	'views/pres/boardView',
 	'views/pres/loginView',
 	'views/pres/registerView'
 	//'views/pres/controlPanelView',
 	//'views/pres/txtEditorView',
 	//'views/pres/settingsView'
-], function($, _, Backbone, sizeDetector, BoardView, LoginView, RegisterView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
+], function($, _, Backbone, BoardView, LoginView, RegisterView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes

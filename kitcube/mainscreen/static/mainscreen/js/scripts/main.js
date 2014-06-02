@@ -41,9 +41,10 @@ require.config({
     //"bigtext": "vendor/bigtext"
     "bigtext": "vendor/bigtext/src/bigtext",
     "momentjs": "vendor/momentjs/min/moment.min",
-    "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
+    //"chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
-    "cookie": "vendor/jquery-cookie/jquery.cookie"
+    "cookie": "vendor/jquery-cookie/jquery.cookie",
+    "cacher": "dev/datacacher.min"
     //"regression": "vendor/highcharts_trendline/regression"
   },
   shim: {
@@ -149,11 +150,11 @@ require.config({
         "jquery"
       ]
     },
-    chosen: {
+    /*chosen: {
       deps: [
         "jquery"
       ]
-    },
+    },*/
     momentjs: {
       deps: [
         "jquery"
@@ -165,6 +166,11 @@ require.config({
       ]
     },
     cookie: {
+      deps: [
+        "jquery"
+      ]
+    },
+    cacher: {
       deps: [
         "jquery"
       ]
