@@ -113,7 +113,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		addNewPoint: function(model) {
 
-			var chart = this.chart;
+			/*var chart = this.chart;
 			var series = this.chart.series;
 			//console.log(chart);
 			var index = undefined; //index of series
@@ -121,11 +121,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			//console.log(model.get('id'));
 			var sensorValue = model.get('value');
 			var foundSeriesObj = null;
-
-			/*if (model.get('values').length > 10) {
-				shift = true;
-			} */
-			//console.log(model.get('values'));
 
 			for (var seriesName in series) {
 				var seriesObject = series[seriesName];
@@ -152,12 +147,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			if (foundSeriesObj) {
 				foundSeriesObj.addPoint(Point, false, shift);
 			}
-			//if (chart.series[index])
-			//chart.series[index].addPoint(Point, false, shift); //last point is for everyone\
 
 			shift = false;
 
-			this.setExtremes();
+			this.setExtremes(); */
 
 		},
 		getIdsOfSensorType: function(elems, models, type) {
@@ -175,6 +168,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		setSensorDataInChart: function(elems, type) {
 			var chart = this.chart;
+
 			var series = this.chart.series;
 			//console.log(chart);
 			var index = undefined; //index of series
@@ -190,7 +184,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				}
 
 				var sensorModel = _allSensors[id];
-				sensorModel.on('addPoint', self.addNewPoint, self);
+				//sensorModel.on('addPoint', self.addNewPoint, self);
 				sensorModel.on('deleteSensor', self.removeSeries, self);
 				sensorModel.on('removing', self.onSensorRemoving, self);
 				self.model.get('link').push(sensorModel.get('id'));
@@ -206,9 +200,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				});
 				var color = undefined;
 				self.chart.addAxis(axisObject);
+				//console.log(JSON.stringify(axisObject));
 				//self.chart.addSeries(seriesObject, false);
-				self.chart.addSeries(seriesObject);
-
+				self.chart.addSeries(seriesObject, false);
+				//console.log(JSON.stringify(seriesObject));
+				sensorModel.on('addPoint', self.addNewPoint, self);
 				for (var seriesName in series) {
 					var seriesObject = series[seriesName];
 					var id = seriesObject.userOptions.id;
@@ -261,6 +257,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		getDataForElements: function(typeObject) {
 			//console.log(model.get('id'));
+
+			if (!typeObject) {
+				return;
+			}
+
 			var self = this;
 			var masks = [];
 			var server = this.board.settings['server'];
@@ -276,30 +277,46 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.getIdsOfSensorType(typeObject["2"], models, 2);
 			this.getIdsOfSensorType(typeObject["0"], models, 0);
 
+
 			for (var i = 0; i < models.length; i++) {
 				masks.push(models[i].get('mask'));
 			}
 
 			var masksToRequest = masks.join();
+			if (masksToRequest.length === 0) {
+				return;
+			}
 
-			window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, 800, 'mean', function(obj) {
-				var data = obj.data;
-				var datetime = obj.dateTime;
-				for (var i = 0; i < data.length - 1; i++) {
-					models[i].setDataModel(data[i], datetime);
-				}
+			try
+			{
+				window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, 800, 'mean', function(obj) {
+					console.log(obj);
+					if (!obj) {
+						return;
+					}
+					var data = obj.data;
+					var datetime = obj.dateTime;
+					for (var i = 0; i < models.length; i++) {
+						if (data[i].length > 0) {
+							models[i].setDataModel(data[i], datetime);
+						}
+						//console.log(JSON.stringify(models[i].get('values')));
+					}
 
-				if (typeObject["1"]) 
-					self.setSensorDataInChart(typeObject["1"], 1);
-				if (typeObject["2"]) 
-					self.setSensorDataInChart(typeObject["2"], 2);
-				if (typeObject["0"]) 
-					self.setSensorDataInChart(typeObject["0"], 0);
-
-				self.setExtremes();
-				self.redraw();
-				console.log(self.chart);
-			});
+					if (typeObject["1"]) 
+						self.setSensorDataInChart(typeObject["1"], 1);
+					if (typeObject["2"]) 
+						self.setSensorDataInChart(typeObject["2"], 2);
+					if (typeObject["0"]) 
+						self.setSensorDataInChart(typeObject["0"], 0); 
+					//self.setExtremes();
+					//self.redraw();
+					console.log(self.chart);
+				});
+			}
+			catch(msg) {
+				console.log(msg);
+			}
 
 
 		},
@@ -338,7 +355,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			var xAxis = model.getXAxisObj();
 			var chart = model.getChartOptions();
-
+			//console.log(JSON.stringify(xAxis));
+			//console.log(JSON.stringify(chart));
 			this.chart = new Highcharts.Chart({
 				//this.chart = new Highcharts.StockChart({
 				chart: chart,
@@ -413,6 +431,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					}
 				}
 			});
+
+			
+
 			(function(b, a) {
 				if (!b) {
 					return
@@ -475,7 +496,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				console.log(color);
 			}
 
+
+
 			this.chart.legendHide();
+
+
 
 			var chartControlPanel = $('<div></div>');
 			chartControlPanel.addClass('chartControlPanel');
@@ -503,6 +528,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			closeBtn.className = "close";
 
 			this.container.find('.highcharts-container').append(closeBtn);
+
+
 			$(closeBtn).click(function(event) {
 				self.removeFromDom();
 			});
@@ -514,6 +541,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			$(resetBtn).click(function(event) {
 				self.resetChart();
 			});
+
+
 
 			//var chooseRange = $('<select style="width: 100px;"></select>');
 			var cntr = $('<div class="cntr"></div>');
@@ -540,11 +569,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				self.model.set({
 					range: value
 				});
-				self.setExtremes();
+				//self.setExtremes();
 				console.log(value);
 			});
 
+
+
 			this.container.append(cntr);
+
+
 			cntr.append(chooseContainer);
 
 			chartControlPanel.append(addBtn);
@@ -554,10 +587,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 
 			this.container.find('.highcharts-container').append(chartControlPanel);
+			
 
-			this.chart.setSize(width, height, true);
+			this.chart.setSize(width, height, false);
+			/*var axisObject = {"id":"sensid41-axis","lineWidth":2,"title":{"text":"Bias (V)"}} ;
+        	this.chart.addAxis(axisObject);
+        	var data = [{"x":1401443324,"y":0},{"x":1401443334,"y":0},{"x":1401443344,"y":0},{"x":1401443354,"y":0},{"x":1401443364,"y":0},{"x":1401443374,"y":0},{"x":1401443384,"y":0},{"x":1401443394,"y":0},{"x":1401443404,"y":0},{"x":1401443414,"y":0},{"x":1401443424,"y":0},{"x":1401443434,"y":0},{"x":1401443444,"y":0},{"x":1401443454,"y":0},{"x":1401443464,"y":0},{"x":1401443474,"y":0},{"x":1401443484,"y":0},{"x":1401443494,"y":0},{"x":1401443504,"y":0},{"x":1401443514,"y":0},{"x":1401443524,"y":0},{"x":1401443534,"y":0},{"x":1401443544,"y":0},{"x":1401443554,"y":0},{"x":1401443564,"y":0},{"x":1401443574,"y":0},{"x":1401443584,"y":0},{"x":1401443594,"y":0},{"x":1401443604,"y":0},{"x":1401443614,"y":0},{"x":1401443624,"y":0},{"x":1401443634,"y":0},{"x":1401443644,"y":0},{"x":1401443654,"y":0},{"x":1401443664,"y":0},{"x":1401443674,"y":0},{"x":1401443684,"y":0},{"x":1401443694,"y":0},{"x":1401443704,"y":0},{"x":1401443714,"y":0},{"x":1401443724,"y":0},{"x":1401443734,"y":0},{"x":1401443744,"y":0},{"x":1401443754,"y":0},{"x":1401443764,"y":0},{"x":1401443774,"y":0},{"x":1401443784,"y":0},{"x":1401443794,"y":0},{"x":1401443804,"y":0},{"x":1401443814,"y":0},{"x":1401443824,"y":0},{"x":1401443834,"y":0},{"x":1401443844,"y":0},{"x":1401443854,"y":0},{"x":1401443864,"y":0}];
+        	var seriesObject = {"data": data,"id":"sensid42","yAxis":"sensid41-axis","name":"Ramping"};
+        	this.chart.addSeries(seriesObject);
+        	this.chart.redraw(); */
+			
 
-			this.setExtremes();
+			//this.setExtremes();
 			//chooseRange.chosen();
 
 			/*chooseRange.chosen({

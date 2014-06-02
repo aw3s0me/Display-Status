@@ -422,7 +422,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		updateModel: function(value, time) {
 			var self = this;
 			var array = self.get('values');
-			var valToPush = [time, value];
+			//var valToPush = [time, value];
+			var valToPush = {
+				x: time,
+				y: 0
+				//y: value
+			}
 			array.push(valToPush);
 			self.set({
 				'value': value,
@@ -436,7 +441,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			var self = this;
 			var array = [];
 			for (var i = 0; i < values.length; i++) {
-				var valToPush = [datetime[i], values[i]];
+				//var valToPush = [datetime[i], values[i]];
+				var valToPush = {
+					x: datetime[i],
+					y: 0
+					//y: values[i]
+				}
 				array.push(valToPush);
 			}
 			self.set({

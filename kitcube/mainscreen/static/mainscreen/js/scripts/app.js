@@ -50,7 +50,7 @@ define([
 
 			window.db = new dataCacher('httpgetcsv', true, false, false, false);
 			window.host = "http://katrin.kit.edu/adei/";
-			/* test
+			
 			try
 			{
 				db.getData('fpd', 'katrin_rep', '0', '0,1,2,3,4,5', '1399896662-1401106262', 800, 'mean', function(obj)
@@ -63,7 +63,7 @@ define([
 				console.log(msg)
 			}
 
-			*/
+		
 
 			var csrfToken = $('meta[name="csrf_token"]').attr('content');
 			console.log(csrfToken);
