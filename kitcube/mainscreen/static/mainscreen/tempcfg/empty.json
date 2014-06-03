@@ -526,7 +526,8 @@
         "size": [16, 9],
         "coords": [16, 0],
         "startrange": "15m",
-        "axislabels": false
+        "axislabels": false,
+        "resolution": 0.3
     },
     "chart2": {
     	"width": 1,
@@ -535,6 +536,7 @@
         "size": [16, 9],
         "coords": [16, 9],
         "startrange": "15m",
-        "axislabels": true
+        "axislabels": true,
+        "resolution": 0.3
     }
 } 

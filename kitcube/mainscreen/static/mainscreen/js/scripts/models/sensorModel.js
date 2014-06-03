@@ -54,6 +54,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				link: undefined,
 				factor: 1,
 				linecolor: undefined,
+				label: undefined,
 				cfgObj: null
 			}
 		},
@@ -445,8 +446,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			var x = mom.valueOf();
 			for (var i = 0; i < values.length; i++) {
 				//var valToPush = [datetime[i], values[i]];
+				var timeToInsert = datetime[i] * 1000;
 				var valToPush = {
-					x: datetime[i] * 1000,
+					x: timeToInsert,
 					//y: 0
 					y: values[i]
 				}

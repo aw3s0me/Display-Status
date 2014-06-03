@@ -31,7 +31,8 @@ require.config({
     "yaml": "vendor/js-yaml/js-yaml.min",
     "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min",
     //chart part
-    "highstock": "vendor/highcharts.com/js/highcharts.src",
+    "highcharts": "vendor/highcharts.com/js/highcharts.src",
+    "highcharts-legend": "vendor/highcharts-legend",
     //"highstock": "vendor/highcharts.com/js/highstock.src",
     //colorpicker
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
@@ -75,14 +76,13 @@ require.config({
       ]
     },
     bootstrap: {
-      deps: ["jquery"],
-      exports: "$.fn.popover"
+      deps: ["jquery"]
     },
     "kit.sizeDetector": {
       deps: [
-      "jquery",
-      "dev/helpers",
-      "kit.dataDownloader"
+        "jquery",
+        "dev/helpers",
+        "kit.dataDownloader"
       ]
     },
     "kit.parser": {
@@ -129,10 +129,15 @@ require.config({
         //"vendor/Highcharts-3.0.10/js/highcharts"
       ]
     }, */
-    highstock: {
+    highcharts: {
       deps: [
         "jquery"
         //"vendor/Highcharts-3.0.10/js/highcharts"
+      ]
+    },
+    "highcharts-legend": {
+      deps: [
+        "highcharts"
       ]
     },
     /*fittext: {

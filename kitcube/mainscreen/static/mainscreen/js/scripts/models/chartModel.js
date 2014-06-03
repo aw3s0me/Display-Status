@@ -20,7 +20,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				border: 1,
 				radius: 0,
 				cfgObj: null,
-				axislabels: true
+				axislabels: true,
+				resolution: 0.4
 			}
 		},
 		initialize: function() {
@@ -159,17 +160,17 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					}
 				case "30d":
 					{
-						number = 800;
+						number = 700;
 						break;
 					}
 				case "90d":
 					{
-						number = 1000;
+						number = 800;
 						break;
 					}
 				case "3months":
 					{
-						number = 1000;
+						number = 900;
 						break;
 					}
 				case "4months":

@@ -25,7 +25,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
             //for (var j = 0; j < rowdata.length - 1; j++)
             for (var j = 0; j < masklength; j++)
             {
-            		data.push(parseFloat(rowdata[j + 1]));             
+            	data.push(parseFloat(rowdata[j + 1]));             
             }
         }
 
@@ -84,7 +84,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			$('.canvas').attr("id", "tab1");
 
-			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizes.height) / 2;
+			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizes.height) / 3.4;
 			$('.canvas').css('margin-top', marginTop + 'px');
 			$('.canvas').css('height', this.viewSizeDetector.boardSizePx.height * this.viewSizeDetector.scaledUnitSize + 'px');
 			$('.canvas').css('width', this.viewSizeDetector.boardSizePx.width * this.viewSizeDetector.scaledUnitSize + 'px');
@@ -551,6 +551,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			serializeRes = JSON.stringify(newJson, null, '\t ');
 			return serializeRes;
 		},
+		getUidList: function() {
+
+		},
 		updateAllSensors: function() {
 			var dbname = this.settings['dbname'];
 			var dbgroup = this.settings['dbgroup'];
@@ -576,6 +579,16 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					window.db.httpGetCsv(url, function(data) {
 						//var result = window.db.dataHandl.onMessageRecievedCsv(data);
 						result = parseCSV(data, masks.length);
+						var time = moment(result.time[0] * 1000);
+						window.lastUpdateTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
+						$('#lblFromNow').text(window.lastUpdateTime);
+						//var now = moment.utc();
+
+						/*if (now.subtract('hours', 1).valueOf() < time.valueOf()) {
+							return;
+						}*/
+
+
 						//console.log(result)
 						var index = 0;
 						for (var sensId in self.sensors) {
@@ -851,7 +864,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				range: attr["startrange"],
 				scale: this.grid.getScale(),
 				cfgObj: attr,
-				axislabels: attr['axislabels']
+				axislabels: attr['axislabels'],
+				resolution: attr['resolution']
 			});
 
 			if (newChart.get('link')) {

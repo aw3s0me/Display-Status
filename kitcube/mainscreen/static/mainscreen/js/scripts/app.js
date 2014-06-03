@@ -14,7 +14,7 @@ define([
 	//'fittext',
 	//'slabtext',
 	'bigtext',
-	'highstock',
+	'highcharts-legend',
 	//'regression',
 	//'vendor/momentjs/min/moment.min',
 	'momentjs',
@@ -26,7 +26,7 @@ define([
 	"models/userModel",
 	'cacher',
 	'router' // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*chosen,*/ OAuthio,/*Sortable, fitText, slabText,*/ bigtext, Highstock, /* regression,*/ moment, sizeDet, parser, dataDownloader, JqCookie, UserModel, Cacher, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*chosen,*/ OAuthio,/*Sortable, fitText, slabText,*/ bigtext, HighchartsLeg, /* regression,*/ momentJS, sizeDet, parser, dataDownloader, JqCookie, UserModel, Cacher, Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -52,12 +52,16 @@ define([
 			window.db = new dataCacher('httpgetcsv', true, false, false, false);
 			//window.host = "http://katrin.kit.edu/adei-detector/";
 			window.host = "http://katrin.kit.edu/adei/";
-			
+			window.lastUpdateTime = moment.utc();
 			/*try
 			{
-				db.getData('fpd', 'katrin_rep', '0', '0,1,2,3,4,5', '1399896662-1401106262', 800, 'mean', function(obj)
+				console.log(new Date(1400700000 * 1000), new Date(1401409791 * 1000));
+
+				db.getData('fpd', 'katrin_rep', '0', '2', '1400700000-1401409791', 800, 'mean', function(obj)
 				{
-					console.log(obj);
+					var data = obj.data;
+					var datetime = obj.dateTime;
+					console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
 				})
 	
 			}
