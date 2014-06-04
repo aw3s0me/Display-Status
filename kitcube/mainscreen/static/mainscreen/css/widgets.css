@@ -107,6 +107,9 @@
   color: black;
 }
 
+.chartControlPanel {
+    position: absolute;
+}
 
 .legendChartBtn {
   //height: 10%;
@@ -154,4 +157,5 @@
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
 } 

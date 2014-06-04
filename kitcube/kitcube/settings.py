@@ -50,7 +50,10 @@ REST_FRAMEWORK = {
     ),
 }
 """
-
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
 
 #Scopes that app will know
 OAUTH_PROVIDER = {
@@ -70,6 +73,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'django_extensions',
     'mainscreen',
     'choice',
     'editor',

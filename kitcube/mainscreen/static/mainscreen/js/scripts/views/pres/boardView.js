@@ -1,40 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel) {
-	if (!String.prototype.format) {
-		String.prototype.format = function() {
-			var args = arguments;
-			return this.replace(/{(\d+)}/g, function(match, number) {
-				return typeof args[number] != 'undefined' ? args[number] : match;
-			});
-		};
-	}
-
-	var parseCSV = function(msg, masklength) {
-		var separator = ',';
-		var lineSeparator = '\r\n';
-        var rows = msg.split(lineSeparator);
-        var channelCount = rows[0].split(separator);
-        var dateTime = [];
-        var data = [];
-
-        for (var i = 1; i < rows.length - 1; i++)
-        {
-            var rowdata = rows[i].split(separator);
-            var time = window.db.dateHelper.splitTimeFromAny(rowdata[0]); //jest
-            time = (new Date(time)).getTime()/1000;
-            dateTime.push(time);
-            //for (var j = 0; j < rowdata.length - 1; j++)
-            for (var j = 0; j < masklength; j++)
-            {
-            	data.push(parseFloat(rowdata[j + 1]));             
-            }
-        }
-
-        return {
-        	values: data,
-        	time: dateTime
-        }
-	}
-
+	
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
 		el: undefined,
@@ -562,7 +527,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var self = this;
 
 			if (dbname && dbgroup && server) {
-				var masksToRequest = "";
+				var masksToRequest = "";	
 				var masks = [];
 
 
@@ -578,7 +543,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=-1';
 					window.db.httpGetCsv(url, function(data) {
 						//var result = window.db.dataHandl.onMessageRecievedCsv(data);
-						result = parseCSV(data, masks.length);
+						result = parseCSVForUpdating(data, masks.length);
 						var time = moment(result.time[0] * 1000);
 						window.lastUpdateTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
 						$('#lblFromNow').text(window.lastUpdateTime);

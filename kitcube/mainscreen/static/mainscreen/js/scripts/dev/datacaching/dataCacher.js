@@ -40,7 +40,7 @@ var dataCacher = function(communicationType, isCache, isCacheDown, isCacheUp, is
     {
         var self = this;
         var db_items = db_mask.split(',');
-        db_items.sort();
+        //db_items.sort();
         self.dataHandl.deleteWorkers();
         self.clientsCallback = onEndCallBack;
         self.aggregation = aggregation;

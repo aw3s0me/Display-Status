@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/sensorGroupCollection'], function($, _, Backbone, ChartModel, SensorGroupCollection) {
+define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/sensorGroupCollection', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, SensorGroupCollection, ChartTemplate) {
 
 	var _seriesArr = [];
 	var _allSensors = undefined;
@@ -67,7 +67,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		},
 		addNewPoint: function(model) {
 
-			var chart = this.chart;
+			/*var chart = this.chart;
 			var series = this.chart.series;
 			//console.log(chart);
 			var index = undefined; //index of series
@@ -102,7 +102,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				foundSeriesObj.addPoint(Point, false, shift);
 			}
 
-			shift = false;
+			shift = false; */
 
 			//this.setExtremes(); 
 
@@ -147,15 +147,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					throw "Cant add sensor";
 				}
 				var seriesObject = sensorModel.getChartProperties();
-				console.log(seriesObject);
-				console.log(sensorModel.get('values'));
 				var axisObject = sensorModel.getChartAxisInfo({
 					axislabels: self.model.get('axislabels')
 				});
 				var color = undefined;
 				self.chart.addAxis(axisObject);
 				//console.log(JSON.stringify(axisObject));
-				//self.chart.addSeries(seriesObject, false);
 				self.chart.addSeries(seriesObject, false);
 				//console.log(JSON.stringify(seriesObject));
 				sensorModel.on('addPoint', self.addNewPoint, self);
@@ -165,8 +162,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					if (id === sensorModel.get('id')) {
 						index = seriesObject._i;
 						color = seriesObject.color;
-						//circle.css('background-color', color);
-
 						switch (type) {
 							case 0:
 								$(jqElement).removeClass('activeSensor');
@@ -213,14 +208,22 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			//load html template
 			var self = this;
 			var model = this.model;
-			var dataToChart = this.elements.paramToChart();
-			this.container = $("<div id='" + model.get('id') + "'></div>");
 			var dx = model.get('size')[0];
 			var dy = model.get('size')[1];
 			var px = model.get('coords')[0];
 			var py = model.get('coords')[1];
-
 			var scale = this.grid.getScale();
+			var dataToChart = this.elements.paramToChart();
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+
+			this.container = $('<div id= ' + this.model.get('id') + '  ></div>')
+
+			var controlPanelTemplate = $(_.template(ChartTemplate, { }));
+			//this.container = $(_.template(ChartTemplate, { id: model.get('id') }));
+
 			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
 				border: 0,
 				transparent: true
@@ -253,16 +256,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					text: model.get('caption'),
 				},
 				xAxis: xAxis,
-				/*yAxis: {
-					title: {
-						text: 'Values'
-					},
-					plotLines: [{
-						value: 0,
-						width: 1,
-						color: '#808080'
-					}]
-				},*/
 				series: dataToChart,
 				tooltip: {
 					shared: true,
@@ -298,33 +291,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						marker: {
 							enabled: false
 						}
-						/*,
-						cursor: 'pointer',
-	                    point: {
-	                        events: {
-	                            click: function() {
-	                                hs.htmlExpand(null, {
-	                                    pageOrigin: {
-	                                        x: this.pageX,
-	                                        y: this.pageY
-	                                    },
-	                                    headingText: this.series.name,
-	                                    maincontentText: Highcharts.dateFormat('%A, %b %e, %Y', this.x) +':<br/> '+
-	                                        this.y,
-	                                    width: 200
-	                                });
-	                            }
-	                        }
-	                    }, */
-						//showInLegend : false
 					}
 				}
 			});
-
-			var unitHeight = this.grid.getUnitSizes().height;
-			var unitWidth = this.grid.getUnitSizes().width;
-			var height = dy * unitWidth * scale;
-			var width = dx * unitHeight * scale;
 
 			for (var i = 0; i < _seriesArr.length; i++) {
 				var sensorModel = this.elements.models[i];
@@ -336,117 +305,41 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				console.log(color);
 			}
 
-
-
 			this.chart.legendHide();
 
+			var controlPanel = controlPanelTemplate.find('.chartControlPanel');
+			controlPanel.css('top', 14 * scale + 'px')
+			            .css('right', 14 * scale + 'px');
 
-
-			var chartControlPanel = $('<div></div>');
-			chartControlPanel.addClass('chartControlPanel');
-			chartControlPanel.css('top', 14 * scale + 'px');
-			//chartControlPanel.css('width', '100%');
-			chartControlPanel.css('right', 14 * scale + 'px');
-			chartControlPanel.css('position', 'absolute');
-
-			var addBtn = $('<button>Add</button>');
-			addBtn.css('font-size', 10 * scale + 'px');
-			addBtn.button();
-			addBtn.addClass('addChartBtn');
-
-			var legendBtn = $('<button>Legend</button>');
-			legendBtn.css('font-size', 10 * scale + 'px');
-			legendBtn.button();
-			legendBtn.addClass('legendChartBtn');
-
-			var closeBtn = document.createElement('div');
-			closeBtn.style.position = 'absolute';
-			closeBtn.style.fontSize = 12 * scale + 'px';
-			closeBtn.style.right = 5 * scale + 'px';
-			closeBtn.style.top = 4 * scale + 'px';
-			closeBtn.innerHTML = "<b>x</b>";
-			closeBtn.className = "close";
-
-			this.container.find('.highcharts-container').append(closeBtn);
-
-
-			$(closeBtn).click(function(event) {
-				self.removeFromDom();
-			});
-
-			var resetBtn = $('<button>Reset</button>');
-			resetBtn.addClass('resetChartBtn');
-			resetBtn.css('fontSize', 10 * scale + 'px');
-			resetBtn.button();
-			$(resetBtn).click(function(event) {
-				self.resetChart();
-			});
-
-
-
-			//var chooseRange = $('<select style="width: 100px;"></select>');
-			var cntr = $('<div class="cntr"></div>');
-			var chooseContainer = $('<div class="rangeContainer"></div>');
-			chooseContainer.css('top', 10 * scale + 'px');
-			chooseContainer.css('left', 10 * scale + 'px');
-			//chooseContainer.css('position', 'absolute');
-			//chooseContainer.css('z-index', '2');
-			var chooseRange = $('<select class="rangeDropdown"></select>');
-			chooseContainer.append(chooseRange);
-			chooseRange.append('<option value="90d">90 day</option>');
-			chooseRange.append('<option value="30d">30 day</option>');
-			chooseRange.append('<option value="14d">14 day</option>');
-			chooseRange.append('<option value="7d">7 day</option>');
-			chooseRange.append('<option value="3d">3 day</option>');
-			chooseRange.append('<option value="24h">24 hour</option>');
-			chooseRange.append('<option value="8h">8 hour</option>');
-			chooseRange.append('<option value="3h">3 hour</option>');
-			chooseRange.append('<option value="1h">1 hour</option>');
-			chooseRange.append('<option selected="selected" value="15m">15 min</option>');
-
-			chooseRange.change(function() {
-				var value = $(this).val();
-				self.model.set({
-					range: value
-				});
-				self.onChangeTimeRange();
-				//self.setExtremes();
-				console.log(value);
-			});
-
-
-
-			this.container.append(cntr);
-
-
-			cntr.append(chooseContainer);
-
-			chartControlPanel.append(addBtn);
-			chartControlPanel.append(resetBtn);
-			chartControlPanel.append(legendBtn);
-
-
-
-			this.container.find('.highcharts-container').append(chartControlPanel);
+			controlPanel.find('.addChartBtn').button().css('font-size', 10 * scale + 'px');
+			controlPanel.find('.legendChartBtn').button()
+			                            .css('font-size', 10 * scale + 'px')
+			                            .click(function(event) {
+				                             self.removeFromDom();
+				                        });;
+			controlPanel.find('.close').css('font-size', 12 * scale + 'px')
+			                           .css('right', 5 * scale + 'px')
+			                           .css('top', 4 * scale + 'px');
+			controlPanel.find('.resetChartBtn').button()
+			                           .css('fontSize', 10 * scale + 'px')
+			                           .click(function(event) {
+				                            self.resetChart();
+			                            });;
+			controlPanel.find('.rangeContainer').css('top', 10 * scale + 'px')
+			                            .css('left', 10 * scale + 'px')
+			                            .change(function() {
+											var value = $(this).val();
+											self.model.set({
+												range: value
+											});
+											self.onChangeTimeRange();
+											//self.setExtremes();
+											console.log(value);
+										}); 
 			
+			this.container.append(controlPanelTemplate);
 
-			this.chart.setSize(width, height, false);
-			/*var axisObject = {"id":"sensid41-axis","lineWidth":2,"title":{"text":"Bias (V)"}} ;
-        	this.chart.addAxis(axisObject);
-        	var data = [{"x":1401443324,"y":0},{"x":1401443334,"y":0},{"x":1401443344,"y":0},{"x":1401443354,"y":0},{"x":1401443364,"y":0},{"x":1401443374,"y":0},{"x":1401443384,"y":0},{"x":1401443394,"y":0},{"x":1401443404,"y":0},{"x":1401443414,"y":0},{"x":1401443424,"y":0},{"x":1401443434,"y":0},{"x":1401443444,"y":0},{"x":1401443454,"y":0},{"x":1401443464,"y":0},{"x":1401443474,"y":0},{"x":1401443484,"y":0},{"x":1401443494,"y":0},{"x":1401443504,"y":0},{"x":1401443514,"y":0},{"x":1401443524,"y":0},{"x":1401443534,"y":0},{"x":1401443544,"y":0},{"x":1401443554,"y":0},{"x":1401443564,"y":0},{"x":1401443574,"y":0},{"x":1401443584,"y":0},{"x":1401443594,"y":0},{"x":1401443604,"y":0},{"x":1401443614,"y":0},{"x":1401443624,"y":0},{"x":1401443634,"y":0},{"x":1401443644,"y":0},{"x":1401443654,"y":0},{"x":1401443664,"y":0},{"x":1401443674,"y":0},{"x":1401443684,"y":0},{"x":1401443694,"y":0},{"x":1401443704,"y":0},{"x":1401443714,"y":0},{"x":1401443724,"y":0},{"x":1401443734,"y":0},{"x":1401443744,"y":0},{"x":1401443754,"y":0},{"x":1401443764,"y":0},{"x":1401443774,"y":0},{"x":1401443784,"y":0},{"x":1401443794,"y":0},{"x":1401443804,"y":0},{"x":1401443814,"y":0},{"x":1401443824,"y":0},{"x":1401443834,"y":0},{"x":1401443844,"y":0},{"x":1401443854,"y":0},{"x":1401443864,"y":0}];
-        	var seriesObject = {"data": data,"id":"sensid42","yAxis":"sensid41-axis","name":"Ramping"};
-        	this.chart.addSeries(seriesObject);
-        	this.chart.redraw(); */
-			
-
-			//this.setExtremes();
-			//chooseRange.chosen();
-
-			/*chooseRange.chosen({
-				disable_search_threshold: 1,
-				width: '80%'
-			});*/
-
+			this.chart.setSize(width, height, false); 
 		},
 		getWindow: function() {
 			var now = new Date;
@@ -481,6 +374,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var windowUrl = start + "-" + end;
 			console.log(new Date(windowObj.start), new Date(windowObj.end));
 			var nubmerOfPoints = this.model.getNumberOfPoints();
+			var resample = getResample(nubmerOfPoints, start, end);
+			console.log('resample: ' + resample)
 
 			this.getIdsOfSensorType(typeObject["1"], models, 1);
 			this.getIdsOfSensorType(typeObject["2"], models, 2);
@@ -507,10 +402,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			*/
 			try
 			{
-				window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
+				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, '1400700000-1401409791', nubmerOfPoints, 'mean', function(obj) {
 				//window.db.getData('fpd', 'katrin_rep', '0', '3', '1400700000-1401409791', 800, 'mean', function(obj) {
+				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
+				window.db.httpGetCsv(url, function(data) {
+					obj = parseCSV(data, masks.length);
 					console.log(obj);
 					if (!obj) {
 						return;
@@ -556,6 +454,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var windowUrl = start + "-" + end;
 			var nubmerOfPoints = this.model.getNumberOfPoints();
 			var series = this.chart.series;
+			var resample = getResample(nubmerOfPoints, start, end);
 
 			if (!models || !models.length) {
 				console.log('empty');
@@ -574,14 +473,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			try
 			{
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
-				window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
+				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
 				//db.getData('fpd', 'katrin_rep', '0', masksToRequest, '1400700000-1401409791', 800, 'mean', function(obj) {
+				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
+				window.db.httpGetCsv(url, function(data) {
+					obj = parseCSV(data, masks.length);
 					if (!obj) {
 						return;
 					}
 					var data = obj.data;
 					//console.log(data)
 					var datetime = obj.dateTime;
+					console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
 					for (var i = 0; i < models.length; i++) {
 						var model = models[i];
 						if (data[i].length > 0) {
@@ -593,19 +496,19 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 							var seriesObject = series[i];
 							var id = seriesObject.userOptions.id;
 							if (id === model.get('id')) {
-								seriesObject.data = {};
+								seriesObject.data = [];
 								//console.log(model.get('values'))
 								//seriesObject.data = model.get('values');
 								seriesObject.setData(model.get('values'));
 								break;
 							}
 						}
-						//console.log(JSON.stringify(models[i].get('values')));
+						console.log(JSON.stringify(models[i].get('values')));
 					}
 
 
-					self.setExtremes();
-					//self.redraw();
+					//self.setExtremes();
+					self.redraw();
 					console.log(self.chart);
 				});
 			}

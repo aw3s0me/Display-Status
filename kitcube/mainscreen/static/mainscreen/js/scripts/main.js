@@ -45,7 +45,8 @@ require.config({
     //"chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
     "cookie": "vendor/jquery-cookie/jquery.cookie",
-    "cacher": "dev/datacacher.min"
+    "cacher": "dev/datacaching/webSockets"
+    //"cacher": "dev/datacacher.min"
     //"regression": "vendor/highcharts_trendline/regression"
   },
   shim: {
@@ -99,6 +100,29 @@ require.config({
         "jquery"
       ]
     },
+    "cacher": {
+      deps: [
+        "dev/dataStream",
+        "dev/helpers/dateTimeFormat",
+        "dev/helpers/dataHandler",
+        //"dev/datacaching/backgrDataCacher",
+        "dev/datacaching/dataCacher"
+      ]
+    },
+    /*<script src={% static "mainscreen/js/scripts/dev/dataStream.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/helpers/dateTimeFormat.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/helpers/dataHandler.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/datacaching/backgrDataCacher.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/datacaching/dataCacher.js" %}>
+  </script> 
+  <script src={% static "mainscreen/js/scripts/dev/datacaching/webSockets.js" %}>
+  </script>*/
+
+
     /*"flatui-app": {
       deps: [
         "jquery",
@@ -171,11 +195,6 @@ require.config({
       ]
     },
     cookie: {
-      deps: [
-        "jquery"
-      ]
-    },
-    cacher: {
       deps: [
         "jquery"
       ]

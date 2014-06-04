@@ -453,3 +453,7 @@ body {
   font-size: 12px;
   display: inline-block;
 }
+
+.close {
+  position: absolute;
+}
