@@ -16,6 +16,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		sensors: {
 
 		},
+		sensorViewLookup: {
+
+		},
 		views: {
 			singlesensors: {},
 			charts: {},
@@ -832,7 +835,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				allSensors: this.sensors,
 				board: this
 			});
-			
+
 			newChart.on('removing', function() {
 				if (this.elements) {
 					delete this.elements.charts[attr._id];
@@ -909,6 +912,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				}
 
 				this.sensors[sensorObj["id"]] = newSensor;
+
 				newSensor.on('removing', function() {
 					if (this.sensors) 
 						delete this.sensors[newSensor.get('id')];
@@ -932,6 +936,16 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						group: false,
 						linkModel: linkModel
 					});
+
+
+					this.sensorViewLookup[linkModel.get('id')] = {
+						type: 2,
+						viewId: sensor.get('id')
+					}
+					this.sensorViewLookup[sensor.get('id')] = {
+						type: 1,
+						viewId: sensor.get('id')
+					};
 				}
 				else {
 					newSensorView = new SingleSensorView({
@@ -940,6 +954,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						group: false,
 						linkModel: linkModel
 					});
+
+					this.sensorViewLookup[sensor.get('id')] = {
+						type: 0,
+						viewId: sensor.get('id')
+					};
 				}
 
 				if (!sensor.get('norender')) {

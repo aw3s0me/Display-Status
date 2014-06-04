@@ -326,6 +326,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		initChartWhenStart: function() {
 			var chartModel = this.model;
 			var linkArr = chartModel.get('link');
+			var htmlElements = []; //to init html elements and change css
+			var typeLookup = this.board.sensorViewLookup;
 
 			if (linkArr.length <= 0) {
 				return;
@@ -333,26 +335,57 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			for (var i = 0; i < linkArr.length; i++) {
 				var model = _allSensors[linkArr[i]];
+				var div = undefined;
 				model.on('addPoint', this.addNewPoint, this);
 				chartModel.get('models').push(model);
+
+				if (typeLookup[linkArr[i]]) {
+					switch (typeLookup[linkArr[i]].type) {
+						case 0: //not double
+							div = $('#' + typeLookup[linkArr[i]].viewId);
+							if (div) {
+								div.addClass('activeSensor');
+							}
+							break;
+						case 1: //first value of double
+							div = $('#' + typeLookup[linkArr[i]].viewId);
+							if (div) {
+								div.addClass('activeSensor1');
+							}
+							break;
+						case 2: //second value of double
+							div = $('#' + typeLookup[linkArr[i]].viewId);
+							if (div) {
+								div.addClass('activeSensor2');
+							}
+							break;
+						default: //error
+							return;
+					}
+				}
+				else {
+					return;
+				}
+
 			}
 
-			return;
+
+
+			//return;
 
 			var elems1Val = $('.canvas').find('.activeSensor1');
 			var elems2Val = $('.canvas').find('.activeSensor2');
 			var elemsVal = $('.canvas').find('.activeSensor');
 			elems = {};
 
-				if (elemsVal)
-					elems["0"] = elemsVal;
-				if (elems2Val)
-					elems["2"] = elems2Val;
-				if (elems1Val)
-					elems["1"] = elems1Val;
+			if (elemsVal)
+				elems["0"] = elemsVal;
+			if (elems2Val)
+				elems["2"] = elems2Val;
+			if (elems1Val)
+				elems["1"] = elems1Val;
 
-			self.getDataForElements(elems);
-			this.getDataForElements()
+			this.getDataForElements(elems);
 		},
 		getDataForElements: function(typeObject) {
 			//console.log(model.get('id'));

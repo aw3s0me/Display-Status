@@ -2,7 +2,8 @@
     "main": {
         "dbgroup": "0",
         "dbname": "katrin_rep",
-        "server": "fpd"
+        "server": "fpd",
+        "fluid": true
     },
     "sensorgroup1": {
         "type": "sensorgroup",
