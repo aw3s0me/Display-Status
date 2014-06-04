@@ -1,6 +1,8 @@
-<div>
-	<div class="sensorName"></div>
-	<div class="sensorVal"></div>
-	<div class="sensorUnit"></div>
-	<div class="close"></div>
+<div id="<%= sensor_id %>">
+      <div class="sensorName"><%= name %></div>
+      <div id="val_<%= sensor_id %>" class="sensorVal bigtext">
+            <div id="b<%= sensor_id %>"><%= val %></div> 
+      </div>
+      <div class="sensorUnit"><%= unit %></div>
+      <div class="close"><b>x</b></div>
 </div>

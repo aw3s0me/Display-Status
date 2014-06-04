@@ -93,7 +93,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			}));
 
 			this.container = $(dblSensorTemplate).css('background-color', newSensor.get('bgcolor'));
-			console.log(this.container.html());
 
 			this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
 			.css('left', 5 * scale + 'px')
