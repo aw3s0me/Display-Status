@@ -547,19 +547,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						var time = moment(result.time[0] * 1000);
 						window.lastUpdateTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
 						$('#lblFromNow').text(window.lastUpdateTime);
-						//var now = moment.utc();
-
-						/*if (now.subtract('hours', 1).valueOf() < time.valueOf()) {
-							return;
-						}*/
-
-
 						//console.log(result)
 						var index = 0;
 						for (var sensId in self.sensors) {
 							var element = self.sensors[sensId];
 
-							element.updateModel(result.values[index++], result.time[0]);
+							element.updateModel(result.values[index++], time.valueOf());
 						}
 					})
 					
@@ -833,25 +826,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				resolution: attr['resolution']
 			});
 
-			if (newChart.get('link')) {
-				var linkArr = newChart.get('link');
-				var sensArr = [];
-				for (var j = 0; j < linkArr.length; j++) {
-					var linkId = linkArr[j];
-					var sensorModel = this.sensors[linkId];
-					if (sensorModel)
-						sensArr.push(sensorModel);
-				}
-			}
-
-			var sensCollection = new SensorCollection(sensArr);
 			var newChartView = new ChartView({
 				model: newChart,
 				grid: this.grid,
-				elements: sensCollection,
 				allSensors: this.sensors,
 				board: this
 			});
+			
 			newChart.on('removing', function() {
 				if (this.elements) {
 					delete this.elements.charts[attr._id];

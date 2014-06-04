@@ -75,6 +75,16 @@
     width: 100%;
     height: 34%;
     text-align: right;
+    position: absolute;
+}
+
+.sensorName {
+    font-weight: bold;
+    position: absolute;
+}
+
+.sensorUnit {
+    position: absolute;
 }
 
 .chartCircle {
