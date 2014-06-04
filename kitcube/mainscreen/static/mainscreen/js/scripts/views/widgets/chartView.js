@@ -30,18 +30,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.render();
 
 			this.container.find('.addChartBtn').click(function(event) {
-				var elems1Val = $('.canvas').find('.activeSensor1');
-				var elems2Val = $('.canvas').find('.activeSensor2');
-				var elemsVal = $('.canvas').find('.activeSensor');
-				elems = {};
-
-				if (elemsVal)
-					elems["0"] = elemsVal;
-				if (elems2Val)
-					elems["2"] = elems2Val;
-				if (elems1Val)
-					elems["1"] = elems1Val;
-
+				var elems = self.formSensorElements();
 				self.getDataForElements(elems);
 			});
 
@@ -55,6 +44,39 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				}
 
 			});
+		},
+		formSensorElements: function() {
+			var elems1Val = $('.canvas').find('.activeSensor1');
+			var elems2Val = $('.canvas').find('.activeSensor2');
+			var elemsVal = $('.canvas').find('.activeSensor');
+			elems = {};
+
+			if (elemsVal)
+				elems["0"] = elemsVal;
+			if (elems2Val)
+				elems["2"] = elems2Val;
+			if (elems1Val)
+				elems["1"] = elems1Val;
+
+			for (var i = 0; i < elems1Val.length; i++) {
+				var jqElement = elems1Val[i];
+				$(jqElement).removeClass('activeSensor1');
+				$(jqElement).addClass('chartAdded1');
+			}
+
+			for (var i = 0; i < elems2Val.length; i++) {
+				var jqElement = elems2Val[i];
+				$(jqElement).removeClass('activeSensor2');
+				$(jqElement).addClass('chartAdded2');
+			}
+
+			for (var i = 0; i < elemsVal.length; i++) {
+				var jqElement = elemsVal[i];
+				$(jqElement).removeClass('activeSensor');
+				$(jqElement).addClass('chartAdded');
+			}
+
+			return elems;
 		},
 		addNewPoint: function(model) {
 
@@ -151,31 +173,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					if (id === sensorModel.get('id')) {
 						index = seriesObject._i;
 						color = seriesObject.color;
-						switch (type) {
-							case 0:
-								$(jqElement).removeClass('activeSensor');
-								$(jqElement).addClass('chartAdded');
-								break;
-							case 1:
-								$(jqElement).removeClass('activeSensor1');
-								$(jqElement).addClass('chartAdded1');
-								break;
-							case 2:
-								$(jqElement).removeClass('activeSensor2');
-								$(jqElement).addClass('chartAdded2');
-								break;
-							case 12:
-								$(jqElement).removeClass('activeSensor1');
-								$(jqElement).addClass('chartAdded1');
-								$(jqElement).removeClass('activeSensor2');
-								$(jqElement).addClass('chartAdded2');
-								break;
-							default:
-								console.log('wrong type of a sensor at chartview');
-								throw 'wrong type of a sensor at chartview';
-								break;
-						}
-
 						var axisId = seriesObject.yAxis.userOptions.id;
 						for (var j = 0; j < self.chart.yAxis.length; j++) {
 							var yaxis = self.chart.yAxis[j];
@@ -275,7 +272,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			var controlPanel = controlPanelTemplate.find('.chartControlPanel');
 			//controlPanel.css('top', 14 * scale + 'px')
-				controlPanel.css('right', 35 * scale + 'px');
+			controlPanel.css('right', 35 * scale + 'px');
 
 			controlPanel.find('.addChartBtn').button().css('font-size', 10 * scale + 'px');
 			controlPanel.find('.legendChartBtn').button()
@@ -344,50 +341,40 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 				if (typeLookup[linkArr[i]]) {
 					switch (typeLookup[linkArr[i]].type) {
-						case 0: //not double
-							div = $('#' + typeLookup[linkArr[i]].viewId);
-							if (div) {
-								div.addClass('activeSensor');
+						case 0:
+							{ //not double
+								div = $('#' + typeLookup[linkArr[i]].viewId);
+								if (div) {
+									div.addClass('activeSensor');
+								}
+								break;
 							}
-							break;
-						case 1: //first value of double
-							div = $('#' + typeLookup[linkArr[i]].viewId);
-							if (div) {
-								div.addClass('activeSensor1');
+						case 1:
+							{ //first value of double
+								div = $('#' + typeLookup[linkArr[i]].viewId);
+								if (div) {
+									div.addClass('activeSensor1');
+								}
+								break;
 							}
-							break;
-						case 2: //second value of double
-							div = $('#' + typeLookup[linkArr[i]].viewId);
-							if (div) {
-								div.addClass('activeSensor2');
+						case 2:
+							{ //second value of double
+								div = $('#' + typeLookup[linkArr[i]].viewId);
+								if (div) {
+									div.addClass('activeSensor2');
+								}
+								break;
 							}
-							break;
 						default: //error
-							return;
+							throw "chart error";
 					}
-				}
-				else {
+				} else {
 					return;
 				}
 
 			}
 
-
-
-			//return;
-
-			var elems1Val = $('.canvas').find('.activeSensor1');
-			var elems2Val = $('.canvas').find('.activeSensor2');
-			var elemsVal = $('.canvas').find('.activeSensor');
-			elems = {};
-
-			if (elemsVal)
-				elems["0"] = elemsVal;
-			if (elems2Val)
-				elems["2"] = elems2Val;
-			if (elems1Val)
-				elems["1"] = elems1Val;
-
+			var elems = this.formSensorElements();
 			this.getDataForElements(elems);
 		},
 		getDataForElements: function(typeObject) {
@@ -412,9 +399,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var resample = getResample(nubmerOfPoints, start, end);
 			console.log('resample: ' + resample)
 
-			this.getIdsOfSensorType(typeObject["1"], models, 1);
-			this.getIdsOfSensorType(typeObject["2"], models, 2);
-			this.getIdsOfSensorType(typeObject["0"], models, 0);
+
+			if (typeObject["1"])
+				this.getIdsOfSensorType(typeObject["1"], models, 1);
+			if (typeObject["2"])
+				this.getIdsOfSensorType(typeObject["2"], models, 2);
+			if (typeObject["0"])
+				this.getIdsOfSensorType(typeObject["0"], models, 0);
 
 
 			for (var i = 0; i < models.length; i++) {

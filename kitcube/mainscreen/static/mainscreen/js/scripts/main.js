@@ -100,40 +100,13 @@ require.config({
         "jquery"
       ]
     },
-    "cacher": {
+    /*"cacher": {
       deps: [
         "dev/dataStream",
         "dev/helpers/dateTimeFormat",
         "dev/helpers/dataHandler",
         //"dev/datacaching/backgrDataCacher",
         "dev/datacaching/dataCacher"
-      ]
-    },
-    /*<script src={% static "mainscreen/js/scripts/dev/dataStream.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/helpers/dateTimeFormat.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/helpers/dataHandler.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/datacaching/backgrDataCacher.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/datacaching/dataCacher.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/datacaching/webSockets.js" %}>
-  </script>*/
-
-
-    /*"flatui-app": {
-      deps: [
-        "jquery",
-        "jqueryui",
-        "bootstrap",
-        "vendor/flat-ui-official/js/bootstrap-select",
-        "vendor/flat-ui-official/js/bootstrap-switch",
-        "vendor/flat-ui-official/js/flatui-checkbox",
-        "vendor/flat-ui-official/js/flatui-radio",
-        "vendor/flat-ui-official/js/jquery.placeholder",
-        "vendor/flat-ui-official/js/jquery.tagsinput"
       ]
     },*/
     kitgrid: {
@@ -164,26 +137,11 @@ require.config({
         "highcharts"
       ]
     },
-    /*fittext: {
-      deps: [
-        "jquery"
-      ]
-    },
-    slabtext: {
-      deps: [
-        "jquery"
-      ]
-    },*/
     bigtext: {
       deps: [
         "jquery"
       ]
     },
-    /*chosen: {
-      deps: [
-        "jquery"
-      ]
-    },*/
     momentjs: {
       deps: [
         "jquery"

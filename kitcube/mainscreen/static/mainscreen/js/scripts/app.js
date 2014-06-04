@@ -24,9 +24,9 @@ define([
 	"kit.dataDownloader",
 	'cookie',
 	"models/userModel",
-	'cacher',
+	//'cacher',
 	'router' // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*chosen,*/ OAuthio,/*Sortable, fitText, slabText,*/ bigtext, HighchartsLeg, /* regression,*/ momentJS, sizeDet, parser, dataDownloader, JqCookie, UserModel, Cacher, Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*chosen,*/ OAuthio,/*Sortable, fitText, slabText,*/ bigtext, HighchartsLeg, /* regression,*/ momentJS, sizeDet, parser, dataDownloader, JqCookie, UserModel, /*Cacher,*/ Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -49,7 +49,7 @@ define([
 		// Pass in our Router module and call it's initialize function
 		$(document).ready(function($) {
 
-			window.db = new dataCacher('httpgetcsv', true, false, false, false);
+			//window.db = new dataCacher('httpgetcsv', true, false, false, false);
 			//window.host = "http://katrin.kit.edu/adei-detector/";
 			window.host = "http://katrin.kit.edu/adei/";
 			window.lastUpdateTime = moment.utc();

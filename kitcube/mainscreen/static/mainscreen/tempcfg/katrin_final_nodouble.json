@@ -24,96 +24,84 @@
                         "name": "Current",
                         "min": 1.0,
                         "max": 2.0,
-                        "precision": 0,
-                        "link": "sensid7"
+                        "precision": 0
                     },
                     {
                         "id": "sensid2",
                         "mask": "106",
                         "unit": "K",
                         "name": "T1",
-                        "precision": 3,
-                        "link": "sensid8"
+                        "precision": 3
                     },
                     {
                         "id": "sensid3",
                         "mask": "107",
                         "unit": "K",
                         "name": "T2",
-                        "precision": 3,
-                        "link": "sensid9"
+                        "precision": 3
                     },
                     {
                         "id": "sensid4",
                         "mask": "108",
                         "unit": "%",
                         "name": "He Level",
-                        "precision": 1,
-                        "link": "sensid10"
+                        "precision": 1
                     },
                     {
                         "id": "sensid5",
                         "mask": "149",
                         "unit": "psig",
                         "name": "HRC Press",
-                        "precision": 2,
-                        "link": "sensid11"
+                        "precision": 2
                     },
                     {
                         "id": "sensid6",
                         "mask": "150",
                         "unit": "W",
                         "name": "HRC Heater",
-                        "precision": 2,
-                        "link": "sensid12"
+                        "precision": 2
                     },
                     {
                         "id": "sensid7",
                         "mask": "103",
                         "unit": "A",
                         "name": "Current",
-                        "precision": 3,
-                        "norender": true
+                        "precision": 3
                     },
                     {
                         "id": "sensid8",
                         "mask": "109",
                         "unit": "K",
                         "name": "T1",
-                        "precision": 3,
-                        "norender": true
+                        "precision": 3
                     },
                     {
                         "id": "sensid9",
                         "mask": "110",
                         "unit": "K",
                         "name": "T2",
-                        "precision": 3,
-                        "norender": true
+                        "precision": 3
                     },
                     {
                         "id": "sensid10",
                         "mask": "111",
                         "unit": "%",
                         "name": "He Level",
-                        "precision": 1,
-                        "norender": true
+                        "precision": 1
                     },
                     {
                         "id": "sensid11",
                         "mask": "151",
                         "unit": "psig",
                         "name": "HRC Press",
-                        "precision": 2,
-                        "norender": true
+                        "precision": 2
                     },
                     {
                         "id": "sensid12",
                         "mask": "152",
                         "unit": "W",
                         "name": "HRC Heater",
-                        "precision": 2,
-                        "norender": true
+                        "precision": 2
                     }
         ]
     },
@@ -315,16 +303,14 @@
                         "mask": "112",
                         "unit": "V",
                         "name": "FET",
-                        "precision": 2,
-                        "link": "sensid43"
+                        "precision": 2
                     },
                     {
                         "id": "sensid38",
                         "mask": "113",
                         "unit": "V",
                         "name": "-8V",
-                        "precision": 2,
-                        "link": "sensid44"
+                        "precision": 2
 
                     },
                     {
@@ -332,24 +318,21 @@
                         "mask": "116",
                         "unit": "V",
                         "name": "+6V",
-                        "precision": 2,
-                        "link": "sensid45"
+                        "precision": 2
                     },
                     {
                         "id": "sensid40",
                         "mask": "117",
                         "unit": "V",
                         "name": "-6V",
-                        "precision": 2,
-                        "link": "sensid46"
+                        "precision": 2
                     },
                     {
                         "id": "sensid41",
                         "mask": "118",
                         "unit": "V",
                         "name": "Bias",
-                        "precision": 2,
-                        "link": "sensid47"
+                        "precision": 2
                     },
                     {
                         "id": "sensid42",
@@ -363,8 +346,7 @@
                         "unit": "mA",
                         "name": "FET",
                         "precision": 0,
-                        "factor": 1000,
-                        "norender": true
+                        "factor": 1000
                     },
                     {
                         "id": "sensid44",
@@ -372,24 +354,21 @@
                         "unit": "mA",
                         "name": "-8V",
                         "precision": 0,
-                        "factor": 1000,
-                        "norender": true
+                        "factor": 1000
                     },
                     {
                         "id": "sensid45",
                         "mask": "123",
                         "unit": "A",
                         "name": "+6V",
-                        "precision": 2,
-                        "norender": true
+                        "precision": 2
                     },
                     {
                         "id": "sensid46",
                         "mask": "124",
                         "unit": "A",
                         "name": "-6V",
-                        "precision": 2,
-                        "norender": true
+                        "precision": 2
                     },
                     {
                         "id": "sensid47",
@@ -397,8 +376,7 @@
                         "unit": "uA",
                         "name": "Bias",
                         "precision": 1,
-                        "factor": 1000000,
-                        "norender": true
+                        "factor": 1000000
                     }
         ]
     },
@@ -416,16 +394,14 @@
                         "mask": "186",
                         "unit": "V",
                         "name": "+6V",
-                        "precision": 3,
-                        "link": "sensid51"
+                        "precision": 3
                     },
                     {
                         "id": "sensid49",
                         "mask": "187",
                         "unit": "V",
                         "name": "-6V",
-                        "precision": 3,
-                        "link": "sensid52"
+                        "precision": 3
 
                     },
                     {
@@ -433,24 +409,21 @@
                         "mask": "188",
                         "unit": "V",
                         "name": "Bias",
-                        "precision": 3,
-                        "link": "sensid53"
+                        "precision": 3
                     },
                     {
                         "id": "sensid54",
                         "mask": "186",
                         "unit": "V",
                         "name": "Temp",
-                        "precision": 1,
-                        "link": "sensid57"
+                        "precision": 1
                     },
                     {
                         "id": "sensid55",
                         "mask": "187",
                         "unit": "V",
                         "name": "Temp SP",
-                        "precision": 1,
-                        "link": "sensid58"
+                        "precision": 1
 
                     },
                     {
@@ -458,24 +431,21 @@
                         "mask": "188",
                         "unit": "V",
                         "name": "Output",
-                        "precision": 2,
-                        "link": "sensid59"
+                        "precision": 2
                     },
                     {
                         "id": "sensid51",
                         "mask": "190",
                         "unit": "mA",
                         "name": "+6V",
-                        "precision": 0,
-                        "norender": true
+                        "precision": 0
                     },
                     {
                         "id": "sensid52",
                         "mask": "191",
                         "unit": "mA",
                         "name": "-6V",
-                        "precision": 0,
-                        "norender": true
+                        "precision": 0
                     },
                     {
                         "id": "sensid53",
@@ -483,24 +453,21 @@
                         "unit": "mA",
                         "name": "Bias",
                         "factor": 100,
-                        "precision": 0,
-                        "norender": true
+                        "precision": 0
                     },
                     {
                         "id": "sensid57",
                         "mask": "190",
                         "unit": "mA",
                         "name": "Temp",
-                        "precision": 1,
-                        "norender": true
+                        "precision": 1
                     },
                     {
                         "id": "sensid58",
                         "mask": "191",
                         "unit": "mA",
                         "name": "Temp SP",
-                        "precision": 1,
-                        "norender": true
+                        "precision": 1
 
                     },
                     {
@@ -508,8 +475,7 @@
                         "mask": "192",
                         "unit": "mA",
                         "name": "Output",
-                        "precision": 2,
-                        "norender": true
+                        "precision": 2
                     }
         ]
 

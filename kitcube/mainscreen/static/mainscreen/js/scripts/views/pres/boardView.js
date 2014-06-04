@@ -959,10 +959,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						linkModel: linkModel
 					});
 
-					this.sensorViewLookup[sensor.get('id')] = {
-						type: 0,
-						viewId: sensor.get('id')
-					};
+					if (!sensor.get('norender')) {
+						this.sensorViewLookup[sensor.get('id')] = {
+							type: 0,
+							viewId: sensor.get('id')
+						}
+					}
 				}
 
 				if (!sensor.get('norender')) {
