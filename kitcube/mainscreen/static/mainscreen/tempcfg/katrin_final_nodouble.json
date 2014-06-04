@@ -10,9 +10,7 @@
     },
     "sensorgroup1": {
         "type": "sensorgroup",
-        "name": "Magnet",
-        "groupname1": "Pinch",
-        "groupname2": "Detector",
+        "name": "Magnet Pinch",
         "size": [6, 5],
         "coords": [2, 7],
         "diffsensors": false,
@@ -60,8 +58,16 @@
                         "unit": "W",
                         "name": "HRC Heater",
                         "precision": 2
-                    },
-                    {
+                    }]
+                },
+    "sensorgroup10": {
+        "type": "sensorgroup",
+        "name": "Magnet Detector",
+        "size": [6, 5],
+        "coords": [2, 13],
+        "diffsensors": false,
+        "diffgroups": false,
+        "sensors": [{
                         "id": "sensid7",
                         "mask": "103",
                         "unit": "A",
@@ -109,7 +115,7 @@
         "type": "sensorgroup",
         "name": "Vacuum XHVac/HVac",
         "size": [8, 5],
-        "coords": [1, 13],
+        "coords": [10, 1],
         "diffsensors": false,
         "diffgroups": false,
         "sensors": [{
@@ -184,7 +190,7 @@
         "type": "sensorgroup",
         "name": "Temperature",
         "size": [8, 5],
-        "coords": [10, 1],
+        "coords": [1, 1],
         "diffsensors": false,
         "diffgroups": false,
         "sensors": [{
@@ -242,7 +248,7 @@
         "type": "sensorgroup",
         "name": "Source & HV",
         "size": [8, 5],
-        "coords": [1, 1],
+        "coords": [19, 1],
         "diffsensors": false,
         "diffgroups": false,
         "empties": 1,
@@ -293,7 +299,7 @@
     },
     "sensorgroup7": {
         "type": "sensorgroup",
-        "name": "Amrel LV",
+        "name": "Amrel L",
         "size": [6, 5],
         "coords": [11, 7],
         "diffsensors": false,
@@ -339,7 +345,17 @@
                         "mask": "146",
                         "name": "Ramping",
                         "sensortype": "2-state"
-                    },
+                    }]
+                },
+    "sensorgroup20": {
+        "type": "sensorgroup",
+        "name": "Amrel V",
+        "size": [6, 5],
+        "coords": [11, 13],
+        "diffsensors": false,
+        "diffgroups": false,
+        "empties": 1,
+        "sensors": [
                     {
                         "id": "sensid43",
                         "mask": "119",
@@ -382,11 +398,9 @@
     },
     "sensorgroup8": {
         "type": "sensorgroup",
-        "name": "Veto",
-        "groupname1": "Peltier 1",
-        "groupname2": "Peltier 2",
+        "name": "Veto Peltier 1",
         "size": [6, 5],
-        "coords": [10, 13],
+        "coords": [20, 7],
         "diffsensors": false,
         "diffgroups": false,
         "sensors": [{
@@ -432,7 +446,16 @@
                         "unit": "V",
                         "name": "Output",
                         "precision": 2
-                    },
+                    }]
+                },
+    "sensorgroup16": {
+        "type": "sensorgroup",
+        "name": "Veto Peltier 2",
+        "size": [6, 5],
+        "coords": [20, 13],
+        "diffsensors": false,
+        "diffgroups": false,
+        "sensors": [
                     {
                         "id": "sensid51",
                         "mask": "190",
@@ -485,8 +508,8 @@
         "type": "chart",
         "link": ["sensid22", "sensid25"],
         "charttype": "line",
-        "size": [16, 9],
-        "coords": [33, 1],
+        "size": [20, 9],
+        "coords": [29, 1],
         "startrange": "15m",
         "axislabels": false
     },
@@ -495,8 +518,8 @@
         "type": "chart",
         "link": ["sensid1", "sensid7"],
         "charttype": "line",
-        "size": [16, 9],
-        "coords": [33, 11],
+        "size": [20, 9],
+        "coords": [29, 11],
         "startrange": "15m",
         "axislabels": false
     }

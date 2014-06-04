@@ -7,10 +7,54 @@ if (!String.prototype.format) {
     };
 }
 
+var getDataFromAdei = function(url, callback) {
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+
+            callback(xmlHttp.responseText);
+        }
+    };
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
+
+    return this;
+}
+
+var parseTime = function(window)
+    {
+        var Microsec = window.substr(19);
+        //window = window.substring(0, 18);
+        var year = window.substr(7, 2);
+        var month = window.substr(3, 3);
+        var day = window.substr(0, 2);
+        var hour = window.substr(10, 2);
+        var minute = window.substr(13, 2);
+        var sec = window.substr(16, 2);
+        if (year > 60)
+        {
+            year = '19' + year;
+        }
+        else
+        {
+            year = '20' + year;
+        }
+        var d = new Date(year, monthFormats[month], day, hour, minute, sec);
+        var buf = d.toISOString().substr(13).substring(0, 7);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        var Time = d.toISOString().substring(0, 13);
+        Time = Time + buf + Microsec;
+        return Time;
+    }
+
+
+
 var getResample = function(numberOfPoints, start, end) {
     var seconds = start - end;
     return seconds / numberOfPoints;
-};
+}
 
 var parseCSVForUpdating = function(msg, masklength) {
     var separator = ',';
@@ -22,7 +66,8 @@ var parseCSVForUpdating = function(msg, masklength) {
 
     for (var i = 1; i < rows.length - 1; i++) {
         var rowdata = rows[i].split(separator);
-        var time = window.db.dateHelper.splitTimeFromAny(rowdata[0]); //jest
+        //var time = window.db.dateHelper.splitTimeFromAny(rowdata[0]); //jest
+        var time = parseTime(rowdata[0]);
         time = (new Date(time)).getTime() / 1000;
         dateTime.push(time);
         //for (var j = 0; j < rowdata.length - 1; j++)
@@ -36,6 +81,21 @@ var parseCSVForUpdating = function(msg, masklength) {
         time: dateTime
     }
 }
+
+var monthFormats = {
+        'Jan': 0,
+        'Feb': 1,
+        'Mar': 2,
+        'Apr': 3,
+        'May': 4,
+        'Jun': 5,
+        'Jul': 6,
+        'Aug': 7,
+        'Sep': 8,
+        'Oct': 9,
+        'Nov': 10,
+        'Dec': 11
+    };
 
 var parseCSV = function(msg) {
     var separator = ',';
@@ -51,7 +111,7 @@ var parseCSV = function(msg) {
 
     for (var i = 1; i < rows.length - 1; i++) {
         var rowdata = rows[i].split(separator);
-        var time = window.db.dateHelper.splitTimeFromAny(rowdata[0]); //jest
+        var time = parseTime(rowdata[0]);
         time = (new Date(time)).getTime() / 1000;
         dateTime.push(time);
         for (var j = 0; j < rowdata.length - 1; j++) {

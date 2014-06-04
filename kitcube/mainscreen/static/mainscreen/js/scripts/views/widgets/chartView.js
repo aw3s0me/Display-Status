@@ -432,7 +432,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, '1400700000-1401409791', nubmerOfPoints, 'mean', function(obj) {
 				//window.db.getData('fpd', 'katrin_rep', '0', '3', '1400700000-1401409791', 800, 'mean', function(obj) {
 				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
-				window.db.httpGetCsv(url, function(data) {
+				//window.db.httpGetCsv(url, function(data) {
+				getDataFromAdei(url, function(data) {
 					obj = parseCSV(data, masks.length);
 					console.log(obj);
 					if (!obj) {
@@ -499,7 +500,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
 				//db.getData('fpd', 'katrin_rep', '0', masksToRequest, '1400700000-1401409791', 800, 'mean', function(obj) {
 				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
-				window.db.httpGetCsv(url, function(data) {
+				getDataFromAdei(url, function(data) {
 					obj = parseCSV(data, masks.length);
 					if (!obj) {
 						return;

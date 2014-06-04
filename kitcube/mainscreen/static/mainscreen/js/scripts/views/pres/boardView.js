@@ -548,7 +548,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				{
 					//http://katrin.kit.edu/adei/services/getdata.php?db_server=fpd&db_name=katrin_rep&db_group=0&db_mask=102,106,107,108,149,150,103,109,110,111,151,152,74,66,68,99,12,67,69,100,2,3,4,5,6,7,8,9,59,61,75,78,80,82,145,112,113,116,117,118,146,119,120,123,124,125,186,187,188,190,191,192,190,191,192&window=-1
 					var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=-1';
-					window.db.httpGetCsv(url, function(data) {
+					//window.db.httpGetCsv(url, function(data) {
+					getDataFromAdei(url, function(data) {
 						//var result = window.db.dataHandl.onMessageRecievedCsv(data);
 						result = parseCSVForUpdating(data, masks.length);
 						var time = moment(result.time[0] * 1000);
