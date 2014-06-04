@@ -337,7 +337,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				var model = _allSensors[linkArr[i]];
 				var div = undefined;
 				model.on('addPoint', this.addNewPoint, this);
-				chartModel.get('models').push(model);
+				//chartModel.get('models').push(model);
 
 				if (typeLookup[linkArr[i]]) {
 					switch (typeLookup[linkArr[i]].type) {
