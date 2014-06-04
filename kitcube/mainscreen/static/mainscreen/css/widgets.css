@@ -169,3 +169,13 @@
     left: 0;
     width: 100%;
 } 
+
+.groupNameDiv {
+    position: absolute;
+    font-weight: bold;
+    width: 100%;
+}
+
+.groupName {
+    font-weight: bold;
+}

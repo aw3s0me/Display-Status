@@ -274,8 +274,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.chart.legendHide();
 
 			var controlPanel = controlPanelTemplate.find('.chartControlPanel');
-			controlPanel.css('top', 14 * scale + 'px')
-				.css('right', 14 * scale + 'px');
+			//controlPanel.css('top', 14 * scale + 'px')
+				controlPanel.css('right', 35 * scale + 'px');
 
 			controlPanel.find('.addChartBtn').button().css('font-size', 10 * scale + 'px');
 			controlPanel.find('.legendChartBtn').button()
@@ -283,9 +283,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				.click(function(event) {
 					self.removeFromDom();
 				});;
-			controlPanel.find('.close').css('font-size', 12 * scale + 'px')
-				.css('right', 5 * scale + 'px')
-				.css('top', 4 * scale + 'px');
+			controlPanelTemplate.find('.close').css('font-size', 12 * scale + 'px')
+				.css('right', 10 * scale + 'px')
+				.css('top', 10 * scale + 'px')
+				.click(function(event) {
+					self.removeFromDom();
+				});
 			controlPanel.find('.resetChartBtn').button()
 				.css('fontSize', 10 * scale + 'px')
 				.click(function(event) {

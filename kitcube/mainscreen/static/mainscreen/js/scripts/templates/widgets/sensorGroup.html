@@ -1,1 +1,14 @@
- 
+<div id="<%= group_id %>" >
+    <div class="groupNameDiv">
+        <% if (groupname1 !== undefined && groupname2 !== undefined) { %>
+            <table>
+                <tr><td rowspan="2"><%= name %> </td>
+                <td class="groupName"><%= groupname1 %></td></tr>
+                <tr><td class="groupName"><%= groupname2 %></td></tr>
+            </table>
+        <% } else { %>
+            <%= name %>
+        <% } %>
+    </div>
+    <div class="close"><b>x</b></div>
+</div> 

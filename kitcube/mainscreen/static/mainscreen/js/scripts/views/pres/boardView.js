@@ -36,11 +36,23 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		updSensorsInterval: undefined,
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
+			var textToParse = options.aceText;
+			var myParser = new cfgParser('1');
+			var prsObj = myParser.parseJson(textToParse);
+
 			try {
-				this.viewSizeDetector = new sizeDetector(50, 32, 21, '#banner', '#footer');
-				this.viewSizeDetector.detectAllSizes();
+				this.viewSizeDetector = new sizeDetector(50, 50, 21, '#banner', '#footer');
+				if (prsObj.screen) {
+					if (prsObj.screen.fluid) {
+						this.viewSizeDetector.detectSizesForFluidCanvas();
+					}
+					else {
+						this.viewSizeDetector.detectSizesForFixedCanvas();
+					}
+				}
+				
 			} catch (err) {
-				alert(err.message);
+			 	alert(err.message);
 			}
 
 			var data = {};
@@ -52,23 +64,18 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			$('.canvas').attr("id", "tab1");
 
-			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizes.height) / 3.4;
-			$('.canvas').css('margin-top', marginTop + 'px');
-			$('.canvas').css('height', this.viewSizeDetector.boardSizePx.height * this.viewSizeDetector.scaledUnitSize + 'px');
-			$('.canvas').css('width', this.viewSizeDetector.boardSizePx.width * this.viewSizeDetector.scaledUnitSize + 'px');
-			$('.canvas').data('height', this.viewSizeDetector.boardSizePx.height * this.viewSizeDetector.scaledUnitSize);
-			$('.canvas').data('width', this.viewSizeDetector.boardSizePx.width * this.viewSizeDetector.scaledUnitSize);
-			//$('.canvas').css('height', this.viewSizeDetector.maxGridSizes.height + 'px');
-			//$('.canvas').css('width', this.viewSizeDetector.maxGridSizes.width + 'px');
-			//$('.canvas').data('height', this.viewSizeDetector.maxGridSizes.height);
-			//$('.canvas').data('width', this.viewSizeDetector.maxGridSizes.width);
-
-			$('.canvas').data('gridUnitX', this.viewSizeDetector.unitSize);
-			$('.canvas').data('gridUnitY', this.viewSizeDetector.unitSize);
-			$('.canvas').data('gridSizeX', this.viewSizeDetector.boardSizePx.width);
-			$('.canvas').data('gridSizeY', this.viewSizeDetector.boardSizePx.height);
-			$('.canvas').data('scale', this.viewSizeDetector.scale);
-			$('.canvas').data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
+			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 3.4;
+			$('.canvas').css('margin-top', marginTop + 'px')
+			.css('height', this.viewSizeDetector.boardSizePx.height  + 'px')
+			.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
+			.data('height', this.viewSizeDetector.boardSizePx.height)
+			.data('width', this.viewSizeDetector.boardSizePx.width)
+			.data('gridUnitX', this.viewSizeDetector.unitSize)
+			.data('gridUnitY', this.viewSizeDetector.unitSize)
+			.data('gridSizeX', this.viewSizeDetector.gridSize.width)
+			.data('gridSizeY', this.viewSizeDetector.gridSize.height)
+			.data('scale', this.viewSizeDetector.scale)
+			.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 
 			this.grid = new kitGrid("#tab1");
 			this.el = $("#tab1");
@@ -80,9 +87,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			});
 
 			/* board insertion part */
-			var textToParse = options.aceText;
-			var myParser = new cfgParser('1');
-			var prsObj = myParser.parseJson(textToParse);
 			this.insertFromCfg(prsObj);
 		},
 		toggleGrid: function() {
@@ -129,7 +133,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
-				if (_id === "main") {
+				if (_id === "datasource") {
 					this.initSettings(attr);
 					continue;
 				}

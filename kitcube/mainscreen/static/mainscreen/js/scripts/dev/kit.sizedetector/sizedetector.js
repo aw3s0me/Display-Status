@@ -22,7 +22,7 @@ var sizeDetector = (function($) {
 			width: screen.availWidth
 		};
 
-		this.maxGridSizes = {
+		this.maxGridSizesPx = {
 			height: undefined,
 			width: undefined
 		};
@@ -113,19 +113,29 @@ var sizeDetector = (function($) {
 		return this.footerSize;
 	};
 
-	sizeDetector.prototype.detectAllSizes = function() {
+	sizeDetector.prototype.detectBasicSizes = function() {
 		this.detectFooterSize();
 		this.detectBannerSize();
 		this.detectMaxGridSizes();
 		this.detectScale();
 		this.detectScaledUnitSize();
+
+	}
+
+	sizeDetector.prototype.detectSizesForFluidCanvas = function() {
+		this.detectBasicSizes();
+		this.detectGridSizesFluid();
 		this.detectBoardSizes();
-		this.detectScaledUnitSize();
+	}
+
+	sizeDetector.prototype.detectSizesForFixedCanvas = function() {
+		this.detectBasicSizes();
+		this.detectBoardSizes();
 	}
 
 	sizeDetector.prototype.detectScale = function() {
-		var scaleWidth = this.maxGridSizes.width / (this.unitSize * this.gridSize.width);
-		var scaleHeight = this.maxGridSizes.height / (this.unitSize * this.gridSize.height);
+		var scaleWidth = this.maxGridSizesPx.width / (this.unitSize * this.gridSize.width);
+		var scaleHeight = this.maxGridSizesPx.height / (this.unitSize * this.gridSize.height);
 
 		this.scale = (scaleHeight < scaleWidth) ? scaleHeight : scaleWidth;
 		this.scale = Math.floor(this.scale * 100) / 100;
@@ -143,22 +153,35 @@ var sizeDetector = (function($) {
 	}
 
 	sizeDetector.prototype.detectMaxGridSizes = function() {
-		this.maxGridSizes.width = (this.windowSize.width - 2 * this.boardMargin.width - this.panelRightWidth - this.panelLeftWidth);
-		this.maxGridSizes.height = (this.windowSize.height - this.bannerSize.height - this.footerSize.height - 2 * this.boardMargin.height);
-		if (this.maxGridSizes.width === NaN || this.maxGridSizes.height === NaN) {
+		this.maxGridSizesPx.width = (this.windowSize.width - 2 * this.boardMargin.width - this.panelRightWidth - this.panelLeftWidth);
+		this.maxGridSizesPx.height = (this.windowSize.height - this.bannerSize.height - this.footerSize.height - 2 * this.boardMargin.height);
+		if (this.maxGridSizesPx.width === NaN || this.maxGridSizesPx.height === NaN) {
 			throw "Error happened while detecting size of board";
 		}
 
-		return this.maxGridSizes;
+		return this.maxGridSizesPx;
+	}
+
+	sizeDetector.prototype.detectGridSizesFluid = function() {
+		//find size for fullscreen
+	
+		//this.boardSizePx.width = this.gridSize.width * this.scaledUnitSize;
+		//this.boardSizePx.height = this.gridSize.height * this.scaledUnitSize;
+		this.gridSize.width = parseInt(this.maxGridSizesPx.width / this.scaledUnitSize);
+		this.gridSize.height = parseInt(this.maxGridSizesPx.height / this.scaledUnitSize);
+
+		if (this.boardSizePx.width === NaN || this.boardSizePx.height === NaN) {
+			throw "Error happened while detecting size of board";
+		}
+
+		return this.gridSize;
 	}
 
 	sizeDetector.prototype.detectBoardSizes = function() {
 		//find size for fullscreen
 	
-		//this.boardSizePx.width = this.gridSize.width * this.scaledUnitSize;
-		//this.boardSizePx.height = this.gridSize.height * this.scaledUnitSize;
-		this.boardSizePx.width = parseInt(this.maxGridSizes.width / this.scaledUnitSize);
-		this.boardSizePx.height = parseInt(this.maxGridSizes.height / this.scaledUnitSize);
+		this.boardSizePx.width = this.gridSize.width * this.scaledUnitSize;
+		this.boardSizePx.height = this.gridSize.height * this.scaledUnitSize;
 
 		if (this.boardSizePx.width === NaN || this.boardSizePx.height === NaN) {
 			throw "Error happened while detecting size of board";
@@ -166,13 +189,6 @@ var sizeDetector = (function($) {
 
 		return this.boardSizePx;
 	}
-
-	sizeDetector.prototype.detectGridSizes = function() {
-
-
-	}
-
-
 
 	sizeDetector.prototype.detectScaledUnitSize = function() {
 		if (this.scale === undefined) {

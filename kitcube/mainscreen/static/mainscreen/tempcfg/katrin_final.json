@@ -1,9 +1,11 @@
 {
-    "main": {
+    "screen": {
+        "fluid": false
+    },
+    "datasource": {
         "dbgroup": "0",
         "dbname": "katrin_rep",
-        "server": "fpd",
-        "fluid": true
+        "server": "fpd"
     },
     "sensorgroup1": {
         "type": "sensorgroup",
@@ -167,7 +169,8 @@
                         "unit": "mbar",
                         "name": "CCG",
                         "exp": true,
-                        "precision": 1
+                        "precision": 1,
+                        "sensortype": "noval"
                     },
                     {
                         "id": "sensid20",
@@ -212,19 +215,19 @@
                         "id": "sensid24",
                         "mask": "4",
                         "name": "PTC Cold Finger",
-                        "sensortype": "valve"
+                        "precision": 2
                     },
                     {
                         "id": "sensid25",
                         "mask": "5",
                         "name": "Cooling Ring Top",
-                        "sensortype": "valve"
+                        "precision": 2
                     },
                     {
                         "id": "sensid26",
                         "mask": "6",
                         "name": "Cooling Ring Bottom",
-                        "sensortype": "valve"
+                        "precision": 2
                     },
                     {
                         "id": "sensid27",
@@ -515,8 +518,8 @@
         "type": "chart",
         "link": ["sensid22", "sensid25"],
         "charttype": "line",
-        "size": [16, 8],
-        "coords": [19, 1],
+        "size": [16, 9],
+        "coords": [33, 1],
         "startrange": "15m",
         "axislabels": false
     },
@@ -526,9 +529,9 @@
         "link": ["sensid1", "sensid7"],
         "charttype": "line",
         "size": [16, 9],
-        "coords": [19, 12],
+        "coords": [33, 11],
         "startrange": "15m",
-        "axislabels": true
+        "axislabels": false
     }
 } 
  
