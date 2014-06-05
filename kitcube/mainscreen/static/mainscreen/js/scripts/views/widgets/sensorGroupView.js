@@ -51,6 +51,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 groupname2: this.model.get('groupname2'),
                 name: this.model.get('name')
             }));
+            console.log(grpSensorTemplate.html());
 
             this.container = $(grpSensorTemplate);
             this.container.find('.groupNameDiv')

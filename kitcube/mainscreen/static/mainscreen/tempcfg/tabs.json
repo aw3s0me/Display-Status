@@ -8,6 +8,22 @@
         "dbname": "katrin_rep",
         "server": "fpd"
     },
+    "tabs": {
+        "tab1": {
+            "name": "Summary",
+            "can_close": false,
+            "content": ["sensorgroup1", "sensorgroup10", "sensorgroup3",
+                "sensorgroup5", "sensorgroup6", "sensorgroup20", "sensorgroup7", "sensorgroup8", "sensorgroup16"
+            ]
+        },
+        "tab2": {
+            "name": "Temp",
+            "can_close": true,
+            "content": [
+                "chart1", "chart2"
+            ]
+        }
+    },
     "elements": {
         "sensorgroup1": {
             "type": "sensorgroup",
@@ -468,4 +484,5 @@
             "axislabels": false
         }
     }
+
 }

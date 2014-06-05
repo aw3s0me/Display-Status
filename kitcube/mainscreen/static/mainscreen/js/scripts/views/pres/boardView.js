@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel, TabView) {
 	
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
@@ -37,24 +37,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			var textToParse = options.aceText;
-			var myParser = new cfgParser('1');
+			var myParser = new cfgParser('../static/cfg.json');
 			var prsObj = myParser.parseJson(textToParse);
-
-			try {
-				this.viewSizeDetector = new sizeDetector(50, 50, 21, '#banner', '#footer');
-				if (prsObj.screen) {
-					if (prsObj.screen.fluid) {
-						this.viewSizeDetector.detectSizesForFluidCanvas();
-					}
-					else {
-						this.viewSizeDetector.detectSizesForFixedCanvas();
-					}
-				}
-				
-			} catch (err) {
-			 	alert(err.message);
-			}
-
+			this.detectSizes(50, 50, 21, '#banner', '#footer', prsObj['screen']);
+			
 			var data = {};
 
 			if (!options.reinit) {
@@ -62,23 +48,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				this.container.append(compiledTemplate);
 			}
 
-			$('.canvas').attr("id", "tab1");
-
-			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 3.4;
-			$('.canvas').css('margin-top', marginTop + 'px')
-			.css('height', this.viewSizeDetector.boardSizePx.height  + 'px')
-			.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
-			.data('height', this.viewSizeDetector.boardSizePx.height)
-			.data('width', this.viewSizeDetector.boardSizePx.width)
-			.data('gridUnitX', this.viewSizeDetector.unitSize)
-			.data('gridUnitY', this.viewSizeDetector.unitSize)
-			.data('gridSizeX', this.viewSizeDetector.gridSize.width)
-			.data('gridSizeY', this.viewSizeDetector.gridSize.height)
-			.data('scale', this.viewSizeDetector.scale)
-			.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
-
-			this.grid = new kitGrid("#tab1");
-			this.el = $("#tab1");
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			});
@@ -89,8 +58,41 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			/* board insertion part */
 			this.insertFromCfg(prsObj);
 		},
+		detectSizes: function(blockSize, xBlocks, yBlocks, bannerId, footerId, options) {
+			try {
+				this.viewSizeDetector = new sizeDetector(blockSize, xBlocks, yBlocks, bannerId, footerId);
+				if (options) {
+					if (options.fluid) {
+						this.viewSizeDetector.detectSizesForFluidCanvas();
+					}
+					else {
+						this.viewSizeDetector.detectSizesForFixedCanvas();
+					}
+				}
+				else {
+					this.viewSizeDetector.detectSizesForFixedCanvas();
+				}
+				
+			} catch (err) {
+			 	alert(err.message);
+			}
+		},
+		establishStyle: function(canvas) {
+			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 3.4;
+			canvas.css('margin-top', marginTop + 'px')
+			.css('height', this.viewSizeDetector.boardSizePx.height  + 'px')
+			.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
+			.data('height', this.viewSizeDetector.boardSizePx.height)
+			.data('width', this.viewSizeDetector.boardSizePx.width)
+			.data('gridUnitX', this.viewSizeDetector.unitSize)
+			.data('gridUnitY', this.viewSizeDetector.unitSize)
+			.data('gridSizeX', this.viewSizeDetector.gridSize.width)
+			.data('gridSizeY', this.viewSizeDetector.gridSize.height)
+			.data('scale', this.viewSizeDetector.scale)
+			.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
+		},
 		toggleGrid: function() {
-			var holder = $("#tab1");
+			var holder = this.el;
 			var attr = holder.attr('grid');
 
 			if (typeof attr !== 'undefined' && attr !== false) {
@@ -111,7 +113,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		},
 		newWidget: function(dx, dy, px, py, scale) {
 			var e = document.createElement('div');
-			var holder = $('#tab1');
+			var holder = this.el;
 
 			scale = typeof scale !== 'undefined' ? scale : holder.data('scale');
 			e.dataset.scale = scale;
@@ -133,31 +135,48 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
-				if (_id === "datasource") {
-					this.initSettings(attr);
-					continue;
+				switch(_id) {
+					case "datasource": {
+						this.initSettings(attr);
+						break;
+					}
+					case "tabs": {
+						this.initTabs(attr);
+						break;
+					}
+					case "elements": {
+						for (var _elId in attr) {
+							var elObj = attr[_elId];
+							elObj._id = _elId;
+							switch (elObj["type"]) {
+								case "sensor":
+									singleSensorsToAdd.push(elObj);
+									break;
+								case "sensortable":
+									sensorTablesToAdd.push(elObj);
+									break;
+								case "sensorgroup":
+									sensorGroupsToAdd.push(elObj);
+									break;
+								case "alarmlist":
+									alarmListsToAdd.push(elObj);
+									break;
+								case "chart":
+									chartsToAdd.push(elObj);
+									break;
+								default:
+									break;
+							}
+						}
+						break;
+					}
 				}
+			}
 
-				attr._id = _id;
-				switch (attr["type"]) {
-					case "sensor":
-						singleSensorsToAdd.push(attr);
-						break;
-					case "sensortable":
-						sensorTablesToAdd.push(attr);
-						break;
-					case "sensorgroup":
-						sensorGroupsToAdd.push(attr);
-						break;
-					case "alarmlist":
-						alarmListsToAdd.push(attr);
-						break;
-					case "chart":
-						chartsToAdd.push(attr);
-						break;
-					default:
-						break;
-				}
+			if (this.tabs.length === 0) {
+				this.el = $("#tabs");
+				this.establishStyle(this.el);
+				this.grid = new kitGrid("#tabs");
 			}
 
 			this.addAllSingleSensors(singleSensorsToAdd);
@@ -692,6 +711,20 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				console.log('Please specify fields dbgroup, dbname and server in configuration file');
 			} 
 			this.settings = attr;
+		},
+		initTabs: function(attr) {
+			var tabs = this.tabs;
+			for (var tabId in attr) {
+				var tabAttr = attr[tabId];
+				var newTabProperties = {
+					name: tabAttr['name'],
+					id: tabId,
+					can_close: true,
+					links: tabAttr['content']
+				}
+				var newTabView = new TabView(newTabProperties);
+				tabs.push(newTabView);
+			}
 		},
 		addSingleSensor: function(attr) {
 			var newSensor = new Sensor({
