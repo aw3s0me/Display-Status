@@ -121,8 +121,6 @@ define([
 				document.location.href = '#login';
 			});
 
-
-
 		});
 	}
 	return {

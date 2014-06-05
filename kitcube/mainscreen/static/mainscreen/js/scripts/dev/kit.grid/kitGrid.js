@@ -6,31 +6,30 @@ var kitGrid = (function($) {
 
 	// private properties.
 
-	//DRAG FEATURE
+	//DRAG FEATURE STATIC
 	var _dragElem = null;
-	var _grid = null;
-
-	//DROP FEATURE
+	
+	//DROP FEATURE STATIC
 	var _dropElem = null;
 	var _dropzones = []; //alowed dropzones
 	var _isDroppable = false;
 	var _tempdx = 0;
 	var _tempdy = 0;
-	var _scale = 0;
 	var _self = null;
 
-	//CANVAS SIZE
-	var _unitHeight = 0;
-	var _unitWidth = 0;
-
+	//CANVAS SIZE STATIC
 	var DEFAULT_HEIGHT = 500;
 	var DEFAUL_WIDTH = 500;
 
-	function kitGrid(initDivClass, properties) {
+	var kitGrid = function(initElement, properties) {
+		var _grid = initElement;
+		var _scale = _grid.data('scale');
+		var _unitHeight = _grid.data('gridUnitY');
+		var _unitWidth = _grid.data('gridUnitX');
 		this.matrix = [];
 		this.gridObjects = {
 			html: undefined,
-			model: undefined 
+			model: undefined
 		}
 
 		var options = $.extend({
@@ -39,28 +38,26 @@ var kitGrid = (function($) {
 			height: DEFAULT_HEIGHT,
 			width: DEFAUL_WIDTH
 		}, properties);
-		_grid = $(initDivClass);
-		_scale = _grid.data('scale');
-		_unitHeight = _grid.data('gridUnitY');
-		_unitWidth = _grid.data('gridUnitX');
 
+		
 		if (!_grid.hasClass('canvas')) {
 			_grid.addClass('canvas');
 		}
 
 		_self = this;
 
-	};
-
-	kitGrid.prototype.getScale = function() {
-		return _scale;
+		this.get_grid = function() { return _grid; };
+		this.getScale = function() { return _scale; };
+		this.getUnitSizes = function() { 
+			return {
+				height: _unitHeight,
+				width: _unitWidth
+			}
+		}
 	}
 
-	kitGrid.prototype.getUnitSizes = function() {
-		return {
-			height: _unitHeight,
-			width: _unitWidth
-		};
+	kitGrid.prototype.getIdOfCanvas = function() {
+		return this.get_grid().attr('id');
 	}
 
 	kitGrid.prototype.makeDraggable = function(elem) {
@@ -68,27 +65,68 @@ var kitGrid = (function($) {
 		elem.onmousedown = (mouseDown);
 	}
 
+	kitGrid.prototype.toggleGrid = function() {
+		var holder = this.get_grid();
+		var attr = holder.attr('grid');
+
+		if (typeof attr !== 'undefined' && attr !== false) {
+			holder.children('.grid').remove();
+			holder.removeAttr('grid');
+			return;
+		}
+
+		holder.attr('grid', 'grid');
+
+		for (var i = 0; i < holder.data('gridSizeX'); i++)
+			for (var j = 0; j < holder.data('gridSizeY'); j++) {
+				var e = this.newGridBlock(1, 1, i, j);
+				e.className = 'grid';
+				holder.append(e);
+			}
+		return;
+	}
+
+	kitGrid.prototype.newGridBlock = function(dx, dy, px, py, scale) {
+		var e = document.createElement('div');
+		var holder = this.get_grid();
+
+		scale = typeof scale !== 'undefined' ? scale : holder.data('scale');
+		e.dataset.scale = scale;
+
+		e.className = 'tile';
+		e.style.left = px * holder.data('scaledUnitSize') + 'px';
+		e.style.top = py * holder.data('scaledUnitSize') + 'px';
+		e.style.width = dx * holder.data('scaledUnitSize') + 'px';
+		e.style.height = dy * holder.data('scaledUnitSize') + 'px';
+
+		return e;
+	}
+
 	kitGrid.prototype.addUnit = function(dx, dy, posx, posy, scale, content, options, model) {
 		var divElem = $('<div></div>');
-		scale = defaultFor(scale, _grid.data('scale'));
-		var unitSizeX = _grid.data('scaledUnitSize');
-		var unitSizeY = _grid.data('scaledUnitSize');
-		divElem.css('left', posx * _grid.data('scaledUnitSize') + 'px');
-		divElem.css('top', posy * _grid.data('scaledUnitSize') + 'px');
-		divElem.css('width', dx * _grid.data('scaledUnitSize') + 'px');
-		divElem.css('height', dy * _grid.data('scaledUnitSize') + 'px');
+		var grid = this.get_grid();
+		scale = defaultFor(scale, grid.data('scale'));
+		var unitSizeX = grid.data('scaledUnitSize');
+		var unitSizeY = grid.data('scaledUnitSize');
+		divElem.css('left', posx * grid.data('scaledUnitSize') + 'px');
+		divElem.css('top', posy * grid.data('scaledUnitSize') + 'px');
+		divElem.css('width', dx * grid.data('scaledUnitSize') + 'px');
+		divElem.css('height', dy * grid.data('scaledUnitSize') + 'px');
 		divElem.data('id', model.get('id'));
+		console.log(grid.data('scaledUnitSize'));
+		console.log('kitgrid dxdy true: ' + dx + ": " + dy + ": " + posx + ": " + posy);
+		console.log('kitgrid dxdy true px: ' + dx * grid.data('scaledUnitSize') + ": " + dy * grid.data('scaledUnitSize') + ": " + posx * grid.data('scaledUnitSize') + ": " + posy * grid.data('scaledUnitSize'));
 
 		divElem.addClass('tile');
 		if (options) {
 			if (options.border === 0) {
 				divElem.css('border', 0);
-				divElem.css('width', dx * _grid.data('scaledUnitSize') + 'px');
+				divElem.css('width', dx * grid.data('scaledUnitSize') + 'px');
 			}
 			if (options.border > 0) {
 				divElem.css('border', 0);
 				//divElem.css('border', options.border);
-				divElem.css('width', dx * _grid.data('scaledUnitSize') + options.border - 1 + 'px');
+				divElem.css('width', dx * grid.data('scaledUnitSize') + options.border - 1 + 'px');
 			}
 
 			if (options.absolute) {
@@ -102,30 +140,32 @@ var kitGrid = (function($) {
 
 		divElem.append(content);
 
-		_grid.append(divElem);
+		grid.append(divElem);
 
 		this.gridObjects[model.get('id')] = {
 			html: divElem,
 			model: model
 		}
-
+		var self = this;
 		divElem.addClass('widget')
 			.draggable({
-				grid: [_grid.data('scaledUnitSize'), _grid.data('scaledUnitSize')],
+				grid: [self.get_grid().data('scaledUnitSize'), self.get_grid().data('scaledUnitSize')],
 				containment: "parent",
 				stop: function() {
-					var scale = _grid.data('scale');
-					var unitSizeX = _grid.data('scaledUnitSize');
-					var unitSizeY = _grid.data('scaledUnitSize');
+					var scale = self.get_grid().data('scale');
+					var unitSizeX = self.get_grid().data('scaledUnitSize');
+					var unitSizeY = self.get_grid().data('scaledUnitSize');
 
 					var newCoordX = parseInt(parseFloat(this.style.left) / unitSizeX);
-					var newCoordY = parseInt(parseFloat(this.style.top) / unitSizeY); 	
-					model.set({coords: [newCoordX, newCoordY]});
+					var newCoordY = parseInt(parseFloat(this.style.top) / unitSizeY);
+					model.set({
+						coords: [newCoordX, newCoordY]
+					});
 					console.log(newCoordX, newCoordY);
 				}
 			})
 			.resizable({
-				grid: _grid.data('scaledUnitSize'),
+				grid: grid.data('scaledUnitSize'),
 				//containment: 'parent',
 				handles: 'se',
 				//helper: 'ui-resizable-helper',
@@ -142,8 +182,8 @@ var kitGrid = (function($) {
 					console.log(newWidth, oldWidth);
 					console.log(ui.originalSize); */
 				},
-				resize: function( event, ui) {
-					var unitSize = _grid.data('scaledUnitSize');
+				resize: function(event, ui) {
+					var unitSize = grid.data('scaledUnitSize');
 
 					var oldWidth = model.get('size')[0];
 					var oldHeight = model.get('size')[1];
@@ -156,7 +196,7 @@ var kitGrid = (function($) {
 					}
 				},
 				stop: function(event, ui) {
-					var unitSize = _grid.data('scaledUnitSize');
+					var unitSize = grid.data('scaledUnitSize');
 
 					var oldWidth = model.get('size')[0];
 					var oldHeight = model.get('size')[1];
@@ -167,11 +207,13 @@ var kitGrid = (function($) {
 					if (oldWidth === newWidth && oldHeight === newHeight) {
 						return;
 					}
-					model.set({ size: [newWidth, newHeight]});
+					model.set({
+						size: [newWidth, newHeight]
+					});
 					model.trigger('resize', model);
 				}
-			}); 
-			
+			});
+
 
 		/*divElem.draggable({ 
 			grid: [unitSizeX, unitSizeY],
@@ -197,19 +239,20 @@ var kitGrid = (function($) {
 	}
 
 	kitGrid.prototype.resizeTile = function(posx, posy, dx, dy, tile) {
-		tile.css('left', posx * _grid.data('scaledUnitSize') + 'px');
-		tile.css('top', posy * _grid.data('scaledUnitSize')  + 'px');
-		tile.css('width', dx * _grid.data('scaledUnitSize') + 'px');
-		tile.css('height', dy * _grid.data('scaledUnitSize') + 'px');
+		var grid = this.get_grid();
+		tile.css('left', posx * grid.data('scaledUnitSize') + 'px');
+		tile.css('top', posy * grid.data('scaledUnitSize') + 'px');
+		tile.css('width', dx * grid.data('scaledUnitSize') + 'px');
+		tile.css('height', dy * grid.data('scaledUnitSize') + 'px');
 	}
 
 	kitGrid.prototype.addByClick = function(dx, dy, absPosX, absPosY, scale, content) {
 		var divElem = $('<div></div>');
-		scale = defaultFor(scale, _grid.data('scale'));
+		scale = defaultFor(scale, this.get_grid().data('scale'));
 		divElem.css('left', absPosX + 'px');
 		divElem.css('top', absPosY + 'px');
-		divElem.css('width', dx * _grid.data('scaledUnitSize') + 'px');
-		divElem.css('height', dy * _grid.data('scaledUnitSize') + 'px');
+		divElem.css('width', dx * this.get_grid().data('scaledUnitSize') + 'px');
+		divElem.css('height', dy * this.get_grid().data('scaledUnitSize') + 'px');
 
 		divElem.addClass('tile');
 		divElem.append(content);
@@ -226,11 +269,11 @@ var kitGrid = (function($) {
 			model: model
 		}
 
-		_grid.append(divElem);
-		console.log(_grid);
-		divElem.draggable({ 
-			containment: "parent", 
-			grid: [unitSizeX, unitSizeY] 
+		this.get_grid().append(divElem);
+		console.log(this.get_grid());
+		divElem.draggable({
+			containment: "parent",
+			grid: [unitSizeX, unitSizeY]
 		});
 
 		var self = this;

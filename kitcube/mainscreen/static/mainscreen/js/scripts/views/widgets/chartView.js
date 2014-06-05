@@ -221,8 +221,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			var xAxis = model.getXAxisObj();
 			var chart = model.getChartOptions();
-			console.log(JSON.stringify(xAxis));
-			console.log(JSON.stringify(chart));
 			this.chart = new Highcharts.Chart({
 				//this.chart = new Highcharts.StockChart({
 				chart: chart,
@@ -302,7 +300,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				});
 				self.onChangeTimeRange();
 				//self.setExtremes();
-				console.log(value);
 			});
 
 			this.chart.setSize(width, height, false);
@@ -394,10 +391,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var start = parseInt(windowObj.start / 1000);
 			var end = parseInt(windowObj.end / 1000);
 			var windowUrl = start + "-" + end;
-			console.log(new Date(windowObj.start), new Date(windowObj.end));
+			//console.log(new Date(windowObj.start), new Date(windowObj.end));
 			var nubmerOfPoints = this.model.getNumberOfPoints();
 			var resample = getResample(nubmerOfPoints, start, end);
-			console.log('resample: ' + resample)
+			//console.log('resample: ' + resample)
 
 
 			if (typeObject["1"])
@@ -416,7 +413,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			if (masksToRequest.length === 0) {
 				return;
 			}
-			console.log(masksToRequest);
+			//console.log(masksToRequest);
 
 			/* TEST CODE
 			db.getData('fpd', 'katrin_rep', '0', '0,1,2,3,4,5', '1400700000-1401409791', 800, 'mean', function(obj)
@@ -435,18 +432,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				//window.db.httpGetCsv(url, function(data) {
 				getDataFromAdei(url, function(data) {
 					obj = parseCSV(data, masks.length);
-					console.log(obj);
+					//console.log(obj);
 					if (!obj) {
 						return;
 					}
 
 					var data = obj.data;
 					var datetime = obj.dateTime;
-					console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
+					//console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
 					for (var i = 0; i < models.length; i++) {
 						if (data[i].length > 0) {
 							models[i].setDataModel(data[i], datetime);
-							console.log(models[i].get('mask'), data[i][0]);
+							//console.log(models[i].get('mask'), data[i][0]);
 						}
 						//console.log(JSON.stringify(models[i].get('values')));
 					}
@@ -459,7 +456,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						self.setSensorDataInChart(typeObject["0"], 0);
 					//self.setExtremes();
 					//self.redraw();
-					console.log(self.chart);
+					//console.log(self.chart);
 				});
 			} catch (msg) {
 				console.log(msg);
@@ -473,7 +470,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var dbname = this.board.settings['dbname'];
 			var dbgroup = this.board.settings['dbgroup'];
 			var windowObj = this.getWindow();
-			console.log(new Date(windowObj.start), new Date(windowObj.end));
+			//console.log(new Date(windowObj.start), new Date(windowObj.end));
 			var start = parseInt(windowObj.start / 1000);
 			var end = parseInt(windowObj.end / 1000);
 			var windowUrl = start + "-" + end;
@@ -482,7 +479,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var resample = getResample(nubmerOfPoints, start, end);
 
 			if (!models || !models.length) {
-				console.log('empty');
 				return;
 			}
 
@@ -508,13 +504,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					var data = obj.data;
 					//console.log(data)
 					var datetime = obj.dateTime;
-					console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
+					//console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
 					for (var i = 0; i < models.length; i++) {
 						var model = models[i];
 						if (data[i].length > 0) {
 							//console.log(model.get('values'));
 							model.setDataModel(data[i], datetime);
-							console.log(model.get('values'));
+							//console.log(model.get('values'));
 						}
 						for (var i = 0; i < series.length; i++) {
 							var seriesObject = series[i];
@@ -527,16 +523,16 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 								break;
 							}
 						}
-						console.log(JSON.stringify(models[i].get('values')));
+						//console.log(JSON.stringify(models[i].get('values')));
 					}
 
 
 					//self.setExtremes();
 					self.redraw();
-					console.log(self.chart);
+					//console.log(self.chart);
 				});
 			} catch (msg) {
-				console.log(msg);
+				//console.log(msg);
 			}
 
 		},
@@ -634,7 +630,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					bgcolor: color
 				});
 				sensorModel.trigger('changebgcolor', sensorModel);
-				console.log(color);
 			}
 
 			chart.legendHide();
@@ -690,7 +685,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			while (this.chart.yAxis.length > 0)
 				this.chart.yAxis[0].remove();
 
-			console.log(this.chart);
 			//this.chart.redraw();
 
 		},

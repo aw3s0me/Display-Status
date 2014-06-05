@@ -57,10 +57,17 @@ body {
 
 .canvas {
     position: relative;
-    font-family: 'Open Sans', sans-serif;
-    background: #cccccc;
+    font-family: 'Open Sans', sans-serif !important;
+    background: #cccccc !important;
     /*border: 5px solid #bbbbbb; */
-    margin: 0 auto;
+    margin: 0 auto !important;
+    padding: 0 !important;
+}
+
+.gridTab {
+  margin: 0 auto;
+  font-family: 'Open Sans', sans-serif;
+  background: #cccccc;
 }
 
 

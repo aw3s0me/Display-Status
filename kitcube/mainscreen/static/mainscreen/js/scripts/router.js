@@ -60,8 +60,8 @@ define([
 			$.ajax({
 				//url: '../static/mainscreen/tempcfg/empty.json',
 				//url: '../static/mainscreen/tempcfg/katrin_final.json',
-				url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
-				//url: '../static/mainscreen/tempcfg/tabs.json',
+				//url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
+				url: '../static/mainscreen/tempcfg/tabs.json',
 				async: false,
 				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 				success: function(data){
@@ -95,44 +95,6 @@ define([
 				$('.loginHref').attr('href', '#logout');
 				$('#userStatus').text('Welcome! ' + curUser.get('username') + ',');
 			}
-			/*var numTab = (id === undefined)? 0 : parseInt(id);
-			var text = this.myTextEditorView.externEditor.getSession().getValue();
-			if (!this.boardViewTabs[numTab]) {
-				//if tab doesnt exist so create
-				console.log('doesnt exist');
-
-				this.boardViewTabs.push({
-					id: this.tabCount++,
-					board: new BoardView({aceText : text}),
-				});
-
-				this.curTab = this.boardViewTabs[numTab].board; //get board obj
-
-				var container = this.curTab.container; //get jquery container
-				if ($("#kitcube-console").val() !== undefined) //if console still opened
-					$("#kitcube-console").hide();
-				if (container.val() !== undefined) { //show container
-					container.show();
-				}
-			}
-			else {
-				//show board according to tab
-				var curBoard = this.boardViewTabs[numTab].board;
-				//console.log(curBoard);
-				//curBoard.clear();
-				var container = curBoard.container;
-				//var tabContainer = curBoard.elContainer;
-				//this.boardViewTabs[numTab].board = null;
-				//tabContainer.remove();
-				//this.boardViewTabs[numTab].board = new BoardView({aceText : text});
-				console.log('exists');
-				//curBoard.reinitWithOptions({aceText : text});
-				if ($("#kitcube-console").val() !== undefined)
-					$("#kitcube-console").hide();
-				if (container.val() !== undefined) {
-					container.show();
-				}
-			}	*/
 		},
 		showLoginView: function() {
 			if (this.views.myLoginView === undefined) {

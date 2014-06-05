@@ -20,7 +20,14 @@
             "name": "Temp",
             "can_close": true,
             "content": [
-                "chart1", "chart2"
+                "chart1"
+            ]
+        },
+        "tab3": {
+            "name": "Magnet",
+            "can_close": false,
+            "content": [
+                "chart2"
             ]
         }
     },
