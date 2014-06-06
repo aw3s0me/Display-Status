@@ -10,6 +10,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		chart: undefined,
 		model: undefined,
 		board: undefined,
+		lookDiv: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -24,6 +25,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			}
 			if (options.board) {
 				this.board = options.board;
+				this.lookDiv = this.board.el;
 			}
 
 			this.model.on('resize', this.onresize, this);
@@ -46,9 +48,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			});
 		},
 		formSensorElements: function() {
-			var elems1Val = $('.canvas').find('.activeSensor1');
-			var elems2Val = $('.canvas').find('.activeSensor2');
-			var elemsVal = $('.canvas').find('.activeSensor');
+			var elems1Val = this.lookDiv.find('.activeSensor1');
+			var elems2Val = this.lookDiv.find('.activeSensor2');
+			var elemsVal = this.lookDiv.find('.activeSensor');
 			elems = {};
 
 			if (elemsVal)

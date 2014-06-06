@@ -43,7 +43,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var textToParse = options.aceText;
 			var myParser = new cfgParser('../static/cfg.json');
 			var prsObj = myParser.parseJson(textToParse);
-			this.detectSizes(50, 50, 21, '#banner', '#footer', prsObj['screen']);
+			this.detectSizes(50, 49, 20, '#banner', '#footer', prsObj['screen']);
 			
 			var data = {};
 
@@ -142,12 +142,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				}
 			}
 
+			this.el = $("#tabs")
+
 			if ($.isEmptyObject(this.views.tabs)) {
-				this.el = $("#tabs");
 				this.establishStyle(this.el);
-				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 3.4; 
-				this.el.css('margin-top', marginTop + 'px');
+				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 3.2; 
 				this.grid = new kitGrid(this.el);
+				this.el.removeClass('canvas')
+				.addClass('tab')
+				.css('margin-top', marginTop + 'px');
 				$('#toggleGridButton').click(function(e) {
 					self.grid.toggleGrid();
 				});

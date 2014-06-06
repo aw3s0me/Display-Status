@@ -55,13 +55,22 @@ body {
   width: 100%;
 }
 
+.tab {
+  position: relative;
+  font-family: 'Open Sans', sans-serif !important;
+  background: #cccccc !important;
+  margin: 0 auto;
+  /*border: 5px solid #bbbbbb; */
+  padding: 0 !important;  
+}
+
 .canvas {
-    position: relative;
-    font-family: 'Open Sans', sans-serif !important;
-    background: #cccccc !important;
-    /*border: 5px solid #bbbbbb; */
-    margin: 0 auto !important;
-    padding: 0 !important;
+  position: relative;
+  font-family: 'Open Sans', sans-serif !important;
+  background: #cccccc !important;
+  /*border: 5px solid #bbbbbb; */
+  margin: 0 auto !important;
+  padding: 0 !important;
 }
 
 .gridTab {

@@ -60,8 +60,8 @@ define([
 			$.ajax({
 				//url: '../static/mainscreen/tempcfg/empty.json',
 				//url: '../static/mainscreen/tempcfg/katrin_final.json',
-				//url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
-				url: '../static/mainscreen/tempcfg/tabs.json',
+				url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
+				//url: '../static/mainscreen/tempcfg/tabs.json',
 				async: false,
 				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 				success: function(data){

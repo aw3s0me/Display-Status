@@ -94,17 +94,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             this.container.append(newSortableContainer);
 
             this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model).addClass('group')
-                .draggable({
-                    grid: [unitX, unitY],
-                    containment: 'parent',
-                    drag: function(event, ui) {
-                        console.log('dragg');
-                    },
-                    start: function(event, ui) {
-                        console.log('staart');
-                    }
-                })
-                .resizable({
+                .resizable({ //different handler because its with the sortable container
                     grid: unitX,
                     //containment: 'parent',
                     handles: 'ne, se',
