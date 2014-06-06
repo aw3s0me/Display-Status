@@ -108,9 +108,9 @@ var kitGrid = (function($) {
 		divElem.css('width', dx * grid.data('scaledUnitSize') + 'px');
 		divElem.css('height', dy * grid.data('scaledUnitSize') + 'px');
 		divElem.data('id', model.get('id'));
-		console.log(grid.data('scaledUnitSize'));
-		console.log('kitgrid dxdy true: ' + dx + ": " + dy + ": " + posx + ": " + posy);
-		console.log('kitgrid dxdy true px: ' + dx * grid.data('scaledUnitSize') + ": " + dy * grid.data('scaledUnitSize') + ": " + posx * grid.data('scaledUnitSize') + ": " + posy * grid.data('scaledUnitSize'));
+		//console.log(grid.data('scaledUnitSize'));
+		//console.log('kitgrid dxdy true: ' + dx + ": " + dy + ": " + posx + ": " + posy);
+		//console.log('kitgrid dxdy true px: ' + dx * grid.data('scaledUnitSize') + ": " + dy * grid.data('scaledUnitSize') + ": " + posx * grid.data('scaledUnitSize') + ": " + posy * grid.data('scaledUnitSize'));
 
 		divElem.addClass('tile');
 		if (options) {
@@ -143,14 +143,6 @@ var kitGrid = (function($) {
 		}
 		var self = this;
 
-		var containmentX1 = grid.offset().left;
-		var containmentY1 = grid.offset().top;
-		var containmentX2 =  grid.outerWidth() +  grid.offset().left - divElem.outerWidth();
-		var containmentY2 = grid.outerHeight() +  grid.offset().top - divElem.outerHeight();
-
-		console.log([containmentX1, containmentY1, containmentX2, containmentY2])
-
-
 		divElem.addClass('widget')
 			.draggable({
 				grid: [grid.data('scaledUnitSize'), grid.data('scaledUnitSize')],
@@ -166,8 +158,7 @@ var kitGrid = (function($) {
 
 					var newCoordX = Math.round(parseFloat(ui.position.left) / unitSizeX);
 					var newCoordY = Math.round(parseFloat(ui.position.top) / unitSizeY);
-					console.log("x: " + newCoordX + " y: " + newCoordY);
-					console.log("maxx: " + maxSizeX + " maxy: " + maxSizeY);
+
 					if (newCoordY > maxSizeY || newCoordX > maxSizeX || newCoordX < 0 || newCoordY < 0) {
 						ui.position.left = ui.position.left_old
       					ui.position.top = ui.position.top_old
@@ -190,7 +181,7 @@ var kitGrid = (function($) {
 					model.set({
 						coords: [newCoordX, newCoordY]
 					});
-					console.log(newCoordX, newCoordY);
+					//console.log(newCoordX, newCoordY);
 				}
 			})
 			.resizable({
@@ -268,7 +259,7 @@ var kitGrid = (function($) {
 		}
 
 		this.getGrid().append(divElem);
-		console.log(this.getGrid());
+		//console.log(this.getGrid());
 		divElem.draggable({
 			containment: "parent",
 			grid: [unitSizeX, unitSizeY]
