@@ -63,6 +63,7 @@ def mainscreen_index(request, projname=None, name=None):
             data['userblock'] = render_user_block()
     else:
         data['userblock'] = render_user_block()
+        
     response = render_to_response('mainscreen/index.html', data, context_instance=RequestContext(request))
     
     response['Access-Control-Allow-Origin'] = '*'  

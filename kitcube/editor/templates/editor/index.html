@@ -7,7 +7,8 @@
   <title>{{ title }}</title>
   <meta name="description" 
           content="{{ description }}">
-  <meta name="csrf_token" content="{{csrf_token}}">
+  <meta name="csrf_token" content="{{ csrf_token }}">
+  <meta name="projects" content="{{ projects }}">
   <link href={% static "editor/css/bootstrap.min.css" %} rel="stylesheet">
   <link href={% static "editor/css/main.css" %} rel="stylesheet">
   <link href={% static "editor/js/scripts/vendor/jqgrid/css/ui.jqgrid.css" %} rel="stylesheet"> 
@@ -33,14 +34,7 @@
           Kitcube Status
           <small>template editor</small>
         </h1>
-        <div id="loginPanel">
-          <div class="btn-group btn-group-lg btn-group-justified">
-            <a role="button" class="btn btn-default">Help</a>
-            <a role="button" class="btn btn-default" href="#login">Login</a>
-            <a role="button" class="btn btn-default">Panel</a>
-            <a role="button" class="btn btn-default" href="#test">Test perm</a>
-          </div>
-        </div>
+        {{ userblock }}
       </div>
       <div id="container"></div>
   </div>

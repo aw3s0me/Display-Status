@@ -43,7 +43,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var textToParse = options.aceText;
 			var myParser = new cfgParser('../static/cfg.json');
 			var prsObj = myParser.parseJson(textToParse);
-			this.detectSizes(50, 49, 20, '#banner', '#footer', prsObj['screen']);
+			this.detectSizes(50, 50, 21, '#banner', '#footer', prsObj['screen']);
 			
 			var data = {};
 
@@ -55,7 +55,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			$('#canvasButton').click(function(e) {
 				self.submitTest();
 			});
-	
 			/* board insertion part */
 			this.insertFromCfg(prsObj);
 		},
@@ -153,7 +152,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				.css('margin-top', marginTop + 'px');
 				$('#toggleGridButton').click(function(e) {
 					self.grid.toggleGrid();
-				});
+				}).tooltip({});
 			}
 
 			this.addAllSingleSensors(singleSensorsToAdd);
@@ -260,9 +259,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		},
 		alert: function(e) {
 			console.log(e);
-		},
-		render: function() {
-
 		},
 		resize: function(x, y) {
 
@@ -420,7 +416,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				console.log(id);
 				var tab = self.views.tabs[id];
 				tab.grid.toggleGrid();
-			});
+			}).tooltip({});
 		},
 		addSingleSensor: function(attr) {
 			//which tab will be there

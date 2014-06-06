@@ -27,9 +27,6 @@ define([
 			'*actions': 'defaultAction'
 		},
 		self: this,
-		tabCount: 0,
-		boardViewTabs: [],
-		curTab: undefined,
 		views: {},
 		testPermissions: function() {
 			var user = window.activeSessionUser;
@@ -60,8 +57,8 @@ define([
 			$.ajax({
 				//url: '../static/mainscreen/tempcfg/empty.json',
 				//url: '../static/mainscreen/tempcfg/katrin_final.json',
-				url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
-				//url: '../static/mainscreen/tempcfg/tabs.json',
+				//url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
+				url: '../static/mainscreen/tempcfg/tabs.json',
 				async: false,
 				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 				success: function(data){
@@ -79,6 +76,8 @@ define([
 			$(this.views.current.el).show();
 		},
 		showBoardView: function(id) {
+			console.log($('#lblFromNow'));
+
 			if (this.views.myBoardViewContainer === undefined) {
 				this.views.myBoardViewContainer = new BoardView({aceText: this.getCfg()});
 			}
@@ -141,11 +140,6 @@ define([
 
 			this.showView(this.views.myRegisterView);
 		},
-		changeUnitNumber: function(x, y) {
-		},
-		resizeBoard: function(x, y) {
-
-		},
 		defaultAction: function(actions) {
 			// We have no matching route, lets just log what the URL was
 			console.log('No route:', actions);
@@ -155,12 +149,6 @@ define([
 
 	var initialize = function() {
 		var app_router = new AppRouter;
-
-		//var start_url = 
-
-		/*app_router.views = {
-			myBoardViewContainer : new BoardView({aceText: app_router.getCfg()})
-		} */
 
 		Backbone.history.start();
 	};

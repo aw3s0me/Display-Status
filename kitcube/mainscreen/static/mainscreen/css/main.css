@@ -203,7 +203,7 @@ body {
 
 #userBlock {
 	float: right;
-	display: inline;
+	//display: inline;
 	font-weight: bold;
 	font-size: 20px;
 }
@@ -448,9 +448,7 @@ body {
 }
 /* Register Form End */
 
-#toggleGridButton {
-  margin-right: 15px;
-  margin-top: 10px;
+.circle-btn {
   width: 30px;
   height: 30px;
   text-align: center;
@@ -458,9 +456,22 @@ body {
   font-size: 12px;
   line-height: 1.42;
   border-radius: 15px;
-  right: 0;
+}
+
+#toggleGridButton {
+  margin-right: 15px;
+  margin-top: 10px;
+  float: right;
   display: none;
-  position: absolute;
+  //position: absolute;
+}
+
+#goEditorButton {
+  margin-right: 15px;
+  margin-top: 10px;
+  float: right;
+  //display: none;
+  //position: absolute;
 }
 
 #lblFromNow {
@@ -468,6 +479,7 @@ body {
   margin-top: 8px !important;
   font-size: 12px;
   display: inline-block;
+  //display: none;
 }
 
 .close {

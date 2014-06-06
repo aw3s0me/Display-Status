@@ -12,7 +12,7 @@ define([
 	'views/pres/boardViewContainer',
 	'views/pres/navPanelView',
 	'views/pres/registerView'
-], function($, _, Backbone, sizeDetector, BoardView, LoginView, /*ControlPanelView,*/ TextEditorView, SettingsView, BoardViewContainer, NavPanelView, RegisterView) {
+], function($, _, Backbone, sizeDetector, BoardView, LoginView, TextEditorView, SettingsView, BoardViewContainer, NavPanelView, RegisterView) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -22,6 +22,7 @@ define([
 			'board/:id': 'showBoardView',
 			'settings': 'showSettingsView',
 			'settings/:proj/:conf': 'showSettingsViewId',
+			'logout': 'doLogout',
 			//'control': 'showControlPanelView',
 			'login': 'showLoginView',
 			'register': 'showRegisterView',
@@ -31,20 +32,19 @@ define([
 			'*actions': 'defaultAction'
 		},
 		self: this,
+		views: {},
 		showView: function(view) {
 			if (this.views.current != undefined) {
-				//this.views.current.hide();
-				this.views.current.hide();
+				$(this.views.current.el).hide();
+				this.views.current.trigger('hide');
 			}
 			this.views.current = view;
-			//this.views.current.show();
-			console.log(this.views);
-			this.views.current.show();
+			$(this.views.current.el).show();
 		},
 		hideView: function(view) {
 			this.views.hide();
 		},
-		showTextEditorView: function(){
+		showTextEditorView: function() {
 			if (this.views.myTextEditorView === undefined) {
 				this.views.myTextEditorView = new TextEditorView();
 			}
@@ -61,18 +61,18 @@ define([
 		showTextEditorViewId: function(proj, confid) {
 			console.log("id routing text", proj, confid);
 		},
-		showBoardView: function(){
-			if (this.views.myBoardViewContainer === undefined) {
-				this.views.myBoardViewContainer = new BoardViewContainer();
+		showGuiEditor: function() {
+			if (this.views.myGuiEditor === undefined) {
+				this.views.myGuiEditor = new BoardViewContainer();
 			}
 
 			if (this.views.myNavPanelView === undefined) {
 				this.views.myNavPanelView = new NavPanelView();
 			}
 
-			this.showView(this.views.myBoardViewContainer);
+			this.showView(this.views.myGuiEditor);
 		},
-		showSettingsView: function(){
+		showSettingsView: function() {
 			if (this.views.mySettingsView === undefined) {
 				this.views.mySettingsView = new SettingsView();
 			}
@@ -84,44 +84,53 @@ define([
 			this.showView(this.views.mySettingsView);
 
 		},
-		showControlPanelView: function(){
+		showControlPanelView: function() {
 			this.showView(this.views.myControlPanelView);
 		},
-		showLoginView: function(){
+		showLoginView: function() {
 			if (this.views.myLoginView === undefined) {
 				this.views.myLoginView = new LoginView();
 			}
-
-			/*if (this.views.myNavPanelView !== undefined) {
-				this.views.myNavPanelView.hide();
-			}*/
-
 			this.showView(this.views.myLoginView);
+
+			$('.loginHref').text('Board');
+			$('.loginHref').attr('href', '#board');
 		},
-		showRegisterView: function(){
+		doLogout: function() {
+			if (window.activeSessionUser.get('logged_in')) {
+				var user = window.activeSessionUser;
+				if (!user.get('logged_in')) {
+					return;
+				}
+				var token = user.get('token');
+				//var dataToSend = JSON.stringify({'token': token});
+				$.ajax({
+					//url: '/api-token/login/google/',
+					url: '/api-token/logout/',
+					method: 'GET',
+					//data: dataToSend,
+					headers: {
+						'Authorization': token,
+					},
+					success: function(data) {
+						user.trigger('logout');
+					},
+					beforeSend: function(xhr, settings) {
+						xhr.setRequestHeader('Authorization', token);
+					}
+				})
+				var curUser = window.activeSessionUser;
+				$('.loginHref').text('Login');
+				$('.loginHref').attr('href', '#login');
+				$('#userStatus').text('');
+			}
+		},
+		showRegisterView: function() {
 			if (this.views.myRegisterView === undefined) {
 				this.views.myRegisterView = new RegisterView();
 			}
 
 			this.showView(this.views.myRegisterView);
-
-		},
-			/*var tabs = this.myBoardViewContainer.tabs;
-			var numTab = (id === undefined)? 0 : parseInt(id);
-			if (!tabs[numTab]) {
-				var newBoard = new BoardView();
-				this.myBoardViewContainer.addTab(newBoard);
-
-				this.curTab = this.boardViewTabs[numTab].board; //get board obj
-
-			}
-			else {
-				//show board according to tab
-				var curBoard = tabs[numTab];
-			}
-		},*/
-		resizeBoard: function(x, y) {
-
 		},
 		defaultAction: function(actions) {
 			// We have no matching route, lets just log what the URL was
@@ -131,14 +140,16 @@ define([
 
 	var initialize = function() {
 		var app_router = new AppRouter;
-		
-		app_router.views = {
-			myLoginView : new LoginView()
+
+		if (!window.activeSessionUser.get('logged_in')) {
+			app_router.views = {
+				myLoginView: new LoginView()
+			}
+
+			app_router.showView(app_router.views.myLoginView);
+		} else {
+			//app_router.showGuiEditor();
 		}
-
-		app_router.showView(app_router.views.myLoginView);
-
-		//app_router.views.myNavPanelView = new NavPanelView();
 
 		Backbone.history.start();
 	};

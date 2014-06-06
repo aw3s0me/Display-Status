@@ -143,6 +143,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 					xhr.setRequestHeader('Authorization', token);
 				}
 			})
+			$('#goEditorButton').remove();
 		},
 		onSuccessLogin: function(loginInfo) {
 			$('#loginValidation').empty();
@@ -157,8 +158,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				role: loginInfo.userRole,
 				group: loginInfo.group
 			});
-			$.cookie('access_token', user.get('token'));
+			$.cookie('access_token', user.get('token'), { path: '/'});
 			window.location.href = "#board";
+			$('#banner').append(window.editorBtnTemplate);
 		},
 		onError: function(errorInfo) {
 			var div = $('#loginValidation');
@@ -186,6 +188,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			else {
 				this.form.find('#password').addClass('valid_input');
 			}
+
+			$('#goEditorButton').remove();
 
 		},
 		clear: function() {

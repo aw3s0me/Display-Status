@@ -32,65 +32,17 @@
  
 <body>
   <div id="wrapper">
-    <div id="content">
     	{{ banner }}
       <span id="lblFromNow" class="label label-default">Loading...</span>
       {{ userblock }}
-    	<!-- <span id="userBlock"><label id="userStatus"></label><a class="loginHref" href="#login">Login</a></span> -->
-      <!-- <div id="banner" class="demo-headline">
-        <h1 class="demo-logo">
-          <div class="logo"></div>
-          Kitcube Status
-          <small>template editor</small>
-        </h1> -->
-       	<!-- <nav class="navbar navbar-default" id="navBarKitcube" role="navigation" style="border: 0!important;" >
-        	<div class="container-fluid" id="navBarContainer">
-		        <<button id="btnLogin" type="button">Login</button> 
-		        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"> 
-		        <ul class="nav navbar-nav">
-			        <li>
-			        	<div class="btn-group">
-			        		<button id="btnBoard" type="button" class="btn btn-default btn-responsive">Board</button>
-			        		<button type="button" value="grid" id="toggleGridButton" class="btn btn-default btn-responsive">Grid</button>
-			        		<button type="button" title="drop" value="drop" id="drop" class="nottoggle btn btn-default btn-responsive">Drop To Grid</button>
-			        		<button id="btnTxt" type="button" class="btn btn-default btn-responsive">Edit Config</button>
-			        	</div>
-			  		</li>
-
-			        <li><input id='testfunction' value='loadCfg(table.json);' class="form-control input-responsive"></li>
-			        <li><button type="button" value="submit" id="canvasButton" class="btn btn-default btn-responsive">Submit</button></li> 
-			        			  	</ul>
-		        </div>
-	        </div>
-        </nav> -->
-      <!-- </div> --> <!-- /demo-headline -->
-      <div id="kitcube-container">
         <div id="board-container"> <!-- there should be tabs with boards -->
         </div>
-      </div><!-- #kitcube-container -->
       <div id="footer" class="shadow">
         <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
       </div>
-    </div><!-- #content -->
-		
-    <!-- #footer -->
-
   </div>
-  <!-- java script -->
+  <!-- require -->
   <script data-main="../static/mainscreen/js/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}></script> 
-  <!-- <script src={% static "mainscreen/js/scripts/dev/dataStream.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/helpers/dateTimeFormat.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/helpers/dataHandler.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/datacaching/backgrDataCacher.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/datacaching/dataCacher.js" %}>
-  </script> 
-  <script src={% static "mainscreen/js/scripts/dev/datacaching/webSockets.js" %}>
-  </script> -->
-  
 </body>
 </html>
 

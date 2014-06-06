@@ -50,8 +50,7 @@
 
 .group {
     position: absolute !important;
-    background: rgba(255,255,255,1);
-    //background: rgba(100,200,100,0.7);
+    background: rgba(100,200,100,0.7);
     //background: rgba(45,43,46,0.7);
     color: #2e2d2b;
     //-moz-box-sizing: border-box;
@@ -63,8 +62,7 @@
     float: left;
     //display: inline-table;
     position: relative;
-    //color: #ffff4d;
-    color: white;
+    color: #ffff4d;
     //color: yellow;
     background: #137;
     -moz-box-sizing: border-box;

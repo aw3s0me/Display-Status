@@ -42,6 +42,7 @@ define([
 				logged_in: true,
 				group: group
 			})
+			$('#banner').append(window.editorBtnTemplate);
 		}
 	}
 
@@ -53,6 +54,13 @@ define([
 			//window.host = "http://katrin.kit.edu/adei-detector/";
 			window.host = "http://katrin.kit.edu/adei/";
 			window.lastUpdateTime = moment.utc();
+
+			window.openWindow = function() {
+				window.location.href = '../editor/';
+			}
+
+			window.editorBtnTemplate = '<button onclick="window.openWindow()"; class="btn btn-default circle-btn" id="goEditorButton" data-toggle="tooltip" data-placement="bottom" title="Go to Editor"><span class="glyphicon glyphicon-edit"></span></button>';
+			//so lazy
 			/*try
 			{
 				console.log(new Date(1400700000 * 1000), new Date(1401409791 * 1000));
@@ -68,13 +76,10 @@ define([
 			catch(msg) {
 				console.log(msg)
 			} */
-
-		
-
 			var csrfToken = $('meta[name="csrf_token"]').attr('content');
 			console.log(csrfToken);
 			$(document).ajaxSend(function(event, xhr, settings) {
-				/* stuff to do before an AJAX request is sent */
+				/* stuff to do before an AJAX request is sent. ERROR */
 				//xhr.setRequestHeader('X-CSRFToken', csrfToken);
 			});
 
@@ -107,19 +112,6 @@ define([
 			initialize_user();
 			$('#toggleGridButton').show();
 			Router.initialize();
-			//document.location.href = '#board';
-
-			$("#btnBoard").click(function() {
-				document.location.href = '#board/0';
-			});
-
-			$("#btnTxt").click(function() {
-				document.location.href = '#editor';
-			});
-
-			$("#btnLogin").click(function() {
-				document.location.href = '#login';
-			});
 
 		});
 	}

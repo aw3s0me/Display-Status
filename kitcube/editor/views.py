@@ -13,29 +13,52 @@ from django.middleware.csrf import get_token
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets
+from provider.user.userValidation import is_user_valid_obj, is_user_valid_obj_groups
+
+from django.template import Context, Template, loader
 
 #from django.views.decorators.csrf import csrf_exempt
 
-#@csrf_exempt
+import pdb
+
+def render_user_block(user=None):
+    #pdb.set_trace()
+    if user == None:
+        userblock = loader.get_template('editor/notloggeduserblock.html')
+        userblock_html = userblock.render(Context({}))
+    else:
+        userblock = loader.get_template('editor/loggeduserblock.html')
+        userblock_html = userblock.render(Context({'username': user.username}))
+    return userblock_html
+
 def index(request):
     data = {
         'title': getattr(settings, 'TITLE'),
         'description': getattr(settings, 'DESCRIPTION'),
         'csrf_token': get_token(request)
     }
-    #request.META["CSRF_COOKIE_USED"] = True
-    #data.update(csrf(request))
-    #print "TEST INDEX"
-    #request.COOKIES.get('logged_in_status') #work with cookie
+    tokenkey = request.COOKIES.get('access_token')
+    pdb.set_trace()
+    if tokenkey and (len(tokenkey) > 0):
+        userObj = is_user_valid_obj_groups(tokenkey)
+        if userObj:
+            if userObj[0]:
+                groups = "" #forming the list of groups that are separated by commas
+                data['userblock'] = render_user_block(userObj[0])
+                for group in userObj[1]:
+                    groups = groups + group.name + ','
+                    groups = groups[:-1]
 
+                data['projects'] = groups
+            else:
+                data['userblock'] = render_user_block()
+        else:
+            print "Violated" #need to handle
+    else:
+        data['userblock'] = render_user_block()
 
     response = render_to_response('editor/index.html', data)#, context_instance=RequestContext(request))
     
-    #response['Access-Control-Allow-Origin'] = '*'  
-    #response['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'  
-    #response['Access-Control-Max-Age'] = '1000'  
-    #response['Access-Control-Allow-Headers'] = '*'  
-    #response['Access-Control-Allow-Credentials'] = 'true'
     return response  
 
 
