@@ -56,9 +56,9 @@ GRAPH_MODELS = {
 }
 
 #Scopes that app will know
-OAUTH_PROVIDER = {
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
-}
+#OAUTH_PROVIDER = {
+   # 'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+#}
 
     #'provider',
     #'provider.oauth2',
@@ -77,7 +77,7 @@ INSTALLED_APPS = (
     'mainscreen',
     'choice',
     'editor',
-    'oauth2_provider',
+    #'oauth2_provider',
     'rest_framework',
     'snippets',
     'rest_framework.authtoken',

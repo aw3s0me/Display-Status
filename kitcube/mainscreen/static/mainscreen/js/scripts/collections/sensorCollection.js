@@ -54,7 +54,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 			return objToPush;
 
 			//dataToTable.push(objToPush);
-
+			
 			//return dataToTable;
 			
 		},

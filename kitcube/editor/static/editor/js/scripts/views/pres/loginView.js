@@ -1,7 +1,7 @@
 define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], function($, _, Backbone, LoginTemplate) {
 
 	var loginView = Backbone.View.extend({
-		container: $('#board-container'),
+		container: $('#container'),
 		el: undefined,
 		form: undefined,
 		initialize: function() {

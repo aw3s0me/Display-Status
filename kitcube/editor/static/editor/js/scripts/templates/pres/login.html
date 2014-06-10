@@ -1,0 +1,16 @@
+<div id="loginFormDiv">
+	<!-- {% csrf_token %} -->
+	<h2>Log-in</h2>
+	<form id="loginForm" method="post">
+		<input type="text" id="username" name="username" placeholder="Username"/>
+		<input type="password" id="password" name="password"  placeholder="Password" />
+		<input type="submit" id="loginBtn" name="LogIn" value="Log in"/>
+	</form>
+	<!-- <input type="button" id="loginFacebook" name="loginFacebook" value='Facebook'/>
+	<input type="button" id="loginGoogle" name="loginGoogle" value='Google'/> -->
+	<a id="loginFacebook"/>
+	<a id="loginGoogle"/>
+	<p class="reglbl"><a href="#register">Register</a></p>
+	<p class="forgetlbl"><a href="">Forgot the password?</a></p>
+</div>
+<div id="loginValidation"></div>

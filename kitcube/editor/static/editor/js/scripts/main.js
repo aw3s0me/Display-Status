@@ -13,7 +13,7 @@ require.config({
     //There goes my helpers
     "kit.sizeDetector": "dev/kit.sizedetector/sizedetector",
     "kit.parser": "dev/kit.parser/kit.cfgParser",
-    "kit.dataDownloader" : "dev/kit.dataDownloader/kit.dataDownloader",
+    "kit.dataDownloader" : "dev/kit.dataDownloader/kit.dataDownloader", //refactor
     //my grid part
     "kitgrid": "dev/kit.grid/kitGrid",
     "text" : "vendor/requirejs-text/text",

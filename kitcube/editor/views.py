@@ -38,7 +38,7 @@ def index(request):
         'csrf_token': get_token(request)
     }
     tokenkey = request.COOKIES.get('access_token')
-    pdb.set_trace()
+    #pdb.set_trace()
     if tokenkey and (len(tokenkey) > 0):
         userObj = is_user_valid_obj_groups(tokenkey)
         if userObj:

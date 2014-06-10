@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   //overflow: hidden;
-  font-family: 'Open Sans', sans-serif;
+  //font-family: 'Open Sans', sans-serif;
 }
 
 #wrapper {
@@ -50,19 +50,46 @@ body {
 
 /* End */
 
+/* Login form */
 
 /* LoginView CSS TEMPLATE BEGIN */
 
+#userBlock {
+	float: right;
+	//display: inline;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.loginHref {
+	margin-right: 10px;
+	color: #000;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+#userStatus {
+	margin-right: 10px;
+}
+
+.loginlbl {
+	padding-top: 10px;
+}
+
+.loginHref:hover {
+	color: grey;
+	text-decoration: none;
+}
 
 #loginFormDiv {
-    width: 50%;
+    width: 27%;
     margin: auto;
-    margin-top: 120px;
+    margin-top: 150px;
 }
 
 #loginFormDiv h2 {
     text-shadow: 0 1px 0 #27ae60;
-    font-size: 1.62em;
+    font-size: 40px;
     //color: #2ecc71;
     color: black;
     display: block;
@@ -77,12 +104,24 @@ body {
 }
 
 #loginFormDiv a {
-    color: black;
+    color: #27ae60;
 }
 
-#loginFormDiv input[type="text"],
-#loginFormDiv input[type="submit"],
-#loginFormDiv input[type="password"]
+.reglbl {
+    padding-top : 12px;
+    display: inline-block;
+}
+.forgetlbl {
+	margin-top: -5px;
+}
+
+
+
+#loginForm input[type="text"],
+#loginForm input[type="submit"],
+#loginForm input[type="password"]
+/*#registerFormDiv input[type="text"],*/
+/*#registerFormDiv input[type="submit"],*/
 {
     clear: both;
     float: left;
@@ -92,63 +131,99 @@ body {
     margin: 6px 0;
     padding: 4px 10px;
     width: 100%;
-    height: 34px;
+    height: 70px;
     outline: 0;
     color: #34495e;
-    font-size: 14px;
+    font-size: 24px;
 }
 
-#loginFormDiv input[type=submit] {
+#loginForm input[type=submit]
+/*#registerFormDiv input[type=submit]*/ {
     background: #27ae60;
     //background: #e5e5e5;
     color: #ecf0f1;
     border: 0;
     border-bottom: 2px solid #2ecc71;
-    margin: 10px 0 0;
+    margin: 22px 0 0;
+    height: 60px;
 }
 
 #loginFormDiv input[value*="Facebook"] {
-    background: #3b5998;
-    border-color: #1f4189;
-    width: 50%;
-    float: left;
-    clear: none;
-    margin-left: 0;
+  background: url(../images/login/fb_logo_min.png) no-repeat;
+  cursor: pointer;
+  width: 90px;
+  height: 90px;
 }
 
 #loginFormDiv input[value*="Google"] {
-    background: #0396c7;
-    border-color: #0078a6;
-    width: 50%;
-    float: left;
-    clear: none;
+  background: url(../images/login/google_logo_min.png) no-repeat;
+  cursor: pointer;
 }
 
-#loginFormDiv input[value*="Facebook"]:active,
-#loginFormDiv input[value*="Facebook"]:focus {
-    color: #ecf0f1;
-    background: #1f4189;
+#loginFacebook {
+  background: url(../images/login/fb_logo_min.png) no-repeat;
+  cursor: pointer;
+  padding-left: 40px;
+  padding-top: 38px;
+  background-size:35px 37px;
+  margin-top: 10px;
+  float: right
 }
 
-input[value*="Google"]:active,
-input[value*="Google"]:focus {
-    color: #ecf0f1;
-    background: #0078a6;
+#loginGoogle {
+  background: url(../images/login/google_logo_min.png) no-repeat;
+  cursor: pointer;
+  padding-left: 40px;
+  padding-top: 38px;
+  margin-top: 10px;
+  float: right;
+}
+
+
+#loginValidation {
+	display: none;
+	width: 30%;
+	border: 1px solid;
+	margin: 0 auto;
+	padding:15px 10px 15px 50px;
+	background-repeat: no-repeat;
+	background-position: 10px center;
+	background-image: url(../images/icons/validation.png);
+	color: #ff0000;
+	background-color: #FFBABA;
+}
+
+.invalid_input {
+	//background-color: ;
+	border: 2px solid #f08080 !important;
+	background-color: #FFBABA !important;
+}
+
+.valid_input {
+	//background-color: #adff2f;
+	border-color: #adff2f !important;
+	background-color: #DFF2BF !important;
 }
 
 /* LoginView CSS TEMPLATE END */
 
 /* Register Form Begin */
 
+#registerWrapper {
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 150px;
+}
+
 #registerFormDiv {
-    width: 50%;
-    margin: 0 auto;
-    margin-top: 120px;
+    //width: 30%;
+    height: 295px;
+    
 }
 
 #registerFormDiv h2 {
     text-shadow: 0 1px 0 #27ae60;
-    font-size: 1.62em;
+    font-size: 45px;
     //color: #2ecc71;
     color: black;
     display: block;
@@ -178,10 +253,10 @@ input[value*="Google"]:focus {
     margin: 6px 0;
     padding: 4px 10px;
     width: 100%;
-    height: 34px;
+    height: 50px;
     outline: 0;
     color: #34495e;
-    font-size: 14px;
+    font-size: 25px;
 }
 
 #registerFormDiv input[type=submit] {
@@ -189,12 +264,55 @@ input[value*="Google"]:focus {
     //background: #e5e5e5;
     color: #ecf0f1;
     border: 0;
+    height: 52px;
     border-bottom: 2px solid #2ecc71;
-    margin: 10px 0 0;
+    margin: 25px 0 0;
 }
 
+#mailForm {
+  display: none;
+}
 
+.registerValidation {
+  display: none;
+  border: 1px solid;
+  margin: 0 auto;
+  padding:15px 10px 15px 50px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  background-image: url(../images/icons/validation.png);
+  color: #ff0000;
+  background-color: #FFBABA;
+}
+
+.activationCompletedDiv {
+  display: none;
+  width: 100%;
+  border: 1px solid;
+  margin: 0 auto;
+  padding:15px 10px 15px 50px;
+  background-repeat: no-repeat;
+  background-color: #DFF2BF !important;
+  background-position: 10px center;
+  background-image: url(../images/icons/completed.png);
+  border-color: #adff2f !important;
+  color: #006400;
+  background-color: white;
+}
 /* Register Form End */
+
+.circle-btn {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.42;
+  border-radius: 15px;
+}
+
+/* Registration end */
+
 
 /* TextEditorView CSS TEMPLATE START */
 

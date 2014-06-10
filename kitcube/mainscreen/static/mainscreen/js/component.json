@@ -13,12 +13,12 @@
 		"qunit": null,
 		"js-yaml": null,
 		"jqgrid": null,
-		"backgrid": null,
 		"highcharts.com": null,
 		"jqueryui-touch-punch": null,
 		"FitText.js": null,
 		"jsonlint": null,
 		"slabText": null,
-		"momentjs": null
+		"momentjs": null,
+		"oauth.io": "0.2.0"
 	} 
 }		

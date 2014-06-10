@@ -14,26 +14,6 @@ admin.autodiscover()
 from rest_framework import viewsets, routers
 from rest_framework import permissions
 
-from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
-
-class UserViewSet(viewsets.ModelViewSet):
-	permission_classes = [permissions.IsAuthenticated, TokenHasReadWriteScope]
-	model = User
-
-class GroupViewSet(viewsets.ModelViewSet):
-	permission_classes = [permissions.IsAuthenticated, TokenHasScope]
-	required_scopes = ['groups']
-	model = Group
-
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'groups', GroupViewSet)
-
-"""
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-"""
-
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'kitcube.views.home', name='home'),

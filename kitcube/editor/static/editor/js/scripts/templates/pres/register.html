@@ -1,10 +1,20 @@
-<div id="registerFormDiv">
+<div id="registerWrapper">
+<div id="registerFormDiv" >
 	<h2>Register</h2>
 	<form id="registerForm" method="post">
-		<input type="text" id="username" name="username" placeholder="Username" value="allah" />
-		<input type="password" id="password" name="password"  placeholder="Password" value="123" />
-		<input type="password" id="password" name="confPassword"  placeholder="Confirm Password" value="123" />
-		<input type="text" id="email" name="email" placeholder="Email" value="aw3s0me@rocketmail.com" />
+		<input type="text" class="username" name="username" placeholder="Username"  />
+		<input type="password" class="password" name="password"  placeholder="Password" />
+		<input type="password" class="confPassword" name="confPassword"  placeholder="Confirm password" />
+		<input type="text" class="email" name="email" placeholder="Email" />
 		<input type="submit" id="regBtn" name="Reg" value="Register"/>
 	</form>
+	<!-- <form id="mailForm" method="post">
+		<input type="text" class="email" name="email" placeholder="Email" value="fugeem90@gmail.com" />
+		<input type="submit" id="regBtn" name="Reg" value="Register"/>
+	</form>
+	<input type="button" id="registerFacebook" name="submit" value="Facebook"/>
+	<input type="button" id="registerGoogle" name="submit" value="Google"/> -->
+</div>
+<div id="registerValidationDiv" class="registerValidation"></div>
+
 </div>

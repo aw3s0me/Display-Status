@@ -133,7 +133,14 @@ define([
 			this.showView(this.views.myRegisterView);
 		},
 		defaultAction: function(actions) {
-			// We have no matching route, lets just log what the URL was
+			// We have no matching route, lets just log what the URL 
+			if (!window.activeSessionUser.get('logged_in')) {
+				console.log('default: ' + 'showLogin')
+				this.showLoginView()
+			} else {
+				console.log('default: ' + 'showGui')
+				this.showGuiEditor();
+			}
 			console.log("404: " + actions);
 		}
 	});

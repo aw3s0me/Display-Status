@@ -161,13 +161,19 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			this.addAllAlarmLists(alarmListsToAdd);
 			this.addAllCharts(chartsToAdd);
 
+
+			this.enableFetchingData();
+			this.updateAllSensors();
+
+		},
+		disableFetchingData: function() {
+
+		},
+		enableFetchingData: function() {
 			var self = this;
 			this.updSensorsInterval = setInterval(function() {
 				self.updateAllSensors();
 			}, 10000); //the only way to pass param */
-
-			self.updateAllSensors();
-
 		},
 		serializeToJson: function() {
 			var newJson = {};
@@ -911,6 +917,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				var attr = arr[i];
 				this.addSensorTable(attr);
 			}
+		},
+		hide: function() {
+			this.disableFetchingData();
+			this.el.hide();
 		}
 	});
 
