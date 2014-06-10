@@ -31,7 +31,7 @@ define([
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
 		if (token && token.length > 0) {
-			var username = $('#userStatus').find('span').text();
+			var username = $('#userName').text();
 			var group = $('meta[name="project"]').attr('content');
 			if (!username.length || !group.length) {
 				return;

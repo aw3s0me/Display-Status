@@ -4,7 +4,7 @@
         </br>
         <b id="lblUserInfo">
         {% if user.username %}
-            Welcome {{ user.username }}
+            Welcome, <span id="userName">{{ user.username }}</span> !
         {% else %}
             No authorized user
         {% endif %}
