@@ -458,26 +458,27 @@ body {
   border-radius: 15px;
 }
 
-#toggleGridButton {
-  margin-right: 15px;
+.menuButton {
+  margin-right: 7px;
   margin-top: 10px;
   float: right;
   display: none;
-  //position: absolute;
+}
+
+#toggleGridButton {
+  
 }
 
 #goEditorButton {
-  margin-right: 15px;
-  margin-top: 10px;
-  float: right;
-  //display: none;
-  //position: absolute;
+
 }
 
-#lblFromNow {
-  margin-left: 10px;
+#lblInfo {
+  margin-right: 10px;
   margin-top: 8px !important;
   font-size: 12px;
+  float: right;
+  text-align: left;
   display: inline-block;
   //display: none;
 }

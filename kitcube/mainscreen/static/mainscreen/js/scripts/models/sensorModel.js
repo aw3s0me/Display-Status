@@ -6,7 +6,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	var _min3State = 0.5;
 	var _max3State = 1.5;
 	var _minNoneState = 0;
-	var _defbgcolor;
+	var _defvalcolor;
 	var _defalarmcolor = '#E51400';
 	//var _defokcolor = '#40bf40';
 	var _defokcolor = '#20c62e';
@@ -49,7 +49,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				exp: false,
 				size: [2, 2],
 				coords: [0, 0],
-				bgcolor: '#1bb2e2',
+				valcolor: '#20c62e',
+				//bgcolor: '#1bb2e2',
+				bgcolor: '#ffffff',
 				valUnit: "NaN",
 				link: undefined,
 				factor: 1,
@@ -60,7 +62,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		},
 		initialize: function() {
 			//console.log("model created");
-			_defbgcolor = this.get('bgcolor');
+			_defvalcolor = this.get('valcolor');
 			
 			switch (this.get('sensortype')) {
 				case "2-state":
@@ -174,10 +176,10 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 							var val = this.get('value'); 
 							if (val > this.get('min')) {
-								this.set({bgcolor: _defokcolor, valUnit: "YES"});
+								this.set({valcolor: _defokcolor, valUnit: "YES"});
 							}
 							else {
-								this.set({bgcolor: _defalarmcolor, valUnit: "NO"});
+								this.set({valcolor: _defalarmcolor, valUnit: "NO"});
 							}
 							break;
 						}
@@ -187,17 +189,17 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								this.set({
 									valUnit: "OPEN",
-									bgcolor: _defokcolor
+									valcolor: _defokcolor
 								});
 							} else if (val < this.get('max')) {
 								this.set({
 									valUnit: "SHORT",
-									bgcolor: _defokcolor
+									valcolor: _defokcolor
 								});
 							} else if (val === 0) {
 								this.set({
 									valUnit: "---",
-									bgcolor: _defalarmcolor
+									valcolor: _defalarmcolor
 								});
 							}
 							break;
@@ -210,17 +212,17 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								value = "INV"; //"INVALID"
 								this.set({
-									bgcolor: _defalarmcolor
+									valcolor: _defalarmcolor
 								});
 							} else if (val < this.get('max')) {
 								value = "MID"; //Full = "MIDDLE"
 								this.set({
-									bgcolor: _defmiddlecolor
+									valcolor: _defmiddlecolor
 								});
 							} else {
 								value = (val > this.get('max')) ? "IN" : "OUT";
 								this.set({
-									bgcolor: _defokcolor
+									valcolor: _defokcolor
 								});
 							}
 							this.set({
@@ -235,12 +237,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								this.set({
 									valUnit: "DIS", //Full = "DIS"
-									bgcolor: _defalarmcolor
+									valcolor: _defalarmcolor
 								});
 							} else {
 								this.set({
 									valUnit: "ENAB", //Full = "ENABLED"
-									bgcolor: _defokcolor
+									valcolor: _defokcolor
 								});
 							}
 							break;
@@ -253,7 +255,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val === this.get('min')) {
 								this.set({
 									valUnit: "---",
-									bgcolor: _defalarmcolor
+									valcolor: _defalarmcolor
 								});
 							}
 							else {
@@ -323,11 +325,11 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							} else {
 								if (val < this.get('min') || val > this.get('max')) {
 									this.set({
-										bgcolor: _defalarmcolor
+										valcolor: _defalarmcolor
 									});		
 								} else {
 									this.set({
-										bgcolor: _defbgcolor
+										valcolor: _defvalcolor
 									});
 								}
 							}
@@ -539,7 +541,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					}*/
 				//},
 				lineWidth: 2
-				//lineColor: this.get('bgcolor')
+				//lineColor: this.get('valcolor')
 			};
 
 			if (axislabels === false) {
@@ -715,8 +717,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				});
 			}
 
-			if (this.get('bgcolor') === '#338fff') {
-				sensorClone.unset('bgcolor', {
+			if (this.get('valcolor') === '#338fff') {
+				sensorClone.unset('valcolor', {
 					silent: true
 				});
 			}

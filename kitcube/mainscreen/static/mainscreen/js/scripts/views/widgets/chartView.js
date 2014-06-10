@@ -198,8 +198,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var model = this.model;
 			var dx = model.get('size')[0];
 			var dy = model.get('size')[1];
-			var px = model.get('coords')[0];
-			var py = model.get('coords')[1];
 			var scale = this.grid.getScale();
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -211,9 +209,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			var controlPanelTemplate = $(_.template(ChartTemplate, {}));
 			//this.container = $(_.template(ChartTemplate, { id: model.get('id') }));
 
-			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
+			this.grid.addUnit(this.container, {
 				border: 0,
-				transparent: true
+				transparent: true,
+				draggable: true,
+				resizable: true
 			}, this.model);
 
 			if (!model) {

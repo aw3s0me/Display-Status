@@ -16,37 +16,40 @@ def get_image_url(projname):
     project = Project.objects.get(link=projname)
     return project.banner
 
-def get_banner(projname):
+def get_banner(projname, user):
+    user_panel_html = render_user_panel(user)
     if projname == 'katrin':
         banner = loader.get_template('mainscreen/katrin_banner.html')
         #if we need to get image from database
         #banner_html = banner.render(Context({'banner_image': get_image_url(projname), 'MEDIA_URL': settings.MEDIA_URL}))
-        banner_html = banner.render(Context({}))
+        banner_html = banner.render(Context({'userPanel': user_panel_html}))
     elif projname == 'kitcube':
         banner = loader.get_template('mainscreen/kitcube_banner.html')
         #banner_html = banner.render(Context({'banner_image': get_image_url(projname), 'MEDIA_URL': settings.MEDIA_URL}))
-        banner_html = banner.render(Context({}))
+        banner_html = banner.render(Context({'userPanel': user_panel_html}))
     else:
         banner = loader.get_template('mainscreen/def_banner.html')
         banner_html = banner.render(Context({}))
     return banner_html
 
-def render_user_block(user=None):
+def render_user_panel(user=None):
     #pdb.set_trace()
     if user == None:
-        userblock = loader.get_template('mainscreen/notloggeduserblock.html')
-        userblock_html = userblock.render(Context({}))
+        user_panel = loader.get_template('mainscreen/userMainscreenPanel.html')
+        user_panel_html = user_panel.render(Context({ 'user': '' }))
     else:
-        userblock = loader.get_template('mainscreen/loggeduserblock.html')
-        userblock_html = userblock.render(Context({'username': user.username}))
-    return userblock_html
+        user_panel = loader.get_template('mainscreen/userMainscreenPanel.html')
+        user_panel_html = user_panel.render(Context({ 'user': user }))
+    return user_panel_html
 
 
 def mainscreen_index(request, projname=None, name=None):
-    print projname
-    print name
-    
-    banner_html = get_banner(projname)
+    tokenkey = request.COOKIES.get('access_token')
+    user = None
+    if tokenkey and (len(tokenkey) > 0):
+        user = is_user_valid_obj(tokenkey, projname)
+
+    banner_html = get_banner(projname, user)
     data = {
         'title': getattr(settings, 'TITLE'),
         'description': getattr(settings, 'DESCRIPTION'),
@@ -54,15 +57,7 @@ def mainscreen_index(request, projname=None, name=None):
         'project': projname,
     }
     #pdb.set_trace()
-    tokenkey = request.COOKIES.get('access_token')
-    if tokenkey and (len(tokenkey) > 0):
-        user = is_user_valid_obj(tokenkey, projname)
-        if user:
-            data['userblock'] = render_user_block(user)
-        else:
-            data['userblock'] = render_user_block()
-    else:
-        data['userblock'] = render_user_block()
+    
         
     response = render_to_response('mainscreen/index.html', data, context_instance=RequestContext(request))
     

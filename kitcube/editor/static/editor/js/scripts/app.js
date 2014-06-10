@@ -44,7 +44,6 @@ define([
     // Pass in our Router module and call it's initialize function
     $(document).ready(function($) {
       window.host = "http://katrin.kit.edu/adei/";
-      window.lastUpdateTime = moment.utc();
 
       window.openWindow = function() {
         window.location.href = '../editor/';

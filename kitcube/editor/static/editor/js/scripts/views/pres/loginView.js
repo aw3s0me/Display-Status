@@ -159,8 +159,23 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				group: loginInfo.group
 			});
 			$.cookie('access_token', user.get('token'), { path: '/'});
+
+			if (!window.activeSessionUser.get('logged_in')) {
+				$('.loginHref').text('Login');
+				$('.loginHref').attr('href', '#login');
+			}
+			else {
+				var curUser = window.activeSessionUser;
+				$('.loginHref').text('Logout');
+				$('.loginHref').attr('href', '#logout');
+				$('#userStatus').text('Welcome! ' + curUser.get('username') + ',');
+			}
+
 			window.location.href = "#board";
 			$('#banner').append(window.editorBtnTemplate);
+
+
+
 		},
 		onError: function(errorInfo) {
 			var div = $('#loginValidation');

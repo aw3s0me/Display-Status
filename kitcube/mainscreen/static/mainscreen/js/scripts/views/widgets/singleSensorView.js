@@ -27,7 +27,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.render();
 
 			this.model.on('resize', this.onresize, this);
-			this.model.on('change:bgcolor', this.onchangebgcolor, this);
+			this.model.on('change:valcolor', this.onchangevalcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
 			this.model.on('removedFromChart', this.onremovedfromchart, this);
 
@@ -67,10 +67,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var newSensor = this.model;
 			//console.log(this.model);
 			var scale = this.grid.getScale();
-			var dx = newSensor.get("size")[0];
-			var dy = newSensor.get("size")[1];
-			var px = newSensor.get("coords")[0];
-			var py = newSensor.get("coords")[1];
 
 			var snglSensorTemplate = $(_.template(SensorTemplate, {
 				sensor_id: newSensor.get('id'),
@@ -107,6 +103,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				.css('right', 5 * scale + 'px')
 				.css('top', 4 * scale + 'px');
 
+			this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
+
 		},
 		getHtml: function() {
 			return this.container[0];
@@ -132,11 +130,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var min = (height < width) ? height : width;
 			var ratio = min / max;
 		},
-		onchangebgcolor: function(model) {
+		onchangevalcolor: function(model) {
 			var sensorDiv = this.container;
 			var sensorModel = model;
-
-			sensorDiv.css('background-color', this.model.get('bgcolor'));
+			sensorDiv.find('#val_' + this.model.get('id')).css('color', this.model.get('valcolor'));
+			//sensorDiv.css('background-color', this.model.get('valcolor'));
 		},
 		onchangevalue: function(model) {
 			var sensorDiv = this.container;

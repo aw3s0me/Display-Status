@@ -25,7 +25,7 @@ require.config({
     //colorpicker part
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
     "bigtext": "vendor/bigtext/src/bigtext",
-    "momentjs": "vendor/momentjs/min/moment.min",
+    //"momentjs": "vendor/momentjs/min/moment.min",
     "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
     "tabdrop": "vendor/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
@@ -76,19 +76,6 @@ require.config({
         "jquery"
       ]
     },
-    /*"flatui-app": {
-      deps: [
-        "jquery",
-        "jqueryui",
-        "bootstrap",
-        "vendor/flat-ui-official/js/bootstrap-select",
-        "vendor/flat-ui-official/js/bootstrap-switch",
-        "vendor/flat-ui-official/js/flatui-checkbox",
-        "vendor/flat-ui-official/js/flatui-radio",
-        "vendor/flat-ui-official/js/jquery.placeholder",
-        "vendor/flat-ui-official/js/jquery.tagsinput"
-      ]
-    },*/
     kitgrid: {
       deps: [
         "jquery"//,

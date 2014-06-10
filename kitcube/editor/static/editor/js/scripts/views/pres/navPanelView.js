@@ -5,6 +5,11 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/navPanel.html'], fun
 		el: undefined,
 		initialize: function() {
 			this.render();
+			this.on('logout', function() {
+				if (this.el) {
+					this.el.remove();
+				}
+			}, this);
 		},
 		render: function() {
 			var compiledTemplate = _.template(NavPanelTemplate, {});
@@ -23,24 +28,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/navPanel.html'], fun
 			);
 			this.el = $('#navPanel');
 			//$(element).chosen();
-		},
-		hide: function() {
-			this.el.hide();
-		},
-		show: function() {
-			this.el.show();
-		},
-		isHidden: function() {
-			if (this.el.is(':hidden')) {
-				return true;
-			} else
-				return false;
-		},
-		isShown: function() {
-			if (this.el.is(':hidden')) {
-				return false;
-			} else
-				return true;
 		}
 	})
 

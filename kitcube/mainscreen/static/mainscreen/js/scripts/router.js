@@ -5,11 +5,12 @@ define([
 	'backbone',
 	'views/pres/boardView',
 	'views/pres/loginView',
-	'views/pres/registerView'
+	'views/pres/registerView',
+	'views/pres/userPanelView'
 	//'views/pres/controlPanelView',
 	//'views/pres/txtEditorView',
 	//'views/pres/settingsView'
-], function($, _, Backbone, BoardView, LoginView, RegisterView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
+], function($, _, Backbone, BoardView, LoginView, RegisterView, UserPanelView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -57,8 +58,8 @@ define([
 			$.ajax({
 				//url: '../static/mainscreen/tempcfg/empty.json',
 				//url: '../static/mainscreen/tempcfg/katrin_final.json',
-				//url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
-				url: '../static/mainscreen/tempcfg/tabs.json',
+				url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
+				//url: '../static/mainscreen/tempcfg/tabs.json',
 				async: false,
 				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 				success: function(data){
@@ -83,17 +84,6 @@ define([
 			}
 
 			this.showView(this.views.myBoardViewContainer);
-
-			if (!window.activeSessionUser.get('logged_in')) {
-				$('.loginHref').text('Login');
-				$('.loginHref').attr('href', '#login');
-			}
-			else {
-				var curUser = window.activeSessionUser;
-				$('.loginHref').text('Logout');
-				$('.loginHref').attr('href', '#logout');
-				$('#userStatus').text('Welcome! ' + curUser.get('username') + ',');
-			}
 		},
 		showLoginView: function() {
 			if (this.views.myLoginView === undefined) {
@@ -128,9 +118,12 @@ define([
 					}
 				})
 				var curUser = window.activeSessionUser;
-				$('.loginHref').text('Login');
-				$('.loginHref').attr('href', '#login');
-				$('#userStatus').text('');
+				if (this.views.userPanelView !== undefined) {
+					this.views.userPanelView.onUserLogout();
+				} 
+				//$('.loginHref').text('Login');
+				//$('.loginHref').attr('href', '#login');
+				//$('#userStatus').text('');
 			}
 		},
 		showRegisterView: function(){
@@ -149,7 +142,9 @@ define([
 
 	var initialize = function() {
 		var app_router = new AppRouter;
-
+		if (app_router.views.userPanelView === undefined) {
+			app_router.views.userPanelView = new UserPanelView();
+		}
 		Backbone.history.start();
 	};
 	return {

@@ -4,7 +4,6 @@ define([
 	'underscore',
 	'backbone',
 	'kit.sizeDetector',
-	'views/pres/boardView',
 	'views/pres/loginView',
 	//'views/pres/controlPanelView',
 	'views/pres/txtEditorView',
@@ -12,7 +11,7 @@ define([
 	'views/pres/boardViewContainer',
 	'views/pres/navPanelView',
 	'views/pres/registerView'
-], function($, _, Backbone, sizeDetector, BoardView, LoginView, TextEditorView, SettingsView, BoardViewContainer, NavPanelView, RegisterView) {
+], function($, _, Backbone, sizeDetector, LoginView, TextEditorView, SettingsView, BoardViewContainer, NavPanelView, RegisterView) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -36,7 +35,6 @@ define([
 		showView: function(view) {
 			if (this.views.current != undefined) {
 				$(this.views.current.el).hide();
-				this.views.current.trigger('hide');
 			}
 			this.views.current = view;
 			$(this.views.current.el).show();
@@ -93,8 +91,6 @@ define([
 			}
 			this.showView(this.views.myLoginView);
 
-			$('.loginHref').text('Board');
-			$('.loginHref').attr('href', '#board');
 		},
 		doLogout: function() {
 			if (window.activeSessionUser.get('logged_in')) {
@@ -120,9 +116,12 @@ define([
 					}
 				})
 				var curUser = window.activeSessionUser;
-				$('.loginHref').text('Login');
+				$('.loginHref').text('');
 				$('.loginHref').attr('href', '#login');
 				$('#userStatus').text('');
+				if (this.views.myNavPanelView !== undefined) {
+					this.views.myNavPanelView.remove();
+				}
 			}
 		},
 		showRegisterView: function() {

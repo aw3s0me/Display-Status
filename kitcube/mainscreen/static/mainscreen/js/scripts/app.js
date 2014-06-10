@@ -17,7 +17,7 @@ define([
 	'highcharts-legend',
 	//'regression',
 	//'vendor/momentjs/min/moment.min',
-	'momentjs',
+	//'momentjs',
 	//'fittext',
 	"kit.sizeDetector",
 	"kit.parser",
@@ -26,7 +26,7 @@ define([
 	"models/userModel",
 	//'cacher',
 	'router' // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*chosen,*/ OAuthio,/*Sortable, fitText, slabText,*/ bigtext, HighchartsLeg, /* regression,*/ momentJS, sizeDet, parser, dataDownloader, JqCookie, UserModel, /*Cacher,*/ Router) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*chosen,*/ OAuthio,/*Sortable, fitText, slabText,*/ bigtext, HighchartsLeg, /* regression, momentJS,*/ sizeDet, parser, dataDownloader, JqCookie, UserModel, /*Cacher,*/ Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -46,6 +46,10 @@ define([
 		}
 	}
 
+	var initializeMainPageCSS = function() {
+		$('#toggleGridButton').show();
+	}
+
 	var initialize = function() {
 		// Pass in our Router module and call it's initialize function
 		$(document).ready(function($) {
@@ -58,8 +62,6 @@ define([
 			window.openWindow = function() {
 				window.location.href = '../editor/';
 			}
-
-			window.editorBtnTemplate = '<button onclick="window.openWindow()"; class="btn btn-default circle-btn" id="goEditorButton" data-toggle="tooltip" data-placement="bottom" title="Go to Editor"><span class="glyphicon glyphicon-edit"></span></button>';
 			//so lazy
 			/*try
 			{
@@ -80,7 +82,7 @@ define([
 			console.log(csrfToken);
 			$(document).ajaxSend(function(event, xhr, settings) {
 				/* stuff to do before an AJAX request is sent. ERROR */
-				//xhr.setRequestHeader('X-CSRFToken', csrfToken);
+				xhr.setRequestHeader('X-CSRFToken', csrfToken);
 			});
 
 			var body = document.body,
@@ -110,7 +112,9 @@ define([
 			console.log(OAuth)
 
 			initialize_user();
-			$('#toggleGridButton').show();
+
+			//Adding to all views triggering event function
+			Backbone.View.prototype.eventAggregator = _.extend({}, Backbone.Events);
 			Router.initialize();
 
 		});

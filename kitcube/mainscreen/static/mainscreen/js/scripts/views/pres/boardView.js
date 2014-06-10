@@ -223,8 +223,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						//var result = window.db.dataHandl.onMessageRecievedCsv(data);
 						result = parseCSVForUpdating(data, masks.length);
 						var time = moment(result.time[0] * 1000);
-						window.lastUpdateTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
-						$('#lblFromNow').text(window.lastUpdateTime);
+						var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
+						//$('#lblFromNow').text();
+						self.eventAggregator.trigger('loadingfinished', {lastUpdatedTime : lastUpdatedTime});
 						//console.log(result)
 						var index = 0;
 						for (var sensId in self.sensors) {

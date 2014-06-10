@@ -41,8 +41,6 @@
 
 .ui-resizable-handle {
   position: absolute;
-  width: 10%; 
-  height: 10%; 
   border: 0px solid rgb(128, 128, 128); 
 }
 .ui-resizable-se {position: absolute; bottom: 0px; right: 0px; }
@@ -50,7 +48,7 @@
 
 .group {
     position: absolute !important;
-    background: rgba(255,255,255,1);
+    //background: rgba(255,255,255,1);
     //background: rgba(100,200,100,0.7);
     //background: rgba(45,43,46,0.7);
     color: #2e2d2b;
@@ -64,9 +62,10 @@
     //display: inline-table;
     position: relative;
     //color: #ffff4d;
-    color: white;
+    color: black;
     //color: yellow;
     background: #137;
+    //background: white;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid black;
@@ -176,6 +175,7 @@
     position: absolute;
     font-weight: bold;
     width: 100%;
+    color: white;
 }
 
 .groupName {

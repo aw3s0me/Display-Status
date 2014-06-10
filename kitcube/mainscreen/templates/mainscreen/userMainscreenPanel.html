@@ -1,0 +1,27 @@
+<div id="userPanel">
+    <span id="lblInfo" class="label label-default">
+        <b id="lblFromNow">Loading...</b>
+        </br>
+        <b id="lblUserInfo">
+        {% if user.username %}
+            Welcome {{ user.username }}
+        {% else %}
+            No authorized user
+        {% endif %}
+        </b>
+    </span>
+<div id="btnUserPanel">
+    <button class="btn btn-default circle-btn menuButton" id="toggleGridButton" data-toggle="tooltip" data-placement="bottom" title="Toggle Grid">
+    <span class="glyphicon glyphicon-th"></a>
+    </button>
+    <a href="#login" class="btn btn-default circle-btn menuButton" id="loginButton" data-toggle="tooltip" data-placement="bottom" title="Login">
+    <span class="glyphicon glyphicon-log-in"></span>
+    </a>
+    <a href="#logout" class="btn btn-default circle-btn menuButton" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="Log-out">
+    <span class="glyphicon glyphicon-log-out"></span>
+    </a>
+
+
+</div>
+</div>
+

@@ -18,7 +18,7 @@ from rest_framework.authtoken.models import Token
 import json
 import pdb
 
-def validate_user(data):
+def validate_user_by_group(data):
     errors = {}
     groupname = data['group']
     group = Group.objects.get(name=groupname).user_set.all()
@@ -41,6 +41,22 @@ def validate_user(data):
     
     return errors
 
+def validate_user_without_group(data):
+    errors = {}
+    if not User.objects.filter(username=data['username']).exists():
+        errors['username'] = 'User doesnt exist'
+    else:
+        user = User.objects.get(username=data['username'])
+        if not user.check_password(data['password']):
+            errors['password'] = 'Wrong password'
+    if len(data['password']) < 5:
+        errors['password'] = 'Password length should be more than 5'
+    if len(data['username']) < 5:
+        errors['username'] = 'Username length should be more than 5'
+    
+    return errors
+
+
 #to login user that were registered without backend
 class LoginView(APIView):
     throttle_classes = ()
@@ -54,7 +70,10 @@ class LoginView(APIView):
         data = json.loads(request.body)
         #pdb.set_trace()
         
-        errors = validate_user(data)
+        if 'group' in data:
+            errors = validate_user_by_group(data)
+        else:
+            errors = validate_user_without_group(data)
         if is_empty(errors):
             user = User.objects.get(username=data['username'])
             if user and user.is_active:
@@ -85,7 +104,7 @@ class LogoutView(APIView):
             return Response('Invalid token header', status=status.HTTP_400_BAD_REQUEST)
         key=auth[0]
         if not Token.objects.filter(key=key).exists(): 
-            return Response('Group hasnt been specified correctly', status=status.HTTP_400_BAD_REQUEST)
+            return Response('Token doesnt exist', status=status.HTTP_400_BAD_REQUEST)
         else:
             Token.objects.get(key=key).delete()
         return Response({'User': ''})

@@ -40,8 +40,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             var newSensorGroup = this.model;
             var dx = newSensorGroup.get("size")[0];
             var dy = newSensorGroup.get("size")[1];
-            var px = newSensorGroup.get("coords")[0];
-            var py = newSensorGroup.get("coords")[1];
             var unitX = this.grid.getUnitSizes().width * scale;
             var unitY = this.grid.getUnitSizes().height * scale;
 
@@ -93,11 +91,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
 
             this.container.append(newSortableContainer);
 
-            this.grid.addUnit(dx, dy, px, py, scale, this.container, {}, this.model).addClass('group')
+            this.grid.addUnit(this.container, { draggable: true }, this.model).addClass('group')
                 .resizable({ //different handler because its with the sortable container
                     grid: unitX,
                     //containment: 'parent',
                     handles: 'ne, se',
+                    create: function(event, ui) {
+                        $(this).find('div.ui-resizable-handle').css('height', 19 * scale + 'px').css('width', 20 * scale + 'px');
+                    },
                     //helper: 'ui-resizable-helper',
                     start: function(event, ui) {},
                     resize: function(event, ui) {
@@ -123,7 +124,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                         $(this).find('.sortable_container').css('height', parseInt($(this).css('height')) - unitY);
                         self.model.trigger('resize', model);
                     }
-                });
+                }); 
 
             for (var i = 0; i < trendChartInitArr.length; i++) {
                 var view = trendChartInitArr[i];
@@ -131,6 +132,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             }
 
             this.container.parent().css('border', '1px solid black');
+
+            
+            //console.log(this.container.html());
         },
         rerender: function() {
 
@@ -161,8 +165,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             var unitSizeY = this.grid.getUnitSizes().height * scale;
             divElem.css('left', posx * unitSizeX + 'px');
             divElem.css('top', posy * unitSizeY + 'px');
-            divElem.css('width', dx * unitSizeX + 'px');
-            divElem.css('height', dy * unitSizeY + 'px');
+            divElem.css('width', dx * unitSizeX - 0.4 + 'px');
+            divElem.css('height', dy * unitSizeY - 0.4 + 'px');
 
             //sensorModel.set({ bgcolor: color });
             //sensorModel.trigger('changebgcolor', sensorModel);

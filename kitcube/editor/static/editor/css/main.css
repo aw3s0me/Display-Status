@@ -55,7 +55,10 @@ body {
 /* LoginView CSS TEMPLATE BEGIN */
 
 #userBlock {
-	float: right;
+  position: absolute;
+  right: 0;
+  top: 0;
+	//float: right;
 	//display: inline;
 	font-weight: bold;
 	font-size: 20px;
@@ -491,7 +494,6 @@ body {
     margin: 0 auto;
     width: 90%;
     min-height: 20px;
-    padding: 19px;
     margin-bottom: 20px;
     background-color: #f5f5f5;
     border: 1px solid #e3e3e3;

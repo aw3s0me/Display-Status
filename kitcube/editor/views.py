@@ -31,6 +31,8 @@ def render_user_block(user=None):
         userblock_html = userblock.render(Context({'username': user.username}))
     return userblock_html
 
+
+
 def index(request):
     data = {
         'title': getattr(settings, 'TITLE'),
@@ -53,7 +55,7 @@ def index(request):
             else:
                 data['userblock'] = render_user_block()
         else:
-            print "Violated" #need to handle
+            data['userblock'] = render_user_block()
     else:
         data['userblock'] = render_user_block()
 
