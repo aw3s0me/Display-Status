@@ -81,8 +81,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			.css('left', 5 * scale + 'px')
 			.css('line-height', 15 * scale + 'px')
 
-			var main_val = this.container.find('#val_' + newSensor.get('id')); //nested div because of big text
+			var main_val = this.container.find('#val_' + newSensor.get('id'));
+			//.css('height', 40 * scale + 'px'); //nested div because of big text
 			var main_val_child = main_val.children('#b' + newSensor.get('id'));
+			//.css('height', main_val.css('height') + '!important');
 
 			main_val_child
 				.css('width', main_val.width())
@@ -91,7 +93,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			main_val.css('bottom', 2 * scale + 'px')
 				.css('padding-right', 6 * scale + 'px')
 				.bigtext({
-					maxfontsize: 30 * scale
+					maxfontsize: 30 * scale,
+					minfontsize: 16 * scale
 				});
 
 			this.container.find('.sensorUnit')
@@ -142,8 +145,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var valToInsert = model.get('valUnit');
 			var name = this.model.get('name');
 			var scale = this.grid.getScale();
-			var maxFont = 30 * scale;
-			var minFont = 25 * scale + 'px';
 			var valDiv = this.container.find('.sensorVal');
 			$('#b' + model.get('id')).text(valToInsert);
 		},

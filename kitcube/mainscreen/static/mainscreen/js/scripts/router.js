@@ -84,46 +84,28 @@ define([
 			}
 
 			this.showView(this.views.myBoardViewContainer);
+			this.views.myBoardViewContainer.eventAggregator.trigger('onuseratmainscreen');
 		},
 		showLoginView: function() {
 			if (this.views.myLoginView === undefined) {
 				this.views.myLoginView = new LoginView();
 			}
 			this.showView(this.views.myLoginView);
+			this.views.myLoginView.eventAggregator.trigger('onuseratloginscreen');
 
-			$('.loginHref').text('Board');
-			$('.loginHref').attr('href', '#board');
 		},
 		doLogout: function() {
 			if (window.activeSessionUser.get('logged_in')) {
-				var user = window.activeSessionUser;
-				if (!user.get('logged_in')) {
+				if (this.views.myLoginView === undefined) {
 					return;
 				}
-				var token = user.get('token');
-				//var dataToSend = JSON.stringify({'token': token});
-				$.ajax({
-					//url: '/api-token/login/google/',
-					url: '/api-token/logout/',
-					method: 'GET',
-					//data: dataToSend,
-					headers: {
-						'Authorization': token,
-					},
-					success: function(data) {
-						user.trigger('logout');
-					},
-					beforeSend: function(xhr, settings) {
-						xhr.setRequestHeader('Authorization', token);
-					}
-				})
-				var curUser = window.activeSessionUser;
+				else {
+					this.views.myLoginView.logout();
+				}
+
 				if (this.views.userPanelView !== undefined) {
 					this.views.userPanelView.onUserLogout();
 				} 
-				//$('.loginHref').text('Login');
-				//$('.loginHref').attr('href', '#login');
-				//$('#userStatus').text('');
 			}
 		},
 		showRegisterView: function(){

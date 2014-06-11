@@ -2,36 +2,66 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
     var userPanelView = Backbone.View.extend({
         el: undefined,
         timeLabel: $('#lblFromNow'),
+        userPanel: $('#btnUserPanel'),
         initialize: function() {
             var self = this;
             this.eventAggregator.on('loadingfinished', function(data) {
                 self.timeLabel.text(data.lastUpdatedTime);
             }, this);
-            this.eventAggregator.on('userLoaded', this.onUserLoggedIn, this);
+            this.eventAggregator.on('userloggedin', this.onUserLoggedIn, this);
+            this.eventAggregator.on('onuseratloginscreen', this.onUserAtLoginScreen, this);
+            this.eventAggregator.on('onuseratmainscreen', this.onUserAtMainScreen, this);
             this.render();
         },
         render: function() {
             this.el = $('#userPanel');
+            this.ifLoggedIn();
+            $('#toggleGridButton').show();
+            
+            $('#loginButton').tooltip({});;
+            $('#logoutButton').tooltip({});;
+            $('#goEditorButton').tooltip({});;
+            $('#goMainscreenButton').tooltip({});;
+            $('#toggleGridButton').tooltip({});;
+            
+        },
+        ifLoggedIn: function() {
             if (window.activeSessionUser.get('logged_in'))  {
-               $('#logoutButton').show();
+               this.onUserLoggedIn();
             }
             else {
                 $('#loginButton').show();
             }
-            $('#toggleGridButton').show();
         },
         onUserLoggedIn: function() {
-            var userName = window.activeSessionUser;
-            $('#lblUserInfo').text("Welcome, <span id='userName'>" + userName + "</span> !");
-            var template = '<button onclick="window.openWindow()"; class="btn btn-default circle-btn" id="goEditorButton" data-toggle="tooltip" data-placement="bottom" title="Go to Editor"><span class="glyphicon glyphicon-edit"></span></button>';
-            self.el.append(template);
+            if (!window.activeSessionUser.get('logged_in')) {
+                return;
+            }
+            var userName = window.activeSessionUser.get('username');
+            $('#lblUserInfo').html("Welcome, <span id='userName'>" + userName + "</span> !");
+
             $('#loginButton').hide();
             $('#logoutButton').show();
+            $('#goEditorButton').show();
+            $('#goMainscreenButton').hide();
+            $('#toggleGridButton').show();
+        },
+        onUserAtLoginScreen: function() {
+            $('#loginButton').hide();
+            $('#logoutButton').hide();
+            $('#goMainscreenButton').show();
+            $('#toggleGridButton').hide();
+        },
+        onUserAtMainScreen: function() {
+            this.ifLoggedIn();
         },
         onUserLogout: function() {
             $('#loginButton').show();
             $('#logoutButton').hide();
             $('#lblUserInfo').text("No user authorized");
+
+            $('#goEditorButton').hide();
+            $('#goMainscreenButton').hide();
         }
 
     });

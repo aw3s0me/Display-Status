@@ -152,7 +152,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				.css('margin-top', marginTop + 'px');
 				$('#toggleGridButton').click(function(e) {
 					self.grid.toggleGrid();
-				}).tooltip({});
+				});
 			}
 
 			this.addAllSingleSensors(singleSensorsToAdd);
