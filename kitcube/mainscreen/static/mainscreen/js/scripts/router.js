@@ -11,6 +11,50 @@ define([
 	//'views/pres/txtEditorView',
 	//'views/pres/settingsView'
 ], function($, _, Backbone, BoardView, LoginView, RegisterView, UserPanelView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
+
+	var getCfg = function() {
+		var text;
+		var cfgType = 'default';
+		var width = $(window).width();   // returns width of browser viewport
+		var height = $(window).height();   // returns heightof browser viewport
+
+		if (window.innerHeight > window.innerWidth) {
+			//portrait orientation
+			cfgType = 'portrait';
+		}
+		else {
+			//cfgType = 'landscape';
+			cfgType = 'default';
+			//landscape orientation
+		}
+
+		/*if (width <= 320) {
+			//
+			cfgType = 'smportrait';
+		}
+		else if (width >= 768 && width <= 1024) {
+			//tablet landscape
+			cfgType = ''
+		} */
+
+		$.ajax({
+			url: 'configs/' + cfgType + '/',
+			method: 'GET',
+			//url: '../static/mainscreen/tempcfg/empty.json',
+			//url: '../static/mainscreen/tempcfg/katrin_final.json',
+			//url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
+			//url: '../static/mainscreen/tempcfg/tabs.json',
+			async: false,
+			dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
+			success: function(data) {
+				text = data;
+				console.log(data);
+			}
+		});
+		return text;
+	}
+
+
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -51,22 +95,7 @@ define([
 					console.log(data);
 				}
 			})
-			
-		},	
-		getCfg: function() {
-			var text;
-			$.ajax({
-				//url: '../static/mainscreen/tempcfg/empty.json',
-				//url: '../static/mainscreen/tempcfg/katrin_final.json',
-				url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
-				//url: '../static/mainscreen/tempcfg/tabs.json',
-				async: false,
-				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
-				success: function(data){
-					text = data;
-				}
-			});	
-			return text;
+
 		},
 		showView: function(view) {
 			if (this.views.current != undefined) {
@@ -80,7 +109,9 @@ define([
 			console.log($('#lblFromNow'));
 
 			if (this.views.myBoardViewContainer === undefined) {
-				this.views.myBoardViewContainer = new BoardView({aceText: this.getCfg()});
+				this.views.myBoardViewContainer = new BoardView({
+					aceText: getCfg()
+				});
 			}
 
 			this.showView(this.views.myBoardViewContainer);
@@ -97,7 +128,9 @@ define([
 		doLogout: function() {
 			if (window.activeSessionUser.get('logged_in')) {
 				if (this.views.myLoginView === undefined) {
-					$.cookie("access_token", null, { path: '/' });
+					$.cookie("access_token", null, {
+						path: '/'
+					});
 					var user = window.activeSessionUser;
 					var token = user.get('token');
 					$.ajax({
@@ -116,17 +149,20 @@ define([
 						}
 					})
 					return;
-				}
-				else {
+				} else {
 					this.views.myLoginView.logout();
 				}
 
 				if (this.views.userPanelView !== undefined) {
 					this.views.userPanelView.onUserLogout();
-				} 
+				}
+			} else {
+				$.cookie("access_token", null, {
+					path: '/'
+				});
 			}
 		},
-		showRegisterView: function(){
+		showRegisterView: function() {
 			if (this.views.myRegisterView === undefined) {
 				this.views.myRegisterView = new RegisterView();
 			}

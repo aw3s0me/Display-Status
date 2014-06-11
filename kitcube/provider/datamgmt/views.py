@@ -10,9 +10,13 @@ from rest_framework import viewsets, generics
 from rest_framework.decorators import throttle_classes
 from rest_framework import status
 from django.conf import settings
-from serializers import ProjectSerializer
+
+import os
+from serializers import ProjectSerializer, ConfigSerializer
 from provider.user.userValidation import is_user_valid
 import json
+#from django.middleware.gzip import GZipMiddleware
+import cStringIO, gzip
 
 import pdb
 
@@ -72,6 +76,12 @@ class ConfigListView(APIView):
         if not Project.objects.filter(link=projname).exists():
             return Response('Doesn\'t exists', status=status.HTTP_404_NOT_FOUND)
 
+
+def dec(request, *args, **kwargs):
+    response = func(request, *args, **kwargs)
+    return gzip_middleware.process_response(request, response)
+    return dec
+
 class ConfigDetailView(APIView):
     model = User
     throttle_classes = ()
@@ -81,5 +91,23 @@ class ConfigDetailView(APIView):
         #pdb.set_trace()
         data = json.loads(request.body)
     def get(self, request, projname, confname):
-        data = json.loads(request.body)
+        if not Config.objects.filter(projects__link=projname, name=confname).exists():
+            return Response('Doesn\'t exists', status=status.HTTP_404_NOT_FOUND)
+        cfg_to_serialize = Config.objects.get(projects__link=projname, name=confname)
+        cfg = ConfigSerializer(cfg_to_serialize)
+
+        path = os.path.dirname(__file__)
+        file_path = os.path.join(path, 'cfgs/' + cfg_to_serialize.path)
+        file = open(file_path)
+        #gzip_middleware = GZipMiddleware()
+        #print file.read()
+        zbuf = cStringIO.StringIO()
+        zfile = gzip.GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
+        zfile.write(file.read().encode('utf-8'))
+        zfile.close()
+        print zbuf.getvalue()
+
+        return Response(cfg.data, status=status.HTTP_200_OK)
+        #return gzip_middleware.process_response(response) 
+        #data = json.loads(request.body)
         

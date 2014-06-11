@@ -33,23 +33,11 @@ SITE_ID = 1
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Site information
-TITLE = 'Kitcube Status'
-DESCRIPTION = 'Summary of Kitcube Experiment'
+TITLE = 'Display Status'
+DESCRIPTION = 'Summary of KIT Experiments'
 
 # Application definition
 
-
-
-"""
-#OAuth with rest_frmework provide
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.OAuth2Authentication',
-        #'rest_framework.authentication.SessionAuthentication',
-    ),
-}
-"""
 GRAPH_MODELS = {
   'all_applications': True,
   'group_models': True,
@@ -84,6 +72,7 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'social',
     'provider',
+    #'pipeline',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,6 +84,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    #'pipeline.middleware.MinifyHTMLMiddleware',
     #"account.middleware.TimezoneMiddleware",
 )
 
@@ -108,13 +99,16 @@ TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
                                'social.apps.django_app.context_processors.backends',
                                'social.apps.django_app.context_processors.login_redirect',
                                'choice.processor.get_context',)
-"""
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    )
-}
-"""
+
+
+###DJANGO-PIPELINE
+
+#STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+#PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
+
+###DJANGO-PIPELINE ENDS
+
+### SOCIAL AUTH
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'facebook', 'google-oauth2',)
 
@@ -125,32 +119,6 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = []
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '74899432743.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'rP_1Eh5hpkY1yHADfs3NQ25f'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = []
-
-
-REST_FRAMEWORK = {
-    # Use hyperlinked styles by default.
-    # Only used if the `serializer_class` attribute is not set on a view.
-    'DEFAULT_MODEL_SERIALIZER_CLASS':
-        'rest_framework.serializers.HyperlinkedModelSerializer',
- 
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
-"""
-AUTHENTICATION_BACKENDS = (
-    'social.backends.open_id.OpenIdAuth',
-      'social.backends.facebook.FacebookOAuth2',
-      'social.backends.google.GoogleOAuth',
-    'social.backends.google.GoogleOAuth2',
-    'social.backends.google.GoogleOpenId',
-    'social.backends.google.GooglePlusAuth',
-      'social.backends.twitter.TwitterOAuth',
-      'django.contrib.auth.backends.ModelBackend',
-  )
-"""
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.open_id.OpenIdAuth',
@@ -172,20 +140,24 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.user_details'
 )
 
-"""
+###SOCIAL ENDS
+
+###REST
+
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.HyperlinkedModelSerializer',
+ 
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
 }
-"""
 
-
-
+###REST ENDS
 
 ROOT_URLCONF = 'kitcube.urls'
 
@@ -195,14 +167,6 @@ WSGI_APPLICATION = 'kitcube.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'temp.db',
-    }
-}
-"""
 
 DATABASES = {
     'default': {

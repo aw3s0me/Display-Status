@@ -11,4 +11,4 @@ class ProjectSerializer(serializers.ModelSerializer):
 class ConfigSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Config
-		fields = ('id', 'title', 'description')
+		fields = ('id', 'title', 'description', 'name')

@@ -23,14 +23,27 @@ class Project(models.Model):
     class Meta:
         app_label = 'provider'
 
+class Type(models.Model):
+    name = models.TextField()
+    description = models.TextField()
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        app_label = 'provider'
 
 class Config(models.Model):
-    projects = models.ManyToManyField(Project)
+    projects = models.ForeignKey(Project)
     title = models.CharField(max_length = 200)
+    name = models.TextField()
     description = models.TextField()
+    path = models.TextField()
+    type = models.ForeignKey(Type)
 
     def __str__(self):
         return self.title 
     class Meta:
         app_label = 'provider'
+
+
 
