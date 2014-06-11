@@ -97,6 +97,24 @@ define([
 		doLogout: function() {
 			if (window.activeSessionUser.get('logged_in')) {
 				if (this.views.myLoginView === undefined) {
+					$.cookie("access_token", null, { path: '/' });
+					var user = window.activeSessionUser;
+					var token = user.get('token');
+					$.ajax({
+						//url: '/api-token/login/google/',
+						url: '/api-token/logout/',
+						method: 'GET',
+						//data: dataToSend,
+						headers: {
+							'Authorization': token,
+						},
+						success: function(data) {
+							user.trigger('logout');
+						},
+						beforeSend: function(xhr, settings) {
+							xhr.setRequestHeader('Authorization', token);
+						}
+					})
 					return;
 				}
 				else {
