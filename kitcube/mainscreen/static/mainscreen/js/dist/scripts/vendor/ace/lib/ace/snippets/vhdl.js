@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./vhdl.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./vhdl.snippets"),t.scope="vhdl"});

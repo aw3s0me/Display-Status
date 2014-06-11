@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./haml.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./haml.snippets"),t.scope="haml"});

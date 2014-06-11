@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./sql.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./sql.snippets"),t.scope="sql"});

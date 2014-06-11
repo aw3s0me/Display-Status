@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./cobol.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./cobol.snippets"),t.scope="cobol"});

@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./makefile.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./makefile.snippets"),t.scope="makefile"});

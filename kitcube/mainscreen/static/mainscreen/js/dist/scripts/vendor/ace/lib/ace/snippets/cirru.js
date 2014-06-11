@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./cirru.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./cirru.snippets"),t.scope="cirru"});

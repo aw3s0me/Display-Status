@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./toml.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./toml.snippets"),t.scope="toml"});

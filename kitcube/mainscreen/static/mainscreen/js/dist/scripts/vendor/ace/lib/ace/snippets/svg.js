@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./svg.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./svg.snippets"),t.scope="svg"});

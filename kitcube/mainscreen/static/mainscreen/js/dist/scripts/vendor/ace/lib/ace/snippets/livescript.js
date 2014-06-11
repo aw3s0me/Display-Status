@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./livescript.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./livescript.snippets"),t.scope="livescript"});

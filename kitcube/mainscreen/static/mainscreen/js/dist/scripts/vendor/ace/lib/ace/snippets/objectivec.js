@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./objectivec.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./objectivec.snippets"),t.scope="objectivec"});

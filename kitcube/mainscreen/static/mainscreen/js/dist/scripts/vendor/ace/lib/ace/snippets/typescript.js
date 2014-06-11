@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./typescript.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./typescript.snippets"),t.scope="typescript"});

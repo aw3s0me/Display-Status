@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./python.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./python.snippets"),t.scope="python"});

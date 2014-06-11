@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./matlab.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./matlab.snippets"),t.scope="matlab"});

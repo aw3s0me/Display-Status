@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./ruby.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./ruby.snippets"),t.scope="ruby"});

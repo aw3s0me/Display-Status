@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./curly.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./curly.snippets"),t.scope="curly"});

@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./django.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./django.snippets"),t.scope="django"});

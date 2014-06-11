@@ -41,9 +41,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			var textToParse = options.aceText;
-			var myParser = new cfgParser('../static/cfg.json');
-			var prsObj = myParser.parseJson(textToParse);
-			this.detectSizes(50, 50, 21, '#banner', '#footer', prsObj['screen']);
+			//var myParser = new cfgParser('../static/cfg.json');
+			//var prsObj = myParser.parseJson(textToParse);
+			prsObj = textToParse;
+			var blocksize = prsObj['screen'] && prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize']: 50;
+			var boardsizex = prsObj['screen'] && prsObj['screen']['boardsizex'] ? prsObj['screen']['boardsizex']: 50;
+			var boardsizey = prsObj['screen'] && prsObj['screen']['boardsizey'] ? prsObj['screen']['boardsizey']: 21;
+			this.detectSizes(blocksize, boardsizex, boardsizey, '#banner', '#footer', prsObj['screen']);
 			
 			var data = {};
 

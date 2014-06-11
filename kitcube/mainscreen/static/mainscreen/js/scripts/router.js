@@ -47,7 +47,8 @@ define([
 			async: false,
 			dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
 			success: function(data) {
-				text = data;
+				var parsed_unicode = JSON.parse(data);
+				text = JSON.parse(parsed_unicode['content']);
 				console.log(data);
 			}
 		});

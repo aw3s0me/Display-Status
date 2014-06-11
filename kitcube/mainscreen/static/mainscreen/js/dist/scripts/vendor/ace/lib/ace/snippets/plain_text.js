@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./plain_text.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./plain_text.snippets"),t.scope="plain_text"});

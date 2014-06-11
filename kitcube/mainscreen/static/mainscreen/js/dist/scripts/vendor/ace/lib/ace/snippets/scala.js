@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./scala.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./scala.snippets"),t.scope="scala"});

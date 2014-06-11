@@ -1,1 +1,0 @@
-function styleCode(){if(typeof disableStyleCode!="undefined")return;var e=!1;$("pre code").parent().each(function(){$(this).hasClass("prettyprint")||($(this).addClass("prettyprint"),e=!0)}),e&&prettyPrint()};

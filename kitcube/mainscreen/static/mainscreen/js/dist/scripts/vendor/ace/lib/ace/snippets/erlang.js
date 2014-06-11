@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./erlang.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./erlang.snippets"),t.scope="erlang"});

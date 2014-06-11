@@ -1,7 +1,10 @@
 {
     "screen": {
         "fluid": false,
-        "glb_sensor_size": 3
+        "glb_sensor_size": 3,
+        "blocksize": 50,
+        "boardsizex": 50,
+        "boardsizey": 21
     },
     "datasource": {
         "dbgroup": "0",

@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./lucene.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./lucene.snippets"),t.scope="lucene"});

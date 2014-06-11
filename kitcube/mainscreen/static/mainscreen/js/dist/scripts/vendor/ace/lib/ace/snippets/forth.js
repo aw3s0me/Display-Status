@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./forth.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./forth.snippets"),t.scope="forth"});

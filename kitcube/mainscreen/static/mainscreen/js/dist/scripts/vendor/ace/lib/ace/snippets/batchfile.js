@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./batchfile.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./batchfile.snippets"),t.scope="batchfile"});

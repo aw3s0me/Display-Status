@@ -31,21 +31,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			this.model.on('resize', this.onresize, this);
 			this.render();
 
-			this.container.find('.addChartBtn').click(function(event) {
-				var elems = self.formSensorElements();
-				self.getDataForElements(elems);
-			});
-
-			this.container.find('.legendChartBtn').click(function(event) {
-				if (!_isLegendShown) {
-					self.chart.legendShow();
-					_isLegendShown = true;
-				} else {
-					self.chart.legendHide();
-					_isLegendShown = false;
-				}
-
-			});
 		},
 		formSensorElements: function() {
 			var elems1Val = this.lookDiv.find('.activeSensor1');
@@ -278,8 +263,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			controlPanel.find('.legendChartBtn').button()
 				.css('font-size', 10 * scale + 'px')
 				.click(function(event) {
-					self.removeFromDom();
-				});;
+					if (!_isLegendShown) {
+						self.chart.legendShow();
+						_isLegendShown = true;
+					} else {
+						self.chart.legendHide();
+						_isLegendShown = false;
+					}
+				});
+			controlPanel.find('.addChartBtn').click(function(event) {
+				var elems = self.formSensorElements();
+				self.getDataForElements(elems);
+			});
 			controlPanelTemplate.find('.close').css('font-size', 12 * scale + 'px')
 				.css('right', 10 * scale + 'px')
 				.css('top', 10 * scale + 'px')

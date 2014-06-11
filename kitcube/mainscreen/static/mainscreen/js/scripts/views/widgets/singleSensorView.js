@@ -91,9 +91,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				.css('height', main_val.height());
 	
 			main_val.css('bottom', 2 * scale + 'px')
-				.css('padding-right', 6 * scale + 'px')
+				.css('padding-right', 7 * scale + 'px')
+				.css('padding-left', 7 * scale + 'px')
 				.bigtext({
-					maxfontsize: 30 * scale,
+					maxfontsize: 26 * scale,
 					minfontsize: 16 * scale
 				});
 

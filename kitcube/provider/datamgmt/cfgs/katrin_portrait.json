@@ -1,7 +1,10 @@
 {
     "screen": {
         "fluid": false,
-        "glb_sensor_size": 3
+        "glb_sensor_size": 3,
+        "blocksize": 50,
+        "boardsizex": 20,
+        "boardsizey": 31
     },
     "datasource": {
         "dbgroup": "0",
@@ -20,14 +23,7 @@
             "name": "Temp",
             "can_close": true,
             "content": [
-                "chart1"
-            ]
-        },
-        "tab3": {
-            "name": "Magnet",
-            "can_close": false,
-            "content": [
-                "chart2"
+                "chart1", "chart2"
             ]
         }
     },
@@ -476,7 +472,7 @@
             "link": ["sensid22", "sensid25"],
             "charttype": "line",
             "size": [20, 9],
-            "coords": [29, 1],
+            "coords": [1, 1],
             "startrange": "15m",
             "axislabels": false
         },
@@ -486,7 +482,7 @@
             "link": ["sensid1", "sensid7"],
             "charttype": "line",
             "size": [20, 9],
-            "coords": [29, 11],
+            "coords": [1, 11],
             "startrange": "15m",
             "axislabels": false
         }

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from models import Project, Config
 from django.conf import settings
+from django.http import HttpResponse
 from provider.user.permissions import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework import viewsets, generics
 from rest_framework.decorators import throttle_classes
 from rest_framework import status
+from rest_framework.renderers import JSONRenderer
 from django.conf import settings
 
 import os
@@ -19,6 +21,16 @@ import json
 import cStringIO, gzip
 
 import pdb
+
+
+class JSONResponse(HttpResponse):
+    """
+    An HttpResponse that renders its content into JSON.
+    """
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
 
 class ProjectListView(APIView):
     model = User
@@ -99,15 +111,19 @@ class ConfigDetailView(APIView):
         path = os.path.dirname(__file__)
         file_path = os.path.join(path, 'cfgs/' + cfg_to_serialize.path)
         file = open(file_path)
+        #cfg.data['content'] = json.dumps(file.read())
+        cfg.data['content'] = file.read()
+        print cfg.data
         #gzip_middleware = GZipMiddleware()
         #print file.read()
-        zbuf = cStringIO.StringIO()
-        zfile = gzip.GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
-        zfile.write(file.read().encode('utf-8'))
-        zfile.close()
-        print zbuf.getvalue()
+        #zbuf = cStringIO.StringIO()
+        #zfile = gzip.GzipFile(mode='wb', compresslevel=6, fileobj=zbuf)
+        #zfile.write(file.read().encode('utf-8'))
+        #zfile.close()
+        #print zbuf.getvalue()
 
-        return Response(cfg.data, status=status.HTTP_200_OK)
+        #return Response(cfg.data, status=status.HTTP_200_OK)
+        return JSONResponse(cfg.data, status=status.HTTP_200_OK)
         #return gzip_middleware.process_response(response) 
         #data = json.loads(request.body)
         

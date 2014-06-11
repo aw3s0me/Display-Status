@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./c9search.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./c9search.snippets"),t.scope="c9search"});

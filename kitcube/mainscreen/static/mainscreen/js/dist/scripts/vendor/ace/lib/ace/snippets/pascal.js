@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./pascal.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./pascal.snippets"),t.scope="pascal"});

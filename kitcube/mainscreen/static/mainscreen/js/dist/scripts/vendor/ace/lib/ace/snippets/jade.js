@@ -1,1 +1,0 @@
-define(["require","exports","module","../requirejs/text!./jade.snippets"],function(e,t,n){t.snippetText=e("../requirejs/text!./jade.snippets"),t.scope="jade"});

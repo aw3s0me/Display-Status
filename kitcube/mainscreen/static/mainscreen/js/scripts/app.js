@@ -3,16 +3,10 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	//'flatui-app',
-	'ace',
 	'kitgrid',
 	'yaml',
 	'jqgrid',
-	//'chosen',
 	'oauthio',
-	//'jquerysort',
-	//'fittext',
-	//'slabtext',
 	'bigtext',
 	'highcharts-legend',
 	//'regression',
@@ -21,12 +15,11 @@ define([
 	//'fittext',
 	"kit.sizeDetector",
 	"kit.parser",
-	"kit.dataDownloader",
 	'cookie',
 	"models/userModel",
 	//'cacher',
 	'router' // Request router.js
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, jqGrid, /*chosen,*/ OAuthio,/*Sortable, fitText, slabText,*/ bigtext, HighchartsLeg, /* regression, momentJS,*/ sizeDet, parser, dataDownloader, JqCookie, UserModel, /*Cacher,*/ Router) {
+], function($, _, Backbone, kitgrid, YAML, jqGrid, OAuthio, bigtext, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, UserModel, /*Cacher,*/ Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();

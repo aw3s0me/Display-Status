@@ -1,1 +1,0 @@
-function Stack(){this.stack=new Array,this.pop=function(){return this.stac.pop()},this.push=function(e){this.stack.push(e)},this.stringify=function(){return this.stack.join("/")},this.fromArray=function(e){this.stack=e}};

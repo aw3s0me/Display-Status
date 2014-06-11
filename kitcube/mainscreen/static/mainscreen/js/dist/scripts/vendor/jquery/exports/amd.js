@@ -1,1 +1,0 @@
-define(["../core"],function(e){typeof define=="function"&&define.amd&&define("jquery",[],function(){return e})});

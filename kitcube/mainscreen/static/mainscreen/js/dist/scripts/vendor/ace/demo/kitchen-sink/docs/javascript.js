@@ -1,1 +1,0 @@
-function foo(e,t){for(var n=0;n<e.length;n++)alert(e[n]+"juhu\n")};
