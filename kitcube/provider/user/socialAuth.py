@@ -83,6 +83,7 @@ class ObtainAuthToken(APIView):
                 #add to group this guy
                 groupname = data['group']
                 if not Group.objects.filter(name=groupname):
+                    #return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key})
                     raise 'Group doesn\t exists'
                 group = Group.objects.get(name=groupname)
                 user.groups.add(group)

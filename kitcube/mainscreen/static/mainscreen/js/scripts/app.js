@@ -51,7 +51,6 @@ define([
 			//window.host = "http://katrin.kit.edu/adei-detector/";
 			window.host = "http://katrin.kit.edu/adei/";
 			window.lastUpdateTime = moment.utc();
-
 			window.openWindow = function() {
 				window.location.href = '../editor/';
 			}

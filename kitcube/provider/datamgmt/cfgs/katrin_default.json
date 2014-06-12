@@ -456,8 +456,18 @@
             "type": "chart",
             "link": ["sensid22", "sensid25"],
             "charttype": "line",
-            "size": [25, 16],
+            "size": [25, 9],
             "coords": [24, 1],
+            "startrange": "15m",
+            "axislabels": false
+        },
+        "chart2": {
+            "width": 1,
+            "type": "chart",
+            "link": ["sensid22", "sensid25"],
+            "charttype": "line",
+            "size": [25, 9],
+            "coords": [24, 11],
             "startrange": "15m",
             "axislabels": false
         }
