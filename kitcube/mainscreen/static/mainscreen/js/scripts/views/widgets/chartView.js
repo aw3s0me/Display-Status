@@ -191,14 +191,16 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			this.container = $('<div id= ' + this.model.get('id') + '  ></div>')
 
-			var controlPanelTemplate = $(_.template(ChartTemplate, {}));
+			var controlPanelTemplate = $(_.template(ChartTemplate, {
+				canberemoved: model.get('canberemoved')
+			}));
 			//this.container = $(_.template(ChartTemplate, { id: model.get('id') }));
 
 			this.grid.addUnit(this.container, {
 				border: 0,
 				transparent: true,
-				draggable: true,
-				resizable: true
+				draggable: model.get('isdraggable'),
+				resizable: model.get('isresizable')
 			}, this.model);
 
 			if (!model) {
@@ -283,12 +285,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						_isLegendShown = false;
 					}
 				});
-			controlPanelTemplate.find('.close').css('font-size', 12 * scale + 'px')
+			if (model.get('canberemoved')) {
+				controlPanelTemplate.find('.close').css('font-size', 12 * scale + 'px')
 				.css('right', 10 * scale + 'px')
 				.css('top', 10 * scale + 'px')
 				.click(function(event) {
 					self.removeFromDom();
 				});
+			}
+			
 			controlPanel.find('.resetChartBtn').button()
 				.click(function(event) {
 					self.resetChart();

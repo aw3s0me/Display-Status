@@ -58,6 +58,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				linecolor: undefined,
 				label: undefined,
 				canberemoved: false,
+				isdraggable: false,
+				isresizable: false,
 				cfgObj: null
 			}
 		},

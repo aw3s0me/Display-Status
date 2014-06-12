@@ -5,7 +5,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		model: undefined,
 		linkModel: undefined,
 		isGrouped: false,
-		canBeRemoved: false,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -69,7 +68,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				val: (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1),
 				name: newSensor.get('name'),
 				unit: newSensor.get('unit'),
-				canBeRemoved: newSensor.get('canberemoved')
+				canberemoved: newSensor.get('canberemoved')
 			}));
 
 			this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));

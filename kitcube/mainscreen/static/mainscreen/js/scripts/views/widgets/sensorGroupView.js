@@ -47,7 +47,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 group_id: newSensorGroup.get('id'),
                 groupname1: this.model.get('groupname1'),
                 groupname2: this.model.get('groupname2'),
-                name: this.model.get('name')
+                name: this.model.get('name'),
+                canberemoved: newSensorGroup.get("canberemoved")
             }));
 
             this.container = $(grpSensorTemplate);
@@ -56,9 +57,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 .css('left', 5 * scale + 'px');
 
             this.container.find('.groupName').css('font-size', 17 * scale + 'px');
-            this.container.find('.close').css('font-size', 20 * scale + 'px')
-                .css('right', 5 * scale + 'px')
-                .css('top', 4 * scale + 'px');
+
+            if (newSensorGroup.get('canberemoved')) {
+                this.container.find('.close').css('font-size', 20 * scale + 'px')
+                    .css('right', 5 * scale + 'px')
+                    .css('top', 4 * scale + 'px');
+            }
 
             var newSortableContainer = $('<span></span>')
                 .css('left', 0 + 'px')
@@ -91,8 +95,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
 
             this.container.append(newSortableContainer);
 
-            this.grid.addUnit(this.container, { draggable: true }, this.model).addClass('group')
-                .resizable({ //different handler because its with the sortable container
+            var grpElem = this.grid.addUnit(this.container, { 
+                draggable: newSensorGroup.get('isdraggable'),
+                resizable: newSensorGroup.get('isresizable')
+            }, this.model).addClass('group');
+
+            if (newSensorGroup.get('isresizable')) {
+                grpElem.resizable({ //different handler because its with the sortable container
                     grid: unitX,
                     //containment: 'parent',
                     handles: 'ne, se',
@@ -125,6 +134,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                         self.model.trigger('resize', model);
                     }
                 }); 
+            }
+            
 
             for (var i = 0; i < trendChartInitArr.length; i++) {
                 var view = trendChartInitArr[i];

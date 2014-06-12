@@ -21,6 +21,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				radius: 0,
 				cfgObj: null,
 				axislabels: true,
+				canberemoved: false,
+				isresizable: false,
+				isdraggable: false,
 				resolution: 0.4
 			}
 		},
