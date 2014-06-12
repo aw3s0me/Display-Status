@@ -356,6 +356,16 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 
 			return false;
+		},
+		isOnTheChartById: function(id) {
+			var models = this.get('models');
+			for (var j = 0; j < models.length; j++) {
+				var model = models[j];
+				if (model.get('id') === id) {
+					return true;
+				}	
+			}
+			return false;
 		}
 	});
 

@@ -97,12 +97,12 @@
 }
 
 .activeSensor {
-  border: 2px dotted yellow;
+  border: 2px dotted #CC5400;
 }
 
 .activeSensor1 {
-  border-top: 2px dotted yellow;
-  border-right: 2px dotted yellow;
+  border-top: 2px dotted #CC5400;
+  border-right: 2px dotted #CC5400;
 }
 
 .activeSensor2 {
@@ -132,14 +132,14 @@
 }
 
 .chartAdded1 {
-  border-top: 2px solid yellow;
-  border-right: 2px solid yellow;
+  border-top: 2px solid #CC5400;
+  border-right: 2px solid #CC5400;
 }
 
 .chartAdded2 {
-  border-bottom: 2px solid white;
-  border-left: 2px solid white;
-  //outline: 2px solid white;
+  border-bottom: 2px solid green;
+  border-left: 2px solid green;
+  //outline: 2px solid green;
 }
 
 .sensUnit2 {
@@ -147,7 +147,7 @@
 }
 
 .chartAdded {
-  border: 2px solid #E7A73C;
+  border: 2px solid #CC5400;
 }
 
 .rangeContainer {

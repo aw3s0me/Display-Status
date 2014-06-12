@@ -60,8 +60,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			for (var i = 0; i < elemsVal.length; i++) {
 				var jqElement = elemsVal[i];
 				$(jqElement).removeClass('activeSensor');
-				$(jqElement).addClass('chartAdded');
+
 			}
+
+			/* OPTION 1
+			for (var i = 0; i < elemsVal.length; i++) {
+				var jqElement = elemsVal[i];
+				$(jqElement).removeClass('activeSensor');
+				$(jqElement).addClass('chartAdded');
+			}*/
 
 			return elems;
 		},
@@ -115,7 +122,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				} else {
 					id = jqElement.getAttribute('id');
 				}
-				models.push(_allSensors[id]);
+				if (!this.model.isOnTheChartById(id)) {
+					models.push(_allSensors[id]);
+				}
 			}
 		},
 		setSensorDataInChart: function(elems, type) {
@@ -133,6 +142,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					id = jqElement.getAttribute('id2');
 				} else {
 					id = jqElement.getAttribute('id');
+				}
+
+				if (this.model.isOnTheChartById(id)) {
+					continue;
 				}
 
 				var sensorModel = _allSensors[id];
@@ -210,6 +223,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			var xAxis = model.getXAxisObj();
 			var chart = model.getChartOptions();
+			chart.marginTop = 47 * scale;
 			this.chart = new Highcharts.Chart({
 				//this.chart = new Highcharts.StockChart({
 				chart: chart,
@@ -415,7 +429,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 
 			for (var i = 0; i < models.length; i++) {
-				masks.push(models[i].get('mask'));
+				if (!this.model.isOnTheChartById(models[i].get('id'))) {
+					masks.push(models[i].get('mask'));
+				}
 			}
 
 			var masksToRequest = masks.join();
@@ -449,7 +465,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					var data = obj.data;
 					var datetime = obj.dateTime;
 					//console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
-					for (var i = 0; i < models.length; i++) {
+					for (var i = 0; i < masks.length; i++) {
 						if (data[i].length > 0) {
 							models[i].setDataModel(data[i], datetime);
 							//console.log(models[i].get('mask'), data[i][0]);
@@ -514,7 +530,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					//console.log(data)
 					var datetime = obj.dateTime;
 					//console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
-					for (var i = 0; i < models.length; i++) {
+					for (var i = 0; i < masks.length; i++) {
 						var model = models[i];
 						if (data[i].length > 0) {
 							//console.log(model.get('values'));

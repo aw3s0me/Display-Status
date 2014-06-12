@@ -10,7 +10,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	var _defalarmcolor = '#E51400';
 	//var _defokcolor = '#40bf40';
 	var _defokcolor = '#20c62e';
-	var _defmiddlecolor = '#1bb2e2';
+	//var _defmiddlecolor = '#1bb2e2';
+	var _defmiddlecolor = '#FFD700';
 	//var _defmiddlecolor = '#75c6ef';
 
 	function _isNumber(n) {
