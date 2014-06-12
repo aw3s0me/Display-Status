@@ -266,8 +266,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			controlPanel.find('.goAdeiBtn').button()
 				.click(function(event) {
-
-
+					console.log(self.getUrlGoToAdei());
+					window.open(self.getUrlGoToAdei(), '_blank');
 				});
 
 			controlPanel.find('.addChartBtn').button()
@@ -697,8 +697,20 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			//this.chart.redraw();
 
 		},
-		goToAdei: function() {
+		getUrlGoToAdei: function() {
+			var adeiurl = window.host;
+			var windowObj = this.getWindow();
+			//console.log(new Date(windowObj.start), new Date(windowObj.end));
+			var start = parseInt(windowObj.start / 1000);
+			var end = parseInt(windowObj.end / 1000);
+			var windowUrl = start + "-" + end;
+			var srctree = this.model.getSrcTreeLink();
 
+			adeiurl += "#module=graph&db_server=virtual&db_name=srctree&db_group=-3&contro_group=-3&db_mask=all&experiment=-";
+			adeiurl += "&window=" + windowUrl;
+			adeiurl += "&module=graph&virtual=srctree&srctree=" + srctree;
+
+			return adeiurl;
 		},
 		getNumberOfPoints: function() {
 			var width = this.chart.chartWidth;

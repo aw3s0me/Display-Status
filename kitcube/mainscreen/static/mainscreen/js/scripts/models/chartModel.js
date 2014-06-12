@@ -294,6 +294,23 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			return chart;
 		},
+		getSrcTreeLink: function() {
+			var models = this.get('models');
+			var srctree = '';
+			var srcarr = [];
+			for (var i = 0; i < models.length; i++) {
+				var model = models[i];
+				var mask = model.get('mask');
+				var server = model.get('server');
+				var database = model.get('dbname');
+				var group = model.get('dbgroup');
+				srcarr.push(server + '__' + database + '__' + group + '__' + mask);
+			}
+			srctree = srcarr.join();
+
+			return srctree;
+
+		},
 		serToJSON: function() {
 			var cfg = this.get('cfgObj');
 			delete cfg['_id'];
