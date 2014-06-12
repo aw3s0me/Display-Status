@@ -159,8 +159,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				});
 			}
 
+			var start = new Date().getTime();
+
 			this.addAllSingleSensors(singleSensorsToAdd);
 			this.addAllSensorGroups(sensorGroupsToAdd);
+
+			var end = new Date().getTime();
+			var time = end - start;
+			console.log('Execution time of sensor appending: ' + time)
+
 			this.addAllTables(sensorTablesToAdd);
 			this.addAllAlarmLists(alarmListsToAdd);
 			this.addAllCharts(chartsToAdd);

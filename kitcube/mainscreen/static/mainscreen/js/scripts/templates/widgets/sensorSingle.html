@@ -4,5 +4,7 @@
             <div id="b<%= sensor_id %>"><%= val %></div> 
       </div>
       <div class="sensorUnit"><%= unit %></div>
-      <div class="close"><b>x</b></div>
+      <% if (canBeRemoved == "true") { %>
+        <div class="close"><b>x</b></div>
+      <% } %>
 </div>

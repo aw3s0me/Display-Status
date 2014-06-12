@@ -7,5 +7,7 @@
             <div id="c<%= sensor_main_id %>"><%= sub_val %></div> 
       </div>
       <div class="sensorUnit"><span class='sensUnit2'><%= unit2 %></span>/<%= unit1 %></div>
-      <div class="close"><b>x</b></div>
+      <% if (canBeRemoved == "true") { %>
+        <div class="close"><b>x</b></div>
+      <% } %>
 </div>

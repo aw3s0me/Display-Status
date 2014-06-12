@@ -13,6 +13,7 @@ define([
 ], function($, _, Backbone, BoardView, LoginView, RegisterView, UserPanelView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
 
 	var getCfg = function() {
+		var start = new Date().getTime();
 		var text;
 		var cfgType = 'default';
 		var width = $(window).width();   // returns width of browser viewport
@@ -52,6 +53,11 @@ define([
 				console.log(data);
 			}
 		});
+
+		var end = new Date().getTime();
+		var time = end - start;
+		console.log('Execution time of cfg downloading: ' + time)
+
 		return text;
 	}
 
@@ -108,7 +114,7 @@ define([
 		},
 		showBoardView: function(id) {
 			console.log($('#lblFromNow'));
-
+			var start = new Date().getTime();
 			if (this.views.myBoardViewContainer === undefined) {
 				this.views.myBoardViewContainer = new BoardView({
 					aceText: getCfg()
@@ -117,6 +123,9 @@ define([
 
 			this.showView(this.views.myBoardViewContainer);
 			this.views.myBoardViewContainer.eventAggregator.trigger('onuseratmainscreen');
+			var end = new Date().getTime();
+			var time = end - start;
+			console.log('Execution time of board loading: ' + time)
 		},
 		showLoginView: function() {
 			if (this.views.myLoginView === undefined) {

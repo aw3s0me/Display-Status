@@ -57,6 +57,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				factor: 1,
 				linecolor: undefined,
 				label: undefined,
+				canberemoved: false,
 				cfgObj: null
 			}
 		},

@@ -5,6 +5,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		model: undefined,
 		linkModel: undefined,
 		isGrouped: false,
+		canBeRemoved: false,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -33,8 +34,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.model.updateModel();
 
-			this.container.mousedown(function(event) {
-				if (event.ctrlKey || event.shiftKey) {
+			//this.container.mousedown(function(event) {
+			this.container.dblclick(function(event) {
+				//if (event.ctrlKey || event.shiftKey) {
 					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
 						self.container.addClass('activeSensor');
 						return;
@@ -47,13 +49,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 						self.container.removeClass('chartAdded');
 						self.model.trigger('deleteSensor', self.model);
 					}
-				}
-			});
-
-			this.container.find('.close').click(function(event) {
-				event.stopImmediatePropagation();
-				self.removeFromDom();
-				return;
+				//}
 			});
 
 		},
@@ -73,6 +69,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				val: (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1),
 				name: newSensor.get('name'),
 				unit: newSensor.get('unit'),
+				canBeRemoved: newSensor.get('canberemoved')
 			}));
 
 			this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));
@@ -93,19 +90,29 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			main_val.css('bottom', 2 * scale + 'px')
 				.css('padding-right', 7 * scale + 'px')
 				.css('padding-left', 7 * scale + 'px')
-				.bigtext({
+				.css('font-size', 23 * scale + 'px');
+				/*.bigtext({
 					maxfontsize: 26 * scale,
 					minfontsize: 16 * scale
-				});
+				});*/
 
 			this.container.find('.sensorUnit')
 				.css('font-size', 12 * scale + 'px')
 				.css('right', 5 * scale + 'px')
 				.css('top', 20 * scale + 'px');
 
-			this.container.find('.close').css('font-size', 12 * scale + 'px')
+			if (newSensor.get('canberemoved')) {
+				this.container.find('.close').css('font-size', 12 * scale + 'px')
 				.css('right', 5 * scale + 'px')
-				.css('top', 4 * scale + 'px');
+				.css('top', 4 * scale + 'px')
+				.click(function(event) {
+					event.stopImmediatePropagation();
+					self.removeFromDom();
+					return;
+				});
+			}
+
+			
 
 			this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
 

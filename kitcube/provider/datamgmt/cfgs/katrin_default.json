@@ -16,7 +16,7 @@
             "type": "sensorgroup",
             "name": "Magnet Pinch",
             "size": [6, 5],
-            "coords": [2, 7],
+            "coords": [17, 13],
             "diffsensors": false,
             "diffgroups": false,
             "sensors": [{
@@ -63,7 +63,7 @@
             "type": "sensorgroup",
             "name": "Magnet Detector",
             "size": [6, 5],
-            "coords": [2, 13],
+            "coords": [10, 13],
             "diffsensors": false,
             "diffgroups": false,
             "sensors": [{
@@ -108,7 +108,7 @@
             "type": "sensorgroup",
             "name": "Vacuum XHVac/HVac",
             "size": [8, 5],
-            "coords": [10, 1],
+            "coords": [1, 7],
             "diffsensors": false,
             "diffgroups": false,
             "sensors": [{
@@ -225,7 +225,7 @@
             "type": "sensorgroup",
             "name": "Source & HV",
             "size": [8, 5],
-            "coords": [19, 1],
+            "coords": [1, 13],
             "diffsensors": false,
             "diffgroups": false,
             "empties": 1,
@@ -271,7 +271,7 @@
             "type": "sensorgroup",
             "name": "Amrel L",
             "size": [6, 5],
-            "coords": [11, 7],
+            "coords": [10, 1],
             "diffsensors": false,
             "diffgroups": false,
             "sensors": [{
@@ -316,7 +316,7 @@
             "type": "sensorgroup",
             "name": "Amrel V",
             "size": [6, 5],
-            "coords": [11, 13],
+            "coords": [17, 1],
             "diffsensors": false,
             "diffgroups": false,
             "empties": 1,
@@ -359,7 +359,7 @@
             "type": "sensorgroup",
             "name": "Veto Peltier 1",
             "size": [6, 5],
-            "coords": [20, 7],
+            "coords": [10, 7],
             "diffsensors": false,
             "diffgroups": false,
             "sensors": [{
@@ -406,7 +406,7 @@
             "type": "sensorgroup",
             "name": "Veto Peltier 2",
             "size": [6, 5],
-            "coords": [20, 13],
+            "coords": [17, 7],
             "diffsensors": false,
             "diffgroups": false,
             "sensors": [{
@@ -455,18 +455,8 @@
             "type": "chart",
             "link": ["sensid22", "sensid25"],
             "charttype": "line",
-            "size": [20, 9],
-            "coords": [29, 1],
-            "startrange": "15m",
-            "axislabels": false
-        },
-        "chart2": {
-            "width": 1,
-            "type": "chart",
-            "link": ["sensid1", "sensid7"],
-            "charttype": "line",
-            "size": [20, 9],
-            "coords": [29, 11],
+            "size": [25, 16],
+            "coords": [24, 1],
             "startrange": "15m",
             "axislabels": false
         }

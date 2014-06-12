@@ -257,11 +257,23 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			var controlPanel = controlPanelTemplate.find('.chartControlPanel');
 			//controlPanel.css('top', 14 * scale + 'px')
-			controlPanel.css('right', 35 * scale + 'px');
+			controlPanel.css('right', 35 * scale + 'px')
+			.css('top', 10 * scale + 'px');
 
-			controlPanel.find('.addChartBtn').button().css('font-size', 10 * scale + 'px');
+			controlPanel.css('font-size', 12 * scale + 'px');
+
+			controlPanel.find('.goAdeiBtn').button()
+				.click(function(event) {
+
+
+				});
+
+			controlPanel.find('.addChartBtn').button()
+				.click(function(event) {
+					var elems = self.formSensorElements();
+					self.getDataForElements(elems);
+				});
 			controlPanel.find('.legendChartBtn').button()
-				.css('font-size', 10 * scale + 'px')
 				.click(function(event) {
 					if (!_isLegendShown) {
 						self.chart.legendShow();
@@ -271,10 +283,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						_isLegendShown = false;
 					}
 				});
-			controlPanel.find('.addChartBtn').click(function(event) {
-				var elems = self.formSensorElements();
-				self.getDataForElements(elems);
-			});
 			controlPanelTemplate.find('.close').css('font-size', 12 * scale + 'px')
 				.css('right', 10 * scale + 'px')
 				.css('top', 10 * scale + 'px')
@@ -282,10 +290,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					self.removeFromDom();
 				});
 			controlPanel.find('.resetChartBtn').button()
-				.css('fontSize', 10 * scale + 'px')
 				.click(function(event) {
 					self.resetChart();
-				});;
+				});
 			var selectElem = controlPanelTemplate.find('.rangeContainer').css('top', 10 * scale + 'px').css('left', 10 * scale + 'px');
 
 			this.container.append(controlPanelTemplate);
@@ -685,7 +692,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			//this.chart.redraw();
 
 		},
-		addAdeiChart: function(models) {
+		goToAdei: function() {
 
 		},
 		getNumberOfPoints: function() {
