@@ -69,7 +69,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 .css('top', unitY + 'px')
                 .css('height', unitY * (dy) + 'px')
                 .css('width', unitX * dx + 'px')
-                .addClass('sortable_container').sortable();
+                .addClass('sortable_container').sortable({
+                    items: "li:not(.ui-state-disabled)"
+                });
 
             if (this.group !== undefined) {
                 for (var i = 0; i < this.group.length; i++) {
@@ -165,6 +167,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
         },
         setContainer: function(sensorView) {
             var divElem = sensorView.getContainer();
+            var groupModel = this.model;
             var model = sensorView.model;
             var posx = 0;
             var posy = 0;
@@ -179,16 +182,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             divElem.css('width', dx * unitSizeX - 0.4 + 'px');
             divElem.css('height', dy * unitSizeY - 0.4 + 'px');
 
-            //sensorModel.set({ bgcolor: color });
-            //sensorModel.trigger('changebgcolor', sensorModel);
-
             divElem.data('id', model.get('id'));
 
-            //divElem.addClass('widget');
             divElem.addClass('subtile');
 
-            return divElem;
+            if (groupModel.get('issortable')) {
+                divElem.addClass('ui-state-disabled');
+            }
 
+
+            return divElem;
         },
         onresize: function(model) {},
         onchangebgcolor: function(model) {

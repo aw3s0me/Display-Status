@@ -11,6 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			if (options.grid) {
 				this.grid = options.grid;
 			}
+
 			if (options.model) {
 				this.model = options.model;
 			}
@@ -89,18 +90,18 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//s2.innerHTML = newSensor.get('unit');
 			s2.className = "sensorUnit";
 
-			var s3 = document.createElement('div');
+			/*var s3 = document.createElement('div');
 			s3.style.position = 'absolute';
 			s3.style.fontSize = 12 * scale + 'px';
 			s3.style.right = 5 * scale + 'px';
 			s3.style.top = 4 * scale + 'px';
 			s3.innerHTML = "<b>x</b>";
-			s3.className = "close";
+			s3.className = "close"; */
 
 			this.container.append(s0);
 			this.container.append(s1);
 			this.container.append(s2);
-			this.container.append(s3);
+			//this.container.append(s3);
 
 			this.container.css('background-color', this.model.get('bgcolor'));
 

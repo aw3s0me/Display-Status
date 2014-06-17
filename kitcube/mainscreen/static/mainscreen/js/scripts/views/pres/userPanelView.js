@@ -16,13 +16,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         render: function() {
             this.el = $('#userPanel');
             this.ifLoggedIn();
-            $('#toggleGridButton').show();
+            //$('#toggleGridButton').show();
             
             $('#loginButton').tooltip({});;
             $('#logoutButton').tooltip({});;
             $('#goEditorButton').tooltip({});;
             $('#goMainscreenButton').tooltip({});;
-            $('#toggleGridButton').tooltip({});;
+            //$('#toggleGridButton').tooltip({});;
             
         },
         ifLoggedIn: function() {
@@ -44,16 +44,17 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             $('#logoutButton').show();
             $('#goEditorButton').show();
             $('#goMainscreenButton').hide();
-            $('#toggleGridButton').show();
+            //$('#toggleGridButton').show();
         },
         onUserAtLoginScreen: function() {
             $('#loginButton').hide();
             $('#logoutButton').hide();
             $('#goMainscreenButton').show();
-            $('#toggleGridButton').hide();
+            //$('#toggleGridButton').hide();
         },
         onUserAtMainScreen: function() {
             this.ifLoggedIn();
+            $('#goMainscreenButton').hide();
         },
         onUserLogout: function() {
             $('#loginButton').show();

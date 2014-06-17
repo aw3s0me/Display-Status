@@ -16,6 +16,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				canberemoved: false,
 				isresizable: false,
 				isdraggable: false,
+				issortable: false,
 				cfgObj: null
 			}	
 		},

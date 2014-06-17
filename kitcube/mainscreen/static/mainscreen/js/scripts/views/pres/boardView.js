@@ -233,6 +233,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					getDataFromAdei(url, function(data) {
 						//var result = window.db.dataHandl.onMessageRecievedCsv(data);
 						result = parseCSVForUpdating(data, masks.length);
+						if (typeof(result) === "string") {
+							console.log('Error occured: ' + result);
+							var lastUpdatedTime = 'Error in getting data';
+							self.eventAggregator.trigger('loadingfinished', {lastUpdatedTime : lastUpdatedTime});
+							return;
+						}
 						var time = moment(result.time[0] * 1000);
 						var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
 						//$('#lblFromNow').text();
@@ -244,9 +250,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 							element.updateModel(result.values[index++], time.valueOf());
 						}
-					})
-					
-
+					});
 					//window.db.getData(this.settings['server'], this.settings['dbname'], this.settings['dbgroup'], masksToRequest, '-1', 800, 'mean', function(obj)
 					//{
 						//console.log(obj);

@@ -464,13 +464,14 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 					var data = obj.data;
 					var datetime = obj.dateTime;
-					//console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
+					if (!data.length || !datetime.length) {
+						alert('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
+						return;
+					}
 					for (var i = 0; i < masks.length; i++) {
 						if (data[i].length > 0) {
 							models[i].setDataModel(data[i], datetime);
-							//console.log(models[i].get('mask'), data[i][0]);
 						}
-						//console.log(JSON.stringify(models[i].get('values')));
 					}
 
 					if (typeObject["1"])
@@ -479,9 +480,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						self.setSensorDataInChart(typeObject["2"], 2);
 					if (typeObject["0"])
 						self.setSensorDataInChart(typeObject["0"], 0);
-					//self.setExtremes();
-					//self.redraw();
-					//console.log(self.chart);
 				});
 			} catch (msg) {
 				console.log(msg);
@@ -527,23 +525,21 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						return;
 					}
 					var data = obj.data;
-					//console.log(data)
 					var datetime = obj.dateTime;
-					//console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
+					if (!data.length || !datetime.length) {
+						alert('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
+						return;
+					}
 					for (var i = 0; i < masks.length; i++) {
 						var model = models[i];
 						if (data[i].length > 0) {
-							//console.log(model.get('values'));
 							model.setDataModel(data[i], datetime);
-							//console.log(model.get('values'));
 						}
 						for (var i = 0; i < series.length; i++) {
 							var seriesObject = series[i];
 							var id = seriesObject.userOptions.id;
 							if (id === model.get('id')) {
 								seriesObject.data = [];
-								//console.log(model.get('values'))
-								//seriesObject.data = model.get('values');
 								seriesObject.setData(model.get('values'));
 								break;
 							}
