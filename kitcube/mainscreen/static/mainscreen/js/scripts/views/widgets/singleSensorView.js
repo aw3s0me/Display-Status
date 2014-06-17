@@ -36,6 +36,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//this.container.mousedown(function(event) {
 			this.container.dblclick(function(event) {
 				//if (event.ctrlKey || event.shiftKey) {
+					if(document.selection && document.selection.empty) {
+				        document.selection.empty();
+				    } else if(window.getSelection) {
+				        var sel = window.getSelection();
+				        sel.removeAllRanges();
+				    }
+					
 					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
 						self.container.addClass('activeSensor');
 						return;
@@ -82,10 +89,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var main_val_child = main_val.children('#b' + newSensor.get('id'));
 			//.css('height', main_val.css('height') + '!important');
 
-			main_val_child
-				.css('width', main_val.width())
-				.css('height', main_val.height());
-	
 			main_val.css('bottom', 2 * scale + 'px')
 				.css('padding-right', 7 * scale + 'px')
 				.css('padding-left', 7 * scale + 'px')
@@ -94,6 +97,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 					maxfontsize: 26 * scale,
 					minfontsize: 16 * scale
 				});*/
+			//main_val_child
+				//.css('width', 15 * scale + 'px')
+				//.css('height', main_val.height());
+
 
 			this.container.find('.sensorUnit')
 				.css('font-size', 12 * scale + 'px')

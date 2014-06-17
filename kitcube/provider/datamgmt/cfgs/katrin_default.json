@@ -464,7 +464,7 @@
         "chart2": {
             "width": 1,
             "type": "chart",
-            "link": ["sensid22", "sensid25"],
+            "link": ["sensid41", "sensid37"],
             "charttype": "line",
             "size": [25, 9],
             "coords": [24, 11],

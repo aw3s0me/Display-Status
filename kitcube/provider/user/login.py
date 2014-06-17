@@ -68,7 +68,7 @@ class LoginView(APIView):
     userSerializer_class = UserSerializer
     model = Token
     def post(self, request):
-        pdb.set_trace()
+        #pdb.set_trace()
         data = json.loads(request.body)
         if 'group' in data:
             errors = validate_user_by_group(data)

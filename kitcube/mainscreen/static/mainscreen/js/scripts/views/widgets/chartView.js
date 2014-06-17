@@ -11,6 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 		model: undefined,
 		board: undefined,
 		lookDiv: undefined,
+		setExteremesInterval: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -47,6 +48,37 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			for (var i = 0; i < elems1Val.length; i++) {
 				var jqElement = elems1Val[i];
+				//$(jqElement).removeClass('activeSensor1');
+				//$(jqElement).addClass('chartAdded1');
+			}
+
+			for (var i = 0; i < elems2Val.length; i++) {
+				var jqElement = elems2Val[i];
+				//$(jqElement).removeClass('activeSensor2');
+				//(jqElement).addClass('chartAdded2');
+			}
+
+			for (var i = 0; i < elemsVal.length; i++) {
+				var jqElement = elemsVal[i];
+				//$(jqElement).removeClass('activeSensor');
+
+			}
+
+			/* OPTION 1
+			for (var i = 0; i < elemsVal.length; i++) {
+				var jqElement = elemsVal[i];
+				$(jqElement).removeClass('activeSensor');
+				$(jqElement).addClass('chartAdded');
+			}*/
+
+			return elems;
+		},
+		removeSelection: function() {
+			var elems1Val = this.lookDiv.find('.activeSensor1');
+			var elems2Val = this.lookDiv.find('.activeSensor2');
+			var elemsVal = this.lookDiv.find('.activeSensor');
+
+			for (var i = 0; i < elems1Val.length; i++) {
 				$(jqElement).removeClass('activeSensor1');
 				$(jqElement).addClass('chartAdded1');
 			}
@@ -62,15 +94,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				$(jqElement).removeClass('activeSensor');
 
 			}
-
-			/* OPTION 1
-			for (var i = 0; i < elemsVal.length; i++) {
-				var jqElement = elemsVal[i];
-				$(jqElement).removeClass('activeSensor');
-				$(jqElement).addClass('chartAdded');
-			}*/
-
-			return elems;
 		},
 		addNewPoint: function(model) {
 
@@ -322,6 +345,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					range: value
 				});
 				self.onChangeTimeRange();
+
 				//self.setExtremes();
 			});
 
@@ -427,6 +451,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			if (typeObject["0"])
 				this.getIdsOfSensorType(typeObject["0"], models, 0);
 
+
+			if (models.length + this.model.get('models').length > this.model.get('maxelementsize')) {
+				alert('You can add only no more than: ' + this.model.get('maxelementsize') + ' elements');
+				return;
+			}
+
+			this.removeSelection();
 
 			for (var i = 0; i < models.length; i++) {
 				if (!this.model.isOnTheChartById(models[i].get('id'))) {
