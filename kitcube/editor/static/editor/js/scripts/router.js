@@ -3,15 +3,15 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'kit.sizeDetector',
 	'views/pres/loginView',
+	'views/pres/userPanelView',
 	//'views/pres/controlPanelView',
 	'views/pres/txtEditorView',
 	'views/pres/settingsView',
-	'views/pres/boardViewContainer',
+	'views/pres/guiEditorView',
 	'views/pres/navPanelView',
 	'views/pres/registerView'
-], function($, _, Backbone, sizeDetector, LoginView, TextEditorView, SettingsView, BoardViewContainer, NavPanelView, RegisterView) {
+], function($, _, Backbone, LoginView, UserPanelView, TextEditorView, SettingsView, GuiEditorView, NavPanelView, RegisterView) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -61,7 +61,7 @@ define([
 		},
 		showGuiEditor: function() {
 			if (this.views.myGuiEditor === undefined) {
-				this.views.myGuiEditor = new BoardViewContainer();
+				this.views.myGuiEditor = new GuiEditorView();
 			}
 
 			if (this.views.myNavPanelView === undefined) {
@@ -90,39 +90,54 @@ define([
 				this.views.myLoginView = new LoginView();
 			}
 			this.showView(this.views.myLoginView);
-
+			this.views.myLoginView.eventAggregator.trigger('onuseratloginscreen');
 		},
 		doLogout: function() {
 			if (window.activeSessionUser.get('logged_in')) {
-				var user = window.activeSessionUser;
-				if (!user.get('logged_in')) {
+				if (this.views.myLoginView === undefined) {
+					$.cookie("access_token", null, {
+						path: '/'
+					});
+					var user = window.activeSessionUser;
+					var token = user.get('token');
+					$.ajax({
+						//url: '/api-token/login/google/',
+						url: '/api-token/logout/',
+						method: 'GET',
+						//data: dataToSend,
+						headers: {
+							'Authorization': token,
+						},
+						success: function(data) {
+							user.trigger('logout');
+						},
+						beforeSend: function(xhr, settings) {
+							xhr.setRequestHeader('Authorization', token);
+						}
+					})
 					return;
+				} else {
+					this.views.myLoginView.logout();
 				}
-				var token = user.get('token');
-				//var dataToSend = JSON.stringify({'token': token});
-				$.ajax({
-					//url: '/api-token/login/google/',
-					url: '/api-token/logout/',
-					method: 'GET',
-					//data: dataToSend,
-					headers: {
-						'Authorization': token,
-					},
-					success: function(data) {
-						user.trigger('logout');
-					},
-					beforeSend: function(xhr, settings) {
-						xhr.setRequestHeader('Authorization', token);
-					}
-				})
-				var curUser = window.activeSessionUser;
-				$('.loginHref').text('');
-				$('.loginHref').attr('href', '#login');
-				$('#userStatus').text('');
-				if (this.views.myNavPanelView !== undefined) {
-					this.views.myNavPanelView.remove();
-				}
+
+				
+			} else {
+				$.cookie("access_token", null, {
+					path: '/'
+				});
 			}
+
+			if (this.views.userPanelView !== undefined) {
+				this.views.userPanelView.onUserLogout();
+			}
+
+		},
+		showUserPanelView: function() {
+			if (this.views.myUserPanelView === undefined) {
+				this.views.myUserPanelView = new UserPanelView();
+			}
+
+			this.showView(this.views.myUserPanelView);
 		},
 		showRegisterView: function() {
 			if (this.views.myRegisterView === undefined) {
@@ -133,6 +148,7 @@ define([
 		},
 		defaultAction: function(actions) {
 			// We have no matching route, lets just log what the URL 
+			//this.showGuiEditor();
 			if (!window.activeSessionUser.get('logged_in')) {
 				console.log('default: ' + 'showLogin')
 				this.showLoginView()
@@ -140,21 +156,23 @@ define([
 				console.log('default: ' + 'showGui')
 				this.showGuiEditor();
 			}
-			console.log("404: " + actions);
+			console.log("404: " + actions); 
 		}
 	});
 
 	var initialize = function() {
 		var app_router = new AppRouter;
 
+		//app_router.showGuiEditor();
+		app_router.views.myUserPanelView = new UserPanelView();
+
 		if (!window.activeSessionUser.get('logged_in')) {
 			app_router.views = {
 				myLoginView: new LoginView()
 			}
-
 			app_router.showView(app_router.views.myLoginView);
 		} else {
-			//app_router.showGuiEditor();
+			app_router.showGuiEditor();
 		}
 
 		Backbone.history.start();

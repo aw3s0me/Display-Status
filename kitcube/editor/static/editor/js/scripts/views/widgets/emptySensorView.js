@@ -80,10 +80,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//$(".slab").slabText();
 			tempDiv.css('width', $(s1).width());
 			tempDiv.css('height', $(s1).height());
-			//$(s1).bigtext();
-			$(s1).bigtext({
-				maxfontsize: maxFont
-			});
 
 			var s2 = document.createElement('div');
 			s2.style.position = 'absolute';

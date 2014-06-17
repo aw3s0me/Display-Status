@@ -113,7 +113,6 @@ define([
 			$(this.views.current.el).show();
 		},
 		showBoardView: function(id) {
-			console.log($('#lblFromNow'));
 			var start = new Date().getTime();
 			if (this.views.myBoardViewContainer === undefined) {
 				this.views.myBoardViewContainer = new BoardView({
@@ -133,7 +132,6 @@ define([
 			}
 			this.showView(this.views.myLoginView);
 			this.views.myLoginView.eventAggregator.trigger('onuseratloginscreen');
-
 		},
 		doLogout: function() {
 			if (window.activeSessionUser.get('logged_in')) {

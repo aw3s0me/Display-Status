@@ -21,7 +21,7 @@ require.config({
     "highcharts-legend": "vendor/highcharts-legend",
     //colorpicker
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
-    "bigtext": "vendor/bigtext/src/bigtext",
+    //"bigtext": "vendor/bigtext/src/bigtext",
     "momentjs": "vendor/momentjs/min/moment.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
     "cookie": "vendor/jquery-cookie/jquery.cookie",
@@ -93,11 +93,6 @@ require.config({
     "highcharts-legend": {
       deps: [
         "highcharts"
-      ]
-    },
-    bigtext: {
-      deps: [
-        "jquery"
       ]
     },
     momentjs: {

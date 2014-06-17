@@ -15,7 +15,8 @@ from django.conf import settings
 
 import os
 from serializers import ProjectSerializer, ConfigSerializer
-from provider.user.userValidation import is_user_valid
+from provider.user.userValidation import is_user_valid, is_user_valid_obj_groups
+from provider.user.helpers import get_authorization_header
 import json
 #from django.middleware.gzip import GZipMiddleware
 import cStringIO, gzip
@@ -31,6 +32,97 @@ class JSONResponse(HttpResponse):
         content = JSONRenderer().render(data)
         kwargs['content_type'] = 'application/json'
         super(JSONResponse, self).__init__(content, **kwargs)
+
+def get_first_elem(qs):
+    r = list(qs[:1])
+    if r:
+        return r[0]
+    return None
+
+class UpdateProjConfListsView(APIView):
+    model = User
+    throttle_classes = ()
+    permission_classes = ()
+    renderer_classes = (renderers.JSONRenderer,)
+    def get(self, request):     
+        auth = get_authorization_header(request).split()
+        if not auth or auth[0].lower() != b'token':
+            msg = 'No token header provided.'
+        if len(auth) == 1:
+            msg = 'Invalid token header. No credentials provided.'
+        if not msg:
+            return Response('Invalid token header', status=status.HTTP_400_BAD_REQUEST)
+        key=auth[0]
+        if key:
+            userObj = is_user_valid_obj_groups(key)
+            user = userObj[0]
+            groups = userObj[1]
+            if not user:
+                return Response('User is not valid', status=status.HTTP_400_BAD_REQUEST)
+            if not groups:
+                return Response('Groups are not valid', status=status.HTTP_400_BAD_REQUEST)
+            data = []
+            #pdb.set_trace()
+            for group in groups:
+                project = Project.objects.get(link=group.name)
+                configs = project.config_set.all()
+                config_arr = []
+                for config in configs:
+                    config_arr.append({'name': config.name, 'title': config.title})
+                data.append({'name': project.link, 'title': project.title, 'configs': config_arr})
+                #data[index++] = {'name': project.link, 'title': project.title, 'configs': config_arr}
+        else:
+            return Response('Username or token hasnt been specified', status=status.HTTP_400_BAD_REQUEST)
+
+class InitializeFirstTimeListsView(APIView):
+    model = User
+    throttle_classes = ()
+    permission_classes = ()
+    renderer_classes = (renderers.JSONRenderer,)
+    def get(self, request):  
+        auth = get_authorization_header(request).split()
+        if not auth or auth[0].lower() != b'token':
+            msg = 'No token header provided.'
+        if len(auth) == 1:
+            msg = 'Invalid token header. No credentials provided.'
+        if not msg:
+            return Response('Invalid token header', status=status.HTTP_400_BAD_REQUEST)
+        key=auth[0]
+        if not key:
+            return Response('Username or token hasnt been specified', status=status.HTTP_400_BAD_REQUEST)
+        userObj = is_user_valid_obj_groups(key)
+        user = userObj[0]
+        groups = userObj[1]
+        if not user:
+            return Response('User is not valid', status=status.HTTP_400_BAD_REQUEST)
+        if not groups:
+            return Response('Groups are not valid', status=status.HTTP_400_BAD_REQUEST)
+        data = []
+        first_config_file = ""
+        index = 0
+        #pdb.set_trace()
+        first = False
+        for group in groups:
+            project = Project.objects.get(link=group.name)
+            configs = project.config_set.all()
+            if not first:
+                config = get_first_elem(configs)
+                path = os.path.dirname(__file__)
+                file_path = os.path.join(path, 'cfgs/' + config.path)
+                file = open(file_path)
+                #cfg.data['content'] = json.dumps(file.read())
+                first_config_file = file.read()
+                #print cfg.data
+            config_arr = []
+            for config in configs:
+                config_arr.append({'name': config.name, 'title': config.title})
+            data.append({'name': project.link, 'title': project.title, 'configs': config_arr})
+        if len(data) > 0:
+            data[0]['first_config_content'] = first_config_file
+            return Response({'user_id': user.id, 'data': data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'user_id': user.id, 'data': ''}, status=status.HTTP_200_OK)
+            
 
 class ProjectListView(APIView):
     model = User

@@ -8,9 +8,12 @@
   <meta name="description" 
           content="{{ description }}">
   <meta name="csrf_token" content="{{ csrf_token }}">
-  <meta name="projects" content="{{ projects }}">
+  <meta name="projects" content="{{ projects }}"> <!-- initializing user project to user model -->
+  <meta name="project" content="{{ project }}"> <!-- editor project -->
   <link href={% static "editor/css/bootstrap.min.css" %} rel="stylesheet">
   <link href={% static "editor/css/main.css" %} rel="stylesheet">
+  <link href={% static "editor/css/bootstrap.submenu.css" %} rel="stylesheet">
+  <link href={% static "editor/css/guieditor.css" %} rel="stylesheet">
   <link href={% static "editor/js/scripts/vendor/jqgrid/css/ui.jqgrid.css" %} rel="stylesheet"> 
   <link href={% static "editor/js/scripts/vendor/jquery-ui/themes/smoothness/jquery-ui.css" %} rel="stylesheet">
   <link href={% static "editor/js/scripts/vendor/jquery-ui/themes/smoothness/jquery.ui.theme.css" %} rel="stylesheet">
@@ -31,7 +34,7 @@
       <div id="banner" class="demo-headline">
         <h1 class="demo-logo">
           <div class="logo"></div>
-          Kitcube Status
+          Display Status
           <small>template editor</small>
         </h1>
         {{ userblock }}

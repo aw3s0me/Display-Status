@@ -15,6 +15,7 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from provider.datamgmt.models import Project
 import json
 import pdb
 
@@ -67,15 +68,23 @@ class LoginView(APIView):
     userSerializer_class = UserSerializer
     model = Token
     def post(self, request):
+        pdb.set_trace()
         data = json.loads(request.body)
-        #pdb.set_trace()
-        
         if 'group' in data:
             errors = validate_user_by_group(data)
         else:
             errors = validate_user_without_group(data)
         if is_empty(errors):
             user = User.objects.get(username=data['username'])
+            # groups = user.groups.all()
+            # group_arr = []
+            # for group in groups:
+            #     project = Project.objects.get(link=group.name)
+            #     configs = project.config_set.all()
+            #     config_arr = []
+            #     for config in configs:
+
+                #group_arr.append({'name': group.name, 'title': project.title})
             if user and user.is_active:
                 token, created = Token.objects.get_or_create(user=user)
                 return Response({'id': user.id , 'name': user.username, 'userRole': 'user','token': token.key})

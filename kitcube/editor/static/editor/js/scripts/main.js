@@ -11,14 +11,10 @@ require.config({
     //Text Editor part
     "ace": "vendor/ace/build/src-min/ace",
     //There goes my helpers
-    "kit.sizeDetector": "dev/kit.sizedetector/sizedetector",
-    "kit.parser": "dev/kit.parser/kit.cfgParser",
-    "kit.dataDownloader" : "dev/kit.dataDownloader/kit.dataDownloader", //refactor
+    "kit.sizeDetector": "dev/sizedetector",
     //my grid part
-    "kitgrid": "dev/kit.grid/kitGrid",
+    "kitgrid": "dev/kitGrid",
     "text" : "vendor/requirejs-text/text",
-    //yaml part
-    "yaml": "vendor/js-yaml/js-yaml.min",
     "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min",
     //chart part
     "highcharts": "vendor/highcharts.com/js/highcharts.src",
@@ -57,23 +53,7 @@ require.config({
     },
     "kit.sizeDetector": {
       deps: [
-      "jquery",
-      "dev/helpers",
-      "kit.dataDownloader"
-      ]
-    },
-    "kit.parser": {
-      deps: [
-        "jquery",
-        "dev/kit.parser/prshelpers",
-        "yaml",
-        "dev/helpers",
-        "kit.dataDownloader"
-      ]
-    },
-    "kit.dataDownloader" : {
-      deps: [
-        "jquery"
+      "jquery"
       ]
     },
     kitgrid: {

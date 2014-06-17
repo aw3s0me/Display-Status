@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/widgets/sensorSingle.html'], function($, _, Backbone, SensorModel, SensorTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/widgets/sensorDouble.html'], function($, _, Backbone, SensorModel, SensorTemplate) {
 	var SensorView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
@@ -80,89 +80,57 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var dy = newSensor.get("size")[1];
 			var px = newSensor.get("coords")[0];
 			var py = newSensor.get("coords")[1];
-
-			this.container = $('<div></div>');
-			this.container.attr('id', newSensor.get('id'));
-			var s0 = document.createElement('div');
-			s0.style.position = 'absolute';
-			s0.style.fontSize = 14 * scale + 'px';
-			s0.style.left = 5 * scale + 'px';
-			s0.innerHTML = newSensor.get('name');
-			s0.className = "sensorName";
-			s0.style.fontWeight = 'bold';
-			s0.style.lineHeight = 15 * scale + 'px';
-
-			var s1 = document.createElement('div');
-			s1.style.position = 'absolute';
-			var maxFont = 30 * scale;
-			s1.style.bottom = 2 * scale + 'px';
-			var tempDiv = $('<div></div>');
-			tempDiv.attr('id', 'b' + this.model.get('id'));
-			tempDiv.text((newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1));
-			$(s1).append(tempDiv);
-			s1.className = "sensorVal";
-			//s1.className += " slabtext";
-			s1.className += " slab";
-			s1.className += " bigtext";
-			s1.style.paddingRight = 6 * scale + 'px';
-			//$(s1).fitText(1.2, { minFontSize: minFont, maxFontSize: maxFont });
-			//$(".slab").slabText();
-			tempDiv.css('width', $(s1).width());
-			tempDiv.css('height', $(s1).height());
-			//$(s1).bigtext();
-			$(s1).bigtext({
-				maxfontsize: maxFont
-			});
-
-			var s2 = document.createElement('div');
-			s2.style.position = 'absolute';
-			s2.style.fontSize = 12 * scale + 'px';
-			s2.style.right = 5 * scale + 'px';
-			s2.style.top = 20 * scale + 'px';
-			s2.innerHTML = newSensor.get('unit');
-			s2.className = "sensorUnit";
-
-			//var prevHeight = this.container.height() * 0.4;
 			var prevHeight = 2 * this.grid.getUnitSizes().height * this.grid.getScale() * 0.34;
 
-			var s5 = document.createElement('div');
-			s5.style.position = 'absolute';
-			var maxFont = 30 * scale;
-			s5.style.bottom = prevHeight + 'px';
-			console.log(prevHeight);
-			var tempDiv = $('<div></div>');
-			tempDiv.attr('id', 'c' + this.model.get('id'));
-			tempDiv.text((this.linkModel.get('value') === undefined) ? 'NAN' : (this.linkModel.get('value')).toFixed(1));
-			$(s5).append(tempDiv);
-			s5.className = "sensorVal";
-			s5.className += " slab";
-			s5.className += " bigtext";
-			s5.style.paddingRight = 6 * scale + 'px';
-			$(s5).css('color', 'white');
-			tempDiv.css('width', $(s5).width());
-			tempDiv.css('height', $(s5).height());
-			$(s5).bigtext({
-				maxfontsize: maxFont
-			});
-			this.container.append(s5);
-			s2.innerHTML = "<span class='sensUnit2'>" + this.linkModel.get('unit') + "</span>" + "/" + s2.innerHTML;
-			this.container.attr('id2', this.linkModel.get('id'));
+			var dblSensorTemplate = $(_.template(SensorTemplate, {
+				sensor_main_id: newSensor.get('id'),
+				sensor_sub_id: this.linkModel.get('id'),
+				main_val: (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1),
+				name: newSensor.get('name'),
+				sub_val: (this.linkModel.get('value') === undefined) ? 'NAN' : (this.linkModel.get('value')).toFixed(1),
+				unit1: newSensor.get('unit'),
+				unit2: this.linkModel.get('unit')
+			}));
 
-			var s3 = document.createElement('div');
-			s3.style.position = 'absolute';
-			s3.style.fontSize = 12 * scale + 'px';
-			s3.style.right = 5 * scale + 'px';
-			s3.style.top = 4 * scale + 'px';
-			s3.innerHTML = "<b>x</b>";
-			s3.className = "close";
+			this.container = $(dblSensorTemplate).css('background-color', newSensor.get('bgcolor'));
 
-			this.container.append(s0);
-			this.container.append(s1);
-			this.container.append(s2);
-			this.container.append(s3);
-			this.container.append(s5);
+			this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
+			.css('left', 5 * scale + 'px')
+			.css('line-height', 15 * scale + 'px')
 
-			this.container.css('background-color', this.model.get('bgcolor'));
+			var main_val = this.container.find('#val_' + newSensor.get('id')); //nested div because of big text
+			var main_val_child = main_val.children('#b' + newSensor.get('id'));
+			var sub_val = this.container.find('#val_' + this.linkModel.get('id'));
+			var sub_val_child = sub_val.children('#c' + newSensor.get('id'))
+
+			main_val_child
+				.css('width', main_val.width())
+				.css('height', main_val.height());
+	
+			main_val.css('bottom', 2 * scale + 'px')
+				.css('padding-right', 6 * scale + 'px')
+				.bigtext({
+					maxfontsize: 30 * scale
+				});
+			sub_val_child
+				.css('width', main_val.width())
+				.css('height', main_val.height())
+				.css('color', 'white');
+
+			sub_val.css('bottom', prevHeight + 'px')
+			.css('padding-right', 6 * scale + 'px')
+			.bigtext({
+					maxfontsize: 30 * scale
+				});
+
+			this.container.find('.sensorUnit')
+				.css('font-size', 12 * scale + 'px')
+				.css('right', 5 * scale + 'px')
+				.css('top', 20 * scale + 'px');
+
+			this.container.find('.close').css('font-size', 12 * scale + 'px')
+				.css('right', 5 * scale + 'px')
+				.css('top', 4 * scale + 'px');
 
 		},
 		getHtml: function() {

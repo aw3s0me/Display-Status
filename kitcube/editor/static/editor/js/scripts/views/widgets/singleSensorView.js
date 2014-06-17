@@ -27,14 +27,15 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.render();
 
 			this.model.on('resize', this.onresize, this);
-			this.model.on('change:bgcolor', this.onchangebgcolor, this);
+			this.model.on('change:valcolor', this.onchangevalcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
 			this.model.on('removedFromChart', this.onremovedfromchart, this);
 
 			this.model.updateModel();
 
-			this.container.mousedown(function(event) {
-				if (event.ctrlKey || event.shiftKey) {
+			//this.container.mousedown(function(event) {
+			this.container.dblclick(function(event) {
+				//if (event.ctrlKey || event.shiftKey) {
 					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
 						self.container.addClass('activeSensor');
 						return;
@@ -47,13 +48,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 						self.container.removeClass('chartAdded');
 						self.model.trigger('deleteSensor', self.model);
 					}
-				}
-			});
-
-			this.container.find('.close').click(function(event) {
-				event.stopImmediatePropagation();
-				self.removeFromDom();
-				return;
+				//}
 			});
 
 		},
@@ -67,61 +62,58 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var newSensor = this.model;
 			//console.log(this.model);
 			var scale = this.grid.getScale();
-			var dx = newSensor.get("size")[0];
-			var dy = newSensor.get("size")[1];
-			var px = newSensor.get("coords")[0];
-			var py = newSensor.get("coords")[1];
 
-			this.container = $('<div></div>');
-			this.container.attr('id', newSensor.get('id'));
-			var s0 = document.createElement('div');
-			s0.style.position = 'absolute';
-			s0.style.fontSize = 14 * scale + 'px';
-			s0.style.left = 5 * scale + 'px';
-			s0.innerHTML = newSensor.get('name');
-			s0.className = "sensorName";
-			s0.style.fontWeight = 'bold';
-			s0.style.lineHeight = 15 * scale + 'px';
+			var snglSensorTemplate = $(_.template(SensorTemplate, {
+				sensor_id: newSensor.get('id'),
+				val: (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1),
+				name: newSensor.get('name'),
+				unit: newSensor.get('unit'),
+				canberemoved: newSensor.get('canberemoved')
+			}));
 
-			var s1 = document.createElement('div');
-			s1.style.position = 'absolute';
-			var maxFont = 30 * scale;
-			s1.style.bottom = 2 * scale + 'px';
-			var tempDiv = $('<div></div>');
-			tempDiv.attr('id', 'b' + this.model.get('id'));
-			tempDiv.text((newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1));
-			$(s1).append(tempDiv);
-			s1.className = "sensorVal";
-			s1.className += " bigtext";
-			s1.style.paddingRight = 6 * scale + 'px';
-			tempDiv.css('width', $(s1).width());
-			tempDiv.css('height', $(s1).height());
-			$(s1).bigtext({
-				maxfontsize: maxFont
-			});
+			this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));
 
-			var s2 = document.createElement('div');
-			s2.style.position = 'absolute';
-			s2.style.fontSize = 12 * scale + 'px';
-			s2.style.right = 5 * scale + 'px';
-			s2.style.top = 20 * scale + 'px';
-			s2.innerHTML = newSensor.get('unit');
-			s2.className = "sensorUnit";
+			this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
+			.css('left', 5 * scale + 'px')
+			.css('line-height', 15 * scale + 'px')
 
-			var s3 = document.createElement('div');
-			s3.style.position = 'absolute';
-			s3.style.fontSize = 12 * scale + 'px';
-			s3.style.right = 5 * scale + 'px';
-			s3.style.top = 4 * scale + 'px';
-			s3.innerHTML = "<b>x</b>";
-			s3.className = "close";
+			var main_val = this.container.find('#val_' + newSensor.get('id'));
+			//.css('height', 40 * scale + 'px'); //nested div because of big text
+			var main_val_child = main_val.children('#b' + newSensor.get('id'));
+			//.css('height', main_val.css('height') + '!important');
 
-			this.container.append(s0);
-			this.container.append(s1);
-			this.container.append(s2);
-			this.container.append(s3);
+			main_val_child
+				.css('width', main_val.width())
+				.css('height', main_val.height());
+	
+			main_val.css('bottom', 2 * scale + 'px')
+				.css('padding-right', 7 * scale + 'px')
+				.css('padding-left', 7 * scale + 'px')
+				.css('font-size', 23 * scale + 'px');
+				/*.bigtext({
+					maxfontsize: 26 * scale,
+					minfontsize: 16 * scale
+				});*/
 
-			this.container.css('background-color', this.model.get('bgcolor'));
+			this.container.find('.sensorUnit')
+				.css('font-size', 12 * scale + 'px')
+				.css('right', 5 * scale + 'px')
+				.css('top', 20 * scale + 'px');
+
+			if (newSensor.get('canberemoved')) {
+				this.container.find('.close').css('font-size', 12 * scale + 'px')
+				.css('right', 5 * scale + 'px')
+				.css('top', 4 * scale + 'px')
+				.click(function(event) {
+					event.stopImmediatePropagation();
+					self.removeFromDom();
+					return;
+				});
+			}
+
+			
+
+			this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
 
 		},
 		getHtml: function() {
@@ -148,11 +140,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var min = (height < width) ? height : width;
 			var ratio = min / max;
 		},
-		onchangebgcolor: function(model) {
+		onchangevalcolor: function(model) {
 			var sensorDiv = this.container;
 			var sensorModel = model;
-
-			sensorDiv.css('background-color', this.model.get('bgcolor'));
+			sensorDiv.find('#val_' + this.model.get('id')).css('color', this.model.get('valcolor'));
+			//sensorDiv.css('background-color', this.model.get('valcolor'));
 		},
 		onchangevalue: function(model) {
 			var sensorDiv = this.container;
@@ -160,8 +152,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var valToInsert = model.get('valUnit');
 			var name = this.model.get('name');
 			var scale = this.grid.getScale();
-			var maxFont = 30 * scale;
-			var minFont = 25 * scale + 'px';
 			var valDiv = this.container.find('.sensorVal');
 			$('#b' + model.get('id')).text(valToInsert);
 		},

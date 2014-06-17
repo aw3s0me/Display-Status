@@ -15,7 +15,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 					password: $(this).find('#username').val()
 				}
 				var dataToSend = $(this).serializeObject();
-				dataToSend['group'] = $('meta[name="project"]').attr('content');
+				//dataToSend['group'] = $('meta[name="project"]').attr('content');
+				//var user = window.activeSessionUser;
+				//var groups = user.get('groups');
+				//dataToSend['groups'] = groups;
 				dataToSend = JSON.stringify(dataToSend);
 
 				var csrfToken = $('meta[name="csrf_token"]').attr('content');
@@ -58,16 +61,19 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 							data: dataToSend,
 							success: function(data) {
 								console.log(data);
-								self.onSuccessLogin(data);
+								if (data['error'] !== undefined) {
+									self.onSocialError(data);
+								}
+								else {
+									self.onSuccessLogin(data);
+								}
+								
 							},
 							beforeSend: function(xhr, settings) {
 								xhr.setRequestHeader('Authorization', token);
 							}
 						})
-
 					}
-
-
 				});
 			});
 			$('#loginGoogle').click(function(event) {
@@ -92,8 +98,12 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 								'Authorization': token,
 							},
 							success: function(data) {
-								console.log(data);
-								self.onSuccessLogin(data);
+								if (data['error'] !== undefined) {
+									self.onSocialError(data);
+								}
+								else {
+									self.onSuccessLogin(data);
+								}
 							},
 							beforeSend: function(xhr, settings) {
 								xhr.setRequestHeader('Authorization', token);
@@ -119,6 +129,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 		logout: function() {
 			var user = window.activeSessionUser;
 			var self = this;
+			$.cookie("access_token", null, { path: '/' });
 			if (!user.get('logged_in')) {
 				return;
 			}
@@ -134,16 +145,14 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				},
 				success: function(data) {
 					user.trigger('logout');
-					self.form.find('#username').removeClass('valid_input');
-					self.form.find('#username').removeClass('invalid_input');
-					self.form.find('#password').removeClass('invalid_input');
-					self.form.find('#password').removeClass('valid_input');
+					self.clear();
 				},
 				beforeSend: function(xhr, settings) {
 					xhr.setRequestHeader('Authorization', token);
 				}
 			})
-			$('#goEditorButton').remove();
+			this.eventAggregator.trigger('onuserloggedout');
+
 		},
 		onSuccessLogin: function(loginInfo) {
 			$('#loginValidation').empty();
@@ -156,26 +165,13 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				id: loginInfo.id,
 				logged_in: true,
 				role: loginInfo.userRole,
-				group: loginInfo.group
+				group: loginInfo.group,
+				groups: loginInfo.groups
 			});
+			this.eventAggregator.trigger('userloggedin');
 			$.cookie('access_token', user.get('token'), { path: '/'});
-
-			if (!window.activeSessionUser.get('logged_in')) {
-				$('.loginHref').text('Login');
-				$('.loginHref').attr('href', '#login');
-			}
-			else {
-				var curUser = window.activeSessionUser;
-				$('.loginHref').text('Logout');
-				$('.loginHref').attr('href', '#logout');
-				$('#userStatus').text('Welcome! ' + curUser.get('username') + ',');
-			}
-
 			window.location.href = "#board";
-			$('#banner').append(window.editorBtnTemplate);
-
-
-
+			this.clear();
 		},
 		onError: function(errorInfo) {
 			var div = $('#loginValidation');
@@ -206,6 +202,17 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 
 			$('#goEditorButton').remove();
 
+		},
+		onSocialError: function(errorInfo) {
+			var div = $('#loginValidation');
+			div.show();
+			div.empty();
+			for (var errorName in errorInfo) {
+				var error = errorInfo[errorName];
+				var errorLi = $('<li></li>');
+				errorLi.text(error);
+				div.append(errorLi);
+			}
 		},
 		clear: function() {
 			this.form.find('#username').removeClass('valid_input');

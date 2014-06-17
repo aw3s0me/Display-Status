@@ -1,0 +1,22 @@
+<div id="userPanel">
+    <span id="lblInfo" class="label label-default">
+        <b id="lblUserInfo">
+        {% if user.username %}
+            Welcome, <span id="userName">{{ user.username }}</span> !
+        {% else %}
+            No authorized user
+        {% endif %}
+        </b>
+    </span>
+    <div id="btnUserPanel">
+        <a href="#login" class="btn btn-default circle-btn menuButton" id="loginButton" data-toggle="tooltip" data-placement="bottom" title="Login">
+        <span class="glyphicon glyphicon-log-in"></span>
+        </a>
+        <a href="#logout" class="btn btn-default circle-btn menuButton" id="logoutButton" data-toggle="tooltip" data-placement="bottom" title="Log-out">
+        <span class="glyphicon glyphicon-log-out"></span>
+        </a>
+        <a href="../" class="btn btn-default circle-btn menuButton" id="goHome" data-toggle="tooltip" data-placement="bottom" title="Home"><span class="glyphicon glyphicon-home"></span></a>
+        <a href="#board"; class="btn btn-default circle-btn menuButton" id="goGuiEditorButton" data-toggle="tooltip" data-placement="bottom" title="Go to Editor"><span class="glyphicon glyphicon-edit"></span></a>
+    </div>
+</div>
+

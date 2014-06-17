@@ -117,31 +117,6 @@ body {
 /* SENSOR TABLE STYLE END */
 
 
-/* SLABTEXT */
-
-.slabtexted .slabtext
-        {
-        display:-moz-inline-box;
-        display:inline-block;
-        white-space:nowrap;
-        }
-.slabtextinactive .slabtext
-        {
-        display:inline;
-        white-space:normal;
-        font-size:1em !important;
-        letter-spacing:inherit !important;
-        word-spacing:inherit !important;
-        *letter-spacing:0 !important;
-        *word-spacing:0 !important;
-        }
-.slabtextdone .slabtext
-        {
-        display:block;
-        }
-
-/* SLABTEXT END */
-
 #navBarKitcube {
   position: absolute;
   top: 0;
@@ -308,14 +283,6 @@ body {
   display: none;
 }
 
-#toggleGridButton {
-
-}
-
-#goEditorButton {
-
-}
-
 #lblInfo {
   margin-right: 10px;
   margin-top: 8px !important;
@@ -335,24 +302,6 @@ body {
 /* Login form */
 
 /* LoginView CSS TEMPLATE BEGIN */
-
-#userBlock {
-  float: right;
-  //display: inline;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.loginHref {
-  margin-right: 10px;
-  color: #000;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-#userStatus {
-  margin-right: 10px;
-}
 
 .loginlbl {
   padding-top: 10px;

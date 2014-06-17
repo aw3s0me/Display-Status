@@ -1,0 +1,13 @@
+<div id="<%= sensor_main_id %>" id2="<%= sensor_sub_id %>" >
+      <div class="sensorName"><%= name %></div>
+      <div id="val_<%= sensor_main_id %>" class="sensorVal bigtext">
+            <div id="b<%= sensor_main_id %>"><%= main_val %></div> 
+      </div>
+      <div id="val_<%= sensor_sub_id %>" class="sensorVal bigtext">
+            <div id="c<%= sensor_main_id %>"><%= sub_val %></div> 
+      </div>
+      <div class="sensorUnit"><span class='sensUnit2'><%= unit2 %></span>/<%= unit1 %></div>
+      <% if (canberemoved) { %>
+        <div class="close"><b>x</b></div>
+      <% } %>
+</div>

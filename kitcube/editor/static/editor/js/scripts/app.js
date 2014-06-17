@@ -6,10 +6,8 @@ define([
   //'flatui-app',
   'ace',
   'kitgrid',
-  'yaml',
   "kit.sizeDetector",
-  "kit.parser",
-  "kit.dataDownloader",
+  //"kit.parser",
   "oauthio",
   'minicolors',
   'cookie',
@@ -20,23 +18,22 @@ define([
   //'views/txtEditorView',
   'router', // Request router.js
   'models/userModel',
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, YAML, sizeDet, parser, dataDownloader, OAutha, minicolors2, Cookie, Router, UserModel) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, sizeDet, OAutha, minicolors2, Cookie, Router, UserModel) {
   var initialize_user = function() {
     var token = $.cookie('access_token');
     window.activeSessionUser = new UserModel();
     if (token && token.length > 0) {
-      var username = $('#userStatus').find('span').text();
-      var group = $('meta[name="projects"]').attr('content');
-      if (!username.length || !group.length) {
+      var username = $('#userName').text();
+      var groups = $('meta[name="projects"]').attr('content').split(",");
+      if (!username.length || !groups.length) {
         return;
       }
       window.activeSessionUser.set({
         username: username,
         token: token,
         logged_in: true,
-        group: group
+        groups: groups
       })
-      $('#banner').append(window.mainscrBtnTemplate);
     }
   }
 
@@ -49,12 +46,11 @@ define([
         window.location.href = '../editor/';
       }
 
-      window.mainscrBtnTemplate = '<button onclick="window.openWindow()"; class="btn btn-default circle-btn" id="goMainscreenButton" data-toggle="tooltip" data-placement="bottom" title="Go to Mainscreen"><span class="glyphicon glyphicon-edit"></span></button>';
       var csrfToken = $('meta[name="csrf_token"]').attr('content');
       console.log(csrfToken);
       $(document).ajaxSend(function(event, xhr, settings) {
         /* stuff to do before an AJAX request is sent */
-        //xhr.setRequestHeader('X-CSRFToken', csrfToken);
+          xhr.setRequestHeader('X-CSRFToken', csrfToken);
       });
 
       var body = document.body,
@@ -84,7 +80,9 @@ define([
       console.log(OAuth)
 
       initialize_user();
-      $('#toggleGridButton').show();
+      //Adding to all views triggering event function
+      Backbone.View.prototype.eventAggregator = _.extend({}, Backbone.Events);
+
       Router.initialize();
     });
   }

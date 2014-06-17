@@ -6,7 +6,13 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	var _min3State = 0.5;
 	var _max3State = 1.5;
 	var _minNoneState = 0;
-	var _defbgcolor;
+	var _defvalcolor;
+	var _defalarmcolor = '#E51400';
+	//var _defokcolor = '#40bf40';
+	var _defokcolor = '#20c62e';
+	//var _defmiddlecolor = '#1bb2e2';
+	var _defmiddlecolor = '#FFD700';
+	//var _defmiddlecolor = '#75c6ef';
 
 	function _isNumber(n) {
   		return !isNaN(parseFloat(n)) && isFinite(n);
@@ -19,40 +25,48 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	}
 
 	var Sensor = Backbone.Model.extend({
-		defaults: {
-			id: undefined,
-			name: "",
-			type: "sensor",
-			sensortype: "default",
-			sensorviewtype: undefined,
-			comment: undefined,
-			unit: "",
-			precision: undefined,
-			value: undefined,
-			lastTime: undefined,
-			max: undefined,
-			min: undefined,
-			alarm: undefined,
-			server: undefined,
-			//device: undefined,
-			dbname: undefined,
-			dbgroup: undefined,
-			norender: false,
-			mask: undefined,
-			values: [],
-			exp: false,
-			size: [2, 2],
-			coords: [0, 0],
-			bgcolor: '#338fff',
-			valUnit: "NaN",
-			link: undefined,
-			factor: 1,
-			linecolor: undefined,
-			cfgObj: null
+		defaults: function() {
+			return {
+				id: undefined,
+				name: "",
+				type: "sensor",
+				sensortype: "default",
+				sensorviewtype: undefined,
+				comment: undefined,
+				unit: "",
+				precision: undefined,
+				value: undefined,
+				lastTime: undefined,
+				max: undefined,
+				min: undefined,
+				alarm: undefined,
+				server: undefined,
+				//device: undefined,
+				dbname: undefined,
+				dbgroup: undefined,
+				norender: false,
+				mask: undefined,
+				values: [],
+				exp: false,
+				size: [2, 2],
+				coords: [0, 0],
+				valcolor: '#20c62e',
+				//bgcolor: '#1bb2e2',
+				bgcolor: '#ffffff',
+				valUnit: "NaN",
+				link: undefined,
+				factor: 1,
+				linecolor: undefined,
+				label: undefined,
+				canberemoved: false,
+				isdraggable: false,
+				isresizable: false,
+				cfgObj: null
+			}
 		},
 		initialize: function() {
 			//console.log("model created");
-			_defbgcolor = this.get('bgcolor');
+			_defvalcolor = this.get('valcolor');
 			
 			switch (this.get('sensortype')) {
 				case "2-state":
@@ -166,10 +180,10 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 							var val = this.get('value'); 
 							if (val > this.get('min')) {
-								this.set({bgcolor: "#66D97B", valUnit: "YES"});
+								this.set({valcolor: _defokcolor, valUnit: "YES"});
 							}
 							else {
-								this.set({bgcolor: "#F5025B", valUnit: "NO"});
+								this.set({valcolor: _defalarmcolor, valUnit: "NO"});
 							}
 							break;
 						}
@@ -179,17 +193,17 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								this.set({
 									valUnit: "OPEN",
-									bgcolor: "#66D97B"
+									valcolor: _defokcolor
 								});
 							} else if (val < this.get('max')) {
 								this.set({
 									valUnit: "SHORT",
-									bgcolor: "#4280D6"
+									valcolor: _defokcolor
 								});
 							} else if (val === 0) {
 								this.set({
 									valUnit: "---",
-									bgcolor: "#F5025B"
+									valcolor: _defalarmcolor
 								});
 							}
 							break;
@@ -202,17 +216,17 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								value = "INV"; //"INVALID"
 								this.set({
-									bgcolor: "#F5025B"
+									valcolor: _defalarmcolor
 								});
 							} else if (val < this.get('max')) {
 								value = "MID"; //Full = "MIDDLE"
 								this.set({
-									bgcolor: "#4280D6"
+									valcolor: _defmiddlecolor
 								});
 							} else {
 								value = (val > this.get('max')) ? "IN" : "OUT";
 								this.set({
-									bgcolor: "#66D97B"
+									valcolor: _defokcolor
 								});
 							}
 							this.set({
@@ -227,12 +241,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val > this.get('min')) {
 								this.set({
 									valUnit: "DIS", //Full = "DIS"
-									bgcolor: "#F5025B"
+									valcolor: _defalarmcolor
 								});
 							} else {
 								this.set({
 									valUnit: "ENAB", //Full = "ENABLED"
-									bgcolor: "#66D97B"
+									valcolor: _defokcolor
 								});
 							}
 							break;
@@ -245,7 +259,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							if (val === this.get('min')) {
 								this.set({
 									valUnit: "---",
-									bgcolor: "#F5025B"
+									valcolor: _defalarmcolor
 								});
 							}
 							else {
@@ -271,9 +285,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 							if (this.get('name') === "XHV CP Jacket") {
 								var a = 1;
-								console.log(val);
-								console.log(this.get('value'));
-								console.log(_isNumber(val));
+								//console.log(val);
+								//console.log(this.get('value'));
+								//console.log(_isNumber(val));
 							}
 							
 							var type = this.get('sensorviewtype');
@@ -315,11 +329,11 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							} else {
 								if (val < this.get('min') || val > this.get('max')) {
 									this.set({
-										bgcolor: "#F5025B"
+										valcolor: _defalarmcolor
 									});		
 								} else {
 									this.set({
-										bgcolor: _defbgcolor
+										valcolor: _defvalcolor
 									});
 								}
 							}
@@ -330,7 +344,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 			});
 
-			this.updateModel();
+			//this.updateModel();
 
 		},
 		getAdeiDataRange: function(range) {
@@ -412,9 +426,51 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 			console.log(self.get('values'))
 		},
-		updateModel: function() {
+		updateModel: function(value, time) {
+			if (time === this.get('lastTime')) {
+				return;
+			}
+			var array = this.get('values');
+			var valToPush = [time, value];
+			var valToPush = {
+				x: time,
+				y: value
+			}
+			array.push(valToPush);
+			this.set({
+				'value': value,
+				'lastTime': time,
+				'values': array
+			});
+
+			this.trigger('addPoint', this); 
+		},
+		setDataModel: function(values, datetime) {
+			var self = this;
+			var array = [];
+			var mom = moment.utc();
+			var x = mom.valueOf();
+			for (var i = 0; i < values.length; i++) {
+				var valToPush = [datetime[i] * 1000, values[i]];
+				/*var timeToInsert = datetime[i] * 1000;
+				var valToPush = {
+					x: timeToInsert,
+					//y: 0
+					y: values[i]
+				} */
+				array.push(valToPush);
+			}
+			self.set({
+				'value': values[values.length - 1],
+				'lastTime': datetime[datetime.length - 1],
+				'values': array
+			});
+
+		},
+		/*updateModel: function() {
 			var data = {};
 			var self = this;
+
 			$.ajax({
 				type: "GET",
 				url: self.getDbUrl(),
@@ -449,7 +505,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
                		}
          		}
 			})
-		},
+		}, */
 		getChartProperties: function() {
 			var seriesName = this.get('name');
 
@@ -489,7 +545,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					}*/
 				//},
 				lineWidth: 2
-				//lineColor: this.get('bgcolor')
+				//lineColor: this.get('valcolor')
 			};
 
 			if (axislabels === false) {
@@ -665,8 +721,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				});
 			}
 
-			if (this.get('bgcolor') === '#338fff') {
-				sensorClone.unset('bgcolor', {
+			if (this.get('valcolor') === '#338fff') {
+				sensorClone.unset('valcolor', {
 					silent: true
 				});
 			}

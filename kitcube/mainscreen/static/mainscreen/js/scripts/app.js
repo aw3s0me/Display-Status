@@ -7,7 +7,6 @@ define([
 	'yaml',
 	'jqgrid',
 	'oauthio',
-	'bigtext',
 	'highcharts-legend',
 	//'regression',
 	//'vendor/momentjs/min/moment.min',
@@ -19,7 +18,7 @@ define([
 	"models/userModel",
 	//'cacher',
 	'router' // Request router.js
-], function($, _, Backbone, kitgrid, YAML, jqGrid, OAuthio, bigtext, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, UserModel, /*Cacher,*/ Router) {
+], function($, _, Backbone, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, UserModel, /*Cacher,*/ Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -35,12 +34,7 @@ define([
 				logged_in: true,
 				group: group
 			})
-			$('#banner').append(window.editorBtnTemplate);
 		}
-	}
-
-	var initializeMainPageCSS = function() {
-		$('#toggleGridButton').show();
 	}
 
 	var initialize = function() {

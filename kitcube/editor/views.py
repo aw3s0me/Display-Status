@@ -21,15 +21,15 @@ from django.template import Context, Template, loader
 
 import pdb
 
-def render_user_block(user=None):
+def render_user_panel(user=None):
     #pdb.set_trace()
     if user == None:
-        userblock = loader.get_template('editor/notloggeduserblock.html')
-        userblock_html = userblock.render(Context({}))
+        user_panel = loader.get_template('editor/userEditorPanel.html')
+        user_panel_html = user_panel.render(Context({ 'user': '' }))
     else:
-        userblock = loader.get_template('editor/loggeduserblock.html')
-        userblock_html = userblock.render(Context({'username': user.username}))
-    return userblock_html
+        user_panel = loader.get_template('editor/userEditorPanel.html')
+        user_panel_html = user_panel.render(Context({ 'user': user }))
+    return user_panel_html
 
 
 
@@ -37,7 +37,8 @@ def index(request):
     data = {
         'title': getattr(settings, 'TITLE'),
         'description': getattr(settings, 'DESCRIPTION'),
-        'csrf_token': get_token(request)
+        'csrf_token': get_token(request),
+        'project': 'editor'
     }
     tokenkey = request.COOKIES.get('access_token')
     #pdb.set_trace()
@@ -46,18 +47,19 @@ def index(request):
         if userObj:
             if userObj[0]:
                 groups = "" #forming the list of groups that are separated by commas
-                data['userblock'] = render_user_block(userObj[0])
+                data['userblock'] = render_user_panel(userObj[0])
                 for group in userObj[1]:
-                    groups = groups + group.name + ','
-                    groups = groups[:-1]
+                    project = Project.objects.get(link=group.name)
+                    groups = groups + '|' + group.name + ','
+                groups = groups[:-1]
 
                 data['projects'] = groups
             else:
-                data['userblock'] = render_user_block()
+                data['userblock'] = render_user_panel()
         else:
-            data['userblock'] = render_user_block()
+            data['userblock'] = render_user_panel()
     else:
-        data['userblock'] = render_user_block()
+        data['userblock'] = render_user_panel()
 
     response = render_to_response('editor/index.html', data)#, context_instance=RequestContext(request))
     

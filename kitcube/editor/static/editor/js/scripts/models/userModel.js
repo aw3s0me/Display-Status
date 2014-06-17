@@ -7,7 +7,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				//password: "",
 				token: "",
 				role: "",
-				logged_in: false
+				logged_in: false,
+				group: ""
 			}
 		},
 		initialize: function(){
@@ -42,7 +43,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.clear();
 			this.set(this.defaults);
 			$.removeCookie('access_token');
-			window.location.href = '#login';
+			//window.location.href = '#login';
 		}
 	});
 

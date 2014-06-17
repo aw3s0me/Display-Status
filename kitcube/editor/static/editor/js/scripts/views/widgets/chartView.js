@@ -1,16 +1,16 @@
-define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/sensorGroupCollection'], function($, _, Backbone, ChartModel, SensorGroupCollection) {
+define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/sensorGroupCollection', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, SensorGroupCollection, ChartTemplate) {
 
 	var _seriesArr = [];
 	var _allSensors = undefined;
 	var _isLegendShown = false;
 
-
 	var ChartView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
 		chart: undefined,
-		elements: undefined,
 		model: undefined,
+		board: undefined,
+		lookDiv: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -20,109 +20,136 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			if (options.model) {
 				this.model = options.model;
 			}
-			if (options.elements) {
-				this.elements = options.elements;
-			}
 			if (options.allSensors) {
 				_allSensors = options.allSensors;
 			}
-
-			(function(b, a) {
-				if (!b) {
-					return
-				}
-				var c = b.Chart.prototype,
-					d = b.Legend.prototype;
-				b.extend(c, {
-					legendSetVisibility: function(h) {
-						var i = this,
-							k = i.legend,
-							e, g, j, m = i.options.legend,
-							f, l;
-						if (m.enabled == h) {
-							return
-						}
-						m.enabled = h;
-						if (!h) {
-							d.destroy.call(k);
-							e = k.allItems;
-							if (e) {
-								for (g = 0, j = e.length; g < j; ++g) {
-									e[g].legendItem = a
-								}
-							}
-							k.group = {}
-						}
-						c.render.call(i);
-						if (!m.floating) {
-							f = i.scroller;
-							if (f && f.render) {
-								l = i.xAxis[0].getExtremes();
-								f.render(l.min, l.max)
-							}
-						}
-					},
-					legendHide: function() {
-						this.legendSetVisibility(false)
-					},
-					legendShow: function() {
-						this.legendSetVisibility(true)
-					},
-					legendToggle: function() {
-						this.legendSetVisibility(this.options.legend.enabled ^ true)
-					}
-				})
-			}(Highcharts));
-
-			for (var i = 0; i < this.elements.length; i++) {
-				this.elements.models[i].on('addPoint', this.addNewPoint, this);
+			if (options.board) {
+				this.board = options.board;
+				this.lookDiv = this.board.el;
 			}
+
 			this.model.on('resize', this.onresize, this);
 			this.render();
 
-			this.container.find('.addChartBtn').click(function(event) {
-				var elems1Val = $('.canvas').find('.activeSensor1'); 
-				var elems2Val = $('.canvas').find('.activeSensor2');
-				var elemsVal = $('.canvas').find('.activeSensor');
-				self.addSensorsToChart(elems1Val, 1); //add css property according to type
-				self.addSensorsToChart(elems2Val, 2);
-				self.addSensorsToChart(elemsVal, 0);
-
-				self.chart.redraw();
-			});
-
-			this.container.find('.legendChartBtn').click(function(event) {
-				if (!_isLegendShown) {
-					self.chart.legendShow();
-					_isLegendShown = true;
-				} else {
-					self.chart.legendHide();
-					_isLegendShown = false;
-				}
-
-			});
 		},
-		addSensorsToChart: function(elems, type) {
-			var self = this;
-			var dataSeries = [];
-			var index = undefined;
-			var series = self.chart.series;
-			
+		formSensorElements: function() {
+			var elems1Val = this.lookDiv.find('.activeSensor1');
+			var elems2Val = this.lookDiv.find('.activeSensor2');
+			var elemsVal = this.lookDiv.find('.activeSensor');
+			elems = {};
+
+			if (elemsVal)
+				elems["0"] = elemsVal;
+			if (elems2Val)
+				elems["2"] = elems2Val;
+			if (elems1Val)
+				elems["1"] = elems1Val;
+
+			for (var i = 0; i < elems1Val.length; i++) {
+				var jqElement = elems1Val[i];
+				$(jqElement).removeClass('activeSensor1');
+				$(jqElement).addClass('chartAdded1');
+			}
+
+			for (var i = 0; i < elems2Val.length; i++) {
+				var jqElement = elems2Val[i];
+				$(jqElement).removeClass('activeSensor2');
+				$(jqElement).addClass('chartAdded2');
+			}
+
+			for (var i = 0; i < elemsVal.length; i++) {
+				var jqElement = elemsVal[i];
+				$(jqElement).removeClass('activeSensor');
+
+			}
+
+			/* OPTION 1
+			for (var i = 0; i < elemsVal.length; i++) {
+				var jqElement = elemsVal[i];
+				$(jqElement).removeClass('activeSensor');
+				$(jqElement).addClass('chartAdded');
+			}*/
+
+			return elems;
+		},
+		addNewPoint: function(model) {
+
+			var chart = this.chart;
+			var series = this.chart.series;
+			//console.log(chart);
+			var index = undefined; //index of series
+			var shift = false;
+			//console.log(model.get('id'));
+			var sensorValue = model.get('value');
+			var foundSeriesObj = null;
+
+			for (var seriesName in series) {
+				var seriesObject = series[seriesName];
+				var id = seriesObject.userOptions.id;
+				if (id === model.get('id')) {
+					index = seriesObject._i;
+					foundSeriesObj = seriesObject;
+					break;
+				}
+			}
+
+			var x = model.get('lastTime');
+			var y = parseFloat(sensorValue);
+
+			if (y === undefined || x === undefined) {
+				return;
+			}
+
+			var Point = {
+				x: x,
+				y: y
+			};
+
+			if (foundSeriesObj) {
+				foundSeriesObj.addPoint(Point, true, shift);
+			}
+
+			//this.setExtremes(); 
+
+		},
+		getIdsOfSensorType: function(elems, models, type) {
 			for (var i = 0; i < elems.length; i++) {
 				var jqElement = elems[i];
 				var id;
-				//var circle = $(jqElement).find('.chartCircle');
-				//var id = jqElement.attr('id');
 
 				if (type === 2) {
 					id = jqElement.getAttribute('id2');
-				}
-				else {
+				} else {
 					id = jqElement.getAttribute('id');
 				}
-				
+				if (!this.model.isOnTheChartById(id)) {
+					models.push(_allSensors[id]);
+				}
+			}
+		},
+		setSensorDataInChart: function(elems, type) {
+			var chart = this.chart;
+
+			var series = this.chart.series;
+			//console.log(chart);
+			var index = undefined; //index of series
+			var shift = false;
+			var self = this;
+			for (var i = 0; i < elems.length; i++) {
+				var jqElement = elems[i];
+				var id;
+				if (type === 2) {
+					id = jqElement.getAttribute('id2');
+				} else {
+					id = jqElement.getAttribute('id');
+				}
+
+				if (this.model.isOnTheChartById(id)) {
+					continue;
+				}
+
 				var sensorModel = _allSensors[id];
-				sensorModel.on('addPoint', self.addNewPoint, self);
+				//sensorModel.on('addPoint', self.addNewPoint, self);
 				sensorModel.on('deleteSensor', self.removeSeries, self);
 				sensorModel.on('removing', self.onSensorRemoving, self);
 				self.model.get('link').push(sensorModel.get('id'));
@@ -136,41 +163,16 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				});
 				var color = undefined;
 				self.chart.addAxis(axisObject);
+				//console.log(JSON.stringify(axisObject));
 				self.chart.addSeries(seriesObject, false);
-
+				//console.log(JSON.stringify(seriesObject));
+				sensorModel.on('addPoint', self.addNewPoint, self);
 				for (var seriesName in series) {
 					var seriesObject = series[seriesName];
 					var id = seriesObject.userOptions.id;
 					if (id === sensorModel.get('id')) {
 						index = seriesObject._i;
 						color = seriesObject.color;
-						//circle.css('background-color', color);
-
-						switch(type) {
-							case 0:
-								$(jqElement).removeClass('activeSensor');
-								$(jqElement).addClass('chartAdded');
-								break;
-							case 1:
-								$(jqElement).removeClass('activeSensor1');
-								$(jqElement).addClass('chartAdded1');
-								break;
-							case 2:
-								$(jqElement).removeClass('activeSensor2');
-								$(jqElement).addClass('chartAdded2');
-								break;
-							case 12:
-								$(jqElement).removeClass('activeSensor1');
-								$(jqElement).addClass('chartAdded1');
-								$(jqElement).removeClass('activeSensor2');
-								$(jqElement).addClass('chartAdded2');
-								break;
-							default:
-								console.log('wrong type sensor at chartview');
-								throw 'wrong type sensor at chartview';
-								break;
-						}
-
 						var axisId = seriesObject.yAxis.userOptions.id;
 						for (var j = 0; j < self.chart.yAxis.length; j++) {
 							var yaxis = self.chart.yAxis[j];
@@ -186,22 +188,32 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					}
 				}
 			}
+
 		},
 		render: function() {
 			//load html template
 			var self = this;
 			var model = this.model;
-			var dataToChart = this.elements.paramToChart();
-			this.container = $("<div id='" + model.get('id') + "'></div>");
 			var dx = model.get('size')[0];
 			var dy = model.get('size')[1];
-			var px = model.get('coords')[0];
-			var py = model.get('coords')[1];
-
 			var scale = this.grid.getScale();
-			this.grid.addUnit(dx, dy, px, py, scale, this.container, {
+			var unitHeight = this.grid.getUnitSizes().height;
+			var unitWidth = this.grid.getUnitSizes().width;
+			var height = dy * unitWidth * scale;
+			var width = dx * unitHeight * scale;
+
+			this.container = $('<div id= ' + this.model.get('id') + '  ></div>')
+
+			var controlPanelTemplate = $(_.template(ChartTemplate, {
+				canberemoved: model.get('canberemoved')
+			}));
+			//this.container = $(_.template(ChartTemplate, { id: model.get('id') }));
+
+			this.grid.addUnit(this.container, {
 				border: 0,
-				transparent: true
+				transparent: true,
+				draggable: model.get('isdraggable'),
+				resizable: model.get('isresizable')
 			}, this.model);
 
 			if (!model) {
@@ -209,20 +221,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 				return;
 			}
 
-			var linkArr = model.get('link');
-
-			if (linkArr) {
-				for (var j = 0; j < linkArr.length; j++) {
-					//console.log(this.elements);
-					var sensorModel = this.elements.models[j];
-					//console.log(sensorModel);
-					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name'), j]);
-				}
-			}
-
 			var xAxis = model.getXAxisObj();
 			var chart = model.getChartOptions();
-
+			chart.marginTop = 47 * scale;
 			this.chart = new Highcharts.Chart({
 				//this.chart = new Highcharts.StockChart({
 				chart: chart,
@@ -230,17 +231,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					text: model.get('caption'),
 				},
 				xAxis: xAxis,
-				/*yAxis: {
-					title: {
-						text: 'Values'
-					},
-					plotLines: [{
-						value: 0,
-						width: 1,
-						color: '#808080'
-					}]
-				},*/
-				series: dataToChart,
 				tooltip: {
 					shared: true,
 					crosshairs: true
@@ -275,235 +265,300 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 						marker: {
 							enabled: false
 						}
-						/*,
-						cursor: 'pointer',
-	                    point: {
-	                        events: {
-	                            click: function() {
-	                                hs.htmlExpand(null, {
-	                                    pageOrigin: {
-	                                        x: this.pageX,
-	                                        y: this.pageY
-	                                    },
-	                                    headingText: this.series.name,
-	                                    maincontentText: Highcharts.dateFormat('%A, %b %e, %Y', this.x) +':<br/> '+
-	                                        this.y,
-	                                    width: 200
-	                                });
-	                            }
-	                        }
-	                    }, */
-						//showInLegend : false
 					}
 				}
 			});
-			(function(b, a) {
-				if (!b) {
-					return
-				}
-				var c = b.Chart.prototype,
-					d = b.Legend.prototype;
-				b.extend(c, {
-					legendSetVisibility: function(h) {
-						var i = this,
-							k = i.legend,
-							e, g, j, m = i.options.legend,
-							f, l;
-						if (m.enabled == h) {
-							return
-						}
-						m.enabled = h;
-						if (!h) {
-							d.destroy.call(k);
-							e = k.allItems;
-							if (e) {
-								for (g = 0, j = e.length; g < j; ++g) {
-									e[g].legendItem = a
-								}
-							}
-							k.group = {}
-						}
-						c.render.call(i);
-						if (!m.floating) {
-							f = i.scroller;
-							if (f && f.render) {
-								l = i.xAxis[0].getExtremes();
-								f.render(l.min, l.max)
-							}
-						}
-					},
-					legendHide: function() {
-						this.legendSetVisibility(false)
-					},
-					legendShow: function() {
-						this.legendSetVisibility(true)
-					},
-					legendToggle: function() {
-						this.legendSetVisibility(this.options.legend.enabled ^ true)
-					}
-				})
-			}(Highcharts));
-
-			var unitHeight = this.grid.getUnitSizes().height;
-			var unitWidth = this.grid.getUnitSizes().width;
-			var height = dy * unitWidth * scale;
-			var width = dx * unitHeight * scale;
-
-			for (var i = 0; i < _seriesArr.length; i++) {
-				var sensorModel = this.elements.models[i];
-				var color = this.chart.series[i].color;
-				sensorModel.set({
-					bgcolor: color
-				});
-				sensorModel.trigger('changebgcolor', sensorModel);
-				console.log(color);
-			}
 
 			this.chart.legendHide();
 
-			var chartControlPanel = $('<div></div>');
-			chartControlPanel.addClass('chartControlPanel');
-			chartControlPanel.css('top', 14 * scale + 'px');
-			//chartControlPanel.css('width', '100%');
-			chartControlPanel.css('right', 14 * scale + 'px');
-			chartControlPanel.css('position', 'absolute');
+			var controlPanel = controlPanelTemplate.find('.chartControlPanel');
+			//controlPanel.css('top', 14 * scale + 'px')
+			controlPanel.css('right', 35 * scale + 'px')
+			.css('top', 10 * scale + 'px');
 
-			var addBtn = $('<button>Add</button>');
-			addBtn.css('font-size', 10 * scale + 'px');
-			addBtn.button();
-			addBtn.addClass('addChartBtn');
+			controlPanel.css('font-size', 12 * scale + 'px');
 
-			var legendBtn = $('<button>Legend</button>');
-			legendBtn.css('font-size', 10 * scale + 'px');
-			legendBtn.button();
-			legendBtn.addClass('legendChartBtn');
+			controlPanel.find('.goAdeiBtn').button()
+				.click(function(event) {
+					console.log(self.getUrlGoToAdei());
+					window.open(self.getUrlGoToAdei(), '_blank');
+				});
 
-			var closeBtn = document.createElement('div');
-			closeBtn.style.position = 'absolute';
-			closeBtn.style.fontSize = 12 * scale + 'px';
-			closeBtn.style.right = 5 * scale + 'px';
-			closeBtn.style.top = 4 * scale + 'px';
-			closeBtn.innerHTML = "<b>x</b>";
-			closeBtn.className = "close";
+			controlPanel.find('.addChartBtn').button()
+				.click(function(event) {
+					var elems = self.formSensorElements();
+					self.getDataForElements(elems);
+				});
+			controlPanel.find('.legendChartBtn').button()
+				.click(function(event) {
+					if (!_isLegendShown) {
+						self.chart.legendShow();
+						_isLegendShown = true;
+					} else {
+						self.chart.legendHide();
+						_isLegendShown = false;
+					}
+				});
+			if (model.get('canberemoved')) {
+				controlPanelTemplate.find('.close').css('font-size', 12 * scale + 'px')
+				.css('right', 10 * scale + 'px')
+				.css('top', 10 * scale + 'px')
+				.click(function(event) {
+					self.removeFromDom();
+				});
+			}
+			
+			controlPanel.find('.resetChartBtn').button()
+				.click(function(event) {
+					self.resetChart();
+				});
+			var selectElem = controlPanelTemplate.find('.rangeContainer').css('top', 10 * scale + 'px').css('left', 10 * scale + 'px');
 
-			this.container.find('.highcharts-container').append(closeBtn);
-			$(closeBtn).click(function(event) {
-				self.removeFromDom();
-			});
+			this.container.append(controlPanelTemplate);
 
-			var resetBtn = $('<button>Reset</button>');
-			resetBtn.addClass('resetChartBtn');
-			resetBtn.css('fontSize', 10 * scale + 'px');
-			resetBtn.button();
-			$(resetBtn).click(function(event) {
-				self.resetChart();
-			});
-
-			//var chooseRange = $('<select style="width: 100px;"></select>');
-			var cntr = $('<div class="cntr"></div>');
-			var chooseContainer = $('<div class="rangeContainer"></div>');
-			chooseContainer.css('top', 10 * scale + 'px');
-			chooseContainer.css('left', 10 * scale + 'px');
-			//chooseContainer.css('position', 'absolute');
-			//chooseContainer.css('z-index', '2');
-			var chooseRange = $('<select class="rangeDropdown"></select>');
-			chooseContainer.append(chooseRange);
-			chooseRange.append('<option value="90d">90 day</option>');
-			chooseRange.append('<option value="30d">30 day</option>');
-			chooseRange.append('<option value="14d">14 day</option>');
-			chooseRange.append('<option value="7d">7 day</option>');
-			chooseRange.append('<option value="3d">3 day</option>');
-			chooseRange.append('<option value="24h">24 hour</option>');
-			chooseRange.append('<option value="8h">8 hour</option>');
-			chooseRange.append('<option value="3h">3 hour</option>');
-			chooseRange.append('<option value="1h">1 hour</option>');
-			chooseRange.append('<option selected="selected" value="15m">15 min</option>');
-
-			chooseRange.change(function() {
+			selectElem.find('.rangeDropdown').change(function() {
 				var value = $(this).val();
 				self.model.set({
 					range: value
 				});
-				self.setExtremes();
-				console.log(value);
+				self.onChangeTimeRange();
+				//self.setExtremes();
 			});
 
-			this.container.append(cntr);
-			cntr.append(chooseContainer);
+			this.chart.setSize(width, height, false);
 
-			chartControlPanel.append(addBtn);
-			chartControlPanel.append(resetBtn);
-			chartControlPanel.append(legendBtn);
-
-
-
-			this.container.find('.highcharts-container').append(chartControlPanel);
-
-			this.chart.setSize(width, height, true);
-
-			this.setExtremes();
-			//chooseRange.chosen();
-
-			/*chooseRange.chosen({
-				disable_search_threshold: 1,
-				width: '80%'
-			});*/
-
+			this.initChartWhenStart();
 		},
-		setExtremes: function() {
+		getWindow: function() {
 			var now = new Date;
 			var min = this.model.getRangeToDate();
 			var max = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-
-			this.chart.xAxis[0].setExtremes(min, max);
-		},
-		addNewPoint: function(model) {
-
-			var chart = this.chart;
-			var series = this.chart.series;
-			//console.log(chart);
-			var index = undefined; //index of series
-			var shift = false;
-			//console.log(model.get('id'));
-			var sensorValue = model.get('value');
-			var foundSeriesObj = null;
-
-			/*if (model.get('values').length > 10) {
-				shift = true;
-			} */
-			//console.log(model.get('values'));
-
-			for (var seriesName in series) {
-				var seriesObject = series[seriesName];
-				var id = seriesObject.userOptions.id;
-				if (id === model.get('id')) {
-					index = seriesObject._i;
-					foundSeriesObj = seriesObject;
-					break;
-				}
+			return {
+				start: min,
+				end: max
 			}
+		},
+		setExtremes: function() {
+			var windowObj = this.getWindow();
+			this.chart.xAxis[0].setExtremes(windowObj.start, windowObj.end);
+			this.redraw();
+		},
+		initChartWhenStart: function() {
+			var chartModel = this.model;
+			var linkArr = chartModel.get('link');
+			var htmlElements = []; //to init html elements and change css
+			var typeLookup = this.board.sensorViewLookup;
 
-			var x = model.get('lastTime');
-			var y = parseFloat(sensorValue);
-
-			if (y === undefined || x === undefined) {
+			if (linkArr.length <= 0) {
 				return;
 			}
 
-			var Point = {
-				x: x,
-				y: y
-			};
+			for (var i = 0; i < linkArr.length; i++) {
+				var model = _allSensors[linkArr[i]];
+				var div = undefined;
+				model.on('addPoint', this.addNewPoint, this);
+				//chartModel.get('models').push(model);
 
-			if (foundSeriesObj) {
-				foundSeriesObj.addPoint(Point, false, shift);
+				if (typeLookup[linkArr[i]]) {
+					switch (typeLookup[linkArr[i]].type) {
+						case 0:
+							{ //not double
+								div = $('#' + typeLookup[linkArr[i]].viewId);
+								if (div) {
+									div.addClass('activeSensor');
+								}
+								break;
+							}
+						case 1:
+							{ //first value of double
+								div = $('#' + typeLookup[linkArr[i]].viewId);
+								if (div) {
+									div.addClass('activeSensor1');
+								}
+								break;
+							}
+						case 2:
+							{ //second value of double
+								div = $('#' + typeLookup[linkArr[i]].viewId);
+								if (div) {
+									div.addClass('activeSensor2');
+								}
+								break;
+							}
+						default: //error
+							throw "chart error";
+					}
+				} else {
+					return;
+				}
+
 			}
-			//if (chart.series[index])
-				//chart.series[index].addPoint(Point, false, shift); //last point is for everyone\
 
-			shift = false;
+			var elems = this.formSensorElements();
+			this.getDataForElements(elems);
+		},
+		getDataForElements: function(typeObject) {
+			//console.log(model.get('id'));
 
-			this.setExtremes();
+			if (!typeObject) {
+				return;
+			}
+
+			var self = this;
+			var masks = [];
+			var server = this.board.settings['server'];
+			var dbname = this.board.settings['dbname'];
+			var dbgroup = this.board.settings['dbgroup'];
+			var models = [];
+			var windowObj = this.getWindow();
+			var start = parseInt(windowObj.start / 1000);
+			var end = parseInt(windowObj.end / 1000);
+			var windowUrl = start + "-" + end;
+			//console.log(new Date(windowObj.start), new Date(windowObj.end));
+			var nubmerOfPoints = this.model.getNumberOfPoints();
+			var resample = getResample(nubmerOfPoints, start, end);
+			//console.log('resample: ' + resample)
+
+
+			if (typeObject["1"])
+				this.getIdsOfSensorType(typeObject["1"], models, 1);
+			if (typeObject["2"])
+				this.getIdsOfSensorType(typeObject["2"], models, 2);
+			if (typeObject["0"])
+				this.getIdsOfSensorType(typeObject["0"], models, 0);
+
+
+			for (var i = 0; i < models.length; i++) {
+				if (!this.model.isOnTheChartById(models[i].get('id'))) {
+					masks.push(models[i].get('mask'));
+				}
+			}
+
+			var masksToRequest = masks.join();
+			if (masksToRequest.length === 0) {
+				return;
+			}
+			//console.log(masksToRequest);
+
+			/* TEST CODE
+			db.getData('fpd', 'katrin_rep', '0', '0,1,2,3,4,5', '1400700000-1401409791', 800, 'mean', function(obj)
+				{
+					var data = obj.data;
+					var datetime = obj.dateTime;
+					console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
+				})	
+			*/
+			try {
+				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
+				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
+				//window.db.getData(server, dbname, dbgroup, masksToRequest, '1400700000-1401409791', nubmerOfPoints, 'mean', function(obj) {
+				//window.db.getData('fpd', 'katrin_rep', '0', '3', '1400700000-1401409791', 800, 'mean', function(obj) {
+				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
+				//window.db.httpGetCsv(url, function(data) {
+				getDataFromAdei(url, function(data) {
+					obj = parseCSV(data, masks.length);
+					//console.log(obj);
+					if (!obj) {
+						return;
+					}
+
+					var data = obj.data;
+					var datetime = obj.dateTime;
+					//console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
+					for (var i = 0; i < masks.length; i++) {
+						if (data[i].length > 0) {
+							models[i].setDataModel(data[i], datetime);
+							//console.log(models[i].get('mask'), data[i][0]);
+						}
+						//console.log(JSON.stringify(models[i].get('values')));
+					}
+
+					if (typeObject["1"])
+						self.setSensorDataInChart(typeObject["1"], 1);
+					if (typeObject["2"])
+						self.setSensorDataInChart(typeObject["2"], 2);
+					if (typeObject["0"])
+						self.setSensorDataInChart(typeObject["0"], 0);
+					//self.setExtremes();
+					//self.redraw();
+					//console.log(self.chart);
+				});
+			} catch (msg) {
+				console.log(msg);
+			}
+		},
+		onChangeTimeRange: function() {
+			var models = this.model.get('models');
+			var self = this;
+			var masks = [];
+			var server = this.board.settings['server'];
+			var dbname = this.board.settings['dbname'];
+			var dbgroup = this.board.settings['dbgroup'];
+			var windowObj = this.getWindow();
+			//console.log(new Date(windowObj.start), new Date(windowObj.end));
+			var start = parseInt(windowObj.start / 1000);
+			var end = parseInt(windowObj.end / 1000);
+			var windowUrl = start + "-" + end;
+			var nubmerOfPoints = this.model.getNumberOfPoints();
+			var series = this.chart.series;
+			var resample = getResample(nubmerOfPoints, start, end);
+
+			if (!models || !models.length) {
+				return;
+			}
+
+			for (var i = 0; i < models.length; i++) {
+				masks.push(models[i].get('mask'));
+			}
+
+			var masksToRequest = masks.join();
+			if (masksToRequest.length === 0) {
+				return;
+			}
+
+			try {
+				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
+				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
+				//db.getData('fpd', 'katrin_rep', '0', masksToRequest, '1400700000-1401409791', 800, 'mean', function(obj) {
+				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
+				getDataFromAdei(url, function(data) {
+					obj = parseCSV(data, masks.length);
+					if (!obj) {
+						return;
+					}
+					var data = obj.data;
+					//console.log(data)
+					var datetime = obj.dateTime;
+					//console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
+					for (var i = 0; i < masks.length; i++) {
+						var model = models[i];
+						if (data[i].length > 0) {
+							//console.log(model.get('values'));
+							model.setDataModel(data[i], datetime);
+							//console.log(model.get('values'));
+						}
+						for (var i = 0; i < series.length; i++) {
+							var seriesObject = series[i];
+							var id = seriesObject.userOptions.id;
+							if (id === model.get('id')) {
+								seriesObject.data = [];
+								//console.log(model.get('values'))
+								//seriesObject.data = model.get('values');
+								seriesObject.setData(model.get('values'));
+								break;
+							}
+						}
+						//console.log(JSON.stringify(models[i].get('values')));
+					}
+
+
+					//self.setExtremes();
+					self.redraw();
+					//console.log(self.chart);
+				});
+			} catch (msg) {
+				//console.log(msg);
+			}
 
 		},
 		removeSeries: function(model) {
@@ -566,52 +621,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name'), j]);
 				}
 			}
-			(function(b, a) {
-				if (!b) {
-					return
-				}
-				var c = b.Chart.prototype,
-					d = b.Legend.prototype;
-				b.extend(c, {
-					legendSetVisibility: function(h) {
-						var i = this,
-							k = i.legend,
-							e, g, j, m = i.options.legend,
-							f, l;
-						if (m.enabled == h) {
-							return
-						}
-						m.enabled = h;
-						if (!h) {
-							d.destroy.call(k);
-							e = k.allItems;
-							if (e) {
-								for (g = 0, j = e.length; g < j; ++g) {
-									e[g].legendItem = a
-								}
-							}
-							k.group = {}
-						}
-						c.render.call(i);
-						if (!m.floating) {
-							f = i.scroller;
-							if (f && f.render) {
-								l = i.xAxis[0].getExtremes();
-								f.render(l.min, l.max)
-							}
-						}
-					},
-					legendHide: function() {
-						this.legendSetVisibility(false)
-					},
-					legendShow: function() {
-						this.legendSetVisibility(true)
-					},
-					legendToggle: function() {
-						this.legendSetVisibility(this.options.legend.enabled ^ true)
-					}
-				})
-			}(Highcharts));
 
 			chart.setTitle({
 				text: model.get('caption')
@@ -646,7 +655,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					bgcolor: color
 				});
 				sensorModel.trigger('changebgcolor', sensorModel);
-				console.log(color);
 			}
 
 			chart.legendHide();
@@ -702,12 +710,28 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 			while (this.chart.yAxis.length > 0)
 				this.chart.yAxis[0].remove();
 
-			console.log(this.chart);
 			//this.chart.redraw();
 
 		},
-		addAdeiChart: function(models) {
+		getUrlGoToAdei: function() {
+			var adeiurl = window.host;
+			var windowObj = this.getWindow();
+			//console.log(new Date(windowObj.start), new Date(windowObj.end));
+			var start = parseInt(windowObj.start / 1000);
+			var end = parseInt(windowObj.end / 1000);
+			var windowUrl = start + "-" + end;
+			var srctree = this.model.getSrcTreeLink();
 
+			adeiurl += "#module=graph&db_server=virtual&db_name=srctree&db_group=-3&contro_group=-3&db_mask=all&experiment=-";
+			adeiurl += "&window=" + windowUrl;
+			adeiurl += "&module=graph&virtual=srctree&srctree=" + srctree;
+
+			return adeiurl;
+		},
+		getNumberOfPoints: function() {
+			var width = this.chart.chartWidth;
+			var resolution = this.model.get('resolution');
+			return parseInt(width * resolution);
 		}
 	});
 

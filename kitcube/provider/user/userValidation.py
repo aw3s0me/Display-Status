@@ -45,5 +45,16 @@ def is_user_valid_obj_groups(tokenKey):
     else:
         return False
 
+def check_user_token(tokenKey):
+    if not Token.objects.filter(key=tokenKey).exists():
+        return False
+    token = Token.objects.get(key=tokenKey)
+    if not User.objects.filter(id=token.user_id).exists():
+        return False
+    user = User.objects.get(id=token.user_id)
+    if user and user.is_active:
+        return user
+    else:
+        return False
 
 

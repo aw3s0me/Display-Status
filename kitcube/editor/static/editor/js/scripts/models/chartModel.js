@@ -20,7 +20,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				border: 1,
 				radius: 0,
 				cfgObj: null,
-				axislabels: true
+				axislabels: true,
+				canberemoved: false,
+				isresizable: false,
+				isdraggable: false,
+				resolution: 0.4
 			}
 		},
 		initialize: function() {
@@ -97,6 +101,93 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 
 			return xAxis;
+		},
+		getNumberOfPoints: function() {
+			var number = undefined;
+			switch (this.get('range')) {
+				case "2m":
+					{
+						number = 200;
+						break;
+					}
+				case "15m":
+					{
+						number = 200;
+						break;
+					}
+				case "1h":
+					{
+						number = 300;
+						break;
+					}
+				case "2h":
+					{
+						number = 500;
+						break;
+					}
+				case "3h":
+					{
+						number = 500;
+						break;
+					}
+				case "8h":
+					{
+						number = 500;
+						break;
+					}
+				case "24h":
+				case "1d":
+					{
+						number = 500;
+						break;
+					}
+				case "3d":
+					{
+						number = 560;
+						break;
+					}
+				case "7d":
+					{
+						number = 560;
+						break;
+					}
+				case "10d":
+					{
+						number = 570;
+						break;
+					}
+				case "14d":
+					{
+						number = 670;
+						break;
+					}
+				case "30d":
+					{
+						number = 700;
+						break;
+					}
+				case "90d":
+					{
+						number = 800;
+						break;
+					}
+				case "3months":
+					{
+						number = 900;
+						break;
+					}
+				case "4months":
+					{
+						number = 1000;
+						break;
+					}
+				default:
+					{
+						number = 500;
+						break;
+					}
+			}
+			return number;
 		},
 		getRangeToDate: function() {
 			var now = new Date;
@@ -203,6 +294,23 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			return chart;
 		},
+		getSrcTreeLink: function() {
+			var models = this.get('models');
+			var srctree = '';
+			var srcarr = [];
+			for (var i = 0; i < models.length; i++) {
+				var model = models[i];
+				var mask = model.get('mask');
+				var server = model.get('server');
+				var database = model.get('dbname');
+				var group = model.get('dbgroup');
+				srcarr.push(server + '__' + database + '__' + group + '__' + mask);
+			}
+			srctree = srcarr.join();
+
+			return srctree;
+
+		},
 		serToJSON: function() {
 			var cfg = this.get('cfgObj');
 			delete cfg['_id'];
@@ -219,7 +327,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			return cfg;
 		},
-		removeModel: function(modelId){
+		removeModel: function(modelId) {
 			var link = this.get('link');
 			var models = this.get('models');
 
@@ -227,7 +335,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				if (modelId === link[i]) {
 					link.splice(i, 1);
 					break;
-				} 
+				}
 			}
 
 			for (var i = 0; i < models.length; i++) {
@@ -247,6 +355,16 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				}
 			}
 
+			return false;
+		},
+		isOnTheChartById: function(id) {
+			var models = this.get('models');
+			for (var j = 0; j < models.length; j++) {
+				var model = models[j];
+				if (model.get('id') === id) {
+					return true;
+				}	
+			}
 			return false;
 		}
 	});

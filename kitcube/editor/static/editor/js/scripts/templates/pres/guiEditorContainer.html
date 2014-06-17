@@ -1,0 +1,23 @@
+<div id='guiEditorContainer'>
+	<div id="guiEditorMenuContainer">
+		<div id="guiEditorProjDropdown" class="btn-group">
+			<a role="button" href="#" class="btn btn-default" data-toggle="dropdown">Projects<span class="caret"></span></a>
+		<ul class="dropdown-menu multi-level" aria-labelledby="dropdownMenu" role="menu">
+			<% _.each(items, function(item, key, list) { %>
+				<li class="dropdown-submenu"><a tabindex="-1" href="#" data="<%= item.name %>"><%= item.title %></a>
+				<ul class="dropdown-menu">
+				<% _.each(item.configs, function(config_item, conf_key, list) { %>
+					<li><a tabindex="-1" href="#" data="<%= config_item.name %>"><%= config_item.title %></a></li>
+				<% }); %>
+				</ul>
+				</li>
+			<% }); %>
+		</ul>
+		</div>
+		<div id="guiEditorProjectDesc">
+			<span class="proj"><%= first_proj %></span> / <span class="conf"><%= first_conf %></span>
+		</div>
+	</div>
+	<div id="tabs">
+	</div> 
+</div>
