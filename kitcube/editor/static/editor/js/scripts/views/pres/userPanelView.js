@@ -14,12 +14,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         render: function() {
             this.el = $('#userPanel');
             this.ifLoggedIn();
-            $('#loginButton').tooltip({});
-            $('#logoutButton').tooltip({});
-            $('#goGuiEditorButton').tooltip({});
-            $('#goHome').tooltip({});
-            $('#toggleGridButton').tooltip({});
-            $('#goHome').show();
+            //$('#loginButton').tooltip({});
+            //$('#logoutButton').tooltip({});
+            //$('#goGuiEditorButton').tooltip({});
+            //$('#goHome').tooltip({});
+            //$('#toggleGridButton').tooltip({});
+            //$('#goHome').show();
         },
         onUserAtBoardScreen: function() {
             $('#toggleGridButton').show();

@@ -27,9 +27,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('change:bgcolor', this.onchangebgcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
 			this.model.on('removedFromChart', this.onremovedfromchart, this);
-
-			this.model.updateModel();
-
+			
 			this.container.find('.close').click(function(event){
 				event.stopImmediatePropagation();
 				self.removeFromDom();

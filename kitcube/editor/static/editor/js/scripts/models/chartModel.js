@@ -24,7 +24,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				canberemoved: false,
 				isresizable: false,
 				isdraggable: false,
-				resolution: 0.4
+				resolution: 0.4,
+				maxelementsize: 6
 			}
 		},
 		initialize: function() {

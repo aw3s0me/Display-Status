@@ -55,10 +55,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				var compiledTemplate = _.template(boardTemplate, data);
 				this.container.append(compiledTemplate);
 			//}
-
-			$('#canvasButton').click(function(e) {
-				self.submitTest();
-			});
 			/* board insertion part */
 			this.insertFromCfg(prsObj);
 		},

@@ -18,8 +18,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/guiEditorContai
 				self.descDiv.find('.conf').text(chosen_conf);
 				console.log(chosen_conf);
 			});
-
-
 		},
 		render: function() {
 			var dataReq = this.getInitData();

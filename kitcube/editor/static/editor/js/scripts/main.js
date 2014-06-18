@@ -20,7 +20,7 @@ require.config({
     "highcharts": "vendor/highcharts.com/js/highcharts.src",
     //colorpicker part
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
-    "bigtext": "vendor/bigtext/src/bigtext",
+    //"bigtext": "vendor/bigtext/src/bigtext",
     //"momentjs": "vendor/momentjs/min/moment.min",
     "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
     "tabdrop": "vendor/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min",

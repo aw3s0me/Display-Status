@@ -31,9 +31,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('change:value', this.onchangevalue, this);
 			this.model.on('removedFromChart', this.onremovedfromchart, this);
 
-			this.model.updateModel();
-
-			//this.container.mousedown(function(event) {
 			this.container.dblclick(function(event) {
 				//if (event.ctrlKey || event.shiftKey) {
 					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
@@ -44,19 +41,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 						self.container.removeClass('activeSensor');
 					}
 					if (self.container.hasClass('chartAdded')) {
-						//self.container.find('.chartCircle').css('background-color', 'grey');
 						self.container.removeClass('chartAdded');
 						self.model.trigger('deleteSensor', self.model);
 					}
 				//}
 			});
 
-		},
-		events: {
-			'click': 'onClick'
-		},
-		onClick: function(event) {
-			console.log('clicked');
 		},
 		render: function() {
 			var newSensor = this.model;
@@ -65,10 +55,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			var snglSensorTemplate = $(_.template(SensorTemplate, {
 				sensor_id: newSensor.get('id'),
-				val: (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1),
+				val: 'VAL',
 				name: newSensor.get('name'),
-				unit: newSensor.get('unit'),
-				canberemoved: newSensor.get('canberemoved')
+				unit: newSensor.get('unit')
 			}));
 
 			this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));
@@ -100,18 +89,14 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				.css('right', 5 * scale + 'px')
 				.css('top', 20 * scale + 'px');
 
-			if (newSensor.get('canberemoved')) {
-				this.container.find('.close').css('font-size', 12 * scale + 'px')
-				.css('right', 5 * scale + 'px')
-				.css('top', 4 * scale + 'px')
-				.click(function(event) {
-					event.stopImmediatePropagation();
-					self.removeFromDom();
-					return;
-				});
-			}
-
-			
+			this.container.find('.close').css('font-size', 14 * scale + 'px')
+			.css('right', 5 * scale + 'px')
+			.css('top', 3 * scale + 'px')
+			.click(function(event) {
+				event.stopImmediatePropagation();
+				self.removeFromDom();
+				return;
+			});
 
 			this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
 
