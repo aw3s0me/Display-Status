@@ -99,8 +99,21 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			});
 
 			this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
-
+			this.initializeContextMenu();
 		},
+		initializeContextMenu: function() {
+            var self = this;
+            $.contextMenu({
+                selector: '#' + self.model.get('id'),
+                callback: function(key, options) {
+                    var m = "clicked: " + key;
+                    alert(m); 
+                },
+                items: {
+                    "edit": {name: "Edit"}
+                }
+            });
+        },
 		getHtml: function() {
 			return this.container[0];
 		},

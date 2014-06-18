@@ -15,14 +15,10 @@
 		"highcharts.com": "3.0.9",
 		"jqueryui-touch-punch": null,
 		"jquery-minicolors": null,
-		"bootstrap-tabdrop" : null,
 		"jqueryui-touch-punch": null,
-		"FitText.js": null,
 		"jsonlint": null,
-		"slabText": null,
-		"momentjs": null,
-		"backgrid": null,
 		"oauth.io": null,
-		"jquery-cookie": null
+		"jquery-cookie": null,
+		"bootstrap-contextmenu": "0.2.0"
 	} 
 }		

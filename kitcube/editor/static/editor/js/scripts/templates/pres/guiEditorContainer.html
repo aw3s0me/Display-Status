@@ -2,6 +2,7 @@
 	<div id="guiEditorMenuContainer">
 		<div id="guiEditorProjDropdown" class="btn-group">
 			<a role="button" href="#" class="btn btn-default" data-toggle="dropdown">Projects<span class="caret"></span></a>
+			<a role="button" id="toggleGridButton" href="#" class="btn btn-default"><span class="glyphicon glyphicon-th"></span></a>
 		<ul class="dropdown-menu multi-level" aria-labelledby="dropdownMenu" role="menu">
 			<% _.each(items, function(item, key, list) { %>
 				<li class="dropdown-submenu"><a tabindex="-1" href="#" data="<%= item.name %>"><%= item.title %></a>
@@ -19,5 +20,11 @@
 		</div>
 	</div>
 	<div id="tabs">
+		<div id="context-menu">
+			<ul class="dropdown-menu" role="menu">
+				<li><a tabindex="-1" href="#">Edit</a></li>
+				<li><a tabindex="-1" href="#">Action</a></li>
+			</ul>
+		</div>
 	</div> 
 </div>

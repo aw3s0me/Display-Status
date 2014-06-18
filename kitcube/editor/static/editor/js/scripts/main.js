@@ -25,7 +25,8 @@ require.config({
     "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
     "tabdrop": "vendor/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
-    "cookie": "vendor/jquery-cookie/jquery.cookie"
+    "cookie": "vendor/jquery-cookie/jquery.cookie",
+    "contextmenu": "vendor/contextmenu/jquery.contextMenu"
   },
   shim: {
     backbone: {
@@ -48,8 +49,7 @@ require.config({
       ]
     },
     bootstrap: {
-      deps: ["jquery"],
-      exports: "$.fn.popover"
+      deps: ["jquery"]
     },
     "kit.sizeDetector": {
       deps: [
@@ -93,6 +93,13 @@ require.config({
     	deps: [
     		"jquery"
     	]
+    },
+    "contextmenu": {
+      deps: [
+        "jquery",
+        "jqueryui"
+      ]
+
     }
   }
 });

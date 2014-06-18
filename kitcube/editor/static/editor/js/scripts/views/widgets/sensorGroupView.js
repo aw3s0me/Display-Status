@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', "contextmenu"], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, contextMenu) {
     var SensorGroupView = Backbone.View.extend({
         container: undefined,
         grid: undefined,
@@ -47,8 +47,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 group_id: newSensorGroup.get('id'),
                 groupname1: this.model.get('groupname1'),
                 groupname2: this.model.get('groupname2'),
-                name: this.model.get('name'),
-                canberemoved: newSensorGroup.get("canberemoved")
+                name: this.model.get('name')
             }));
 
             this.container = $(grpSensorTemplate);
@@ -58,18 +57,17 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
 
             this.container.find('.groupName').css('font-size', 17 * scale + 'px');
 
-            if (newSensorGroup.get('canberemoved')) {
-                this.container.find('.close').css('font-size', 20 * scale + 'px')
-                    .css('right', 5 * scale + 'px')
-                    .css('top', 4 * scale + 'px');
-            }
+            this.container.find('.close').css('font-size', 20 * scale + 'px')
+                .css('right', 5 * scale + 'px')
+                .css('top', 4 * scale + 'px');
 
             var newSortableContainer = $('<span></span>')
                 .css('left', 0 + 'px')
                 .css('top', unitY + 'px')
                 .css('height', unitY * (dy) + 'px')
                 .css('width', unitX * dx + 'px')
-                .addClass('sortable_container').sortable();
+                .addClass('sortable_container')
+                .sortable();
 
             if (this.group !== undefined) {
                 for (var i = 0; i < this.group.length; i++) {
@@ -96,12 +94,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             this.container.append(newSortableContainer);
 
             var grpElem = this.grid.addUnit(this.container, { 
-                draggable: newSensorGroup.get('isdraggable'),
-                resizable: newSensorGroup.get('isresizable')
+                draggable: true,
+                resizable: true
             }, this.model).addClass('group');
 
-            if (newSensorGroup.get('isresizable')) {
-                grpElem.resizable({ //different handler because its with the sortable container
+            grpElem.resizable({ //different handler because its with the sortable container
                     grid: unitX,
                     //containment: 'parent',
                     handles: 'ne, se',
@@ -134,7 +131,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                         self.model.trigger('resize', model);
                     }
                 }); 
-            }
             
 
             for (var i = 0; i < trendChartInitArr.length; i++) {
@@ -143,12 +139,22 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             }
 
             this.container.parent().css('border', '1px solid black');
-
-            
+            this.initializeContextMenu();
+        
             //console.log(this.container.html());
         },
-        rerender: function() {
-
+        initializeContextMenu: function() {
+            var self = this;
+            $.contextMenu({
+                selector: '#' + self.model.get('id') + " .groupNameDiv",
+                callback: function(key, options) {
+                    var m = "clicked: " + key;
+                    alert(m); 
+                },
+                items: {
+                    "edit": {name: "Edit"}
+                }
+            });
         },
         removeFromDom: function() {
             for (var i = 0; i < this.group.length; i++) {

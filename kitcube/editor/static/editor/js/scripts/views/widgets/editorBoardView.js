@@ -353,6 +353,9 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				}
 				
 			}, this);
+		},
+		serialize: function() {
+			
 		}
 	});
 

@@ -3,6 +3,7 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
+	'jqueryui',
 	'kitgrid',
 	'yaml',
 	'jqgrid',
@@ -16,9 +17,10 @@ define([
 	"kit.parser",
 	'cookie',
 	"models/userModel",
+	"contextmenu",
 	//'cacher',
 	'router' // Request router.js
-], function($, _, Backbone, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, UserModel, /*Cacher,*/ Router) {
+], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, UserModel, CContextMenu/*Cacher,*/ Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
