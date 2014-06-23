@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/sensorGroupCollection', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, SensorGroupCollection, ChartTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, ChartTemplate) {
 
 	var _seriesArr = [];
 	var _allSensors = undefined;
@@ -181,8 +181,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					throw "Cant add sensor";
 				}
 				var seriesObject = sensorModel.getChartProperties();
-				var axisObject = sensorModel.getChartAxisInfo({
-					axislabels: self.model.get('axislabels')
+				var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
+					axislabels: self.model.get('axislabels'),
+					count: series
 				});
 				var color = undefined;
 				self.chart.addAxis(axisObject);
@@ -296,8 +297,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 
 			var controlPanel = controlPanelTemplate.find('.chartControlPanel');
 			//controlPanel.css('top', 14 * scale + 'px')
-			controlPanel.css('right', 35 * scale + 'px')
-			.css('top', 10 * scale + 'px');
+			controlPanel.css('right', 35 * scale + 'px');
+			//.css('top', 10 * scale + 'px');
 
 			controlPanel.css('font-size', 12 * scale + 'px');
 
@@ -330,16 +331,22 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/se
 					self.removeFromDom();
 				});
 			}
+
+			controlPanel.find('.chartBtn').css('margin-top', -6 * scale + 'px');
 			
 			controlPanel.find('.resetChartBtn').button()
 				.click(function(event) {
 					self.resetChart();
 				});
-			var selectElem = controlPanelTemplate.find('.rangeContainer').css('top', 10 * scale + 'px').css('left', 10 * scale + 'px');
+			//var selectElem = controlPanelTemplate.find('.rangeContainer').css('top', 10 * scale + 'px').css('left', 10 * scale + 'px');
 
 			this.container.append(controlPanelTemplate);
 
-			selectElem.find('.rangeDropdown').change(function() {
+			//selectElem.find('.rangeDropdown').change(function() {
+			controlPanel.find('.rangeDropdown')
+			.css('font-size', 16 * scale + 'px')
+			.css('margin-top', 10 * scale + 'px')
+			.change(function() {
 				var value = $(this).val();
 				self.model.set({
 					range: value

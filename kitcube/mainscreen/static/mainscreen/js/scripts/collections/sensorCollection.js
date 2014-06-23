@@ -2,8 +2,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 	var SensorGroupCollection = Backbone.Collection.extend({
 		id: undefined,
 		model: Sensor,
-		group: undefined,
-		rowId: undefined,
+		group: " ",
+		rowIndex: undefined,
 		initialize: function(models, options) {
 			options || (options = {});
 			if (options.id) {
@@ -28,42 +28,31 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 			}
 			return dataToChart;
 		},
-		getDataToTable: function(colIds) {
+		getDataToTable: function(isheader) {
 			var models = this.models;
 			//var dataToTable = [];
 			var objToPush = {};
 
-			/*if (this.group)
-				dataToTable.push(this.group);
-			for (var i = 0; i < models.length; i++) {
-				dataToTable.push(models[i].get('valUnit'));
-				//if (this.group)
-					//objToPush['groupname'] = this.group;
-				//var value = models[i].get('value') === undefined ? 0: models[i].get('value');
-				//objToPush[models[i].get('id')] = models[i].get('valUnit');
-			} */
-
-			if (this.group) {
-				objToPush[colIds[0]] = this.group;
+			if (isheader) {
+				objToPush['column_0'] = this.group; 
+				for (var i = 0; i < models.length; i++) {
+					objToPush['column_' + String(i+1)] = models[i].get('valUnit');
+				}
+			}
+			else {
+				for (var i = 0; i < models.length; i++) {
+					objToPush['column_' + String(i)] = models[i].get('valUnit');
+				}
 			}
 
-			for (var i = 0; i < models.length; i++) {
-				objToPush[colIds[i + 1]] = models[i].get('valUnit');
-			}
-
-			return objToPush;
-
-			//dataToTable.push(objToPush);
-			
-			//return dataToTable;
-			
+			return objToPush;			
 		},
-		getLookupTable: function() {
+		getLookupTable: function(isheader) {
 			var obj = {};
 			var models = this.models;
 			var startColIndex = 0;
 
-			if (this.group) {
+			if (isheader) {
 				startColIndex = 1;
 			}
 
@@ -71,7 +60,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel'], function($, _
 				obj[models[i].get('id')] = {
 					id: models[i].get('id'),
 					col: startColIndex++,
-					row: this.rowId
+					row: this.rowIndex
 				};
 			}
 			return obj;

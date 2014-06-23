@@ -1,6 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templates/widgets/sensorjQGridTable.html'], function($, _, Backbone, AlarmTableModel, TableTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel', 'text!templates/widgets/sensorjQGridTable.html'], function($, _, Backbone, SensorTableModel, TableTemplate) {
 
-	var AlarmListView = Backbone.View.extend({
+	var sensorJqGridTableView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
 		model: undefined,
@@ -58,11 +58,11 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 
 			return colModel;
 		},
-		formDataToTable: function(alarmCollection) {
+		formDataToTable: function(sensorGroupCollection) {
 			var dataToTable = [];
 
-			for (var i = 0; i < alarmCollection.length; i++) {
-				var alarm = alarmCollection[i];
+			for (var i = 0; i < sensorGroupCollection.length; i++) {
+				var sensorCollection = sensorGroupCollection[i];
 				dataToTable.push(sensorCollection.getDataToTable(this.model.get('isheader')));
 				sensorCollection.rowIndex = i + 1;
 				var tempLookupTable = sensorCollection.getLookupTable(this.model.get('isheader'));
@@ -73,8 +73,7 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 		},
 		render: function() {
 			var self = this;
-			//var sensorGroupCollection = this.model.get('groups');
-			var AlarmGroupCollection = this.model.get('alarms');
+			var sensorGroupCollection = this.model.get('groups');
 			var model = this.model;
 			var dataToTable = []; 
 			var scale = this.grid.getScale();
@@ -84,7 +83,6 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 			var dy = model.get('size')[1];
 			var px = model.get('coords')[0];
 			var py = model.get('coords')[1];
-			var colNames = model.get('colnames');
 
 			var totalHeight = dy * unitHeight * scale;
 			var hscale = totalHeight / $(window).height(); //scale font for header
@@ -100,8 +98,7 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 
 			/*SETTING DATA COLS/ROWS */
 			var colModel = this.formHeaders();
-			//???
-			//var colNames = model.get('colnames');
+			var colNames = model.get('colnames');
 
 			//var sensorCollection = sensorGroupCollection[0];
 
@@ -208,11 +205,7 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 			var id = model.get('id');
 			var lookupObj = this.lookuptable[id];
 			//console.log(model);
-			//this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], model.get('valUnit'));
-			//remember value row and change it here
-
-
-
+			this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], model.get('valUnit'));
 		},
 		onchangevalcolor: function(model) {
 			var id = model.get('id');
@@ -224,13 +217,13 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 		},
 		removeFromDom: function() {
 			//if (this.rendertype === "grid")
-			var alarmGroups = this.model.get('alarms');
-			for (var i = 0; i < alarmGroups.length; i++) {
-				var models = alarmGroups[i].models;
+			var sensorGroups = this.model.get('groups');
+			for (var i = 0; i < sensorGroups.length; i++) {
+				var models = sensorGroups[i].models;
 				for (var j = 0; j < models.length; j++) {
-					var alarm = models[j];
-					alarm.trigger('removing', sensor);
-					alarm.trigger('destroy', sensor);
+					var sensor = models[j];
+					sensor.trigger('removing', sensor);
+					sensor.trigger('destroy', sensor);
 				}
 			}
 			this.container.parent().remove();
@@ -272,5 +265,5 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 
 	});
 
-	return AlarmListView;
+	return sensorJqGridTableView;
 });

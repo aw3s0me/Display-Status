@@ -16,7 +16,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         render: function() {
             this.el = $('#userPanel');
             this.ifLoggedIn();
-            //$('#toggleGridButton').show();
+            $('#toggleGridButton').show();
             
             $('#loginButton').tooltip({});;
             $('#logoutButton').tooltip({});;
@@ -55,6 +55,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         onUserAtMainScreen: function() {
             this.ifLoggedIn();
             $('#goMainscreenButton').hide();
+            $('#toggleGridButton').show();
         },
         onUserLogout: function() {
             $('#loginButton').show();

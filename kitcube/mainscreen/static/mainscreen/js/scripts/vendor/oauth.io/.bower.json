@@ -23,6 +23,6 @@
     "commit": "e3dab0bb7dbcca11ca0669439ea262a09d2ab489"
   },
   "_source": "git://github.com/oauth-io/oauth-js.git",
-  "_target": "*",
+  "_target": "0.2.0",
   "_originalSource": "oauth.io"
 }

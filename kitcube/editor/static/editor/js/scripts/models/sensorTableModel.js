@@ -8,12 +8,14 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				coords: [],
 				cols: undefined,
 				groups: undefined,
-				colids: undefined,
 				colnames: undefined,
-				showheaders: false,
-				render: "table",
+				isheader: false,
+				render: "grid",
 				minsize: [2, 2],
 				scrolling: false,
+				canberemoved: false,
+				isdraggable: false,
+				isresizable: false,
 				cfgObj: null
 			}
 		},

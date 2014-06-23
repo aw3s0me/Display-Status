@@ -1,5 +1,5 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorTableView, TrendSensorView, TrendSensorModel, TabView) {
-	
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView) {
+
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
 		el: undefined,
@@ -44,16 +44,25 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			//var myParser = new cfgParser('../static/cfg.json');
 			//var prsObj = myParser.parseJson(textToParse);
 			prsObj = textToParse;
-			var blocksize = prsObj['screen'] && prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize']: 50;
-			var boardsizex = prsObj['screen'] && prsObj['screen']['boardsizex'] ? prsObj['screen']['boardsizex']: 50;
-			var boardsizey = prsObj['screen'] && prsObj['screen']['boardsizey'] ? prsObj['screen']['boardsizey']: 21;
+
+			if (prsObj['screen']['nofooter']) {
+				$('#banner').css('height', '0');
+			}
+
+			if (prsObj['screen']['nobanner']) {
+				$('#footer').css('height', '0');
+			}
+
+			var blocksize = prsObj['screen'] && prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize'] : 50;
+			var boardsizex = prsObj['screen'] && prsObj['screen']['boardsizex'] ? prsObj['screen']['boardsizex'] : 50;
+			var boardsizey = prsObj['screen'] && prsObj['screen']['boardsizey'] ? prsObj['screen']['boardsizey'] : 21;
 			this.detectSizes(blocksize, boardsizex, boardsizey, '#banner', '#footer', prsObj['screen']);
-			
+
 			var data = {};
 
 			//if (!options.reinit) {
-				var compiledTemplate = _.template(boardTemplate, data);
-				this.container.append(compiledTemplate);
+			var compiledTemplate = _.template(boardTemplate, data);
+			this.container.append(compiledTemplate);
 			//}
 			/* board insertion part */
 			this.insertFromCfg(prsObj);
@@ -64,30 +73,37 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				if (options) {
 					if (options.fluid) {
 						this.viewSizeDetector.detectSizesForFluidCanvas();
-					}
-					else {
+					} else {
 						this.viewSizeDetector.detectSizesForFixedCanvas();
 					}
-				}
-				else {
+				} else {
 					this.viewSizeDetector.detectSizesForFixedCanvas();
 				}
-				
+
 			} catch (err) {
-			 	alert(err.message);
+				alert(err.message);
 			}
 		},
 		establishStyle: function(canvas) {
-			canvas.css('height', this.viewSizeDetector.boardSizePx.height  + 'px')
-			.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
-			.data('height', this.viewSizeDetector.boardSizePx.height)
-			.data('width', this.viewSizeDetector.boardSizePx.width)
-			.data('gridUnitX', this.viewSizeDetector.unitSize)
-			.data('gridUnitY', this.viewSizeDetector.unitSize)
-			.data('gridSizeX', this.viewSizeDetector.gridSize.width)
-			.data('gridSizeY', this.viewSizeDetector.gridSize.height)
-			.data('scale', this.viewSizeDetector.scale)
-			.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
+			canvas.css('height', this.viewSizeDetector.boardSizePx.height + 'px')
+				.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
+				.data('height', this.viewSizeDetector.boardSizePx.height)
+				.data('width', this.viewSizeDetector.boardSizePx.width)
+				.data('gridUnitX', this.viewSizeDetector.unitSize)
+				.data('gridUnitY', this.viewSizeDetector.unitSize)
+				.data('gridSizeX', this.viewSizeDetector.gridSize.width)
+				.data('gridSizeY', this.viewSizeDetector.gridSize.height)
+				.data('scale', this.viewSizeDetector.scale)
+				.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
+		},
+		getGrid: function(attr) {
+			var grid;
+			if (!attr._tabId) {
+				return this.grid;
+			}
+			if (!this.views.tabs[attr._tabId])
+				return this.views.tabs[attr._tabId].grid;
+			return this.grid;
 		},
 		insertFromCfg: function(prsObj) {
 			var self = this;
@@ -99,45 +115,48 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
-				switch(_id) {
-					case "datasource": {
-						this.initSettings(attr);
-						break;
-					}
-					case "tabs": {
-						this.initTabs(attr);
-						break;
-					}
-					case "elements": {
-						for (var _elId in attr) {
-							var elObj = attr[_elId];
-							var tabId = this.tabOfElementIndex(_elId);
-							elObj._id = _elId;
-							if (tabId) {
-								elObj._tabId = tabId;
-							}
-							switch (elObj["type"]) {
-								case "sensor":
-									singleSensorsToAdd.push(elObj);
-									break;
-								case "sensortable":
-									sensorTablesToAdd.push(elObj);
-									break;
-								case "sensorgroup":
-									sensorGroupsToAdd.push(elObj);
-									break;
-								case "alarmlist":
-									alarmListsToAdd.push(elObj);
-									break;
-								case "chart":
-									chartsToAdd.push(elObj);
-									break;
-								default:
-									break;
-							}
+				switch (_id) {
+					case "datasource":
+						{
+							this.initSettings(attr);
+							break;
 						}
-						break;
-					}
+					case "tabs":
+						{
+							this.initTabs(attr);
+							break;
+						}
+					case "elements":
+						{
+							for (var _elId in attr) {
+								var elObj = attr[_elId];
+								var tabId = this.tabOfElementIndex(_elId);
+								elObj._id = _elId;
+								if (tabId) {
+									elObj._tabId = tabId;
+								}
+								switch (elObj["type"]) {
+									case "sensor":
+										singleSensorsToAdd.push(elObj);
+										break;
+									case "sensortable":
+										sensorTablesToAdd.push(elObj);
+										break;
+									case "sensorgroup":
+										sensorGroupsToAdd.push(elObj);
+										break;
+									case "alarmlist":
+										alarmListsToAdd.push(elObj);
+										break;
+									case "chart":
+										chartsToAdd.push(elObj);
+										break;
+									default:
+										break;
+								}
+							}
+							break;
+						}
 				}
 			}
 
@@ -145,25 +164,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			if ($.isEmptyObject(this.views.tabs)) {
 				this.establishStyle(this.el);
-				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 3.2; 
 				this.grid = new kitGrid(this.el);
 				this.el.removeClass('canvas')
-				.addClass('tab')
-				.css('margin-top', marginTop + 'px');
+					.addClass('tab');
 				$('#toggleGridButton').click(function(e) {
 					self.grid.toggleGrid();
 				});
 			}
-
-			var start = new Date().getTime();
-
 			this.addAllSingleSensors(singleSensorsToAdd);
 			this.addAllSensorGroups(sensorGroupsToAdd);
-
-			var end = new Date().getTime();
-			var time = end - start;
-			console.log('Execution time of sensor appending: ' + time)
-
 			this.addAllTables(sensorTablesToAdd);
 			this.addAllAlarmLists(alarmListsToAdd);
 			this.addAllCharts(chartsToAdd);
@@ -211,7 +220,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var self = this;
 
 			if (dbname && dbgroup && server) {
-				var masksToRequest = "";	
+				var masksToRequest = "";
 				var masks = [];
 
 
@@ -221,8 +230,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				}
 				masksToRequest = masks.join();
 
-				try
-				{
+				try {
 					//http://katrin.kit.edu/adei/services/getdata.php?db_server=fpd&db_name=katrin_rep&db_group=0&db_mask=102,106,107,108,149,150,103,109,110,111,151,152,74,66,68,99,12,67,69,100,2,3,4,5,6,7,8,9,59,61,75,78,80,82,145,112,113,116,117,118,146,119,120,123,124,125,186,187,188,190,191,192,190,191,192&window=-1
 					var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=-1';
 					//window.db.httpGetCsv(url, function(data) {
@@ -232,13 +240,17 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						if (typeof(result) === "string") {
 							console.log('Error occured: ' + result);
 							var lastUpdatedTime = 'Error in getting data';
-							self.eventAggregator.trigger('loadingfinished', {lastUpdatedTime : lastUpdatedTime});
+							self.eventAggregator.trigger('loadingfinished', {
+								lastUpdatedTime: lastUpdatedTime
+							});
 							return;
 						}
 						var time = moment(result.time[0] * 1000);
 						var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
 						//$('#lblFromNow').text();
-						self.eventAggregator.trigger('loadingfinished', {lastUpdatedTime : lastUpdatedTime});
+						self.eventAggregator.trigger('loadingfinished', {
+							lastUpdatedTime: lastUpdatedTime
+						});
 						//console.log(result)
 						var index = 0;
 						for (var sensId in self.sensors) {
@@ -249,15 +261,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					});
 					//window.db.getData(this.settings['server'], this.settings['dbname'], this.settings['dbgroup'], masksToRequest, '-1', 800, 'mean', function(obj)
 					//{
-						//console.log(obj);
+					//console.log(obj);
 					//})
-		
-				}
-				catch(msg) {
+
+				} catch (msg) {
 					//console.log(msg)
 				}
-			}
-			else {
+			} else {
 				for (var sensId in this.sensors) {
 					var element = this.sensors[sensId];
 					this.updateSensor(element);
@@ -333,7 +343,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 				}
 				viewSection = {};
-			} 
+			}
 			this.views = null;
 
 			$.ajax({
@@ -369,7 +379,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		initSettings: function(attr) {
 			if (!attr['dbgroup'] || !attr['dbname'] || !attr['server']) {
 				console.log('Please specify fields dbgroup, dbname and server in configuration file');
-			} 
+			}
 			this.settings = attr;
 		},
 		getCurrentTab: function() {
@@ -417,14 +427,14 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			$('#tabs').tabs({
 				collapsible: true
 			}).css('width', this.viewSizeDetector.boardSizePx.width + 5 + 'px')
-			.css('margin', '0 auto');
+				.css('margin', '0 auto');
 			$('#tabs ul').css('padding', '0px !important')
-			.css('height', 50 * this.viewSizeDetector.scale)
-			.css('width', this.viewSizeDetector.boardSizePx.width + 'px');
+				.css('height', 50 * this.viewSizeDetector.scale)
+				.css('width', this.viewSizeDetector.boardSizePx.width + 'px');
 			$('#tabs li').css('height', 40 * this.viewSizeDetector.scale)
-			.css('font-size', 24 * this.viewSizeDetector.scale);
+				.css('font-size', 24 * this.viewSizeDetector.scale);
 
-			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 5.5; 
+			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 5.5;
 			$('#tabs').css('margin-top', marginTop + 'px');
 
 			var self = this;
@@ -438,13 +448,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		},
 		addSingleSensor: function(attr) {
 			//which tab will be there
-			var grid = undefined;
-			if (this.views.tabs[attr._tabId]) {
-				grid = this.views.tabs[attr._tabId].grid;
-			}
-			else {
-				grid = this.grid;
-			}
+			var grid = this.getGrid(attr);
 
 			var newSensor = new Sensor({
 				id: attr._id,
@@ -478,41 +482,43 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			this.views.singlesensors[attr._id] = newSensorView;
 		},
 		addSensorTable: function(attr) {
-			var sensorgroups = attr['sensors'];
+			var sensorgroups = attr['rows'];
 			var collectionGroups = [];
-			var dbname = attr['dbname'];
-			var server = attr['server'];
-			var dbgroup = attr['dbgroup'];
+			var dbname = undefined;
+			var server = undefined;
+			var dbgroup = undefined;
+			var grid = this.getGrid(attr);
+			var isheader = false;
+
+			if (attr['diffgroups']) {
+				dbname = attr['dbname'];
+				server = attr['server'];
+				dbgroup = attr['dbgroup'];
+			} else {
+				dbname = this.settings['dbname'];
+				server = this.settings['server'];
+				dbgroup = this.settings['dbgroup'];
+			}
 
 			for (var i = 0; i < sensorgroups.length; i++) {
-				var sensors = sensorgroups[i]['sensors'];
+				var sensors = sensorgroups[i]['columns'];
+				if (sensorgroups[i]['header']) {
+					isheader = true;
+				}
 				//which tab will be there
-				var grid = undefined;
-				if (this.views.tabs[attr._tabId]) {
-					grid = this.views.tabs[attr._tabId].grid;
-				}
-				else {
-					grid = this.grid;
-				}
+
 				var newSensorCollection = undefined;
 				var sensorModelArr = [];
 
 				for (var j = 0; j < sensors.length; j++) {
 					var sensorInfoObj = sensors[j];
 
-					if (attr["diffsensors"]) {
-						dbname = sensorInfoObj["dbname"];
-						server = sensorInfoObj["server"];
-						dbgroup = sensorInfoObj["dbgroup"];
-
-					}
 					var newSensor = new Sensor({
 						id: sensorInfoObj["id"],
 						name: sensorInfoObj["name"],
 						unit: sensorInfoObj["unit"],
 						max: sensorInfoObj["max"],
 						min: sensorInfoObj["min"],
-						sensorviewtype: "table",
 						sensortype: sensorInfoObj["sensortype"],
 						precision: sensorInfoObj["precision"],
 						exp: sensorInfoObj["exp"],
@@ -524,20 +530,23 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						values: new Array(),
 						lastTime: new Date
 					});
-					if (sensorInfoObj["id"] !== undefined) {
-						sensorModelArr.push(newSensor);
-						this.sensors[sensorInfoObj["id"]] = newSensor;
-						newSensor.on('removing', function(){
-							if (this.sensors) {
-								delete this.sensors[sensorInfoObj["id"]];
-							}
-						}, this);
+
+					if (sensorInfoObj["id"] === undefined) {
+						throw "id hasnt been specified at table: " + attr._id + " at sensor with id: " +sensorInfoObj["id"];
 					}
+
+					sensorModelArr.push(newSensor);
+					this.sensors[sensorInfoObj["id"]] = newSensor;
+
+					newSensor.on('removing', function() {
+						if (this.sensors) {
+							delete this.sensors[sensorInfoObj["id"]];
+						}
+					}, this);
 				}
 
 				newSensorCollection = new SensorCollection(sensorModelArr, {
-					id: attr['sensors'][i]['name'],
-					group: attr['sensors'][i]['name']
+					group: attr['rows'][i]['header']
 				});
 
 				collectionGroups.push(newSensorCollection);
@@ -547,23 +556,32 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				id: attr._id,
 				size: attr['size'],
 				coords: attr['coords'],
-				cols: undefined,
 				groups: collectionGroups,
-				colids: attr['colids'],
 				colnames: attr['colnames'],
-				showheaders: attr['showheaders'],
 				name: attr['name'],
 				render: attr['render'],
-				cfgObj: attr
+				cfgObj: attr,
+				isheader: isheader
 			});
 
 			this.elements.tables[attr._id] = newSensorTableModel;
 
-			var newSensorTableView = new SensorTableView({
-				grid: grid,
-				model: newSensorTableModel
-			});
 
+			var newSensorTableView = undefined;
+
+			if (attr['render'] === 'table') {
+				newSensorTableView = new SensorCustomTableView({
+					grid: grid,
+					model: newSensorTableModel
+				});
+			}
+			else {
+				newSensorTableView = new SensorJqGridTableView({
+					grid: grid,
+					model: newSensorTableModel
+				});
+			}
+			
 			this.views.tables[attr._id] = newSensorTableView;
 
 			newSensorTableModel.on('removing', function() {
@@ -572,17 +590,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					this.views.tables[attr._id] = null;
 				}
 			}, this);
-			$(window).trigger('resize'); //because big text works only after resize event
+
 		},
 		addChart: function(attr) {
 			//which tab will be there
-			var grid = undefined;
-			if (this.views.tabs[attr._tabId]) {
-				grid = this.views.tabs[attr._tabId].grid;
-			}
-			else {
-				grid = this.grid;
-			}
+			var grid = this.getGrid(attr);
 
 			var newChart = new Chart({
 				id: attr._id,
@@ -629,21 +641,14 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var server = undefined;
 			var dbgroup = undefined;
 			//which tab will be there
-			var grid = undefined;
-			if (this.views.tabs[attr._tabId]) {
-				grid = this.views.tabs[attr._tabId].grid;
-			}
-			else {
-				grid = this.grid;
-			}
-			
+			var grid = this.getGrid(attr);
+
 			//if groups are not from diff sources
 			if (attr['diffgroups']) {
 				dbname = attr['dbname'];
 				server = attr['server'];
 				dbgroup = attr['dbgroup'];
-			}
-			else {
+			} else {
 				dbname = this.settings['dbname'];
 				server = this.settings['server'];
 				dbgroup = this.settings['dbgroup'];
@@ -696,9 +701,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				this.sensors[sensorObj["id"]] = newSensor;
 
 				newSensor.on('removing', function() {
-					if (this.sensors) 
+					if (this.sensors)
 						delete this.sensors[newSensor.get('id')];
 				}, this);
+
 				sensorModelsArr.push(newSensor);
 			}
 
@@ -728,8 +734,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						type: 1,
 						viewId: sensor.get('id')
 					};
-				}
-				else {
+				} else {
 					newSensorView = new SingleSensorView({
 						model: sensor,
 						grid: grid,
@@ -824,7 +829,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				if (this.views) {
 					delete this.views.sensorgroups[attr._id];
 				}
-				
+
 			}, this);
 
 			this.elements.sensorgroups[attr._id] = newSensorGroupModel;
@@ -833,13 +838,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		addAlarmList: function(attr) {
 			var alarmList = []; //collection of alarms
 			//which tab will be there
-			var grid = undefined;
-			if (this.views.tabs[attr._tabId]) {
-				grid = this.views.tabs[attr._tabId].grid;
-			}
-			else {
-				grid = this.grid;
-			}
+			var grid = this.getGrid(attr);
+
 			var options = {
 				size: [],
 				coords: [],

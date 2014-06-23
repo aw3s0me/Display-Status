@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'collections/sensorGroupCollection', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, SensorGroupCollection, ChartTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, ChartTemplate) {
 
 	var _seriesArr = [];
 	var _allSensors = undefined;

@@ -25,7 +25,8 @@ require.config({
     "momentjs": "vendor/momentjs/min/moment.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
     "cookie": "vendor/jquery-cookie/jquery.cookie",
-    "cacher": "dev/datacaching/webSockets"
+    "cacher": "dev/datacaching/webSockets",
+    "switch": "vendor/bootstrap-switch/dist/js/bootstrap-switch.min"
     //"cacher": "dev/datacacher.min"
   },
   shim: {
@@ -54,6 +55,9 @@ require.config({
         'jquery',
         'vendor/jqgrid/js/i18n/grid.locale-en'
       ]
+    },
+    "switch": {
+    	deps: ['bootstrap']
     },
     bootstrap: {
       deps: ["jquery"]

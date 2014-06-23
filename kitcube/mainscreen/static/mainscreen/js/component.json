@@ -9,16 +9,15 @@
 		"requirejs": "2.1.11",
 		"bootstrap": null,
 		"modernizr": null,
-		"flat-ui-official": null,
 		"qunit": null,
 		"js-yaml": null,
-		"jqgrid": null,
-		"highcharts.com": null,
+		"jqgrid": "4.6.0",
+		"highcharts.com": "3.0.9",
 		"jqueryui-touch-punch": null,
-		"FitText.js": null,
 		"jsonlint": null,
-		"slabText": null,
 		"momentjs": null,
-		"oauth.io": "0.2.0"
+		"oauth.io": "0.2.0",
+		"jquery-cookie": null,
+		"bootstrap-switch": "3.0.1"
 	} 
 }		

@@ -10,8 +10,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	var _defalarmcolor = '#E51400';
 	//var _defokcolor = '#40bf40';
 	var _defokcolor = '#20c62e';
+	var _defmiddlecolor = '#FFA500';
 	//var _defmiddlecolor = '#1bb2e2';
-	var _defmiddlecolor = '#FFD700';
+	//var _defmiddlecolor = '#FFD700';
 	//var _defmiddlecolor = '#75c6ef';
 
 	function _isNumber(n) {
@@ -528,11 +529,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			
 			return chartProp;
 		},
-		getChartAxisInfo: function(options) {
+		getChartAxisInfo: function(scale, options) {
 			var self = this;
 			var axislabels = options.axislabels;
 			var axisObj = {
 				id: this.get('id') + '-axis',
+				//offset: -17 * scale,
 				//title: {
 					//text: ""//this.get('name')
 					//align: 'middle',
@@ -550,7 +552,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 			if (axislabels === false) {
 				axisObj.title = {
-					text: ""
+					text: " "
 				}
 			}
 			else {
@@ -589,6 +591,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					}
 				}
 			}
+			console.log(options.count.length);
+			//axisObj.labels.x = options.count.length * -10 * scale;
+			//axisObj.offset = options.count.length * 80 * scale;
+			axisObj.labels.align = 'right';
+			//axisObj.labels.x = 5;
+			//axisObj.labels.align = 'left';
 
 			return axisObj;
 			

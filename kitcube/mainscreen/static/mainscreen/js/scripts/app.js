@@ -16,11 +16,11 @@ define([
 	"kit.sizeDetector",
 	"kit.parser",
 	'cookie',
+	'switch',
 	"models/userModel",
-	"contextmenu",
 	//'cacher',
 	'router' // Request router.js
-], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, UserModel, CContextMenu/*Cacher,*/ Router) {
+], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, Switch, UserModel, /*Cacher,*/ Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
