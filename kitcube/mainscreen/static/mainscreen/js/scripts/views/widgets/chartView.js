@@ -181,17 +181,28 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					throw "Cant add sensor";
 				}
 				var seriesObject = sensorModel.getChartProperties();
-				var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
-					axislabels: self.model.get('axislabels'),
-					count: series
-				});
+				var axisId = seriesObject['yAxis'];
+				
+				var existedAxis = self.chart.get(axisId);
+				if (!existedAxis) {
+					var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
+						axislabels: self.model.get('axislabels'),
+						count: series
+					});
+					axisObject.lineColor = '#000';
+					self.chart.addAxis(axisObject);
+					var axis = self.chart.get(axisObject.id);
+					//axis.update({
+
+					//})
+				}
 				var color = undefined;
-				self.chart.addAxis(axisObject);
+					
 				//console.log(JSON.stringify(axisObject));
 				self.chart.addSeries(seriesObject, false);
 				//console.log(JSON.stringify(seriesObject));
 				sensorModel.on('addPoint', self.addNewPoint, self);
-				for (var seriesName in series) {
+				/*for (var seriesName in series) {
 					var seriesObject = series[seriesName];
 					var id = seriesObject.userOptions.id;
 					if (id === sensorModel.get('id')) {
@@ -210,7 +221,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						}
 						break;
 					}
-				}
+				}*/
 			}
 
 		},
@@ -428,6 +439,57 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var elems = this.formSensorElements();
 			this.getDataForElements(elems);
 		},
+		getElementsMetaInfo: function(models) {
+			var isRequestNeeded = false;
+			var masks = [];
+			var modelsToChange = [];
+
+			for (var i = 0; i < models.length; i++) {
+				var model = models[i];
+				if (model.get('axisname') === undefined) {
+					isRequestNeeded = true;
+					masks.push(model.get('mask'));
+					modelsToChange.push(model);
+				}				
+			}
+
+			if (!isRequestNeeded) 
+				return;
+
+			var masksToRequest = masks.join();
+			if (masksToRequest.length === 0) {
+				return;
+			}
+
+			var server = this.board.settings['server'];
+			var dbname = this.board.settings['dbname'];
+			var dbgroup = this.board.settings['dbgroup'];
+			var axes = this.board.axes;
+			
+			var url = window.host + "services/list.php?target=items&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&info=1';
+			
+			try {
+				getDataFromAdei(url, false, function(data) {
+					console.log(data);
+					xmldoc = $.parseXML(data);
+					$xml = $(xmldoc);
+					$values = $xml.find('Value').each(function(index) {
+						var id = $(this).attr('value');
+						var axis_id = $(this).attr('axis');
+						if (!axis_id) {
+							return true; //continue equivalent in jquery
+						}
+						var axis = axes[axis_id];
+						var model = modelsToChange[parseInt(id)];
+						model.set({'axisname': axis_id});
+						
+					});
+				});
+			}
+			catch(msg) {
+				alert('Error when getting axes');
+			}
+		},
 		getDataForElements: function(typeObject) {
 			//console.log(model.get('id'));
 
@@ -450,14 +512,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var resample = getResample(nubmerOfPoints, start, end);
 			//console.log('resample: ' + resample)
 
-
 			if (typeObject["1"])
 				this.getIdsOfSensorType(typeObject["1"], models, 1);
 			if (typeObject["2"])
 				this.getIdsOfSensorType(typeObject["2"], models, 2);
 			if (typeObject["0"])
 				this.getIdsOfSensorType(typeObject["0"], models, 0);
-
 
 			if (models.length + this.model.get('models').length > this.model.get('maxelementsize')) {
 				alert('You can add only no more than: ' + this.model.get('maxelementsize') + ' elements');
@@ -493,7 +553,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				//window.db.getData('fpd', 'katrin_rep', '0', '3', '1400700000-1401409791', 800, 'mean', function(obj) {
 				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
 				//window.db.httpGetCsv(url, function(data) {
-				getDataFromAdei(url, function(data) {
+				getDataFromAdei(url, true, function(data) {
 					obj = parseCSV(data, masks.length);
 					//console.log(obj);
 					if (!obj) {
@@ -506,6 +566,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						alert('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
 						return;
 					}
+
+					self.getElementsMetaInfo(models, masksToRequest);
+
 					for (var i = 0; i < masks.length; i++) {
 						if (data[i].length > 0) {
 							models[i].setDataModel(data[i], datetime);
@@ -624,76 +687,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			}
 			//chart.redraw();
 
-
-		},
-		rerender: function() {
-			for (var i = 0; i < this.elements.length; i++) {
-				this.elements.models[i].off('addPoint');
-			}
-
-			//console.log('rerender chart');
-			var model = this.model;
-			var chart = this.chart;
-			var dataToChart = this.elements.paramToChart();
-			var dx = model.get('size')[0];
-			var dy = model.get('size')[1];
-			var px = model.get('coords')[0];
-			var py = model.get('coords')[1];
-
-			var scale = this.grid.getScale();
-
-			var tile = this.container.parent();
-			this.grid.resizeTile(px, py, dx, dy, tile);
-
-			var linkArr = model.get('link');
-			_seriesArr = [];
-			if (linkArr) {
-				for (var j = 0; j < linkArr.length; j++) {
-					//console.log(this.elements);
-					var sensorModel = this.elements.models[j];
-					//console.log(sensorModel);
-					_seriesArr.push([sensorModel.get('id'), sensorModel.get('name'), j]);
-				}
-			}
-
-			chart.setTitle({
-				text: model.get('caption')
-			});
-
-			while (chart.series.length > 0)
-				chart.series[0].remove(false);
-
-			for (var i = 0; i < dataToChart.length; i++) {
-				//console.log(dataToChart[i]);
-				chart.addSeries(dataToChart[i], false);
-			}
-
-			//console.log(chart.series);
-
-			var unitHeight = this.grid.getUnitSizes().height;
-			var unitWidth = this.grid.getUnitSizes().width;
-			var height = dy * unitWidth * scale;
-			var width = dx * unitHeight * scale;
-
-			this.chart.setSize(width, height, true);
-
-			for (var i = 0; i < this.elements.length; i++) {
-				this.elements.models[i].on('addPoint', this.addNewPoint, this);
-				//console.log("CHANGED: " +i);
-			}
-
-			for (var i = 0; i < _seriesArr.length; i++) {
-				var sensorModel = this.elements.models[i];
-				var color = this.chart.series[i].color;
-				sensorModel.set({
-					bgcolor: color
-				});
-				sensorModel.trigger('changebgcolor', sensorModel);
-			}
-
-			chart.legendHide();
-
-			chart.redraw();
 
 		},
 		removeFromDom: function() {

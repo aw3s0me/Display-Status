@@ -62,6 +62,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				canberemoved: false,
 				isdraggable: false,
 				isresizable: false,
+				axisname: undefined, //if not undefined, means adei sensor contains info about axis otherwise use temp axis
 				cfgObj: null
 			}
 		},
@@ -509,12 +510,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		}, */
 		getChartProperties: function() {
 			var seriesName = this.get('name');
-
+			var id = this.get('axisname') === undefined ? this.get('id') + '-axis' : this.get('axisname');
 			var chartProp = {
 				"data": this.get('values'),
 				//"type": 'scatter',
 				"id": this.get('id'),
-				"yAxis": this.get('id') + '-axis' /*,
+				"yAxis": id /*,
 				marker: {
 					radius: 4
 				},
@@ -532,8 +533,9 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		getChartAxisInfo: function(scale, options) {
 			var self = this;
 			var axislabels = options.axislabels;
+			var id = this.get('axisname') === undefined ? this.get('id') + '-axis' : this.get('axisname');
 			var axisObj = {
-				id: this.get('id') + '-axis',
+				id: id,
 				//offset: -17 * scale,
 				//title: {
 					//text: ""//this.get('name')

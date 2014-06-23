@@ -13,6 +13,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		settings: {
 
 		},
+		axes: { //structure like
+
+		},
 		sensors: {
 
 		},
@@ -30,7 +33,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			tables: {},
 			tabs: {}
 		},
-		elements: {
+		elements: { //models
 			singlesensors: {},
 			charts: {},
 			alarms: {},
@@ -85,8 +88,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			}
 		},
 		establishStyle: function(canvas) {
+			console.log();
 			canvas.css('height', this.viewSizeDetector.boardSizePx.height + 'px')
 				.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
+				.css('top', this.viewSizeDetector.marginTop + 'px')
 				.data('height', this.viewSizeDetector.boardSizePx.height)
 				.data('width', this.viewSizeDetector.boardSizePx.width)
 				.data('gridUnitX', this.viewSizeDetector.unitSize)
@@ -171,6 +176,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					self.grid.toggleGrid();
 				});
 			}
+
+			//getting adei metainfo
+			this.getAxes();
+
 			this.addAllSingleSensors(singleSensorsToAdd);
 			this.addAllSensorGroups(sensorGroupsToAdd);
 			this.addAllTables(sensorTablesToAdd);
@@ -209,8 +218,41 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			serializeRes = JSON.stringify(newJson, null, '\t ');
 			return serializeRes;
 		},
-		getUidList: function() {
+		getAxes: function() {
+			var dbname = this.settings['dbname'];
+			var dbgroup = this.settings['dbgroup'];
+			var server = this.settings['server'];
+			var axes = this.axes;
+			var url = window.host + "services/list.php?target=axes&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup;
+			try {
+				getDataFromAdei(url, true, function(data) {
+					xmldoc = $.parseXML(data);
+					$xml = $(xmldoc);
+					$values = $xml.find('Value').each(function(index) {
+						var id = $(this).attr('value');
+						var newAxes = {
+							id: id,
+							axis_units: $(this).attr('axis_units'),
+							axis_name: $(this).attr('axis_name'),
+							axis_mode: $(this).attr('axis_mode'),
+							axis_range: $(this).attr('axis_range')
+						}
+						console.log(newAxes);
+						axes[id] = newAxes;
+					});	
+					
+					//xmldoc.find('result').each(function( ) {
+					//	console.log($(this).text());
+					//})
 
+					//data = xmlToJson(data);
+
+					//console.log(data);
+				});
+			}
+			catch(msg) {
+				alert('Error when getting axes');
+			}
 		},
 		updateAllSensors: function() {
 			var dbname = this.settings['dbname'];
@@ -234,7 +276,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					//http://katrin.kit.edu/adei/services/getdata.php?db_server=fpd&db_name=katrin_rep&db_group=0&db_mask=102,106,107,108,149,150,103,109,110,111,151,152,74,66,68,99,12,67,69,100,2,3,4,5,6,7,8,9,59,61,75,78,80,82,145,112,113,116,117,118,146,119,120,123,124,125,186,187,188,190,191,192,190,191,192&window=-1
 					var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=-1';
 					//window.db.httpGetCsv(url, function(data) {
-					getDataFromAdei(url, function(data) {
+					getDataFromAdei(url, true, function(data) {
 						//var result = window.db.dataHandl.onMessageRecievedCsv(data);
 						result = parseCSVForUpdating(data, masks.length);
 						if (typeof(result) === "string") {
