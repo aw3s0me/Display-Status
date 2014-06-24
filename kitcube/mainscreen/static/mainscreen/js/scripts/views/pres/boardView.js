@@ -877,6 +877,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			this.elements.sensorgroups[attr._id] = newSensorGroupModel;
 			$(window).trigger('resize'); //because big text works only after resize event
 		},
+		addMeasurementList: function(attr) {
+
+		},
 		addAlarmList: function(attr) {
 			var alarmList = []; //collection of alarms
 			//which tab will be there
@@ -958,6 +961,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			for (var i = 0; i < arr.length; i++) {
 				var attr = arr[i];
 				this.addAlarmList(attr);
+			}
+		},
+		addAllMeasurementLists: function(attr) {
+			for (var i = 0; i < arr.length; i++) {
+				var attr = arr[i];
+				this.addMeasurementList(attr);
 			}
 		},
 		addAllSensorGroups: function(arr) {

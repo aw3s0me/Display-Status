@@ -11,7 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 		model: undefined,
 		board: undefined,
 		lookDiv: undefined,
-		setExteremesInterval: undefined,
+		extremeInterval: undefined,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -32,6 +32,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			this.model.on('resize', this.onresize, this);
 			this.render();
 
+		},
+		setExtremesInterval: function() {
+			this.removeExtremesInterval();
+			this.setExtremes();
+			var self = this;
+			var interval = this.model.getExtremesInterval();
+			this.extremeInterval = setInterval(function() {
+				self.setExtremes();
+			}, interval); //the only way to pass param */
+		},
+		removeExtremesInterval: function() {
+			this.extremeInterval = null;
 		},
 		formSensorElements: function() {
 			var elems1Val = this.lookDiv.find('.activeSensor1');
@@ -187,6 +199,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				if (!existedAxis) {
 					var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
 						axislabels: self.model.get('axislabels'),
+						adeiAxisInfo: self.board.axes[axisId],
 						count: series
 					});
 					axisObject.lineColor = '#000';
@@ -301,7 +314,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 							enabled: false
 						}
 					}
-				}
+				},
+				events: {
+					//redraw: function(event) {
+					afterSetExtremes: function(e) {
+		            //load: function(event) {
+		                //When is chart ready?
+		                self.chart.hideLoading();
+		            }
+		        }     
 			});
 
 			this.chart.legendHide();
@@ -343,7 +364,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				});
 			}
 
-			controlPanel.find('.chartBtn').css('margin-top', -6 * scale + 'px');
+			controlPanel.find('.chartBtn').css('margin-top', -11 * scale + 'px');
 			
 			controlPanel.find('.resetChartBtn').button()
 				.click(function(event) {
@@ -383,7 +404,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 		setExtremes: function() {
 			var windowObj = this.getWindow();
 			this.chart.xAxis[0].setExtremes(windowObj.start, windowObj.end);
-			this.redraw();
+			//this.chart.xAxis[0].setExtremes(windowObj.start, null);
+			//this.redraw();
 		},
 		initChartWhenStart: function() {
 			var chartModel = this.model;
@@ -438,6 +460,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			var elems = this.formSensorElements();
 			this.getDataForElements(elems);
+			
 		},
 		getElementsMetaInfo: function(models) {
 			var isRequestNeeded = false;
@@ -490,13 +513,50 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				alert('Error when getting axes');
 			}
 		},
+		calculateSensorsPrecision: function(models) {
+			/*for (var sensorName in models) {
+				var model = models[sensorName];
+				if (this.get('exp') !== true) {
+					if (this.get('precision') === undefined) {
+						axisObj.labels =  {
+							formatter: function() {
+								return Highcharts.numberFormat(this.value, 2);
+							}
+						}
+					}
+					else {
+						var precision = (self.get('precision') > 2 ) ? 2: self.get('precision');
+
+						axisObj.labels = {
+							formatter: function() {
+								return Highcharts.numberFormat(this.value, precision);
+							}
+						}
+					}
+				}
+				else {
+					axisObj.labels = {
+						formatter: function() {
+							return this.value.toExponential(self.get('precision'))//Highcharts.numberFormat(this.value, self.get('precision'));
+						}
+					}
+				}
+
+
+			}*/
+
+			
+
+
+		},
 		getDataForElements: function(typeObject) {
 			//console.log(model.get('id'));
-
+			this.removeExtremesInterval();
+			this.model.off('addPoint', this.addNewPoint, this);
 			if (!typeObject) {
 				return;
 			}
-
+			this.chart.showLoading();
 			var self = this;
 			var masks = [];
 			var server = this.board.settings['server'];
@@ -521,6 +581,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			if (models.length + this.model.get('models').length > this.model.get('maxelementsize')) {
 				alert('You can add only no more than: ' + this.model.get('maxelementsize') + ' elements');
+				this.chart.hideLoading();
 				return;
 			}
 
@@ -581,6 +642,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						self.setSensorDataInChart(typeObject["2"], 2);
 					if (typeObject["0"])
 						self.setSensorDataInChart(typeObject["0"], 0);
+					self.setExtremesInterval();
+					self.chart.hideLoading();
 				});
 			} catch (msg) {
 				console.log(msg);
@@ -615,12 +678,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				return;
 			}
 
+			this.chart.showLoading();
+			this.removeExtremesInterval();
+			this.stopAddPointEvent();
 			try {
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
 				//db.getData('fpd', 'katrin_rep', '0', masksToRequest, '1400700000-1401409791', 800, 'mean', function(obj) {
 				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
-				getDataFromAdei(url, function(data) {
+				getDataFromAdei(url, true, function(data) {
 					obj = parseCSV(data, masks.length);
 					if (!obj) {
 						return;
@@ -648,15 +714,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						//console.log(JSON.stringify(models[i].get('values')));
 					}
 
-
-					//self.setExtremes();
+					self.setExtremesInterval();
+					self.chart.hideLoading();
+					self.startAddPointEvent();
 					self.redraw();
 					//console.log(self.chart);
 				});
 			} catch (msg) {
 				//console.log(msg);
 			}
-
 		},
 		removeSeries: function(model) {
 			var chart = this.chart;
@@ -667,27 +733,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			model.off('deleteSensor', this.removeSeries);
 			model.off('removing', this.onSensorRemoving);
 			this.model.removeModel(model.get('id'));
-
-			for (var i = 0; i < series.length; i++) {
-				var seriesObject = series[i];
-				var id = seriesObject.userOptions.id;
-				if (id === model.get('id')) {
-					seriesObject.isRemoving = true;
-					var axisId = seriesObject.yAxis.userOptions.id;
-					for (var i = 0; i < chart.yAxis.length; i++) {
-						var yaxis = chart.yAxis[i];
-						if (yaxis.userOptions.id === axisId) {
-							yaxis.remove();
-						}
-					}
-					seriesObject.remove();
-					//index = seriesObject._i;
-					//break;
-				}
-			}
-			//chart.redraw();
-
-
+			var seriesToRemove = chart.get(id);
+			var seriesYAxis = seriesToRemove.yAxis;
+			if (seriesYAxis.series.length === 1)
+				seriesYAxis.remove();
+			seriesToRemove.remove();
 		},
 		removeFromDom: function() {
 			this.container.parent().remove();
@@ -709,19 +759,24 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var width = dx * unitHeight * scale;
 
 			this.chart.setSize(width, height, true);
-
 		},
 		onSensorRemoving: function(model) {
 			this.removeSeries(model);
 		},
+		stopAddPointEvent: function() {
+			var models = this.model.get('models');
+			for (var i = 0; i < models.length; i++) {
+				models[i].off('addPoint', this.addNewPoint);
+			}
+		},
+		startAddPointEvent: function() {
+			var models = this.model.get('models');
+			for (var i = 0; i < models.length; i++) {
+				models[i].on('addPoint', this.addNewPoint, this);
+			}
+		},
 		resetChart: function() {
-			//console.log('reset');
 			var models = _.clone(this.model.get('models'));
-			var length = models.length;
-
-			/*for (var i = 0; i < length; i++) {
-				this.removeSeries(models[i]);
-			} */
 
 			for (var i = 0; i < models.length; i++) {
 				models[i].trigger('removedFromChart');
@@ -730,15 +785,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				models[i].off('removing', this.onSensorRemoving);
 				this.model.removeModel(models[i].get('id'));
 			}
-
+			
 			while (this.chart.series.length > 0)
 				this.chart.series[0].remove();
 
 			while (this.chart.yAxis.length > 0)
 				this.chart.yAxis[0].remove();
-
-			//this.chart.redraw();
-
 		},
 		getUrlGoToAdei: function() {
 			var adeiurl = window.host;

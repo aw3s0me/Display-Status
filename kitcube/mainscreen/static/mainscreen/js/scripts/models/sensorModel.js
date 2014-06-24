@@ -557,7 +557,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					text: " "
 				}
 			}
-			else {
+			else if (this.get('axisname') === undefined) {
 				var text = this.get('name');
 				if (this.get('unit') !== "") {
 					text += " (" + this.get('unit') + ")";
@@ -567,36 +567,33 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					text: text
 				}
 			}
-
-			if (this.get('exp') !== true) {
-				if (this.get('precision') === undefined) {
-					axisObj.labels =  {
-						formatter: function() {
-							return Highcharts.numberFormat(this.value, 2);
-						}
-					}
+			else {
+				var axesInfo = options.adeiAxisInfo;
+				var text = axesInfo.axis_name;
+				if (!axesInfo) {
+					return;
 				}
-				else {
-					var precision = (self.get('precision') > 2 ) ? 2: self.get('precision');
+				if (axesInfo.axis_units) {
+					text+= " (" + axesInfo.axis_units + ")";
+				}
 
-					axisObj.labels = {
-						formatter: function() {
-							return Highcharts.numberFormat(this.value, precision);
-						}
-					}
+				axisObj.title = {
+					text: text
 				}
 			}
-			else {
+
+			if (this.get('exp')) {
 				axisObj.labels = {
 					formatter: function() {
 						return this.value.toExponential(self.get('precision'))//Highcharts.numberFormat(this.value, self.get('precision'));
 					}
 				}
 			}
+
 			console.log(options.count.length);
 			//axisObj.labels.x = options.count.length * -10 * scale;
 			//axisObj.offset = options.count.length * 80 * scale;
-			axisObj.labels.align = 'right';
+			//axisObj.labels.align = 'right';
 			//axisObj.labels.x = 5;
 			//axisObj.labels.align = 'left';
 

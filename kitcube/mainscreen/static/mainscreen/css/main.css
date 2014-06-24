@@ -9,6 +9,7 @@ body {
 #wrapper {
   min-height: 100%;
   position: relative;
+  background-color: #DCDCDC !important;
 }
 
 #content {
@@ -58,7 +59,7 @@ body {
 .tab {
   //position: relative;
   font-family: 'Open Sans', sans-serif !important;
-  background: #cccccc !important;
+  background: #DCDCDC !important;
   margin: 0 auto;
   /*border: 5px solid #bbbbbb; */
   padding: 0 !important;  
@@ -67,7 +68,7 @@ body {
 .canvas {
   //position: relative;
   font-family: 'Open Sans', sans-serif !important;
-  background: #cccccc !important;
+  background: #DCDCDC !important;
   /*border: 5px solid #bbbbbb; */
   margin: 0 auto !important;
   padding: 0 !important;

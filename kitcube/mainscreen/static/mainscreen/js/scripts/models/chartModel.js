@@ -190,6 +190,94 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 			return number;
 		},
+		getExtremesInterval: function() {
+			var extremesChangeTimeSec = 100;
+			switch (this.get('range')) {
+				case "2m":
+					{
+						extremesChangeTimeSec = 20;
+						break;
+					}
+				case "15m":
+					{
+						extremesChangeTimeSec = 120;
+						break;
+					}
+				case "1h":
+					{
+						extremesChangeTimeSec = 1200;
+						break;
+					}
+				case "2h":
+					{
+						extremesChangeTimeSec = 2400;
+						break;
+					}
+				case "3h":
+					{
+						extremesChangeTimeSec = 3400;
+						break;
+					}
+				case "8h":
+					{
+						extremesChangeTimeSec = 9600;
+						break;
+					}
+				case "24h":
+				case "1d":
+					{
+						extremesChangeTimeSec = 24000;
+						break;
+					}
+				case "3d":
+					{
+						extremesChangeTimeSec = 72000;
+						break;
+					}
+				case "7d":
+					{
+						extremesChangeTimeSec = 168000;
+						break;
+					}
+				case "10d":
+					{
+						extremesChangeTimeSec = 240000;
+						break;
+					}
+				case "14d":
+					{
+						extremesChangeTimeSec = 320000;
+						break;
+					}
+				case "30d":
+					{
+						extremesChangeTimeSec = 720000;
+						break;
+					}
+				case "90d":
+					{
+						extremesChangeTimeSec = 2400000;
+						break;
+					}
+				case "3months":
+					{
+						extremesChangeTimeSec = 2400000;
+						break;
+					}
+				case "4months":
+					{
+						extremesChangeTimeSec = 2400000;
+						break;
+					}
+				default:
+					{
+						extremesChangeTimeSec = 200;
+						break;
+					}
+			}
+
+			return extremesChangeTimeSec * 100;
+		},
 		getRangeToDate: function() {
 			var now = new Date;
 			var min = undefined;
