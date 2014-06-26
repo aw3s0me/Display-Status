@@ -21,7 +21,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/guiEditorContai
 		},
 		render: function() {
 			var dataReq = this.getInitData();
-			var firstData = dataReq.data[0]['first_config_content'];
+			var firstData = JSON.parse(dataReq.data[0]['first_config_content']);
 			//var firstData = dataReq.data[0].
 			var compiledBoardTemplate = _.template(GuiEditorContainer, {
 				items: dataReq.data,

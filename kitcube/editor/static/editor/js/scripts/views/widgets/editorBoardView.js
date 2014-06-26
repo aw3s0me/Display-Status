@@ -1,11 +1,13 @@
-define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensorModel', 'models/sensorGroupModel', 'views/widgets/singleSensorView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'views/widgets/emptySensorView'], function($, _, Backbone, TabView, Sensor, SensorGroupModel, SingleSensorView, SensorGroupView, SensorCollection, EmptySensorView){
+define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensorModel', 'models/sensorGroupModel', 'views/widgets/singleSensorView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'models/chartModel'], function($, _, Backbone, TabView, Sensor, SensorGroupModel, SingleSensorView, SensorGroupView, SensorCollection, EmptySensorView, ChartView, Chart){
 	var editorBoardView = Backbone.View.extend({
 		container: $('#tabs'),
 		grid: null,
 		viewSizeDetector: null,
 		curTab: null,
 		settings: {
-
+			size: [50, 21],
+			blocksize: 50,
+			sizecoeff: 2
 		},
 		sensors: {},
 		tabViewLookup: {},
@@ -18,23 +20,28 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			tabs: {}
 		},
 		initialize: function(options) {
-			var initCfg = "";
+			var prsObj = "";
 			if (options.initdata) {
-				initCfg = options.initdata;
+				prsObj = options.initdata;
 			}
-			var blocksize = initCfg['screen'] && initCfg['screen']['blocksize'] ? initCfg['screen']['blocksize']: 50;
-			var boardsizex = initCfg['screen'] && initCfg['screen']['boardsizex'] ? initCfg['screen']['boardsizex']: 50;
-			var boardsizey = initCfg['screen'] && initCfg['screen']['boardsizey'] ? initCfg['screen']['boardsizey']: 21;
-			this.detectSizes(blocksize, boardsizex, boardsizey, '#banner', '#footer', initCfg['screen']);
+			if (prsObj['screen']) {
+				this.settings.blocksize = prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize'] : this.settings.blocksize;
+				this.settings.size[0] = prsObj['screen']['boardsizex'] ? prsObj['screen']['boardsizex'] : this.settings.size[0];
+				this.settings.size[1] = prsObj['screen']['boardsizey'] ? prsObj['screen']['boardsizey'] : this.settings.size[1];
+				this.settings['sizecoeff'] = prsObj['screen']['sizecoeff'] ? prsObj['screen']['sizecoeff'] : this.settings.sizecoeff;
+			}
 
-			this.insertFromCfg(initCfg);
+			console.log(this.settings['sizecoeff']);
+			
+			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
+
+			this.insertFromCfg(prsObj);
 			console.log('init board view');
 		},
 		tabOfElementIndex: function(elemId) {
 			return this.tabViewLookup[elemId];
 		},
-		insertFromCfg: function(initCfg) {
-			var prsObj = JSON.parse(initCfg);
+		insertFromCfg: function(prsObj) {
 			var self = this;
 			var singleSensorsToAdd = [];
 			var sensorGroupsToAdd = [];
@@ -75,7 +82,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 									//alarmListsToAdd.push(elObj);
 									break;
 								case "chart":
-									//chartsToAdd.push(elObj);
+									chartsToAdd.push(elObj);
 									break;
 								default:
 									break;
@@ -104,7 +111,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			this.addAllSensorGroups(sensorGroupsToAdd);
 			//this.addAllTables(sensorTablesToAdd);
 			//this.addAllAlarmLists(alarmListsToAdd);
-			//this.addAllCharts(chartsToAdd);
+			this.addAllCharts(chartsToAdd);
 		},
 		initTabs: function(attr) {
 			$('#tabs').append('<ul></ul>');
@@ -157,16 +164,16 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			}).tooltip({});
 		},
 		establishStyle: function(canvas) {
-			canvas.css('height', this.viewSizeDetector.boardSizePx.height  + 'px')
-			.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
-			.data('height', this.viewSizeDetector.boardSizePx.height)
-			.data('width', this.viewSizeDetector.boardSizePx.width)
-			.data('gridUnitX', this.viewSizeDetector.unitSize)
-			.data('gridUnitY', this.viewSizeDetector.unitSize)
-			.data('gridSizeX', this.viewSizeDetector.gridSize.width)
-			.data('gridSizeY', this.viewSizeDetector.gridSize.height)
-			.data('scale', this.viewSizeDetector.scale)
-			.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
+			canvas.css('height', this.viewSizeDetector.boardSizePx.height + 'px')
+				.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
+				.data('height', this.viewSizeDetector.boardSizePx.height)
+				.data('width', this.viewSizeDetector.boardSizePx.width)
+				.data('gridUnitX', this.viewSizeDetector.unitSize)
+				.data('gridUnitY', this.viewSizeDetector.unitSize)
+				.data('gridSizeX', this.viewSizeDetector.gridSize.width)
+				.data('gridSizeY', this.viewSizeDetector.gridSize.height)
+				.data('scale', this.viewSizeDetector.scale)
+				.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 		},
 		detectSizes: function(blockSize, xBlocks, yBlocks, bannerId, footerId, options) {
 			try {
@@ -197,12 +204,6 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			}
 			return grid;
 		},
-		addAllSensorGroups: function(arr) {
-			for (var i = 0; i < arr.length; i++) {
-				var attr = arr[i];
-				this.addSensorGroup(attr);
-			}
-		},
 		addSensorGroup: function(attr) {
 			var sensorArr = attr['sensors'];
 			var trendsArr = [];
@@ -214,6 +215,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			var dbgroup = undefined;
 			//which tab will be there
 			var grid = this.getGrid(attr);
+			var size = undefined;
 			
 			//if groups are not from diff sources
 			if (attr['diffgroups']) {
@@ -226,6 +228,8 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				server = this.settings['server'];
 				dbgroup = this.settings['dbgroup'];
 			}
+
+			size = [this.settings['sizecoeff'], this.settings['sizecoeff']];
 
 			for (var i = 0; i < sensorArr.length; i++) {
 				var sensorObj = sensorArr[i];
@@ -240,6 +244,9 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 					trendsArr.push(sensorObj);
 					continue;
 				}
+
+				if (!size) 
+					size = sensorObj["size"];
 
 				var newSensor = new Sensor({
 					id: sensorObj["id"],
@@ -259,7 +266,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 					dbname: dbname,
 					dbgroup: dbgroup,
 					mask: sensorObj["mask"],
-					size: sensorObj["size"],
+					size: size,
 					coords: sensorObj["coords"],
 					values: new Array(),
 					lastTime: new Date,
@@ -309,8 +316,13 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			if (emptyCount > 0) {
 				empties = [];
 				while (emptyCount--) {
+					if (!size) 
+						size = [2, 2];
+
 					var newSensorView = new EmptySensorView({
-						model: new Sensor({}),
+						model: new Sensor({
+							size: size,
+						}),
 						grid: grid,
 						empty: true
 					});
@@ -353,6 +365,57 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				}
 				
 			}, this);
+		},
+		addChart: function(attr) {
+			//which tab will be there
+			var grid = this.getGrid(attr);
+
+			var newChart = new Chart({
+				id: attr._id,
+				caption: attr["caption"],
+				charttype: attr["charttype"],
+				type: attr["type"],
+				link: attr["link"],
+				legend: attr["legend"],
+				linewidth: attr["width"],
+				size: attr["size"],
+				coords: attr["coords"],
+				puredata: {},
+				range: attr["startrange"],
+				scale: grid.getScale(),
+				cfgObj: attr,
+				axislabels: attr['axislabels'],
+				resolution: attr['resolution']
+			});
+
+			var newChartView = new ChartView({
+				model: newChart,
+				grid: grid,
+				allSensors: this.sensors,
+				board: this
+			});
+
+			newChart.on('removing', function() {
+				//if (this.elements) {
+					//delete this.elements.charts[attr._id];
+				delete this.views.charts[attr._id];
+				//}
+			}, this);
+
+			//this.elements.charts[attr._id] = newChart;
+			this.views.charts[attr._id] = newChartView;
+		},
+		addAllSensorGroups: function(arr) {
+			for (var i = 0; i < arr.length; i++) {
+				var attr = arr[i];
+				this.addSensorGroup(attr);
+			}
+		},
+		addAllCharts: function(arr) {
+			for (var i = 0; i < arr.length; i++) {
+				var attr = arr[i];
+				this.addChart(attr);
+			}
 		},
 		serialize: function() {
 			

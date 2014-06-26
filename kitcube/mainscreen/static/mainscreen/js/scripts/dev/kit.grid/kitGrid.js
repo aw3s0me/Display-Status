@@ -63,6 +63,7 @@ var kitGrid = (function($) {
 	kitGrid.prototype.toggleGrid = function() {
 		var holder = this.getGrid();
 		var attr = holder.attr('grid');
+		var scale = this.getScale();
 
 		if (typeof attr !== 'undefined' && attr !== false) {
 			holder.children('.grid').remove();
@@ -75,7 +76,10 @@ var kitGrid = (function($) {
 		for (var i = 0; i < holder.data('gridSizeX'); i++)
 			for (var j = 0; j < holder.data('gridSizeY'); j++) {
 				var e = this.newGridBlock(1, 1, i, j);
-				e.className = 'grid';
+				//e.className = 'grid';
+				$(e).addClass('grid')
+				.html('<div>' + i + '<br>' + j + '</div>')
+				.css('font-size', 15 * scale + 'px');
 				holder.append(e);
 			}
 		return;
@@ -88,7 +92,7 @@ var kitGrid = (function($) {
 		scale = typeof scale !== 'undefined' ? scale : holder.data('scale');
 		e.dataset.scale = scale;
 
-		e.className = 'tile';
+		//e.className = 'tile';
 		e.style.left = px * holder.data('scaledUnitSize') + 'px';
 		e.style.top = py * holder.data('scaledUnitSize') + 'px';
 		e.style.width = dx * holder.data('scaledUnitSize') + 'px';

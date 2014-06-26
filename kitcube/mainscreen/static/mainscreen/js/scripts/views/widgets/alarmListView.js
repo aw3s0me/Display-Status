@@ -1,13 +1,28 @@
-define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templates/widgets/sensorjQGridTable.html'], function($, _, Backbone, AlarmTableModel, TableTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templates/widgets/alarmjQGridList.html'], function($, _, Backbone, AlarmTableModel, TableTemplate) {
+	var timeRegexPatter = /(\d{2})-(\d{3})-(\d{4}) (\d{2}):(\d{2}):(\d{2})/;
+	var alarmLastSeenSort = function(a, b, direction) {
+		if (a === 'Active') {
+			return 1;
+		}
+		else if (b === 'Active') {
+			return -1;
+		}
+		var timeArrA = a.match(timeRegexPatter); //array A
+		var timeArrB = b.match(timeRegexPatter); //Array B
+
+		//here should be probably transform time regex into timestamp and compare it,
+		//is there any predefined functions to do this
+	}
 
 	var AlarmListView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
 		model: undefined,
-		//dataToTable: undefined,
-		colAccess: undefined,
-		groups: undefined,
+		alarms: undefined,
+		board: undefined,
+		updateInterval: undefined,
 		lookuptable: {},
+		jqgridHTML: undefined,
 		initialize: function(options) {
 			if (options.grid) {
 				this.grid = options.grid;
@@ -15,68 +30,115 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 			if (options.model) {
 				this.model = options.model;
 			}
-			this.groups = this.model.get('groups');
+			if (options.board) {
+				this.board = options.board;
+			}
+			this.model.on('onalarmsready', this.onalarmsready, this);
+			this.model.on('onalarmsfinishedupdating', this.reloadGrid, this);
+		},
+		onalarmsready: function(model) {
+			this.alarms = model.get('collection').models;
 
-			for (var i = 0; i < this.groups.length; i++) {
-				var collection = this.groups[i];
-				for (var j = 0; j < collection.models.length; j++) {
-					collection.models[j].on('change:value', this.onchangevalue, this);
-					collection.models[j].on('change:valcolor', this.onchangevalcolor, this);
-				}
+			for (var i = 0; i < this.alarms.length; i++) {
+				var alarm = this.alarms[i];
+				alarm.on('change:value', this.onchangevalue, this);
+				alarm.on('change:valcolor', this.onchangevalcolor, this);
 			}
 
 			this.render();
 			this.model.on('resize', this.onresize, this);
 		},
+		setUpdateInterval: function() {
+			this.removeUpdateInterval();
+			var self = this;
+			this.updateInterval = setInterval(function() {
+				self.model.updateAlarmData();
+			}, 15000); //the only way to pass param */
+		},
+		removeUpdateInterval: function() {
+			this.updateInterval = null;
+		},
 		formHeaders: function() {
 			var colModel = [];
 			var colNames = this.model.get('colnames');
+			var colIds = this.model.get('colids');
 			var dx = this.model.get('size')[0];
 			var unitWidth = this.grid.getUnitSizes().width;
 			var scale = this.grid.getScale();
-			var elemWidth = parseInt((dx * unitWidth * scale / 6) - 2);
-			var startindex = 0;
-			
-			if (this.model.get('isheader')) {
-				startindex = 1;
-				colModel.push({
-					name: 'column_0',
-					index: 'column_0',
-					width: elemWidth
-				})
+			//var elemWidth = parseInt((dx * unitWidth * scale / 6) - 2);
+			var elemWidthCoeff = unitWidth * scale * dx;
 
-				colNames.unshift('Group');
-			}
-
-			for (var i = startindex; i < colNames.length; i++) {
+			/*for (var i = 0; i < colIds.length; i++) {
 				colModel.push({
-					name: 'column_' + String(i),
-					index: 'column_' + String(i),
-					width: elemWidth
+					//name: 'column_' + String(i),
+					//index: 'column_' + String(i),
+					name: colIds[i],
+					index: colIds[i]
+					//width: elemWidth
 				});
-			}
+			} */
+			//'severity', 'name', 'firstseen', 'lastseen', 'count', 'description'
+			colModel = [
+				{
+					name: 'severity',
+					index: 'severity',
+					width: 7.5 * elemWidthCoeff,
+					sorttype: 'int'
+				},
+				{
+					name: 'name',
+					index: 'name',
+					width: 25 * elemWidthCoeff
+				},
+				{
+					name: 'firstseen',
+					index: 'firstseen',
+					width: 22.5 * elemWidthCoeff,
+					sorttype: 'date',
+					formatter: 'date',
+					formatoptions: {srcformat: 'U', newformat: 'd-M-Y, H:i:s'},
+					datefmt: 'd-M-Y, H:i:s'
+				},
+				{
+					name: 'lastseen',
+					index: 'lastseen',
+					width: 22.5 * elemWidthCoeff
+					//formatter: 'date',
+					//formatoptions: {newformat: 'd-M-Y, H:i:s'},
+					//datefmt: 'd-M-Y, H:i:s'
+				},
+				{
+					name: 'count',
+					index: 'count',
+					width: 7.5 * elemWidthCoeff,
+					sorttype: 'int'
+				},
+				{
+					name: 'description',
+					index: 'description',
+					width: 15 * elemWidthCoeff,
+					sortable: false
+				},
+			]
 
 			return colModel;
 		},
-		formDataToTable: function(alarmCollection) {
-			var dataToTable = [];
-
-			for (var i = 0; i < alarmCollection.length; i++) {
-				var alarm = alarmCollection[i];
-				dataToTable.push(sensorCollection.getDataToTable(this.model.get('isheader')));
-				sensorCollection.rowIndex = i + 1;
-				var tempLookupTable = sensorCollection.getLookupTable(this.model.get('isheader'));
-				$.extend(true, this.lookuptable, tempLookupTable);
+		formLookupTable: function() {
+			var alarms = this.alarms;
+			var pageIndex = 0;
+			var pageNum = this.jqgridHTML.jqGrid('getGridParam','lastpage');
+			var rowNum = this.jqgridHTML.jqGrid('getGridParam', 'rowNum');
+			for (var i = 0; i < alarms.length; i++) {
+				//if ()
+				this.lookuptable[alarms[i].get('name')] = {
+					alarm: alarms[i]
+				}
 			}
-
-			return dataToTable;
 		},
 		render: function() {
 			var self = this;
-			//var sensorGroupCollection = this.model.get('groups');
-			var AlarmGroupCollection = this.model.get('alarms');
 			var model = this.model;
-			var dataToTable = []; 
+			var dataToTable = [];
 			var scale = this.grid.getScale();
 			var unitHeight = this.grid.getUnitSizes().height;
 			var unitWidth = this.grid.getUnitSizes().width;
@@ -85,6 +147,8 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 			var px = model.get('coords')[0];
 			var py = model.get('coords')[1];
 			var colNames = model.get('colnames');
+			var sizeCoeff = this.board.settings['sizecoeff'] / 2;
+			var coeffScale = scale * sizeCoeff;
 
 			var totalHeight = dy * unitHeight * scale;
 			var hscale = totalHeight / $(window).height(); //scale font for header
@@ -92,7 +156,8 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 			this.container = $(_.template(TableTemplate, {
 				canberemoved: model.get('canberemoved'),
 				id: model.get('id'),
-				table_id: 'table_' + model.get('id')
+				table_id: 'table_' + model.get('id'),
+				pager_id: 'pager_' + model.get('id')
 			}));
 
 			this.container.css('width', dx * unitHeight * scale + 'px');
@@ -100,12 +165,8 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 
 			/*SETTING DATA COLS/ROWS */
 			var colModel = this.formHeaders();
-			//???
-			//var colNames = model.get('colnames');
 
-			//var sensorCollection = sensorGroupCollection[0];
-
-			var dataToTable = this.formDataToTable(sensorGroupCollection);
+			var dataToTable = this.model.formDataToTable();
 
 			this.grid.addUnit(this.container, {
 				border: 0,
@@ -115,9 +176,9 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 			}, this.model);
 
 			/* INITIALIZE JQGRID */
-			var newTable = this.container.find('table');
+			this.jqgridHTML = this.container.find('table');
 
-			this.jqgridElem = newTable.jqGrid({
+			this.jqgridElem = this.jqgridHTML.jqGrid({
 				datatype: 'local',
 				data: dataToTable,
 				colNames: colNames,
@@ -126,80 +187,64 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 				//width: '400',
 				height: '100%',
 				width: '100%',
-				shrinkToFit: false,
+				shrinkToFit: true,
 				autowidth: true,
 				hidegrid: false,
 				colModel: colModel,
 				scrollOffset: 0,
+				pager: '#' + 'pager_' + model.get('id'),
 				//rowNum: cols,
-				caption: this.model.get('name'),
-				loadComplete: function() {
-					var grid = newTable;
-					var ids = grid.getDataIDs();
-					for (var i = 0; i < ids.length; i++) {
-						grid.setRowData(ids[i], false, {
-							height: 14 * scale + i * 2
+				caption: this.model.get('name')
+				/*onPaging: function() {
+					var rows = self.jqgridHTML.getRowData();
+					var rowNum = rows.length;
+					var collection = self.model.get('collection');
+					console.log(rowNum);
+					for (var i = 0; i < rowNum; i++) {
+						var alarmData = rows[i];
+						//var alarm = collection.get(alarmData['name']);
+						var alarm = self.lookuptable[alarmData['name']];
+						var color = alarm['alarm'].attributes['color'];
+						self.jqgridHTML.jqGrid('setCell', i + 1, 3, '', {
+							'background-color': color
 						});
 					}
-				},
-				ondblClickRow: function(rowid, iRow, iCol, e) {
-					if(document.selection && document.selection.empty) {
-				        document.selection.empty();
-				    } else if(window.getSelection) {
-				        var sel = window.getSelection();
-				        sel.removeAllRanges();
-				    }
 
-					$(e.target).toggleClass('activeSensorCell');
-					//css for class doesnt work
-					if ($(e.target).hasClass('activeSensorCell')) {
-						$(e.target).css('background-color', 'yellow');
-					}
-					else {
-						$(e.target).css('background-color', '');
-					}					
-					console.log(e.target);
-				    return false;
-				}
-			}); 
+					console.log('page changed');
+				}*/
+			});
+			this.jqgridHTML.jqGrid('filterToolbar', {stringResult: true, searchOnEnter: true});
 
-			$('.ui-jqgrid .ui-jqgrid-htable th').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid tr.jqgrow td').css('font-size', 14 * scale + 'px');
-
-			$('.ui-jqgrid .ui-jqgrid-view').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-pg-input').css('font-size', 14 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-titlebar').css('font-size', 14 * scale + 'px');
-			//$('#pager_center').css('width', newElement.width() - 6); 
-			$('.ui-jqgrid .ui-jqgrid-hdiv').css('height', 25 * scale + 'px');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('width', this.container.width() - 6);
-			$('.ui-jqgrid .ui-jqgrid-htable th div').css('height', 'auto');
-			$('.ui-jqgrid .ui-jqgrid-pager').css('height', 25 * scale + 'px');
-			$('th.ui-th-column div').css('height', 'auto !important');
-			$('th.ui-th-column div').css('white-space', 'normal !important');
-
-			var gboxHeight = $("#gbox_" + name).height() - $('#gbox_' + name + ' .ui-jqgrid-bdiv').height();
+			var gboxHeight = this.container.find("#gbox_" + name).height() - this.container.find('#gbox_' + name + ' .ui-jqgrid-bdiv').height() + 2 * this.container.find('.ui-jqgrid .ui-jqgrid-pager').height();
+			this.container.find('.ui-jqgrid .ui-jqgrid-bdiv').css('overflow-x', 'hidden');
+			//this.container.find('.ui-jqgrid tr.jqgrow td').css('font-size', 18 * coeffScale + 'px');
 			this.prevGboxHeight = gboxHeight;
 
 			var finalGridHeight = this.container.height() - gboxHeight - 2;
 			var finalGridWidth = this.container.width() - 1;
 
-			newTable.jqGrid('setGridHeight', finalGridHeight);
-			newTable.jqGrid('setGridWidth', finalGridWidth, true);
-			$('.ui-jqgrid tr.jqgrow td').css('height', 14 * scale + 'px');
-			//$('.ui-jqgrid .ui-jqgrid-btable').css('table-layout', 'auto');
-			$('.ui-jqgrid .ui-jqgrid-bdiv').css('overflow', 'hidden');
-			$('.ui-jqgrid .ui-jqgrid-bdiv').css('overflow-x', 'hidden');
-			$('.ui-jqgrid .ui-jqgrid-bdiv')
-			.css('overflow-y', 'hidden')
-			.css('height', '');
-			$('.ui-jqgrid .ui-jqgrid-hdiv').css('overflow', 'hidden');
+			this.jqgridHTML.jqGrid('setGridHeight', finalGridHeight);
+			this.jqgridHTML.jqGrid('setGridWidth', finalGridWidth, true);
+			//newTable.jqGrid('sortGrid', 'lastseen', true, 'desc');
 
-			//$('.ui-jqgrid .ui-jqgrid-btable .jqgrow td').css('height', 0 * scale + 'px !important');
+			this.formLookupTable();
 
 			this.container.find('.close').click(function(event) {
 				self.removeFromDom();
-			}); 
+			});
+
+			//for (var modelName in this.alarms) {
+				//var model = this.alarms[modelName];
+				//this.onchangevalcolor(model);
+			//}
+			for (var modelName in this.alarms) {
+				var model = this.alarms[modelName];
+				this.onchangevalue(model);
+			}
+
+			console.log(this.jqgridHTML.jqGrid('getRowData', 22));
+
+			this.setUpdateInterval();
 		},
 		reloadView: function() {
 			this.container.find('table').trigger('reloadGrid');
@@ -207,20 +252,23 @@ define(['jquery', 'underscore', 'backbone', 'models/alarmListModel', 'text!templ
 		onchangevalue: function(model) {
 			var id = model.get('id');
 			var lookupObj = this.lookuptable[id];
+			var alarmData = model.getData();
+			var data = this.jqgridHTML.jqGrid('getGridParam','data');
+			data[lookupObj["row"]] = alarmData;
+			this.jqgridHTML.jqGrid('setGridParam', 'data', data);
+			this.jqgridHTML[0].refreshIndex();
 			//console.log(model);
-			//this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], model.get('valUnit'));
+			//this.container.find('table').jqGrid('setRowData', lookupObj["row"], data);
+			//this.container.find('table').jqGrid('setCell', lookupObj["row"], 3 , '', {
+					//'background-color': model.get('valcolor')
+			//	'background-color': model.get('color')
+			//});
 			//remember value row and change it here
-
-
-
 		},
 		onchangevalcolor: function(model) {
 			var id = model.get('id');
 			var lookupObj = this.lookuptable[id];
-			this.container.find('table').jqGrid('setCell', lookupObj["row"], lookupObj["col"], '', {
-				//'background-color': model.get('valcolor')
-				'color': model.get('valcolor')
-			});
+			
 		},
 		removeFromDom: function() {
 			//if (this.rendertype === "grid")

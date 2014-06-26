@@ -3,8 +3,10 @@ var sizeDetector = (function($) {
 	var sizeDetector = function(unitSize, gridDx, gridDy, bannerId, footerId, properties) {
 		//banner id, for classes should be .classname, for divId #id
 		var options = $.extend({
-			marginUDFactor: 0.04, //Up Down factor
-			marginLRFactor: 0.01, //Left Right margin
+			//marginUDFactor: 0.04, //Up Down factor
+			//marginLRFactor: 0.01, //Left Right margin
+			marginUDFactor: 0, //Up Down factor
+			marginLRFactor: 0, //Left Right margin
 			marginBlockFactor: 0 * 0.01
 		}, properties);
 
@@ -61,6 +63,8 @@ var sizeDetector = (function($) {
 			height: undefined,
 			width: undefined
 		};
+
+		this.marginTop = 0;
 
 		this.scale = undefined;
 
@@ -126,11 +130,13 @@ var sizeDetector = (function($) {
 		this.detectBasicSizes();
 		this.detectGridSizesFluid();
 		this.detectBoardSizes();
+		this.detectMarginTopSize();
 	}
 
 	sizeDetector.prototype.detectSizesForFixedCanvas = function() {
 		this.detectBasicSizes();
 		this.detectBoardSizes();
+		this.detectMarginTopSize();
 	}
 
 	sizeDetector.prototype.detectScale = function() {
@@ -188,6 +194,17 @@ var sizeDetector = (function($) {
 		}
 
 		return this.boardSizePx;
+	}
+
+	sizeDetector.prototype.detectMarginTopSize = function() {
+		if (this.boardMargin.height === 0) {
+			this.marginTop = this.bannerSize.height - this.footerSize.height;
+			return this.marginTop;
+		}
+
+		this.marginTop = this.windowSize.height - this.bannerSize.height - this.footerSize.height - this.maxGridSizesPx.height;
+		this.marginTop = this.marginTop / 2;
+		return this.marginTop;
 	}
 
 	sizeDetector.prototype.detectScaledUnitSize = function() {

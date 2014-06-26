@@ -249,6 +249,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var unitWidth = this.grid.getUnitSizes().width;
 			var height = dy * unitWidth * scale;
 			var width = dx * unitHeight * scale;
+			var sizeCoeff = this.board.settings['sizecoeff'] / 2;
+			var coeffScale = scale * sizeCoeff;
 
 			this.container = $('<div id= ' + this.model.get('id') + '  ></div>')
 
@@ -271,7 +273,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			var xAxis = model.getXAxisObj();
 			var chart = model.getChartOptions();
-			chart.marginTop = 47 * scale;
+			chart.marginTop = 47 * coeffScale;
 			this.chart = new Highcharts.Chart({
 				//this.chart = new Highcharts.StockChart({
 				chart: chart,
@@ -332,7 +334,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			controlPanel.css('right', 35 * scale + 'px');
 			//.css('top', 10 * scale + 'px');
 
-			controlPanel.css('font-size', 12 * scale + 'px');
+			controlPanel.css('font-size', coeffScale * 12 + 'px');
 
 			controlPanel.find('.goAdeiBtn').button()
 				.click(function(event) {
@@ -356,15 +358,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					}
 				});
 			if (model.get('canberemoved')) {
-				controlPanelTemplate.find('.close').css('font-size', 12 * scale + 'px')
-				.css('right', 10 * scale + 'px')
-				.css('top', 10 * scale + 'px')
+				controlPanelTemplate.find('.close').css('font-size', coeffScale * 12 + 'px')
+				.css('right', coeffScale * 10 + 'px')
+				.css('top', coeffScale * 10 + 'px')
 				.click(function(event) {
 					self.removeFromDom();
 				});
 			}
 
-			controlPanel.find('.chartBtn').css('margin-top', -11 * scale + 'px');
+			controlPanel.find('.chartBtn').css('margin-top', coeffScale * -11 + 'px');
 			
 			controlPanel.find('.resetChartBtn').button()
 				.click(function(event) {
@@ -376,8 +378,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			//selectElem.find('.rangeDropdown').change(function() {
 			controlPanel.find('.rangeDropdown')
-			.css('font-size', 16 * scale + 'px')
-			.css('margin-top', 10 * scale + 'px')
+			.css('font-size', coeffScale * 16 + 'px')
+			.css('margin-top', coeffScale * 10 + 'px')
 			.change(function() {
 				var value = $(this).val();
 				self.model.set({

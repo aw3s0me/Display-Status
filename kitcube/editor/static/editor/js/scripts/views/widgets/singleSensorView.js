@@ -51,7 +51,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		render: function() {
 			var newSensor = this.model;
 			//console.log(this.model);
-			var scale = this.grid.getScale();
+			var sizeCoeff = this.model.get('size')[0] / 2;
+			var scale = sizeCoeff * this.grid.getScale();
+			var self = this;
 
 			var snglSensorTemplate = $(_.template(SensorTemplate, {
 				sensor_id: newSensor.get('id'),

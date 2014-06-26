@@ -3,9 +3,9 @@
         "fluid": false,
         "glb_sensor_size": 3,
         "blocksize": 50,
-        "boardsizex": 50,
-        "boardsizey": 21,
-        "grpsensorsize": [3, 3]	
+        "boardsizex": 60,
+        "boardsizey": 25,
+        "sizecoeff": 3
     },
     "datasource": {
         "host": "http://katrin.kit.edu/adei/",
@@ -17,10 +17,8 @@
         "sensorgroup1": {
             "type": "sensorgroup",
             "name": "Magnet Pinch",
-            "size": [6, 5],
-            "coords": [17, 13],
-            "diffsensors": false,
-            "diffgroups": false,
+            "size": [9, 7],
+            "coords": [24, 17],
             "sensors": [{
                 "id": "sensid1",
                 "mask": "102",
@@ -64,10 +62,8 @@
         "sensorgroup10": {
             "type": "sensorgroup",
             "name": "Magnet Detector",
-            "size": [6, 5],
-            "coords": [10, 13],
-            "diffsensors": false,
-            "diffgroups": false,
+            "size": [9, 7],
+            "coords": [14, 17],
             "sensors": [{
                 "id": "sensid7",
                 "mask": "103",
@@ -109,10 +105,8 @@
         "sensorgroup3": {
             "type": "sensorgroup",
             "name": "Vacuum XHVac/HVac",
-            "size": [8, 5],
-            "coords": [1, 7],
-            "diffsensors": false,
-            "diffgroups": false,
+            "size": [12, 7],
+            "coords": [1, 17],
             "sensors": [{
                 "id": "sensid13",
                 "mask": "74",
@@ -176,10 +170,8 @@
         "sensorgroup5": {
             "type": "sensorgroup",
             "name": "Temperature",
-            "size": [8, 5],
+            "size": [12, 7],
             "coords": [1, 1],
-            "diffsensors": false,
-            "diffgroups": false,
             "sensors": [{
                 "id": "sensid22",
                 "mask": "2",
@@ -226,10 +218,8 @@
         "sensorgroup6": {
             "type": "sensorgroup",
             "name": "Source & HV",
-            "size": [8, 5],
-            "coords": [1, 13],
-            "diffsensors": false,
-            "diffgroups": false,
+            "size": [12, 7],
+            "coords": [1, 9],
             "empties": 1,
             "sensors": [{
                 "id": "sensid30",
@@ -272,10 +262,8 @@
         "sensorgroup7": {
             "type": "sensorgroup",
             "name": "Amrel L",
-            "size": [6, 5],
-            "coords": [10, 1],
-            "diffsensors": false,
-            "diffgroups": false,
+            "size": [9, 7],
+            "coords": [14, 1],
             "sensors": [{
                 "id": "sensid37",
                 "mask": "112",
@@ -317,10 +305,8 @@
         "sensorgroup20": {
             "type": "sensorgroup",
             "name": "Amrel V",
-            "size": [6, 5],
-            "coords": [17, 1],
-            "diffsensors": false,
-            "diffgroups": false,
+            "size": [9, 7],
+            "coords": [24, 1],
             "empties": 1,
             "sensors": [{
                 "id": "sensid43",
@@ -360,10 +346,8 @@
         "sensorgroup8": {
             "type": "sensorgroup",
             "name": "Veto Peltier 1",
-            "size": [6, 5],
-            "coords": [10, 7],
-            "diffsensors": false,
-            "diffgroups": false,
+            "size": [9, 7],
+            "coords": [14, 9],
             "sensors": [{
                 "id": "sensid48",
                 "mask": "186",
@@ -407,10 +391,8 @@
         "sensorgroup16": {
             "type": "sensorgroup",
             "name": "Veto Peltier 2",
-            "size": [6, 5],
-            "coords": [17, 7],
-            "diffsensors": false,
-            "diffgroups": false,
+            "size": [9, 7],
+            "coords": [24, 9],
             "sensors": [{
                 "id": "sensid51",
                 "mask": "190",
@@ -457,8 +439,8 @@
             "type": "chart",
             "link": ["sensid22", "sensid25"],
             "charttype": "line",
-            "size": [25, 9],
-            "coords": [24, 1],
+            "size": [25, 11],
+            "coords": [34, 1],
             "startrange": "15m",
             "axislabels": true
         },
@@ -467,8 +449,8 @@
             "type": "chart",
             "link": ["sensid41", "sensid37"],
             "charttype": "line",
-            "size": [25, 9],
-            "coords": [24, 11],
+            "size": [25, 11],
+            "coords": [34, 13],
             "startrange": "15m",
             "axislabels": true
         }

@@ -1,6 +1,7 @@
-
+<div id="<%= id %>">
     <div class='cntr'>
-        <div class="rangeContainer">
+        <label class="chartIdLabel">id: <%= id %></label>
+        <div class="chartControlPanel">
             <select class="rangeDropdown">
                 <option value="90d">90 day</option>
                 <option value="30d">30 day</option>
@@ -13,15 +14,13 @@
                 <option value="1h">1 hour</option>
                 <option selected="selected" value="15m">15 min</option>
             </select>
-        </div>
-        <div class="chartControlPanel">
             <button class="addChartBtn chartBtn">Add</button>
             <button class="legendChartBtn chartBtn">Legend</button>
             <button class="resetChartBtn chartBtn">Reset</button>
             <button class="goAdeiBtn chartBtn">Adei</button>
         </div>
-        <% if (canberemoved) { %>
-            <div class="close"><b>x</b></div>
-        <% } %>
+        <div class="close"><b>x</b></div>
     </div>
+    <div class="divSensorChartList"><ul class="sensorChartList"></ul></div>
+</div>
 

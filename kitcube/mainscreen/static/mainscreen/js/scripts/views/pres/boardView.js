@@ -3,15 +3,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
 		el: undefined,
-		maxSizeX: 0,
-		maxSizeY: 0,
-		nowCoordX: 0,
-		nowCoordY: 0,
 		grid: null,
 		viewSizeDetector: null,
 		curTab: null,
 		settings: {
-
+			size: [50, 21],
+			blocksize: 50,
+			sizecoeff: 2
 		},
 		axes: { //structure like
 
@@ -56,10 +54,14 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				$('#footer').css('height', '0');
 			}
 
-			var blocksize = prsObj['screen'] && prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize'] : 50;
-			var boardsizex = prsObj['screen'] && prsObj['screen']['boardsizex'] ? prsObj['screen']['boardsizex'] : 50;
-			var boardsizey = prsObj['screen'] && prsObj['screen']['boardsizey'] ? prsObj['screen']['boardsizey'] : 21;
-			this.detectSizes(blocksize, boardsizex, boardsizey, '#banner', '#footer', prsObj['screen']);
+			if (prsObj['screen']) {
+				this.settings.blocksize = prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize'] : this.settings.blocksize;
+				this.settings.size[0] = prsObj['screen']['boardsizex'] ? prsObj['screen']['boardsizex'] : this.settings.size[0];
+				this.settings.size[1] = prsObj['screen']['boardsizey'] ? prsObj['screen']['boardsizey'] : this.settings.size[1];
+				this.settings['sizecoeff'] = prsObj['screen']['sizecoeff'] ? prsObj['screen']['sizecoeff'] : this.settings.sizecoeff;
+			}
+			
+			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
 
 			var data = {};
 
@@ -123,7 +125,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				switch (_id) {
 					case "datasource":
 						{
-							this.initSettings(attr);
+							this.initDatasources(attr);
 							break;
 						}
 					case "tabs":
@@ -178,7 +180,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			}
 
 			//getting adei metainfo
-			this.getAxes();
+			if (chartsToAdd.length > 0)
+				this.getAxes();
 
 			this.addAllSingleSensors(singleSensorsToAdd);
 			this.addAllSensorGroups(sensorGroupsToAdd);
@@ -322,7 +325,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				//chartView.setExtremes();
 			}
 
-			$(window).trigger('resize'); //because big text works only after resize event
 		},
 		updateSensor: function(sensorModel) {
 			sensorModel.updateModel();
@@ -418,11 +420,16 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				reinit: true
 			});
 		},
-		initSettings: function(attr) {
+		initDatasources: function(attr) {
 			if (!attr['dbgroup'] || !attr['dbname'] || !attr['server']) {
 				console.log('Please specify fields dbgroup, dbname and server in configuration file');
 			}
-			this.settings = attr;
+			this.settings['dbgroup'] = attr['dbgroup'];
+			this.settings['dbname'] = attr['dbname'];
+			this.settings['server'] = attr['server'];
+		},
+		initScreenOptions: function(attr) {
+
 		},
 		getCurrentTab: function() {
 			var activeTabIdx = $("#tabs").tabs('option', 'active');
@@ -684,6 +691,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var dbgroup = undefined;
 			//which tab will be there
 			var grid = this.getGrid(attr);
+			var size = undefined;
 
 			//if groups are not from diff sources
 			if (attr['diffgroups']) {
@@ -695,6 +703,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				server = this.settings['server'];
 				dbgroup = this.settings['dbgroup'];
 			}
+
+			size = [this.settings['sizecoeff'], this.settings['sizecoeff']];
 
 			for (var i = 0; i < sensorArr.length; i++) {
 				var sensorObj = sensorArr[i];
@@ -709,6 +719,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					trendsArr.push(sensorObj);
 					continue;
 				}
+
+				if (!size) 
+					size = sensorObj["size"];
 
 				var newSensor = new Sensor({
 					id: sensorObj["id"],
@@ -728,7 +741,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					dbname: dbname,
 					dbgroup: dbgroup,
 					mask: sensorObj["mask"],
-					size: sensorObj["size"],
+					size: size,
 					coords: sensorObj["coords"],
 					values: new Array(),
 					lastTime: new Date,
@@ -803,8 +816,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			if (emptyCount > 0) {
 				empties = [];
 				while (emptyCount--) {
+					if (!size) 
+						size = [2, 2];
+
 					var newSensorView = new EmptySensorView({
-						model: new Sensor({}),
+						model: new Sensor({
+							size: size,
+						}),
 						grid: grid,
 						empty: true
 					});
@@ -875,65 +893,66 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			}, this);
 
 			this.elements.sensorgroups[attr._id] = newSensorGroupModel;
-			$(window).trigger('resize'); //because big text works only after resize event
 		},
 		addMeasurementList: function(attr) {
 
 		},
 		addAlarmList: function(attr) {
 			var alarmList = []; //collection of alarms
+			var newAlarmCollection = undefined;
+			var dbname = undefined;
+			var server = undefined;
+			var control_group = attr['control_group'] ? attr['control_group']: undefined;
 			//which tab will be there
 			var grid = this.getGrid(attr);
 
-			var options = {
-				size: [],
-				coords: [],
-				cols: undefined
-			};
-			for (var alarmKey in attr) { //going from alarmlist object through elems
-				//console.log(alarmKey);
-				if (alarmKey === "type") { //except type
-					continue;
-				} else if (alarmKey === "size") {
-					options.size.push(attr[alarmKey][0]);
-					options.size.push(attr[alarmKey][1]);
-					continue;
-				} else if (alarmKey === "coords") {
-					options.coords.push(attr[alarmKey][0]);
-					options.coords.push(attr[alarmKey][1]);
-					continue;
-				} else if (alarmKey === "cols") {
-					options.cols = attr[alarmKey];
-					continue;
+			if (attr['diffgroups']) {
+				dbname = attr['dbname'];
+				server = attr['server'];
+			} else {
+				dbname = this.settings['dbname'];
+				server = this.settings['server'];
+			}
+
+			if (attr['masks'] && (attr['masks'] instanceof Array)) {
+					for (var alarmKey in attr['masks']) { //going from alarmlist object through elems
+						//console.log(alarmKey);
+						if (!$.isNumeric(alarmKey)) {
+							var alarmAttr = attr['masks'][alarmKey];
+							var newAlarm = new Alarm({
+								id: alarmKey,
+								module: alarmAttr["module"],
+								group: alarmAttr["group"],
+								app: alarmAttr["app"],
+								dbname: alarmAttr["dbname"],
+								mask: alarmAttr["mask"],
+								cfgObj: alarmAttr
+							});
+						} 
+						else {
+							var newAlarm = new Alarm({
+								id: "alarm_" + alarmKey,
+								mask: alarmAttr["mask"]
+							});
+						}
+						
+
+						alarmList.push(newAlarm); //push to collection
+					};
+					newAlarmCollection = new MyAlarmCollection(alarmList);
 				}
-				var alarmAttr = attr[alarmKey]; //get alarm element by key
-				var newAlarm = new Alarm({
-					id: alarmKey,
-					no: alarmAttr["no"],
-					module: alarmAttr["module"],
-					group: alarmAttr["group"],
-					app: alarmAttr["app"],
-					server: alarmAttr["server"],
-					dbname: alarmAttr["dbname"],
-					mask: alarmAttr["mask"],
-					lastDate: 'NAN', //not initialized, need to get from adei
-					delayedBy: 'NAN',
-					severity: 'NAN'
-				});
 
-				alarmList.push(newAlarm); //push to collection
-			};
-
-			var newAlarmCollection = new MyAlarmCollection(alarmList);
 			var newAlarmListModel = new AlarmListModel({
 				id: attr._id,
 				collection: newAlarmCollection,
-				size: options.size,
-				coords: options.coords,
-				cols: options.cols,
-				type: 'alarmlist',
+				size: attr['size'],
+				name: attr['name'],
+				coords: attr['coords'],
+				target: attr['target']? attr['target'] : "all",
+				server: server,
+				dbname: dbname,
+				control_group: control_group,
 				cfgObj: attr
-
 			});
 
 			//console.log(newAlarmCollection.id);
@@ -941,7 +960,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var newAlarmListView = new AlarmListView({
 				model: newAlarmListModel,
 				grid: grid,
+				board: this
 			});
+
 			this.views.alarms[attr._id] = newAlarmListView;
 		},
 		//need refactoring
