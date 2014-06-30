@@ -26,7 +26,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				//do smth
 			});
 		},
-		serToJSON: function() {
+		serialize: function() {
 			var collection = this.get('collection').models;
 
 			var cfg = this.get('cfgObj');

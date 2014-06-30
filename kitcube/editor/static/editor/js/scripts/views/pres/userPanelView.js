@@ -41,10 +41,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
             $('#loginButton').hide();
             $('#logoutButton').show();
+            $('#navPanel').show();
         },
         onUserAtLoginScreen: function() {
             $('#loginButton').hide();
             $('#logoutButton').hide();
+            $('#navPanel').hide();
         },
         onUserAtMainScreen: function() {
             this.ifLoggedIn();
@@ -53,7 +55,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             $('#loginButton').show();
             $('#logoutButton').hide();
             $('#lblUserInfo').text("No user authorized");
-
+            $('#navPanel').hide();
         }
 
     });

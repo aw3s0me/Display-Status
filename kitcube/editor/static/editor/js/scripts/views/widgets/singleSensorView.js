@@ -4,7 +4,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		grid: undefined,
 		model: undefined,
 		linkModel: undefined,
-		isGrouped: false,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -19,9 +18,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			if (options.linkModel) {
 				this.linkModel = options.linkModel;
 				this.linkModel.on('change:value', this.onchangevaluelink, this);
-			}
-			if (options.group === true) {
-				this.isGrouped = true;
 			}
 
 			this.render();

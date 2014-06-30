@@ -12,13 +12,14 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 		sensors: {},
 		tabViewLookup: {},
 		sensorViewLookup: {},
+		tabs: {},
 		views: {
 			singlesensors: {},
 			charts: {},
 			sensorgroups: {},
-			tables: {},
-			tabs: {}
+			tables: {}
 		},
+		cfgObj: "",
 		initialize: function(options) {
 			var prsObj = "";
 			if (options.initdata) {
@@ -36,6 +37,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
 
 			this.insertFromCfg(prsObj);
+			this.cfgObj = prsObj;
 			console.log('init board view');
 		},
 		tabOfElementIndex: function(elemId) {
@@ -95,7 +97,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 
 			this.el = $("#tabs");
 
-			if ($.isEmptyObject(this.views.tabs)) {
+			if ($.isEmptyObject(this.tabs)) {
 				this.establishStyle(this.el);
 				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 3.2; 
 				this.grid = new kitGrid(this.el);
@@ -127,7 +129,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				}
 				var newTabView = new TabView(newTabProperties);
 				this.establishStyle(newTabView.el);
-				this.views.tabs[tabId] = newTabView;
+				this.tabs[tabId] = newTabView;
 				// initialize tab lookup dictionary
 				for (var i = 0; i < links.length; i++) {
 					this.tabViewLookup[links[i]] = tabId;
@@ -135,12 +137,11 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				newTabView.initializeGrid(tabId);
 			}
 			/* ALL THE SAME STUPID ERROR */
-			for (var tabId in this.views.tabs) {
-				var tab = this.views.tabs[tabId];
+			for (var tabId in this.tabs) {
+				var tab = this.tabs[tabId];
 				//console.log(tab.grid.getIdOfCanvas());
 			}
 
-			console.log(this.views.tabs);
 			$('#tabs').tabs({
 				collapsible: true
 			}).css('width', this.viewSizeDetector.boardSizePx.width + 5 + 'px')
@@ -196,8 +197,8 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 		},
 		getGrid: function(attr) {
 			var grid;
-			if (this.views.tabs[attr._tabId]) {
-				grid = this.views.tabs[attr._tabId].grid;
+			if (this.tabs[attr._tabId]) {
+				grid = this.tabs[attr._tabId].grid;
 			}
 			else {
 				grid = this.grid;
@@ -358,8 +359,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			});
 
 			this.views.sensorgroups[attr._id] = newSensorGroupView;
-			newSensorGroupView.on('removing', function() {
-				//delete this.elements.sensorgroups[attr._id];
+			newSensorGroupModel.on('removing', function() {
 				if (this.views) {
 					delete this.views.sensorgroups[attr._id];
 				}
@@ -377,7 +377,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				type: attr["type"],
 				link: attr["link"],
 				legend: attr["legend"],
-				linewidth: attr["width"],
+				linewidth: attr["linewidth"],
 				size: attr["size"],
 				coords: attr["coords"],
 				puredata: {},
@@ -396,10 +396,8 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			});
 
 			newChart.on('removing', function() {
-				//if (this.elements) {
-					//delete this.elements.charts[attr._id];
-				delete this.views.charts[attr._id];
-				//}
+				if (this.views)
+					delete this.views.charts[attr._id];
 			}, this);
 
 			//this.elements.charts[attr._id] = newChart;
@@ -417,8 +415,24 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				this.addChart(attr);
 			}
 		},
-		serialize: function() {
+		serializeElements: function() {
+			var elements = {};
 			
+			for (var sectionName in this.views) {
+				var section = this.views[sectionName];
+				for (var elemName in section) {
+					var model = section[elemName].model;
+					elements[model.get('id')] = model.serialize();
+				}
+			}
+
+			return elements;
+		},
+		serialize: function() { //serialize all elements
+			var cfg = this.cfgObj;
+			var elements = this.serializeElements();
+			cfg['elements'] = elements;
+			return cfg;
 		}
 	});
 

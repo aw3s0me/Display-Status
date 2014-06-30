@@ -30,6 +30,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
 
             this.container.find('.close').click(function(event) {
                 self.removeFromDom();
+                self.model.trigger('removing', self.model);
             });
 
         },
@@ -194,7 +195,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             divElem.addClass('subtile');
 
             return divElem;
-
         },
         onresize: function(model) {},
         onchangebgcolor: function(model) {

@@ -5,16 +5,14 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				id: undefined,
 				caption: "",
 				type: "chart",
-				charttype: undefined,
 				link: [],
 				models: [],
-				seriesArr: [],
 				legend: undefined,
-				linewidth: undefined,
+				linewidth: 1,
 				size: [],
 				coords: [],
 				puredata: {},
-				range: "2-min",
+				range: "15m",
 				rangeToDate: undefined,
 				scale: 1,
 				border: 1,
@@ -272,7 +270,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					}
 				default:
 					{
-						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 2, now.getUTCSeconds(), now.getUTCMilliseconds());
+						min = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes() - 15, now.getUTCSeconds(), now.getUTCMilliseconds());
 						break;
 					}
 			}
@@ -312,7 +310,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			return srctree;
 
 		},
-		serToJSON: function() {
+		serialize: function() {
 			var cfg = this.get('cfgObj');
 			delete cfg['_id'];
 			cfg['size'] = this.get('size');

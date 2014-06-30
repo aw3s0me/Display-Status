@@ -33,7 +33,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 
 			return cfg;
 		},
-		serFromModel: function() {
+		serialize: function() {
 			var listClone = this.clone();
 			listClone.unset('id', {silent: true});
 

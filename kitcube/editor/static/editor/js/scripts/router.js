@@ -5,13 +5,12 @@ define([
 	'backbone',
 	'views/pres/loginView',
 	'views/pres/userPanelView',
-	//'views/pres/controlPanelView',
 	'views/pres/txtEditorView',
 	'views/pres/settingsView',
 	'views/pres/guiEditorView',
-	'views/pres/navPanelView',
-	'views/pres/registerView'
-], function($, _, Backbone, LoginView, UserPanelView, TextEditorView, SettingsView, GuiEditorView, NavPanelView, RegisterView) {
+	'views/pres/registerView',
+	'views/pres/projectPanel',
+], function($, _, Backbone, LoginView, UserPanelView, TextEditorView, SettingsView, GuiEditorView, RegisterView, ProjectPanelView) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			// Define some URL routes
@@ -22,7 +21,6 @@ define([
 			'settings': 'showSettingsView',
 			'settings/:proj/:conf': 'showSettingsViewId',
 			'logout': 'doLogout',
-			//'control': 'showControlPanelView',
 			'login': 'showLoginView',
 			'register': 'showRegisterView',
 			'onresize/:x/ycoord:y': 'resizeBoard',
@@ -35,23 +33,28 @@ define([
 		showView: function(view) {
 			if (this.views.current != undefined) {
 				$(this.views.current.el).hide();
+				if (this.views.current instanceof GuiEditorView) {
+					this.views.current.hideControlPanel();
+				}
 			}
 			this.views.current = view;
 			$(this.views.current.el).show();
 		},
-		hideView: function(view) {
-			this.views.hide();
-		},
 		showTextEditorView: function() {
+			if (!window.activeSessionUser.isDataInitialized()) {
+				window.activeSessionUser.getInitData();
+			}
+
+			if (this.views.myPanelView === undefined) {
+				this.views.myPanelView = new ProjectPanelView();
+			}
+
 			if (this.views.myTextEditorView === undefined) {
 				this.views.myTextEditorView = new TextEditorView();
 			}
 
-			if (this.views.myNavPanelView === undefined) {
-				this.views.myNavPanelView = new NavPanelView();
-			}
-
 			this.showView(this.views.myTextEditorView);
+			$('#guiEditor').css('margin', '0 auto');
 		},
 		showSettingsViewId: function(proj, confid) {
 			console.log("id routing sett", proj, confid);
@@ -60,30 +63,38 @@ define([
 			console.log("id routing text", proj, confid);
 		},
 		showGuiEditor: function() {
+			if (!window.activeSessionUser.isDataInitialized()) {
+				window.activeSessionUser.getInitData();
+			}
+
+			if (this.views.myPanelView === undefined) {
+				this.views.myPanelView = new ProjectPanelView();
+			}
+
 			if (this.views.myGuiEditor === undefined) {
 				this.views.myGuiEditor = new GuiEditorView();
 			}
 
-			if (this.views.myNavPanelView === undefined) {
-				this.views.myNavPanelView = new NavPanelView();
-			}
-
 			this.showView(this.views.myGuiEditor);
+
+			this.views.myGuiEditor.showControlPanel();
+			$('#guiEditor').css('margin-left', '220px');
 		},
 		showSettingsView: function() {
+			if (!window.activeSessionUser.isDataInitialized()) {
+					window.activeSessionUser.getInitData();
+			}
+
+			if (this.views.myPanelView === undefined) {
+				this.views.myPanelView = new ProjectPanelView();
+			}
+
 			if (this.views.mySettingsView === undefined) {
 				this.views.mySettingsView = new SettingsView();
 			}
 
-			if (this.views.myNavPanelView === undefined) {
-				this.views.myNavPanelView = new NavPanelView();
-			}
-
 			this.showView(this.views.mySettingsView);
-
-		},
-		showControlPanelView: function() {
-			this.showView(this.views.myControlPanelView);
+			$('#guiEditor').css('margin', '0 auto');
 		},
 		showLoginView: function() {
 			if (this.views.myLoginView === undefined) {
@@ -172,7 +183,7 @@ define([
 			}
 			app_router.showView(app_router.views.myLoginView);
 		} else {
-			app_router.showGuiEditor();
+			//app_router.showGuiEditor();
 		}
 
 		Backbone.history.start();

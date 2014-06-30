@@ -435,20 +435,16 @@
 
         },
         "chart1": {
-            "width": 1,
             "type": "chart",
             "link": ["sensid22", "sensid25"],
-            "charttype": "line",
             "size": [25, 11],
             "coords": [34, 1],
             "startrange": "15m",
             "axislabels": true
         },
         "chart2": {
-            "width": 1,
             "type": "chart",
             "link": ["sensid41", "sensid37"],
-            "charttype": "line",
             "size": [25, 11],
             "coords": [34, 13],
             "startrange": "15m",

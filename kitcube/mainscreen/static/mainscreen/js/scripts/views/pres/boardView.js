@@ -203,24 +203,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				self.updateAllSensors();
 			}, 2000); //the only way to pass param */
 		},
-		serializeToJson: function() {
-			var newJson = {};
-			var serializeRes = undefined;
-			for (var elementId in this.elements) {
-				var element = this.elements[elementId];
-				for (var innerElId in element) {
-					var inElem = element[innerElId];
-					if (!inElem.serToJSON) {
-						newJson[inElem.model.get('id')] = inElem.model.serToJSON();
-					} else {
-						var modelToSave = inElem.clone();
-						newJson[inElem.get('id')] = inElem.serToJSON();
-					}
-				}
-			}
-			serializeRes = JSON.stringify(newJson, null, '\t ');
-			return serializeRes;
-		},
 		getAxes: function() {
 			var dbname = this.settings['dbname'];
 			var dbgroup = this.settings['dbgroup'];

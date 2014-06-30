@@ -1,6 +1,5 @@
 define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, ChartTemplate) {
 
-	var _seriesArr = [];
 	var _allSensors = undefined;
 	var _isLegendShown = false;
 

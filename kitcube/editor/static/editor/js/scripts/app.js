@@ -46,6 +46,19 @@ define([
         window.location.href = '../editor/';
       }
 
+      window.resetGui = function() {
+      	$('#guiEditor').css('position', 'relative');
+		$('#guiEditor').css('margin', '0 auto');
+		$('#guiEditor').css('left', '0');
+		$('#guiEditor').show();
+      }
+
+      window.setGui = function(left, position) {
+      	$('#guiEditor').css('position', position);
+		$('#guiEditor').css('left', left + 'px');
+		$('#guiEditor').show();
+      }
+
       var csrfToken = $('meta[name="csrf_token"]').attr('content');
       console.log(csrfToken);
       $(document).ajaxSend(function(event, xhr, settings) {
@@ -58,7 +71,8 @@ define([
 
       var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
 
-      $('body').css('min-height', height);
+      $('body').css('min-height', height + 400);
+      $('#container').css('min-height', height + 400);
 
       $.fn.serializeObject = function() {
         var o = {};
@@ -82,6 +96,7 @@ define([
       initialize_user();
       //Adding to all views triggering event function
       Backbone.View.prototype.eventAggregator = _.extend({}, Backbone.Events);
+      //Adding to all models cfg saving func
 
       Router.initialize();
     });
