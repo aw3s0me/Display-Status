@@ -22,6 +22,7 @@ body {
 #banner {
   width: 100%;
   height: 15%;
+  padding-left: 15px;
 }
 
 #container {
@@ -501,11 +502,17 @@ body {
     margin-right: 20px;
 }
 
+.same-size-addon {
+  min-width: 140px;
+  text-align: left;
+}
+
 #settingsContainer {
-    border: 2px solid #ddd;
+    //border: 2px solid #ddd;
     width: 90%;
     margin: 0 auto;
     margin-top: 10px;
+    padding-bottom: 50px;
     background: white;
     //height: 80%;
 }
@@ -538,7 +545,7 @@ body {
 }
 
 #cfgOptions .row {
-    width: 40%;
+    width: 95%;
     margin-top: 2%;
     margin-left: 2%;
 }

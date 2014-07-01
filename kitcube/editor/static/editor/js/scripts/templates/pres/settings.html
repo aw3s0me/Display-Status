@@ -1,10 +1,9 @@
 <div id="settingsContainer">
-    <div id="cfgOptions">
     	<div class="row">
-	    	<div class="col-md-7">
+	    	<div class="col-md-5">
 		    	<div class="input-group">
-		    		<span class="input-group-addon">Background Color</span>
-		  			<input type="text" class="form-control">
+		    		<span class="input-group-addon same-size-addon">Background Color</span>
+		  			<input type="text" class="form-control" value="<=% bgcolor %>" placeholder="(def #DCDCDC)">
 		  			<span class="input-group-addon">HEX</span>
 				</div>
 			</div>
@@ -12,24 +11,24 @@
 				<input id="picker" class="colorpicker" type="text" name="picker" placeholder="" />
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-md-5">
+		<!-- <div class="row">
+			<div class="col-md-4">
 				<div class="input-group numberInputDiv">
-		    		<span class="input-group-addon">Footer Height</span>
+		    		<span class="input-group-addon same-size-addon">Footer Height</span>
 		  			<input type="text" class="form-control">
 		  			<span class="input-group-addon">%, px</span>
 				</div>
 			</div>
-			<div class="col-md-5">
+			<div class="col-md-4">
 				<div class="input-group numberInputDiv">
-		    		<span class="input-group-addon">Banner Height</span>
+		    		<span class="input-group-addon same-size-addon">Banner Height</span>
 		  			<input type="text" class="form-control">
 		  			<span class="input-group-addon">%, px</span>
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<div class="row">
-			<div class="col-md-5">
+			<div class="col-md-3">
 				<div class="input-group checkBoxDiv">
 					<span class="input-group-addon">
 		        		Auto Resize
@@ -39,7 +38,7 @@
 		      		</span>
 		    	</div>
 		    </div>
-		    <div class="col-md-5">
+		    <div class="col-md-3">
 		    	<div class="input-group checkBoxDiv">
 					<span class="input-group-addon">
 		        		Scrollable
@@ -52,15 +51,15 @@
     	</div>
     	
     	<div class="row">
-    		<div class="col-md-7">
-	    	<div class="input-group" id="resolutionInputs">
-	    		<span class="input-group-addon">Resolution</span>
-	  			<input type="text" class="form-control" placeholder="Height" />
-	  			<input type="text" class="form-control" placeholder="Width"/>
-	  			<span class="input-group-addon">px</span>
+    		<div class="col-md-4">
+		    	<div class="input-group" id="resolutionInputs">
+		    		<span class="input-group-addon same-size-addon">Resolution</span>
+		  			<input type="text" class="form-control" placeholder="Height" value="<=% resheight %>"/>
+		  			<input type="text" class="form-control" placeholder="Width" value="<=% reswidth %>"/>
+		  			<span class="input-group-addon">px</span>
+				</div>
 			</div>
-			</div>
-			<div class="col-md-2">
+			<div class="col-md-1">
 				<div class="btn-group" id="sizeList">
 			        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Sizes<span class="caret"></span></button>
 			        <ul class="dropdown-menu scrollable-menu" role="menu">
@@ -69,10 +68,54 @@
 			        </ul>
 		    	</div>
 		    </div>
+		    <div class="col-md-4">
+		    	<div class="input-group" id="boardSizes">
+		    		<span class="input-group-addon same-size-addon">Board sizes</span>
+		  			<input type="text" class="form-control" placeholder="Height (def 25)" value="<=% boardheight %>"/>
+		  			<input type="text" class="form-control" placeholder="Width (def 60)" value="<=% boardwidth %>"/>
+		  			<span class="input-group-addon">cells</span>
+				</div>
+			</div>
 	    </div>
-	    <br>
-	    <br>
-    </div>
+		<div class="row">
+			<div class="col-md-6">
+		    	<div class="input-group">
+		    		<span class="input-group-addon same-size-addon">Size Coefficient</span>
+		  			<input type="text" class="form-control" placeholder="Default (2). Defines sizes of blocks and font sizes" value="<=% sizecoeff %>"/>
+		    	</div>
+		    </div>
+		</div>
 
-
+	    <div class="row">
+	    	<div class="col-xs-12">
+				<div class="input-group">
+				  <span class="input-group-addon same-size-addon">Hostname</span>
+				  <input type="text" class="form-control" placeholder="hostname/adei_adress" value="<=% host %>">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon same-size-addon">Database group</span>
+				  	<input type="text" class="form-control" value="<=% dbgroup %>">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon same-size-addon">Database name</span>
+				  	<input type="text" class="form-control" value="<=% dbname %>">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="input-group">
+					<span class="input-group-addon same-size-addon">Server name</span>
+				  	<input type="text" class="form-control" value="<=% server %>">
+				</div>
+			</div>
+		</div>	
 </div> 
