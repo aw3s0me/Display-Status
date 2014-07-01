@@ -1,8 +1,9 @@
-<div id="guiEditorMenuContainer">
+<div id="projectPanel">
 	<div id="guiEditorProjDropdown" class="btn-group">
+			<button type="button" id="showCntrlPanel" class="btn btn-default"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
 			<a role="button" href="#" class="btn btn-default" data-toggle="dropdown">Projects<span class="caret"></span></a>
-			<a role="button" id="toggleGridButton" href="#" class="btn btn-default"><span class="glyphicon glyphicon-th"></span></a>
-			<a role="button" id="saveCfgGuiButton" href="#" class="btn btn-default"><span class="glyphicon glyphicon-save"></span></a>
+			<button type="button" id="toggleGridButton" class="btn btn-default"><span class="glyphicon glyphicon-th"></span></button>
+			<button type="button" id="saveCfgGuiButton" class="btn btn-default"><span class="glyphicon glyphicon-save"></span></button>
 		<ul class="dropdown-menu multi-level" aria-labelledby="dropdownMenu" role="menu">
 			<% _.each(items, function(item, key, list) { %>
 				<li class="dropdown-submenu"><a tabindex="-1" href="#" data="<%= item.name %>"><%= item.title %></a>
@@ -14,6 +15,7 @@
 				</li>
 			<% }); %>
 		</ul>
+
 	</div>
 	<div id="guiEditorProjectDesc">
 		<span class="proj"><%= first_proj %></span> / <span class="conf"><%= first_conf %></span>

@@ -11,6 +11,7 @@ define([
   "oauthio",
   'minicolors',
   'cookie',
+  'contextmenu',
   //'views/boardView',
   //'views/menuLeft',
   //'views/userPanel',
@@ -18,7 +19,7 @@ define([
   //'views/txtEditorView',
   'router', // Request router.js
   'models/userModel',
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, sizeDet, OAutha, minicolors2, Cookie, Router, UserModel) {
+], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, sizeDet, OAutha, minicolors2, Cookie, Context, Router, UserModel) {
   var initialize_user = function() {
     var token = $.cookie('access_token');
     window.activeSessionUser = new UserModel();
@@ -44,19 +45,6 @@ define([
 
       window.openWindow = function() {
         window.location.href = '../editor/';
-      }
-
-      window.resetGui = function() {
-      	$('#guiEditor').css('position', 'relative');
-		$('#guiEditor').css('margin', '0 auto');
-		$('#guiEditor').css('left', '0');
-		$('#guiEditor').show();
-      }
-
-      window.setGui = function(left, position) {
-      	$('#guiEditor').css('position', position);
-		$('#guiEditor').css('left', left + 'px');
-		$('#guiEditor').show();
       }
 
       var csrfToken = $('meta[name="csrf_token"]').attr('content');
@@ -96,6 +84,7 @@ define([
       initialize_user();
       //Adding to all views triggering event function
       Backbone.View.prototype.eventAggregator = _.extend({}, Backbone.Events);
+
       //Adding to all models cfg saving func
 
       Router.initialize();

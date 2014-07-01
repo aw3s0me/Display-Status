@@ -21,32 +21,42 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/guiEditorContai
 			}
 		},
 		render: function() {
-			var dataReq = window.activeSessionUser.get('cur_data');
-			var firstData = JSON.parse(dataReq.data[0]['first_config_content']);
+			var curData = window.activeSessionUser.get('cur_data_cfg');
 			//var firstData = dataReq.data[0].
 			var compiledBoardTemplate = _.template(GuiEditorContainer, {});
 			this.container.append(compiledBoardTemplate);
 			this.el = $('#guiEditorContainer');
 			this.el.hide();
-			if (firstData) {
+			if (curData) {
 				this.elemBoard = new EditorBoardView({
-					initdata: firstData
+					initdata: curData
 				});
 				this.onConfigLoaded();
 			}
 
 			this.controlPanel = new ControlPanelView();
-			var canvHeight = $('#container').height();
-			$('#controlPanel').css('min-height', canvHeight);
+			//this.controlPanel.open();
+			//var canvHeight = $('#container').height();
+			//$('#controlPanel').css('min-height', canvHeight);
 		},
 		onConfigLoaded: function() {
-			var canvWidth = $('#tabs').width();
-			$('#guiEditorMenuContainer').css('width', canvWidth);
-			$('#guiEditorContainer').css('width', canvWidth);
+			//$('#guiEditorMenuContainer').css('width', canvWidth);
+			//$('#guiEditorContainer').css('width', canvWidth);
 		},
-		saveCfg: function() {
+		getCfg: function() {
 			var serCfg = this.elemBoard.serialize();
-			console.log(serCfg);
+			return JSON.stringify(serCfg);
+		},
+		destroyView: function() {
+			this.elemBoard.destroyView();
+			this.remove();
+			this.el.remove();
+			this.controlPanel.destroyView();
+  			this.unbind();
+  			this.el = undefined;
+			this.curTab = undefined;
+			this.controlPanel = undefined;
+			this.elemBoard = undefined;
 		}
 	})
 

@@ -11,7 +11,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				group: "",
 				cur_proj: undefined,
 				cur_conf: undefined,
-				cur_data: undefined
+				cur_data: undefined,
+				cur_data_cfg: undefined,
+				cur_view: undefined
 			}
 		},
 		initialize: function(){
@@ -74,7 +76,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.set({
 				cur_data: result,
 				cur_proj: result.data[0].title,
-				cur_conf: result.data[0].configs[0].title
+				cur_conf: result.data[0].configs[0].title,
+				cur_data_cfg: result.data[0]['first_config_content']
 			});
 			
 			return result;
@@ -108,7 +111,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.set({cur_data: result});
 			return result;	
 		},
-		saveConfig: function(cfg) {
+		saveConfig: function() {
+			var curView = this.get('cur_view');
+			var cfg = curView.saveCfg();
 			var cfgToSave = JSON.stringify(cfg, null, '\t ');
 			console.log(cfgToSave);
 		}

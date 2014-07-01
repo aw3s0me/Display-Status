@@ -7,6 +7,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 		projDrop: undefined,
 		initialize: function() {
 			this.render();
+			var self = this;
 
 			$('#guiEditorProjDropdown li ul li a').click(function() {
 				var chosen_conf = $(this).text();
@@ -16,7 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 			});
 
 			$('#saveCfgGuiButton').click(function(event) {
-				self.saveConfig();
+				window.activeSessionUser.saveConfig();	
 			});	
 		},
 		render: function() {
@@ -33,6 +34,12 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 			this.projDrop = $('#guiEditorProjDropdown');
 			this.descDiv = $('#guiEditorProjectDesc');
 			this.el.show();
+		},
+		onGui: function() {
+			this.el.find('#showCntrlPanel').show();
+		},
+		onEdit: function() {
+			this.el.find('#showCntrlPanel').hide();
 		},
 		updateLists: function() {
 			var user = window.activeSessionUser;
@@ -64,6 +71,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 				console.log("complete");
 			});
 			return result;
+		},
+		destroyView: function() {
+			this.remove();
+  			this.unbind();
 		}
 	})
 

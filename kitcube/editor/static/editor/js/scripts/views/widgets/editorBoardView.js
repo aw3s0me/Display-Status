@@ -21,9 +21,10 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 		},
 		cfgObj: "",
 		initialize: function(options) {
+			this.resetView();
 			var prsObj = "";
 			if (options.initdata) {
-				prsObj = options.initdata;
+				prsObj = JSON.parse(options.initdata);
 			}
 			if (prsObj['screen']) {
 				this.settings.blocksize = prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize'] : this.settings.blocksize;
@@ -433,6 +434,36 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			var elements = this.serializeElements();
 			cfg['elements'] = elements;
 			return cfg;
+		},
+		destroyView: function() {
+			for (var sectionName in this.views) {
+				var section = this.views[sectionName];
+				for (var elemName in section) {
+					var view = section[elemName];
+					view.removeFromDom();
+				}
+			}
+
+			this.remove();
+			this.el.remove();
+  			this.unbind();
+  			this.sensors = {};
+			this.tabViewLookup = {};
+			this.sensorViewLookup = {};
+			this.tabs = {};
+		},
+		resetView: function() {
+			this.sensors = {};
+			this.tabViewLookup = {};
+			this.sensorViewLookup = {};
+			this.tabs = {};
+			this.views = {
+				singlesensors: {},
+				charts: {},
+				sensorgroups: {},
+				tables: {}
+			};
+			this.cfgObj = "";
 		}
 	});
 

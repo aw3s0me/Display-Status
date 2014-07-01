@@ -4,13 +4,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 		editor: undefined,
 		appendElem: $('#guiEditor'),
 		externEditor: null,
-		choice: {
-			project: undefined,
-			config: undefined
-		},
-		projects: {
-
-		},
 		initialize: function() {
 			this.editor = $('#txtEditorPlaceholder').val();
 			if (this.editor === undefined) {
@@ -41,40 +34,28 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 				this.externEditor.getSession().setMode("ace/mode/yaml");
 				this.el = $('#txtEditContainer');
 				this.el.hide();
+				//var dataReq = window.activeSessionUser.get('cur_data');
+				var curData = window.activeSessionUser.get('cur_data_cfg');
+				this.settext(curData);
 
 				//this.getprojectsonstart(); //need server side
-				/* Some ajax code to load content + event listener */
-
-				/* Change label when dropdown value changes */
-
-				$('#txtCfgList').find(".dropdown-menu li a").click(function() {
-			        self.choice.config = $(this).attr('data');
-			        console.log($(this).attr('data'));
-			        $("#settName").text(self.choice.project + " : " + self.choice.config);
-			        $(this).addClass('active');
-			    });
-				console.log(self.choice.config);
-
-				$('#txtProjectList').find(".dropdown-menu li a").click(function() {
-			        self.choice.project = $(this).attr('data');
-			        console.log($(this).attr('data'));
-			        $(this).addClass('active');
-			    });
-
-			    $('#saveTxt').click(function(event) {
-			    	self.saveToServ();
-			    });
-
+				
 			}
 		},
 		settext: function(text) {
-			this.externEditor.setValue(data);
+			this.externEditor.setValue(text);
 		},
 		setlabel: function(text) {
 
 		},
-		saveCfg: function() {
+		getCfg: function() {
 			var textToSave = this.externEditor.getValue();
+			return textToSave;
+		},
+		destroyView: function() {
+			this.remove();
+			this.el.remove();
+  			this.unbind();
 		}
 
 	});

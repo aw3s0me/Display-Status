@@ -18,6 +18,7 @@ var sizeDetector = (function($) {
 			width: screen.width
 		};
 		this.windowSize = { height: $(window).height(), width: $(window).width() };
+		//this.windowSize = { height: $(document).height(), width: $(document).width() };
 		//without taskbar
 		this.availScreenSize = {
 			height: screen.availHeight,
