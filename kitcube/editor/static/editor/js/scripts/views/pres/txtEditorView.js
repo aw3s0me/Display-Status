@@ -4,6 +4,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 		editor: undefined,
 		appendElem: $('#guiEditor'),
 		externEditor: null,
+		metaName: "txtEditorView",
 		initialize: function() {
 			this.editor = $('#txtEditorPlaceholder').val();
 			if (this.editor === undefined) {

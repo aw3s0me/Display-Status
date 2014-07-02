@@ -37,9 +37,9 @@ body {
 #footer {
   background: #666;
   width: 100%;
-  height: 8%;
-  //position: absolute;
-  //bottom: 0;
+  //height: 8%;
+  position: absolute;
+  bottom: 0;
   //left: 0;
   text-align: center;
   font-size: 12px;
@@ -66,6 +66,27 @@ body {
     display: none;
 }
 
+#lblSavePanel{display:inline;
+  padding:.2em .6em .3em;
+  font-size:75%;
+  font-weight:700;
+  line-height:1;
+  color:#fff;
+  background-color: #5cb85c;
+  text-align:center;
+  white-space:nowrap;
+  vertical-align:baseline;
+  border-radius:.25em
+}
+
+#lblSavePanel {
+  margin-left: 15px;
+  display: none;
+  height: 40px;
+  font-size: 16px;
+  padding: .2em .6em .3em;
+}
+
 #projectPanel {
   padding-bottom: 10px;
 }
@@ -83,7 +104,7 @@ body {
     height: 55px;
 }
 
-#guiEditorProjDropdown {
+#guiPanel {
     margin-left: 10px;
     margin-top: 10px;
     //right: 0;
@@ -92,7 +113,7 @@ body {
 #guiEditorProjectDesc {
     float: right;
     font-size: 16px;
-    margin-top: 18px;
+    margin-top: 12px;
     margin-right: 20px;
     font-weight: bold;
 }
@@ -496,6 +517,10 @@ body {
 
 /* SettingsView CSS TEMPLATE BEGIN */
 
+.minicolors-swatch-color {
+  z-index: 100;
+}
+
 .settPanel {
     text-align: right;
     height: 40%;
@@ -518,8 +543,14 @@ body {
 }
 
 #settingsContainer .row {
-  margin-top: 1%;
+  //margin-top: 1%;
+  margin-bottom: 5px;
   vertical-align: middle;
+}
+
+.input-group-error {
+  color: #a94442;
+  font-weight: bold;
 }
 
 #cfgProjectList {
@@ -537,17 +568,6 @@ body {
     margin: 0 auto;
     margin-top: 1.5%;
     white-space:nowrap;
-}
-
-.colorpicker {
-    margin-top: 8%;
-    margin-left: 10%;
-}
-
-#cfgOptions .row {
-    width: 95%;
-    margin-top: 2%;
-    margin-left: 2%;
 }
 
 #sizeList {

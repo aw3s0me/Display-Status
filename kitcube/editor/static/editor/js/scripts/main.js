@@ -99,7 +99,6 @@ require.config({
         "jquery",
         "jqueryui"
       ]
-
     }
   }
 });

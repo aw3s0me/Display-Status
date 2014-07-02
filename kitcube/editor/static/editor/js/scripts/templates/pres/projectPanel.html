@@ -1,23 +1,26 @@
 <div id="projectPanel">
-	<div id="guiEditorProjDropdown" class="btn-group">
-			<button type="button" id="showCntrlPanel" class="btn btn-default"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
-			<a role="button" href="#" class="btn btn-default" data-toggle="dropdown">Projects<span class="caret"></span></a>
-			<button type="button" id="toggleGridButton" class="btn btn-default"><span class="glyphicon glyphicon-th"></span></button>
-			<button type="button" id="saveCfgGuiButton" class="btn btn-default"><span class="glyphicon glyphicon-save"></span></button>
-		<ul class="dropdown-menu multi-level" aria-labelledby="dropdownMenu" role="menu">
-			<% _.each(items, function(item, key, list) { %>
-				<li class="dropdown-submenu"><a tabindex="-1" href="#" data="<%= item.name %>"><%= item.title %></a>
-				<ul class="dropdown-menu">
-				<% _.each(item.configs, function(config_item, conf_key, list) { %>
-					<li><a tabindex="-1" href="#" data="<%= config_item.name %>"><%= config_item.title %></a></li>
+	<div id="guiPanel">
+		<div id="guiEditorProjDropdown" class="btn-group">
+				<button type="button" id="showCntrlPanel" class="btn btn-default"><span class="glyphicon glyphicon-resize-horizontal"></span></button>
+				<a role="button" href="#" class="btn btn-default" data-toggle="dropdown">Projects<span class="caret"></span></a>
+				<button type="button" id="toggleGridButton" class="btn btn-default"><span class="glyphicon glyphicon-th"></span>Grid</button>
+				<button type="button" id="saveCfgGuiButton" class="btn btn-default"><span class="glyphicon glyphicon-save"></span>Save</button>
+				<button type="button" id="newCfgButton" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>New</button>
+			<ul class="dropdown-menu multi-level" aria-labelledby="dropdownMenu" role="menu">
+				<% _.each(items, function(item, key, list) { %>
+					<li class="dropdown-submenu"><a tabindex="-1" href="#" data="<%= item.name %>"><%= item.title %></a>
+					<ul class="dropdown-menu">
+					<% _.each(item.configs, function(config_item, conf_key, list) { %>
+						<li><a tabindex="-1" href="#" data="<%= config_item.name %>"><%= config_item.title %></a></li>
+					<% }); %>
+					</ul>
+					</li>
 				<% }); %>
-				</ul>
-				</li>
-			<% }); %>
-		</ul>
-
-	</div>
-	<div id="guiEditorProjectDesc">
-		<span class="proj"><%= first_proj %></span> / <span class="conf"><%= first_conf %></span>
+			</ul>
+		</div>
+		<span id="lblSavePanel">Saved</span>
+		<div id="guiEditorProjectDesc">
+			<span class="proj"><%= first_proj %></span> / <span class="conf"><%= first_conf %></span>
+		</div>
 	</div>
 </div>

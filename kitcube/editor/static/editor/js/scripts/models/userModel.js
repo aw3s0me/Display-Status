@@ -114,7 +114,37 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		saveConfig: function() {
 			var curView = this.get('cur_view');
 			var cfg = curView.saveCfg();
-			var cfgToSave = JSON.stringify(cfg, null, '\t ');
+			if (!cfg) {
+				alert('Cannot save configuration file');
+			}
+			switch(curView.metaName) {
+				case "settingsView":
+				{
+					var cur_cfg = JSON.parse(this.get('cur_data_cfg'));
+					cur_cfg['datasource'] = cfg['datasource']; 
+					cur_cfg['screen'] = cfg['screen'];
+					break;
+				}
+				case "guiEditorView": {
+					if (cfg['tabs']) {
+						cur_cfg['tabs'] = cfg['tabs'];
+					}
+					if (cfg['elements']) {
+						cur_cfg['elements'] = cfg['elements'];
+					}
+					break;
+				}
+				case "txtEditorView": {
+					cur_cfg = cfg;
+					break;
+				}
+				default: {
+					alert('Error occured!');
+					break;
+				}
+			}
+			var cfgToSave = JSON.stringify(cur_cfg, null, '\t ');
+			this.set({cur_data_cfg: cfgToSave});
 			console.log(cfgToSave);
 		}
 	});

@@ -1,14 +1,21 @@
 <div id="settingsContainer">
     	<div class="row">
-	    	<div class="col-md-5">
-		    	<div class="input-group">
-		    		<span class="input-group-addon same-size-addon">Background Color</span>
-		  			<input type="text" class="form-control" value="<=% bgcolor %>" placeholder="(def #DCDCDC)">
-		  			<span class="input-group-addon">HEX</span>
+    		<div class="row">
+		    	<div class="col-md-5">
+			    	<div class="input-group">
+			    		<span class="input-group-addon same-size-addon">Background Color</span>
+			  			<input title="bgcolor" type="text" class="form-control settval" value="<%= bgcolor %>" placeholder="(def #DCDCDC)">
+			  			<span class="input-group-addon">HEX</span>
+					</div>
 				</div>
+				<!-- <div class="col-md-2">
+					<input id="picker" class="colorpicker" type="text" name="picker" placeholder="" />
+				</div> -->
 			</div>
-			<div class="col-md-1">
-				<input id="picker" class="colorpicker" type="text" name="picker" placeholder="" />
+			<div class="row">
+				<div class="col-md-12">
+					<span help="bgcolor" class="help-inline input-group-error"></span>
+				</div>
 			</div>
 		</div>
 		<!-- <div class="row">
@@ -28,36 +35,48 @@
 			</div>
 		</div> -->
 		<div class="row">
-			<div class="col-md-3">
-				<div class="input-group checkBoxDiv">
-					<span class="input-group-addon">
-		        		Auto Resize
-		      		</span>
-		      		<span class="input-group-addon">
-		        		<input type="checkbox">
-		      		</span>
-		    	</div>
-		    </div>
-		    <div class="col-md-3">
-		    	<div class="input-group checkBoxDiv">
-					<span class="input-group-addon">
-		        		Scrollable
-		      		</span>
-		      		<span class="input-group-addon">
-		        		<input type="checkbox">
-		      		</span>
-    			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<div class="input-group checkBoxDiv">
+						<span class="input-group-addon">
+			        		Auto Resize
+			      		</span>
+			      		<span class="input-group-addon">
+			        		<input type="checkbox">
+			      		</span>
+			    	</div>
+			    </div>
+			    <div class="col-md-3">
+			    	<div class="input-group checkBoxDiv">
+						<span class="input-group-addon">
+			        		Scrollable
+			      		</span>
+			      		<span class="input-group-addon">
+			        		<input type="checkbox">
+			      		</span>
+	    			</div>
+			    </div>
 		    </div>
     	</div>
     	
     	<div class="row">
     		<div class="col-md-4">
-		    	<div class="input-group" id="resolutionInputs">
-		    		<span class="input-group-addon same-size-addon">Resolution</span>
-		  			<input type="text" class="form-control" placeholder="Height" value="<=% resheight %>"/>
-		  			<input type="text" class="form-control" placeholder="Width" value="<=% reswidth %>"/>
-		  			<span class="input-group-addon">px</span>
+    			<div class="row">
+			    	<div class="input-group">
+			    		<span class="input-group-addon same-size-addon">Resolution</span>
+			  			<input title="resolutionheight" type="text" class="form-control settval" placeholder="Height" value="<%= resolution[1] %>"/>
+			  			<input title="resolutionwidth" type="text" class="form-control settval" placeholder="Width" value="<%= resolution[0] %>"/>
+			  			<span class="input-group-addon">px</span>
+					</div>
 				</div>
+				<div class="row">
+				<div class="col-md-12">
+					<span help="resolutionheight" class="help-inline input-group-error"></span>
+				</div>
+				<div class="col-md-12">
+					<span help="resolutionwidth" class="help-inline input-group-error"></span>
+				</div>
+			</div>
 			</div>
 			<div class="col-md-1">
 				<div class="btn-group" id="sizeList">
@@ -69,53 +88,101 @@
 		    	</div>
 		    </div>
 		    <div class="col-md-4">
-		    	<div class="input-group" id="boardSizes">
-		    		<span class="input-group-addon same-size-addon">Board sizes</span>
-		  			<input type="text" class="form-control" placeholder="Height (def 25)" value="<=% boardheight %>"/>
-		  			<input type="text" class="form-control" placeholder="Width (def 60)" value="<=% boardwidth %>"/>
-		  			<span class="input-group-addon">cells</span>
+		    	<div class="row">
+			    	<div class="input-group">
+			    		<span class="input-group-addon same-size-addon">Board sizes</span>
+			  			<input title="boardsizeheight" type="text" class="form-control settval" placeholder="Height (def 25)" value="<%= boardsize[1] %>"/>
+			  			<input title="boardsizewidth" type="text" class="form-control settval" placeholder="Width (def 60)" value="<%= boardsize[0] %>"/>
+			  			<span class="input-group-addon">cells</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span help="boardsizeheight" class="help-inline input-group-error"></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<span help="boardsizewidth" class="help-inline input-group-error"></span>
+					</div>
 				</div>
 			</div>
 	    </div>
 		<div class="row">
-			<div class="col-md-6">
-		    	<div class="input-group">
-		    		<span class="input-group-addon same-size-addon">Size Coefficient</span>
-		  			<input type="text" class="form-control" placeholder="Default (2). Defines sizes of blocks and font sizes" value="<=% sizecoeff %>"/>
-		    	</div>
+			<div class="row">
+				<div class="col-md-6">
+			    	<div class="input-group">
+			    		<span class="input-group-addon same-size-addon">Size Coefficient</span>
+			  			<input title="sizecoeff" type="text" class="form-control settval" placeholder="Default (2). Defines sizes of blocks and font sizes" value="<%= sizecoeff %>"/>
+			    	</div>
+			    </div>
 		    </div>
+		    <div class="row">
+				<div class="col-md-12">
+					<span help="sizecoeff" class="help-inline input-group-error"></span>
+				</div>
+			</div>
 		</div>
 
 	    <div class="row">
-	    	<div class="col-xs-12">
-				<div class="input-group">
-				  <span class="input-group-addon same-size-addon">Hostname</span>
-				  <input type="text" class="form-control" placeholder="hostname/adei_adress" value="<=% host %>">
+	    	<div class="row">
+		    	<div class="col-xs-12">
+					<div class="input-group">
+					  <span class="input-group-addon same-size-addon">Hostname</span>
+					  <input title="host" type="text" class="form-control settval" placeholder="hostname/adei_adress" value="<%= host %>">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<span help="host" class="help-inline input-group-error"></span>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12">
-				<div class="input-group">
-					<span class="input-group-addon same-size-addon">Database group</span>
-				  	<input type="text" class="form-control" value="<=% dbgroup %>">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="input-group">
+						<span class="input-group-addon same-size-addon">Database group</span>
+					  	<input title="dbgroup" type="text" class="form-control settval" value="<%= dbgroup %>">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<span help="dbgroup" class="help-inline input-group-error"></span>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12">
-				<div class="input-group">
-					<span class="input-group-addon same-size-addon">Database name</span>
-				  	<input type="text" class="form-control" value="<=% dbname %>">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="input-group">
+						<span class="input-group-addon same-size-addon">Database name</span>
+					  	<input title="dbname" type="text" class="form-control settval" value="<%= dbname %>">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<span help="dbname" class="help-inline input-group-error"></span>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12">
-				<div class="input-group">
-					<span class="input-group-addon same-size-addon">Server name</span>
-				  	<input type="text" class="form-control" value="<=% server %>">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="input-group">
+						<span class="input-group-addon same-size-addon">Server name</span>
+					  	<input title="server" type="text" class="form-control settval" value="<%= server %>">
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<span help="server" class="help-inline input-group-error"></span>
 				</div>
 			</div>
 		</div>	
+
 </div> 

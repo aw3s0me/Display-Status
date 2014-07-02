@@ -18,7 +18,12 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 
 			$('#saveCfgGuiButton').click(function(event) {
 				window.activeSessionUser.saveConfig();	
+				self.el.find("#lblSavePanel").fadeIn('slow').delay(3000).fadeOut('slow');
 			});	
+
+			$('#newCfgButton').click(function(event) {
+				alert('onnewcfg');
+			});
 		},
 		render: function() {
 			var dataReq = window.activeSessionUser.get('cur_data');
@@ -37,9 +42,11 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 		},
 		onGui: function() {
 			this.el.find('#showCntrlPanel').show();
+			this.el.find('#toggleGridButton').show();
 		},
 		onEdit: function() {
 			this.el.find('#showCntrlPanel').hide();
+			this.el.find('#toggleGridButton').hide();
 		},
 		updateLists: function() {
 			var user = window.activeSessionUser;

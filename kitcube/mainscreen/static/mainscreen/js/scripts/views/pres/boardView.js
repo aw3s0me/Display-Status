@@ -56,8 +56,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			if (prsObj['screen']) {
 				this.settings.blocksize = prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize'] : this.settings.blocksize;
-				this.settings.size[0] = prsObj['screen']['boardsizex'] ? prsObj['screen']['boardsizex'] : this.settings.size[0];
-				this.settings.size[1] = prsObj['screen']['boardsizey'] ? prsObj['screen']['boardsizey'] : this.settings.size[1];
+				this.settings.size[0] = prsObj['screen']['boardsize'][0] ? prsObj['screen']['boardsize'][0] : this.settings.size[0];
+				this.settings.size[1] = prsObj['screen']['boardsize'][1] ? prsObj['screen']['boardsize'][1] : this.settings.size[1];
 				this.settings['sizecoeff'] = prsObj['screen']['sizecoeff'] ? prsObj['screen']['sizecoeff'] : this.settings.sizecoeff;
 			}
 			

@@ -4,6 +4,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/guiEditorContai
 		container: $('#guiEditor'),
 		el: undefined,
 		curTab: undefined,
+		metaName: "guiEditorView",
 		controlPanel: undefined,
 		elemBoard: undefined,
 		initialize: function() {

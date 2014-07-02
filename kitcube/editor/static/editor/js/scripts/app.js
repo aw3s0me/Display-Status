@@ -3,7 +3,6 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  //'flatui-app',
   'ace',
   'kitgrid',
   "kit.sizeDetector",
@@ -12,14 +11,9 @@ define([
   'minicolors',
   'cookie',
   'contextmenu',
-  //'views/boardView',
-  //'views/menuLeft',
-  //'views/userPanel',
-  //'views/menuRight',
-  //'views/txtEditorView',
   'router', // Request router.js
   'models/userModel',
-], function($, _, Backbone, /*FlatUi,*/ ace, kitgrid, sizeDet, OAutha, minicolors2, Cookie, Context, Router, UserModel) {
+], function($, _, Backbone, ace, kitgrid, sizeDet, OAutha, minicolors2, Cookie, Context, Router, UserModel) {
   var initialize_user = function() {
     var token = $.cookie('access_token');
     window.activeSessionUser = new UserModel();
@@ -59,8 +53,8 @@ define([
 
       var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
 
-      $('body').css('min-height', height + 400);
-      $('#container').css('min-height', height + 400);
+      $('body').css('min-height', height);
+      $('#container').css('min-height', height);
 
       $.fn.serializeObject = function() {
         var o = {};
