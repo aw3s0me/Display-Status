@@ -1,12 +1,12 @@
 {
     "screen": {
         "fluid": false,
-        "glb_sensor_size": 3,
         "blocksize": 50,
-        "boardsizex": 20,
-        "boardsizey": 31
+        "boardsize": [20,31],
+        "sizecoeff": 2
     },
     "datasource": {
+        "host": "http://katrin.kit.edu/adei/",
         "dbgroup": "0",
         "dbname": "katrin_rep",
         "server": "fpd"

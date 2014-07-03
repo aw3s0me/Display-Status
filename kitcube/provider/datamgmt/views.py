@@ -195,6 +195,7 @@ class ConfigDetailView(APIView):
         #pdb.set_trace()
         data = json.loads(request.body)
     def get(self, request, projname, confname):
+        #pdb.set_trace()
         if not Config.objects.filter(projects__link=projname, name=confname).exists():
             return Response('Doesn\'t exists', status=status.HTTP_404_NOT_FOUND)
         cfg_to_serialize = Config.objects.get(projects__link=projname, name=confname)

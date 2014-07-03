@@ -49,7 +49,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 		setlabel: function(text) {
 
 		},
-		getCfg: function() {
+		saveCfg: function() {
 			var textToSave = this.externEditor.getValue();
 			return textToSave;
 		},
@@ -57,6 +57,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 			this.remove();
 			this.el.remove();
   			this.unbind();
+		},
+		rerender: function() {
+			this.destroyView();
+			this.initialize();
 		}
 
 	});

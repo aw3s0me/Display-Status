@@ -29,6 +29,8 @@ define([
 			//landscape orientation
 		}
 
+		//cfgType = 'portrait';
+
 		/*if (width <= 320) {
 			//
 			cfgType = 'smportrait';

@@ -44,9 +44,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/guiEditorContai
 			//$('#guiEditorMenuContainer').css('width', canvWidth);
 			//$('#guiEditorContainer').css('width', canvWidth);
 		},
-		getCfg: function() {
+		saveCfg: function() {
 			var serCfg = this.elemBoard.serialize();
-			return JSON.stringify(serCfg);
+			return serCfg;
 		},
 		destroyView: function() {
 			this.elemBoard.destroyView();

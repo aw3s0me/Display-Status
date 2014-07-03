@@ -10,20 +10,27 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 			var self = this;
 
 			$('#guiEditorProjDropdown li ul li a').click(function() {
+				var projEl = $(this).parent().parent().parent().children('a');
 				var chosen_conf = $(this).text();
-				var chosen_proj = $(this).parent().parent().parent().children('a').text();
+				var chosen_proj = projEl.text();
+				var conf_id = $(this).attr('data');
+				var proj_id = projEl.attr('data');
 				self.descDiv.find('.proj').text(chosen_proj);
 				self.descDiv.find('.conf').text(chosen_conf);
+				
+				window.activeSessionUser.getConfig(proj_id, conf_id);
+
 			});
 
 			$('#saveCfgGuiButton').click(function(event) {
-				window.activeSessionUser.saveConfig();	
+				window.activeSessionUser.sendCfgToServer();	
 				self.el.find("#lblSavePanel").fadeIn('slow').delay(3000).fadeOut('slow');
 			});	
 
 			$('#newCfgButton').click(function(event) {
 				alert('onnewcfg');
 			});
+
 		},
 		render: function() {
 			var dataReq = window.activeSessionUser.get('cur_data');
@@ -80,6 +87,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 			return result;
 		},
 		destroyView: function() {
+			$('#guiEditorProjDropdown li ul li a').unbind();
+			$('#saveCfgGuiButton').unbind();
+			$('#newCfgButton').unbind();
 			this.remove();
   			this.unbind();
 		}

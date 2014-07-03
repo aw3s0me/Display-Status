@@ -8,10 +8,10 @@
 				<button type="button" id="newCfgButton" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span>New</button>
 			<ul class="dropdown-menu multi-level" aria-labelledby="dropdownMenu" role="menu">
 				<% _.each(items, function(item, key, list) { %>
-					<li class="dropdown-submenu"><a tabindex="-1" href="#" data="<%= item.name %>"><%= item.title %></a>
+					<li class="dropdown-submenu"><a tabindex="-1" data="<%= item.name %>"><%= item.title %></a>
 					<ul class="dropdown-menu">
 					<% _.each(item.configs, function(config_item, conf_key, list) { %>
-						<li><a tabindex="-1" href="#" data="<%= config_item.name %>"><%= config_item.title %></a></li>
+						<li><a tabindex="-1" data="<%= config_item.name %>"><%= config_item.title %></a></li>
 					<% }); %>
 					</ul>
 					</li>

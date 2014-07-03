@@ -120,6 +120,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		},
 		removeFromDom: function() {
 			this.trigger('removing', this.model);
+			$.contextMenu('destroy');
 			this.container.remove();
 			this.model.trigger('removing', this.model);
 			//this.linkModel.trigger('removing', this.linkModel);

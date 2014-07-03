@@ -16,15 +16,15 @@ define([
 			// Define some URL routes
 			'editor': 'showTextEditorView',
 			//'editor/p:proj/conf/:confid': 'showTextEditorViewId',
-			'editor/:proj/:conf': 'showTextEditorViewId',
-			'board/:id': 'showBoardView',
+			'rerender': 'rerenderView',
+			'board': 'showGuiEditor',
 			'settings': 'showSettingsView',
-			'settings/:proj/:conf': 'showSettingsViewId',
 			'logout': 'doLogout',
 			'login': 'showLoginView',
 			'register': 'showRegisterView',
 			'onresize/:x/ycoord:y': 'resizeBoard',
 			'onchange/:x/ycoord:y': 'changeUnitNumber',
+			'done': 'outputMsg',
 			// Default
 			'*actions': 'defaultAction'
 		},
@@ -48,14 +48,21 @@ define([
 			window.activeSessionUser.set({cur_view : view});
 			$(this.views.current.el).show();
 		},
-		showTextEditorView: function() {
-			if (!window.activeSessionUser.isDataInitialized()) {
-				window.activeSessionUser.getInitData();
+		outputMsg: function() {
+			console.log('done');
+			if (this.views.current === undefined) {
+				this.defaultAction();
 			}
-
+		},
+		showTextEditorView: function() {
+			window.activeSessionUser.checkData();
+			
 			if (this.views.myPanelView === undefined) {
 				this.views.myPanelView = new ProjectPanelView();
 			}
+
+			if (this.views.current instanceof TextEditorView)
+				return;
 
 			//if (this.views.myTextEditorView === undefined) {
 			//this.views.myTextEditorView = new TextEditorView();
@@ -67,22 +74,52 @@ define([
 			this.views.myPanelView.onEdit();
 			//$('#guiEditor').css('margin', '0 auto');
 			$('#guiEditor').css('width', '');
+			$('#guiEditor').css('height', '');
 			$('#guiEditor').show();
 		},
-		showSettingsViewId: function(proj, confid) {
-			console.log("id routing sett", proj, confid);
-		},
-		showTextEditorViewId: function(proj, confid) {
-			console.log("id routing text", proj, confid);
+		rerenderView: function() {
+			console.log("RERENDERING");
+			if (this.views.current === undefined) {
+				this.defaultAction();
+				return;
+			}
+
+			var newView = undefined;
+			if (this.views.current instanceof SettingsView) {
+				this.views.current.destroyView();
+				newView = new SettingsView();
+			}
+			else if (this.views.current instanceof TextEditorView) {
+				this.views.current.destroyView();
+				newView = new TextEditorView();
+			}
+			else if (this.views.current instanceof GuiEditorView) {
+				this.views.current.destroyView();
+				this.views.current = undefined;
+				newView = new GuiEditorView();
+				newView.showControlPanel();
+				//$('#guiEditor').css('margin-left', '220px');
+				var canvWidth = $('#tabs').width() > $(document).width() - 5? $('#tabs').width() : $(document).width() - 5;
+				var canvHeight = $('#tabs').height();
+				$('#guiEditor').css('width', canvWidth);
+				$('#guiEditor').css('height', canvHeight + 85);
+				$('#guiEditor').css('margin', '0 auto');
+			}
+
+			this.views.current = newView;
+			window.activeSessionUser.set({cur_view : newView});
+			$(this.views.current.el).show();
+			window.location.href = '#done';
 		},
 		showGuiEditor: function() {
-			if (!window.activeSessionUser.isDataInitialized()) {
-				window.activeSessionUser.getInitData();
-			}
+			window.activeSessionUser.checkData();
 
 			if (this.views.myPanelView === undefined) {
 				this.views.myPanelView = new ProjectPanelView();
 			}
+
+			if (this.views.current instanceof GuiEditorView)
+				return;
 
 			//if (this.views.myGuiEditor === undefined) {
 				//this.views.myGuiEditor = new GuiEditorView();
@@ -96,18 +133,22 @@ define([
 			this.views.myPanelView.onGui();
 			newGuiEditor.showControlPanel();
 			//$('#guiEditor').css('margin-left', '220px');
-			var canvWidth = $('#tabs').width();
+			var canvWidth = $('#tabs').width() > $(document).width() - 5? $('#tabs').width() : $(document).width() - 5;
+			var canvHeight = $('#tabs').height();
 			$('#guiEditor').css('width', canvWidth);
+			$('#guiEditor').css('height', canvHeight + 85);
+			$('#guiEditor').css('margin', '0 auto');
 			$('#guiEditor').show();
 		},
 		showSettingsView: function() {
-			if (!window.activeSessionUser.isDataInitialized()) {
-				window.activeSessionUser.getInitData();
-			}
+			window.activeSessionUser.checkData();
 
 			if (this.views.myPanelView === undefined) {
 				this.views.myPanelView = new ProjectPanelView();
 			}
+
+			if (this.views.current instanceof SettingsView)
+				return;
 
 			//if (this.views.mySettingsView === undefined) {
 				//this.views.mySettingsView = new SettingsView();
@@ -120,6 +161,7 @@ define([
 			this.views.myPanelView.onEdit();
 			//$('#guiEditor').css('margin', '0 auto');
 			$('#guiEditor').css('width', '');
+			$('#guiEditor').css('height', '');
 			$('#guiEditor').show();
 		},
 		showLoginView: function() {
@@ -191,7 +233,8 @@ define([
 				console.log('default: ' + 'showLogin')
 				this.showLoginView()
 			} else {
-				console.log('default: ' + 'showGui')
+				if (this.views.current instanceof GuiEditorView || this.views.current instanceof TextEditorView || this.views.current instanceof SettingsView)
+					return;
 				this.showGuiEditor();
 			}
 			console.log("404: " + actions); 

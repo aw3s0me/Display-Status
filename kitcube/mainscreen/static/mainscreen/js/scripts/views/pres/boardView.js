@@ -74,7 +74,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		},
 		detectSizes: function(blockSize, xBlocks, yBlocks, bannerId, footerId, options) {
 			try {
-				this.viewSizeDetector = new sizeDetector(blockSize, xBlocks, yBlocks, bannerId, footerId);
+				this.viewSizeDetector = new sizeDetector(blockSize, xBlocks, yBlocks, bannerId, footerId, {
+					//marginUDFactor: 0.01
+				});
 				if (options) {
 					if (options.fluid) {
 						this.viewSizeDetector.detectSizesForFluidCanvas();
@@ -89,11 +91,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				alert(err.message);
 			}
 		},
-		establishStyle: function(canvas) {
+		establishStyle: function(canvas, options) {
 			console.log();
 			canvas.css('height', this.viewSizeDetector.boardSizePx.height + 'px')
 				.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
-				.css('top', this.viewSizeDetector.marginTop + 'px')
 				.data('height', this.viewSizeDetector.boardSizePx.height)
 				.data('width', this.viewSizeDetector.boardSizePx.width)
 				.data('gridUnitX', this.viewSizeDetector.unitSize)
@@ -102,13 +103,18 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				.data('gridSizeY', this.viewSizeDetector.gridSize.height)
 				.data('scale', this.viewSizeDetector.scale)
 				.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
+			if (!options || !options.portrait) {
+				canvas.css('top', this.viewSizeDetector.marginTop + 'px');
+				return;
+			}
+
 		},
 		getGrid: function(attr) {
 			var grid;
 			if (!attr._tabId) {
 				return this.grid;
 			}
-			if (!this.views.tabs[attr._tabId])
+			if (this.views.tabs[attr._tabId])
 				return this.views.tabs[attr._tabId].grid;
 			return this.grid;
 		},
@@ -177,6 +183,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				$('#toggleGridButton').click(function(e) {
 					self.grid.toggleGrid();
 				});
+			}
+			else {
+				this.el.css('top', '52px');
 			}
 
 			//getting adei metainfo
@@ -440,7 +449,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					container: $('#tabs')
 				}
 				var newTabView = new TabView(newTabProperties);
-				this.establishStyle(newTabView.el);
+				this.establishStyle(newTabView.el, {portrait: true});
 				this.views.tabs[tabId] = newTabView;
 				// initialize tab lookup dictionary
 				for (var i = 0; i < links.length; i++) {
@@ -456,17 +465,16 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			console.log(this.views.tabs);
 			$('#tabs').tabs({
-				collapsible: true
-			}).css('width', this.viewSizeDetector.boardSizePx.width + 5 + 'px')
-				.css('margin', '0 auto');
-			$('#tabs ul').css('padding', '0px !important')
-				.css('height', 50 * this.viewSizeDetector.scale)
-				.css('width', this.viewSizeDetector.boardSizePx.width + 'px');
+				collapsible: false
+			}).css('width', this.viewSizeDetector.boardSizePx.width + 8 + 'px');
+			//$('#tabs ul').css('padding', '0px !important')
+				//.css('height', 50 * this.viewSizeDetector.scale)
+				//.css('width', this.viewSizeDetector.boardSizePx.width + 'px');
 			$('#tabs li').css('height', 40 * this.viewSizeDetector.scale)
 				.css('font-size', 24 * this.viewSizeDetector.scale);
 
-			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 5.5;
-			$('#tabs').css('margin-top', marginTop + 'px');
+			//var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 5.5;
+			//$('#tabs').css('margin-top', marginTop + 'px');
 
 			var self = this;
 			$('#toggleGridButton').click(function(e) {

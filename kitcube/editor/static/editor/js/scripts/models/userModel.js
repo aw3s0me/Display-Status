@@ -13,14 +13,15 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				cur_conf: undefined,
 				cur_data: undefined,
 				cur_data_cfg: undefined,
-				cur_view: undefined
+				cur_view: undefined,
+				cur_is_new: false
 			}
 		},
 		initialize: function(){
 			var self = this;
 			this.on('logout', function() {
 				self.onlogout();
-			})
+			});
 		},
 		validate: function(attrs){
 			if (attrs.username === "" || attrs.username === undefined || attrs.username.length < 4) {
@@ -49,11 +50,19 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.set(this.defaults);
 			$.removeCookie('access_token');
 		},
-		getInitData: function() {
+		getTokenIfLogged: function() {
 			var user = this;
 			var token = user.get('token');
 			var result = undefined;
 			if (!user.get('logged_in') || !token.length) {
+				return false;
+			}
+
+			return token;
+		},
+		getInitData: function() {
+			var token = this.getTokenIfLogged();
+			if (!token) {
 				return;
 			}
 						
@@ -86,10 +95,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			return (this.get('cur_data') !== undefined);
 		},
 		getConfig: function(projname, confname) {
-			var user = this;
-			var token = user.get('token');
-			var result = undefined;
-			if (!user.get('logged_in') || !token.length) {
+			var token = this.getTokenIfLogged();
+			if (!token) {
+				return;
+			}
+
+			if (this.get('cur_proj') === projname && this.get('cur_conf') === confname) {
 				return;
 			}
 						
@@ -108,34 +119,49 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				console.log("success");
 				result = data;
 			});
-			this.set({cur_data: result});
+			this.set({
+				cur_data: result,
+				cur_data_cfg: result['content'],
+				cur_proj: projname,
+				cur_conf: confname
+			});
+			window.location.href = '#rerender';
+			//this.get('cur_view').rerender();
 			return result;	
 		},
 		saveConfig: function() {
 			var curView = this.get('cur_view');
+			if (curView === undefined) {
+				return;
+			} 
 			var cfg = curView.saveCfg();
+			var cur_cfg = undefined;
+			var cfgToSave = "";
 			if (!cfg) {
 				alert('Cannot save configuration file');
 			}
 			switch(curView.metaName) {
 				case "settingsView":
 				{
-					var cur_cfg = JSON.parse(this.get('cur_data_cfg'));
+					cur_cfg = JSON.parse(this.get('cur_data_cfg'));
 					cur_cfg['datasource'] = cfg['datasource']; 
 					cur_cfg['screen'] = cfg['screen'];
+					cfgToSave = JSON.stringify(cur_cfg, undefined, 4);
 					break;
 				}
 				case "guiEditorView": {
+					cur_cfg = JSON.parse(this.get('cur_data_cfg'));
 					if (cfg['tabs']) {
 						cur_cfg['tabs'] = cfg['tabs'];
 					}
 					if (cfg['elements']) {
 						cur_cfg['elements'] = cfg['elements'];
 					}
+					cfgToSave = JSON.stringify(cur_cfg, undefined, 4);
 					break;
 				}
 				case "txtEditorView": {
-					cur_cfg = cfg;
+					cfgToSave = cfg;
 					break;
 				}
 				default: {
@@ -143,9 +169,43 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					break;
 				}
 			}
-			var cfgToSave = JSON.stringify(cur_cfg, null, '\t ');
+
 			this.set({cur_data_cfg: cfgToSave});
-			console.log(cfgToSave);
+		},
+		checkData: function() {
+			if (!this.isDataInitialized()) {
+				this.getInitData();
+			}
+			else {
+				this.saveConfig();
+			}
+		},
+		sendCfgToServer: function() {
+			var token = this.getTokenIfLogged();
+			if (!token) {
+				return;
+			}
+
+			var cfg = this.get('cur_data_cfg');
+			var projname = this.get('cur_proj');
+			var confname = this.get('cur_cfg');
+			if (!projname || !confname) {
+				alert('Error in sending configuration to server');
+				return;
+			}
+
+			$.ajax({
+				url: '/' + projname + '/configs/' + confname,
+				type: 'POST',
+				data: cfg,
+				headers: {
+					'Authorization': token,
+				},
+				async: true,
+				beforeSend: function(xhr, settings) {
+					xhr.setRequestHeader('Authorization', token);
+				}
+			});
 		}
 	});
 

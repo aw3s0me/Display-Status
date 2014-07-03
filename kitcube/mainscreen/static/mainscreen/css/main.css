@@ -67,6 +67,7 @@ body {
 
 .canvas {
   //position: relative;
+  position: absolute;
   font-family: 'Open Sans', sans-serif !important;
   background: #DCDCDC !important;
   /*border: 5px solid #bbbbbb; */

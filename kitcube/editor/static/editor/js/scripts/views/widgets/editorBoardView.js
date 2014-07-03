@@ -22,6 +22,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 		cfgObj: "",
 		initialize: function(options) {
 			this.resetView();
+			$('#guiEditorContainer').show();
 			var prsObj = "";
 			if (options.initdata) {
 				prsObj = JSON.parse(options.initdata);
@@ -104,7 +105,6 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				this.grid = new kitGrid(this.el);
 				this.el.removeClass('canvas')
 				.addClass('tab')
-				.css('margin-top', marginTop + 'px');
 				$('#toggleGridButton').click(function(e) {
 					self.grid.toggleGrid();
 				});
@@ -115,6 +115,12 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			//this.addAllTables(sensorTablesToAdd);
 			//this.addAllAlarmLists(alarmListsToAdd);
 			this.addAllCharts(chartsToAdd);
+		},
+		getCurrentTab: function() {
+			var activeTabIdx = $("#tabs").tabs('option', 'active');
+			var activeTabID = $('#tabs > ul > li').eq(activeTabIdx).attr('aria-controls');
+			//var activeTabID = $('div[id="tabs"] ul .ui-tabs-active a').attr("href").substring(1);
+			return activeTabID;
 		},
 		initTabs: function(attr) {
 			$('#tabs').append('<ul></ul>');
@@ -129,7 +135,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 					container: $('#tabs')
 				}
 				var newTabView = new TabView(newTabProperties);
-				this.establishStyle(newTabView.el);
+				this.establishStyle(newTabView.el, {portrait: true});
 				this.tabs[tabId] = newTabView;
 				// initialize tab lookup dictionary
 				for (var i = 0; i < links.length; i++) {
@@ -140,32 +146,34 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			/* ALL THE SAME STUPID ERROR */
 			for (var tabId in this.tabs) {
 				var tab = this.tabs[tabId];
-				//console.log(tab.grid.getIdOfCanvas());
+				console.log(tab.grid.getIdOfCanvas());
 			}
 
 			$('#tabs').tabs({
-				collapsible: true
+				collapsible: false
 			}).css('width', this.viewSizeDetector.boardSizePx.width + 5 + 'px')
-			.css('margin', '0 auto');
-			$('#tabs ul').css('padding', '0px !important')
-			.css('height', 50 * this.viewSizeDetector.scale)
-			.css('width', this.viewSizeDetector.boardSizePx.width + 'px');
+				.css('margin', '0 auto')
+				.css('height', this.viewSizeDetector.boardSizePx.height + 'px');
+			//$('#tabs ul').css('padding', '0px !important')
+				//.css('height', 50 * this.viewSizeDetector.scale)
+				//.css('width', this.viewSizeDetector.boardSizePx.width + 'px');
 			$('#tabs li').css('height', 40 * this.viewSizeDetector.scale)
-			.css('font-size', 24 * this.viewSizeDetector.scale);
+				.css('font-size', 24 * this.viewSizeDetector.scale);
 
-			var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 5.5; 
-			$('#tabs').css('margin-top', marginTop + 'px');
+			//var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 5.5; 
+			//$('#tabs').css('margin-top', marginTop + 'px');
 
 			var self = this;
 			$('#toggleGridButton').click(function(e) {
 				console.log('toggle: ')
 				var id = self.getCurrentTab();
 				console.log(id);
-				var tab = self.views.tabs[id];
+				var tab = self.tabs[id];
 				tab.grid.toggleGrid();
 			}).tooltip({});
 		},
-		establishStyle: function(canvas) {
+		establishStyle: function(canvas, options) {
+			console.log();
 			canvas.css('height', this.viewSizeDetector.boardSizePx.height + 'px')
 				.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
 				.data('height', this.viewSizeDetector.boardSizePx.height)
@@ -176,6 +184,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				.data('gridSizeY', this.viewSizeDetector.gridSize.height)
 				.data('scale', this.viewSizeDetector.scale)
 				.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
+
 		},
 		detectSizes: function(blockSize, xBlocks, yBlocks, bannerId, footerId, options) {
 			try {
@@ -198,13 +207,12 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 		},
 		getGrid: function(attr) {
 			var grid;
-			if (this.tabs[attr._tabId]) {
-				grid = this.tabs[attr._tabId].grid;
+			if (!attr._tabId) {
+				return this.grid;
 			}
-			else {
-				grid = this.grid;
-			}
-			return grid;
+			if (this.tabs[attr._tabId])
+				return this.tabs[attr._tabId].grid;
+			return this.grid;
 		},
 		addSensorGroup: function(attr) {
 			var sensorArr = attr['sensors'];
@@ -428,6 +436,14 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			}
 
 			return elements;
+		},
+		serializeTabs: function() {
+			var tabs = {};
+
+			for (var tabName in this.tabs) {
+				var tab = this.tabs[tabName];
+
+			}
 		},
 		serialize: function() { //serialize all elements
 			var cfg = this.cfgObj;

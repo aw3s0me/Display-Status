@@ -92,10 +92,13 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/settings.html',
 			return this.model.formValues();
 		},
 		destroyView: function() {
-
 			this.remove();
 			this.el.remove();
   			this.unbind();
+		},
+		rerender: function() {
+			this.destroyView();
+			this.initialize();
 		}
 	})
 
