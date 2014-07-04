@@ -18,19 +18,31 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 				self.descDiv.find('.proj').text(chosen_proj);
 				self.descDiv.find('.conf').text(chosen_conf);
 				
-				window.activeSessionUser.getConfig(proj_id, conf_id);
-
+				window.activeSessionUser.getConfig({projname: proj_id, projtitle: chosen_proj, confname: conf_id, conftitle: chosen_conf});
 			});
 
 			$('#saveCfgGuiButton').click(function(event) {
-				window.activeSessionUser.sendCfgToServer();	
-				self.el.find("#lblSavePanel").fadeIn('slow').delay(3000).fadeOut('slow');
+				if (!window.activeSessionUser.saveConfig()) {
+					self.onError();
+					return;
+				}
+				if (!window.activeSessionUser.sendCfgToServer()) {
+					self.onError();
+					return;
+				}	
+				self.onSuccess();
 			});	
 
 			$('#newCfgButton').click(function(event) {
 				alert('onnewcfg');
 			});
 
+		},
+		onError: function() {
+			this.el.find("#lblErrorPanel").fadeIn('slow').delay(3000).fadeOut('slow');
+		},
+		onSuccess: function() {
+			this.el.find("#lblSavePanel").fadeIn('slow').delay(3000).fadeOut('slow');
 		},
 		render: function() {
 			var dataReq = window.activeSessionUser.get('cur_data');

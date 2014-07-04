@@ -105,7 +105,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
                 selector: '#' + self.model.get('id'),
                 callback: function(key, options) {
                     var m = "clicked: " + key;
-                    alert(m); 
+                    var modal = new WidgetSettWindow();
+                    console.log(m); 
                 },
                 items: {
                     "edit": {name: "Edit"}

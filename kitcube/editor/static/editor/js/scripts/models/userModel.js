@@ -9,8 +9,16 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				role: "",
 				logged_in: false,
 				group: "",
-				cur_proj: undefined,
-				cur_conf: undefined,
+				cur_proj: {
+					name: undefined,
+					title: undefined
+				},
+				cur_conf: {
+					name: undefined,
+					title: undefined
+				},
+				//cur_proj: undefined,
+				//cur_conf: undefined,
 				cur_data: undefined,
 				cur_data_cfg: undefined,
 				cur_view: undefined,
@@ -84,8 +92,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			
 			this.set({
 				cur_data: result,
-				cur_proj: result.data[0].title,
-				cur_conf: result.data[0].configs[0].title,
+				cur_proj: {name: result.data[0].name, title: result.data[0].title},
+				cur_conf: {title: result.data[0].configs[0].title, name: result.data[0].configs[0].name},
 				cur_data_cfg: result.data[0]['first_config_content']
 			});
 			
@@ -94,13 +102,17 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		isDataInitialized: function() {
 			return (this.get('cur_data') !== undefined);
 		},
-		getConfig: function(projname, confname) {
+		getConfig: function(info) {
+			var projname = info.projname;
+			var projtitle = info.projtitle;
+			var confname = info.confname;
+			var conftitle = info.conftitle;
 			var token = this.getTokenIfLogged();
 			if (!token) {
 				return;
 			}
 
-			if (this.get('cur_proj') === projname && this.get('cur_conf') === confname) {
+			if (this.get('cur_proj')['name'] === projname && this.get('cur_conf')['title'] === confname) {
 				return;
 			}
 						
@@ -119,11 +131,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				console.log("success");
 				result = data;
 			});
+
 			this.set({
 				cur_data: result,
 				cur_data_cfg: result['content'],
-				cur_proj: projname,
-				cur_conf: confname
+				cur_proj: {name: projname, title: projtitle },
+				cur_conf: {name: confname, title: conftitle },
 			});
 			window.location.href = '#rerender';
 			//this.get('cur_view').rerender();
@@ -132,13 +145,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		saveConfig: function() {
 			var curView = this.get('cur_view');
 			if (curView === undefined) {
-				return;
+				return false;
 			} 
 			var cfg = curView.saveCfg();
 			var cur_cfg = undefined;
 			var cfgToSave = "";
 			if (!cfg) {
-				alert('Cannot save configuration file');
+				return false;
 			}
 			switch(curView.metaName) {
 				case "settingsView":
@@ -165,12 +178,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					break;
 				}
 				default: {
-					alert('Error occured!');
+					return false;
 					break;
 				}
 			}
 
 			this.set({cur_data_cfg: cfgToSave});
+			return cfgToSave;
 		},
 		checkData: function() {
 			if (!this.isDataInitialized()) {
@@ -181,17 +195,19 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 		},
 		sendCfgToServer: function() {
+			var self = this;
 			var token = this.getTokenIfLogged();
 			if (!token) {
-				return;
+				console.log('token ne token')
+				return false;
 			}
 
 			var cfg = this.get('cur_data_cfg');
-			var projname = this.get('cur_proj');
-			var confname = this.get('cur_cfg');
+			var projname = this.get('cur_proj')['name'];
+			var confname = this.get('cur_conf')['name'];
 			if (!projname || !confname) {
-				alert('Error in sending configuration to server');
-				return;
+				console.log('projname and confname is not init');
+				return false;
 			}
 
 			$.ajax({
@@ -204,8 +220,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				async: true,
 				beforeSend: function(xhr, settings) {
 					xhr.setRequestHeader('Authorization', token);
+				},
+				error: function() {
+					return false;
 				}
 			});
+			return true;
 		}
 	});
 

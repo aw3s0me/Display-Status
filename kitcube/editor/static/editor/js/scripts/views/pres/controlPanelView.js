@@ -16,7 +16,15 @@ define(['jquery', 'underscore', 'backbone', 'chosen', 'text!templates/pres/contr
 		    	self.open();
 		    });
 
-		    $(".sidebar-nav .box").draggable({
+		    var sidebarBoxes = $(".sidebar-nav .box");
+			if (!sidebarBoxes) {
+				return;
+			}
+
+			//var overHelper = $("<div class='overHelper'></div>");
+			//var unitSize = this.grid.getUnitSizes().height * this.grid.getScale();
+
+			sidebarBoxes.draggable({
 		    	cursor: "move",
 		    	cursorAt: { top: 4, left: 4},
 		    	helper: function() {
@@ -53,7 +61,25 @@ define(['jquery', 'underscore', 'backbone', 'chosen', 'text!templates/pres/contr
 		    		//$(ui.helper).css('top', event.clientY - $(event.target).offset().top);
 		    	},
 		    	drag: function(e, t) {
-		    		//t.helper.width(400);
+		    		/*event.preventDefault();
+					var oldCoordX = overHelper.data('coordX');
+					var oldCoordY = overHelper.data('coordY');
+					var draggable = ui.draggable;
+						//var newWidth = Math.round(ui.size.width / unitSize);
+						//var newHeight = Math.round(ui.size.height / unitSize);
+					var coordX = ui.helper.offset().left - $(this).offset().left;
+					var coordY = ui.helper.offset().top;
+					console.log([coordX, coordY]);
+					var relCoordX = parseInt(coordX/unitSize);
+					var relCoordY = parseInt(coordY/unitSize);
+					console.log([relCoordX, relCoordY]);
+					if (oldCoordX === relCoordX && oldCoordY === relCoordY) {
+						return false;
+					}
+					var sizes = draggable.attr('def_sizes').split(',');
+					var coords = [sizes[0] * unitSize, sizes[1] * unitSize]; */
+
+
 		    	},
 		    	stop: function() {
 		    		//$(this).append(ui.helper);
@@ -73,7 +99,6 @@ define(['jquery', 'underscore', 'backbone', 'chosen', 'text!templates/pres/contr
 			this.el.toggleClass('sidebar-nav-open');
 		},
 		destroyView: function() {
-			$(".sidebar-nav .box").draggable("destroy");
 			$('body').removeClass('bodytoleft');
 			$(".nav-header").unbind();
 			$('#showCntrlPanel').unbind();

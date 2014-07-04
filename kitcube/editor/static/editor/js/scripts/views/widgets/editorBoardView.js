@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensorModel', 'models/sensorGroupModel', 'views/widgets/singleSensorView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'models/chartModel'], function($, _, Backbone, TabView, Sensor, SensorGroupModel, SingleSensorView, SensorGroupView, SensorCollection, EmptySensorView, ChartView, Chart){
+define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensorModel', 'models/sensorGroupModel', 'views/widgets/singleSensorView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'models/chartModel', 'views/pres/widgetsSettPage'], function($, _, Backbone, TabView, Sensor, SensorGroupModel, SingleSensorView, SensorGroupView, SensorCollection, EmptySensorView, ChartView, Chart, WidgetsSettPage){
 	var editorBoardView = Backbone.View.extend({
 		container: $('#tabs'),
 		grid: null,
@@ -39,6 +39,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
 			this.cfgObj = prsObj;
 			this.insertFromCfg(prsObj);
+			this.initDraggable();
 			this.initDroppable();
 		},
 		tabOfElementIndex: function(elemId) {
@@ -439,28 +440,22 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 
 			return elements;
 		},
+		initDraggable: function() {
+			
+		},
 		initDroppable: function() {
 			var self = this;
-			var overHelper = $("<div class='overHelper'></div>");
-			var unitSize = this.grid.getUnitSizes();
+			
 			if (!this.hasTabs()) {
 				this.el.droppable({
 					//accept: '.ghost',
-					over: function(event, ui) {
-						var draggable = ui.draggable;
-						var newWidth = Math.round(ui.size.width / unitSize);
-						var newHeight = Math.round(ui.size.height / unitSize);
-						var coordX = ui.draggable
-						var type = draggable.attr('data');
-
-					},
-					out: function(event, ui) {
-
-					},
+					//over: function(event, ui) {},
+					//out: function(event, ui) {},
 					drop: function(event, ui) {
 						var dropped = ui.draggable;
 						var type = dropped.attr('data');
 						var droppedOn = $(this);
+						var settPage = new WidgetsSettPage();
 						switch(type) {
 			    			case "single-sensor-box": {
 			    				//add single sensor to group or just to board
@@ -512,7 +507,11 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			else {
 				//iterate thru tabs and destroy each droppable
 			}
-			
+
+			//var sidebarBoxes = $(".sidebar-nav .box");
+			//if (sidebarBoxes[0]) {
+				//sidebarBoxes.draggable("destroy");
+			//}
 
 			for (var sectionName in this.views) {
 				var section = this.views[sectionName];

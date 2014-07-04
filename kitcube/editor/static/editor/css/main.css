@@ -63,26 +63,32 @@ body {
 
 }
 
-#lblSavePanel{display:inline;
+.myLblButtons {
+  text-align:center;
+  white-space:nowrap;
+  vertical-align:baseline;
+  border-radius:.25em;
+  margin-left: 15px;
+  height: 40px;
+  font-size: 16px;
+  padding: .2em .6em .3em;
+  display:inline;
   padding:.2em .6em .3em;
   font-size:75%;
   font-weight:700;
   line-height:1;
   color:#fff;
-  background-color: #5cb85c;
-  text-align:center;
-  white-space:nowrap;
-  vertical-align:baseline;
-  border-radius:.25em
+  display: none;
 }
 
-#lblSavePanel {
-  margin-left: 15px;
-  display: none;
-  height: 40px;
-  font-size: 16px;
-  padding: .2em .6em .3em;
+#lblSavePanel{
+  background-color: #5cb85c;
 }
+
+#lblErrorPanel{
+  background-color: #d9534f;
+}
+
 
 #projectPanel {
   padding-bottom: 10px;
@@ -701,3 +707,29 @@ body {
 
 /* User info Panel End */
 
+/* Modal CSS Begin */
+
+.modal .modal-header {
+  border-bottom: none;
+  position: relative;
+}
+.modal .modal-header .btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 0;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.modal .modal-footer {
+  border-top: none;
+  padding: 0;
+}
+.modal .modal-footer .btn-group > .btn:first-child {
+  border-bottom-left-radius: 0;
+}
+.modal .modal-footer .btn-group > .btn:last-child {
+  border-top-right-radius: 0;
+}
+
+/* Modal CSS End */

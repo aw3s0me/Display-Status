@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', "contextmenu"], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, contextMenu) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', "contextmenu", 'views/pres/widgetsSettPage'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, contextMenu, WidgetSettWindow) {
     var SensorGroupView = Backbone.View.extend({
         container: undefined,
         grid: undefined,
@@ -150,7 +150,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 selector: '#' + self.model.get('id') + " .groupNameDiv",
                 callback: function(key, options) {
                     var m = "clicked: " + key;
-                    alert(m); 
+                    var modal = new WidgetSettWindow();
+                    console.log(m); 
                 },
                 items: {
                     "edit": {name: "Edit"}
