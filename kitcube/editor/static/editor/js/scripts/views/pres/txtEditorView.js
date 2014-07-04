@@ -54,6 +54,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'bootstrap', 'text!templ
 			return textToSave;
 		},
 		destroyView: function() {
+			this.externEditor.destroy();
 			this.remove();
 			this.el.remove();
   			this.unbind();

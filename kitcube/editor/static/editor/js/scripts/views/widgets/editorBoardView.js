@@ -37,13 +37,15 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			console.log(this.settings['sizecoeff']);
 			
 			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
-
-			this.insertFromCfg(prsObj);
 			this.cfgObj = prsObj;
-			console.log('init board view');
+			this.insertFromCfg(prsObj);
+			this.initDroppable();
 		},
 		tabOfElementIndex: function(elemId) {
 			return this.tabViewLookup[elemId];
+		},
+		hasTabs: function() {
+			return !$.isEmptyObject(this.tabs);
 		},
 		insertFromCfg: function(prsObj) {
 			var self = this;
@@ -99,7 +101,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 
 			this.el = $("#tabs");
 
-			if ($.isEmptyObject(this.tabs)) {
+			if (!this.hasTabs()) {
 				this.establishStyle(this.el);
 				var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 3.2; 
 				this.grid = new kitGrid(this.el);
@@ -437,6 +439,58 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 
 			return elements;
 		},
+		initDroppable: function() {
+			var self = this;
+			var overHelper = $("<div class='overHelper'></div>");
+			var unitSize = this.grid.getUnitSizes();
+			if (!this.hasTabs()) {
+				this.el.droppable({
+					//accept: '.ghost',
+					over: function(event, ui) {
+						var draggable = ui.draggable;
+						var newWidth = Math.round(ui.size.width / unitSize);
+						var newHeight = Math.round(ui.size.height / unitSize);
+						var coordX = ui.draggable
+						var type = draggable.attr('data');
+
+					},
+					out: function(event, ui) {
+
+					},
+					drop: function(event, ui) {
+						var dropped = ui.draggable;
+						var type = dropped.attr('data');
+						var droppedOn = $(this);
+						switch(type) {
+			    			case "single-sensor-box": {
+			    				//add single sensor to group or just to board
+			    				break;
+			    			}
+			    			case "group-sensor-box-tile": {
+			    				//add tile of group
+			    				break;
+			    			}
+			    			case "group-sensor-box-table": {
+			    				//add sensor table
+			    				break;
+			    			}
+			    			case "alarm-list-box": {
+			    				//add alarm list box
+			    				break;
+			    			}
+			    			case "chart-box": {
+			    				//add chart box
+			    				break;
+			    			}
+			    		} 
+
+						console.log('DROPPED');
+						//$(droppedOn).droppa
+					}
+
+				});
+			}
+		},
 		serializeTabs: function() {
 			var tabs = {};
 
@@ -452,6 +506,14 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			return cfg;
 		},
 		destroyView: function() {
+			if (!this.hasTabs()) {
+				this.el.droppable('destroy');
+			}
+			else {
+				//iterate thru tabs and destroy each droppable
+			}
+			
+
 			for (var sectionName in this.views) {
 				var section = this.views[sectionName];
 				for (var elemName in section) {
