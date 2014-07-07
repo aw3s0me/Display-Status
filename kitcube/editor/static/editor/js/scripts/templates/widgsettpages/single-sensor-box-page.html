@@ -1,24 +1,112 @@
-<div class="ghost"  style="background-color: rgb(255,255,255);
-		    width: 74.6px;
-		    height: 74.6px;
-		    color: black;
-		    border: 1px solid black;
-		    font-weight: bold;">
-	<div style="position: absolute;
-				left: 3.75px;
-				line-height: 11.25px;">Sensor</div>
-	<div style="position: absolute;
-				bottom: 1.5px;
-				padding-right: 5.25px;
-				padding-left: 5.25px;
-				font-size: 17.25px;
-				color: rgb(32, 198, 46);
-				width: 100%;
-				height: 34%;">
-		<div>VAL</div> 
+<div class="widget-settings">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="input-group">
+				<span class="input-group-addon same-size-addon">Name</span>
+				<input title="name" type="text" class="form-control settval" placeholder="Name" value="<%= name %>">
+			</div>
+		</div>
 	</div>
-	<div style="position: absolute;
-			    font-size: 9px;
-			    right: 3.75px;
-			    top: 15px;">-</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="input-group">
+				<span class="input-group-addon same-size-addon">Mask</span>
+				<input title="mask" type="number" class="form-control settval" placeholder="Number" value="<%= mask %>">
+			</div>
+		</div>
+	</div>
+
+	<div class="row validate-row">
+		<div class="col-md-12">
+			<span help="mask" class="help-inline input-group-error"></span>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="input-group">
+				<span class="input-group-addon same-size-addon">Unit</span>
+				<input title="unit" type="text" class="form-control settval" placeholder="Unit" value="<%= unit %>"/>
+			</div>
+		</div>
+	</div>
+
+	<div style="display: none;" class="row">
+		<div class="col-md-12">
+			<div class="input-group">
+				<span class="input-group-addon same-size-addon">Min</span>
+				<input title="min" type="text" class="form-control settval" placeholder="Min" value="<%= min %>"/>
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon same-size-addon">Max</span>
+				<input title="max" type="text" class="form-control settval" placeholder="Max" value="<%= max %>"/>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="input-group">
+				<span class="input-group-addon same-size-addon">Precision</span>
+				<input title="precision" type="text" class="form-control settval" placeholder="Number" value="<%= precision %>">
+			</div>
+		</div>
+	</div>
+
+	<div class="row validate-row">
+		<div class="col-md-12">
+			<span help="precision" class="help-inline input-group-error"></span>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+		<div class="input-group">
+			<span class="input-group-addon same-size-addon">Factor</span>
+			<input title="factor" type="text" class="form-control settval" placeholder="Number" value="<%= factor %>">
+		</div>
+		</div>
+	</div>
+
+	<div class="row validate-row">
+		<div class="col-md-12">
+			<span help="factor" class="help-inline input-group-error"></span>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-3">
+			<div class="input-group">
+				<span class="input-group-addon">
+					Exponential
+				</span>
+				<span class="input-group-addon">
+					<input type="checkbox">
+				</span>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="input-group">
+				<span class="input-group-addon">
+					Can be removed
+				</span>
+				<span class="input-group-addon">
+					<input type="checkbox">
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<select title="sensortype" class="chosen settval" style="width: 200px; height: 28px;" data-placeholder="Choose a value type..." tabindex="1">
+				<option value="">No type</option>
+				<option value="noval">Vacuum</option>
+				<option value="valve">Valve temperature</option>
+				<option value="3-state">Source and Disc positions</option>
+				<option value="endis">HV</option>
+			</select>
+		</div>
+	</div>
 </div>

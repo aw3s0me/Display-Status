@@ -709,6 +709,10 @@ body {
 
 /* Modal CSS Begin */
 
+.myModal {
+	z-index: 100;
+}
+
 .modal .modal-header {
   border-bottom: none;
   position: relative;
@@ -730,6 +734,14 @@ body {
 }
 .modal .modal-footer .btn-group > .btn:last-child {
   border-top-right-radius: 0;
+}
+
+.modal-body .input-group {
+	margin-bottom: 8px;
+}
+
+.modal-body .validate-row {
+	margin-bottom: 5px;
 }
 
 /* Modal CSS End */

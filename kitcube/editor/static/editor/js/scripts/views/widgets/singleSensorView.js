@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/widgets/sensorSingle.html'], function($, _, Backbone, SensorModel, SensorTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/widgets/sensorSingle.html', 'views/pres/widgetsSettPage'], function($, _, Backbone, SensorModel, SensorTemplate, WidgetSettWindow) {
 	var SensorView = Backbone.View.extend({
 		container: undefined,
 		grid: undefined,
@@ -105,7 +105,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
                 selector: '#' + self.model.get('id'),
                 callback: function(key, options) {
                     var m = "clicked: " + key;
-                    var modal = new WidgetSettWindow();
+                    var modal = new WidgetSettWindow({
+                    	type: "single-sensor",
+                    	model: self.model
+                    });
                     console.log(m); 
                 },
                 items: {

@@ -150,7 +150,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 selector: '#' + self.model.get('id') + " .groupNameDiv",
                 callback: function(key, options) {
                     var m = "clicked: " + key;
-                    var modal = new WidgetSettWindow();
+                    var modal = new WidgetSettWindow({
+                    	type: "sensor-group"
+                    });
                     console.log(m); 
                 },
                 items: {

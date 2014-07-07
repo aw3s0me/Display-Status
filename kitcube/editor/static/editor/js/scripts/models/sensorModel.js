@@ -30,22 +30,22 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				id: undefined,
 				name: "",
 				type: "sensor",
-				sensortype: "default",
-				sensorviewtype: undefined,
-				comment: undefined,
+				sensortype: "",
+				sensorviewtype: "",
+				comment: "",
 				unit: "",
-				precision: undefined,
+				precision: "",
 				value: undefined,
 				lastTime: undefined,
-				max: undefined,
-				min: undefined,
+				max: "",
+				min: "",
 				alarm: undefined,
 				server: undefined,
 				//device: undefined,
 				dbname: undefined,
 				dbgroup: undefined,
 				norender: false,
-				mask: undefined,
+				mask: "",
 				values: [],
 				exp: false,
 				size: [2, 2],
@@ -253,7 +253,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				});
 			}
 
-			if (this.get('sensortype') === 'default') {
+			if (this.get('sensortype') === '') {
 				sensorClone.unset('sensortype', {
 					silent: true
 				});
@@ -326,6 +326,27 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 
 			return _.clone(sensorClone.attributes);
+		},
+		validate: function(attrs) {
+			var errors = [];
+
+			if (!attrs) {
+				return false;
+			}
+
+			if (!attrs.mask) {
+		        errors.push({name: 'mask', message: 'Please fill mask field.'});
+		    }
+
+			if (attrs.factor && !$.isNumeric(attrs.factor)) { //number 
+				errors.push({name: 'factor', message: 'Factor param should be number.'});
+			}
+
+			if (attrs.precision && !$.isNumeric(attrs.precision)) {
+				errors.push({name: 'precision', message: 'Precision param should be number.'});
+			}
+
+			return errors.length > 0 ? errors : false;
 		}
 	});
 

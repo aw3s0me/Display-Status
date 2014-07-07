@@ -44,6 +44,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/settings.html',
 			var values = {};
 			$('.settval').each(function(index, val) {
 				values[$(this).attr('title')] = $(this).val();
+				
 			});
 
 			return values;
