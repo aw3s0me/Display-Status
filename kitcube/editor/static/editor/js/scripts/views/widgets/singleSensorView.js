@@ -26,6 +26,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('change:valcolor', this.onchangevalcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
 			this.model.on('removedFromChart', this.onremovedfromchart, this);
+			this.listenTo(this.model, 'change:name', this.onchangename, this);
+			this.listenTo(this.model, 'change:unit', this.onchangeunit	, this);
 
 			this.container.dblclick(function(event) {
 				//if (event.ctrlKey || event.shiftKey) {
@@ -165,6 +167,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.removeClass('chartAdded1');
 			this.container.removeClass('chartAdded2');
 			this.container.removeClass('chartAdded');
+		},
+		onchangename: function(model) {
+			this.container.find('.sensorName').text(model.get('name'));
+		},
+		onchangeunit: function(model) {
+			this.container.find('.sensorUnit').text(model.get('unit'));
 		}
 	});
 

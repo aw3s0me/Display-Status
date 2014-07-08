@@ -1,0 +1,451 @@
+{
+    "screen": {
+        "blocksize": 50,
+        "boardsize": [60, 25],
+        "sizecoeff": 3
+    },
+    "datasource": {
+        "host": "http://katrin.kit.edu/adei/",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd"
+    },
+    "elements": {
+        "sensorgroup1": {
+            "type": "sensorgroup",
+            "name": "Magnet Pinch",
+            "size": [9, 7],
+            "coords": [24, 17],
+            "sensors": [{
+                "id": "sensid1",
+                "mask": "102",
+                "unit": "A",
+                "name": "Current",
+                "min": 1.0,
+                "max": 2.0,
+                "precision": 0
+            }, {
+                "id": "sensid2",
+                "mask": "106",
+                "unit": "K",
+                "name": "T1",
+                "precision": 3
+            }, {
+                "id": "sensid3",
+                "mask": "107",
+                "unit": "K",
+                "name": "T2",
+                "precision": 3
+            }, {
+                "id": "sensid4",
+                "mask": "108",
+                "unit": "%",
+                "name": "He Level",
+                "precision": 1
+            }, {
+                "id": "sensid5",
+                "mask": "149",
+                "unit": "psig",
+                "name": "HRC Press",
+                "precision": 2
+            }, {
+                "id": "sensid6",
+                "mask": "150",
+                "unit": "W",
+                "name": "HRC Heater",
+                "precision": 2
+            }]
+        },
+        "sensorgroup10": {
+            "type": "sensorgroup",
+            "name": "Magnet Detector",
+            "size": [9, 7],
+            "coords": [14, 17],
+            "sensors": [{
+                "id": "sensid7",
+                "mask": "103",
+                "unit": "A",
+                "name": "Current",
+                "precision": 3
+            }, {
+                "id": "sensid8",
+                "mask": "109",
+                "unit": "K",
+                "name": "T1",
+                "precision": 3
+            }, {
+                "id": "sensid9",
+                "mask": "110",
+                "unit": "K",
+                "name": "T2",
+                "precision": 3
+            }, {
+                "id": "sensid10",
+                "mask": "111",
+                "unit": "%",
+                "name": "He Level",
+                "precision": 1
+            }, {
+                "id": "sensid11",
+                "mask": "151",
+                "unit": "psig",
+                "name": "HRC Press",
+                "precision": 2
+            }, {
+                "id": "sensid12",
+                "mask": "152",
+                "unit": "W",
+                "name": "HRC Heater",
+                "precision": 2
+            }]
+        },
+        "sensorgroup3": {
+            "type": "sensorgroup",
+            "name": "Vacuum XHVac/HVac",
+            "size": [12, 7],
+            "coords": [1, 17],
+            "sensors": [{
+                "id": "sensid13",
+                "mask": "74",
+                "unit": "mbar",
+                "name": "Ion Gauge",
+                "precision": 1,
+                "exp": true
+            }, {
+                "id": "sensid14",
+                "mask": "66",
+                "unit": "mbar",
+                "name": "CCG",
+                "precision": 1,
+                "exp": true,
+                "sensortype": "noval"
+
+            }, {
+                "id": "sensid15",
+                "mask": "68",
+                "unit": "",
+                "name": "CEP",
+                "sensortype": "noval",
+                "exp": true,
+                "precision": 1
+            }, {
+                "id": "sensid16",
+                "mask": "99",
+                "unit": "K",
+                "name": "CP Temp",
+                "precision": 2
+            }, {
+                "id": "sensid17",
+                "mask": "12",
+                "unit": "%",
+                "name": "Ion Gauge"
+            }, {
+                "id": "sensid19",
+                "mask": "67",
+                "unit": "mbar",
+                "name": "CCG",
+                "exp": true,
+                "precision": 1,
+                "sensortype": "noval"
+            }, {
+                "id": "sensid20",
+                "mask": "69",
+                "unit": "",
+                "name": "CEP",
+                "sensortype": "noval",
+                "exp": true,
+                "precision": 1
+
+            }, {
+                "id": "sensid21",
+                "mask": "100",
+                "unit": "K",
+                "name": "CP Temp",
+                "precision": 2
+            }]
+        },
+        "sensorgroup5": {
+            "type": "sensorgroup",
+            "name": "Temperature",
+            "size": [12, 7],
+            "coords": [1, 1],
+            "sensors": [{
+                "id": "sensid22",
+                "mask": "2",
+                "unit": "C",
+                "name": "XHV CP Jacket",
+                "precision": 2
+            }, {
+                "id": "sensid23",
+                "mask": "3",
+                "name": "HVac CP Jacket",
+                "sensortype": "valve"
+            }, {
+                "id": "sensid24",
+                "mask": "4",
+                "name": "PTC Cold Finger",
+                "precision": 2
+            }, {
+                "id": "sensid25",
+                "mask": "5",
+                "name": "Cooling Ring Top",
+                "precision": 2
+            }, {
+                "id": "sensid26",
+                "mask": "6",
+                "name": "Cooling Ring Bottom",
+                "precision": 2
+            }, {
+                "id": "sensid27",
+                "mask": "7",
+                "name": "PAE Bell",
+                "sensortype": "valve"
+            }, {
+                "id": "sensid28",
+                "mask": "8",
+                "name": "PAE Tube",
+                "sensortype": "valve"
+            }, {
+                "id": "sensid29",
+                "mask": "9",
+                "name": "Detector Flange",
+                "sensortype": "valve"
+            }]
+        },
+        "sensorgroup6": {
+            "type": "sensorgroup",
+            "name": "Source & HV",
+            "size": [12, 7],
+            "coords": [1, 9],
+            "empties": 1,
+            "sensors": [{
+                "id": "sensid30",
+                "mask": "59",
+                "name": "GS Position",
+                "sensortype": "3-state"
+            }, {
+                "id": "sensid31",
+                "mask": "61",
+                "name": "ES Position",
+                "sensortype": "3-state"
+            }, {
+                "id": "sensid32",
+                "mask": "75",
+                "name": "ES Voltage",
+                "precision": 3
+            }, {
+                "id": "sensid33",
+                "mask": "78",
+                "name": "ES En/Dis",
+                "sensortype": "endis"
+            }, {
+                "id": "sensid34",
+                "mask": "80",
+                "unit": "kV",
+                "name": "PAE Voltage",
+                "precision": 3
+            }, {
+                "id": "sensid35",
+                "mask": "82",
+                "name": "PAE En/Dis",
+                "sensortype": "endis"
+            }, {
+                "id": "sensid36",
+                "mask": "145",
+                "name": "Ramping",
+                "sensortype": "2-state"
+            }]
+        },
+        "sensorgroup7": {
+            "type": "sensorgroup",
+            "name": "Amrel L",
+            "size": [9, 7],
+            "coords": [14, 1],
+            "sensors": [{
+                "id": "sensid37",
+                "mask": "112",
+                "unit": "V",
+                "name": "FET",
+                "precision": 2
+            }, {
+                "id": "sensid38",
+                "mask": "113",
+                "unit": "V",
+                "name": "-8V",
+                "precision": 2
+
+            }, {
+                "id": "sensid39",
+                "mask": "116",
+                "unit": "V",
+                "name": "+6V",
+                "precision": 2
+            }, {
+                "id": "sensid40",
+                "mask": "117",
+                "unit": "V",
+                "name": "-6V",
+                "precision": 2
+            }, {
+                "id": "sensid41",
+                "mask": "118",
+                "unit": "V",
+                "name": "Bias",
+                "precision": 2
+            }, {
+                "id": "sensid42",
+                "mask": "146",
+                "name": "Ramping",
+                "sensortype": "2-state"
+            }]
+        },
+        "sensorgroup20": {
+            "type": "sensorgroup",
+            "name": "Amrel V",
+            "size": [9, 7],
+            "coords": [24, 1],
+            "empties": 1,
+            "sensors": [{
+                "id": "sensid43",
+                "mask": "119",
+                "unit": "mA",
+                "name": "FET",
+                "precision": 0,
+                "factor": 1000
+            }, {
+                "id": "sensid44",
+                "mask": "120",
+                "unit": "mA",
+                "name": "-8V",
+                "precision": 0,
+                "factor": 1000
+            }, {
+                "id": "sensid45",
+                "mask": "123",
+                "unit": "A",
+                "name": "+6V",
+                "precision": 2
+            }, {
+                "id": "sensid46",
+                "mask": "124",
+                "unit": "A",
+                "name": "-6V",
+                "precision": 2
+            }, {
+                "id": "sensid47",
+                "mask": "125",
+                "unit": "uA",
+                "name": "Bias",
+                "precision": 1,
+                "factor": 1000000
+            }]
+        },
+        "sensorgroup8": {
+            "type": "sensorgroup",
+            "name": "Veto Peltier 1",
+            "size": [9, 7],
+            "coords": [14, 9],
+            "sensors": [{
+                "id": "sensid48",
+                "mask": "186",
+                "unit": "V",
+                "name": "+6V",
+                "precision": 3
+            }, {
+                "id": "sensid49",
+                "mask": "187",
+                "unit": "V",
+                "name": "-6V",
+                "precision": 3
+
+            }, {
+                "id": "sensid50",
+                "mask": "188",
+                "unit": "V",
+                "name": "Bias",
+                "precision": 3
+            }, {
+                "id": "sensid54",
+                "mask": "186",
+                "unit": "V",
+                "name": "Temp",
+                "precision": 1
+            }, {
+                "id": "sensid55",
+                "mask": "187",
+                "unit": "V",
+                "name": "Temp SP",
+                "precision": 1
+
+            }, {
+                "id": "sensid56",
+                "mask": "188",
+                "unit": "V",
+                "name": "Output",
+                "precision": 2
+            }]
+        },
+        "sensorgroup16": {
+            "type": "sensorgroup",
+            "name": "Veto Peltier 2",
+            "size": [9, 7],
+            "coords": [24, 9],
+            "sensors": [{
+                "id": "sensid51",
+                "mask": "190",
+                "unit": "mA",
+                "name": "+6V",
+                "precision": 0
+            }, {
+                "id": "sensid52",
+                "mask": "191",
+                "unit": "mA",
+                "name": "-6V",
+                "precision": 0
+            }, {
+                "id": "sensid53",
+                "mask": "192",
+                "unit": "mA",
+                "name": "Bias",
+                "factor": 100,
+                "precision": 0
+            }, {
+                "id": "sensid57",
+                "mask": "190",
+                "unit": "mA",
+                "name": "Temp",
+                "precision": 1
+            }, {
+                "id": "sensid58",
+                "mask": "191",
+                "unit": "mA",
+                "name": "Temp SP",
+                "precision": 1
+
+            }, {
+                "id": "sensid59",
+                "mask": "192",
+                "unit": "mA",
+                "name": "Output",
+                "precision": 2
+            }]
+
+        },
+        "chart1": {
+            "type": "chart",
+            "link": ["sensid22", "sensid25"],
+            "size": [25, 11],
+            "coords": [34, 1],
+            "startrange": "15m",
+            "axislabels": true
+        },
+        "chart2": {
+            "type": "chart",
+            "link": ["sensid41", "sensid37"],
+            "size": [25, 11],
+            "coords": [34, 13],
+            "startrange": "15m",
+            "axislabels": true
+        }
+    }
+}

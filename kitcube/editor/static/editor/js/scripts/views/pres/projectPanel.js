@@ -21,16 +21,12 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 				window.activeSessionUser.getConfig({projname: proj_id, projtitle: chosen_proj, confname: conf_id, conftitle: chosen_conf});
 			});
 
+			this.listenTo(window.activeSessionUser, 'error', this.onError);
+			this.listenTo(window.activeSessionUser, 'success', this.onSuccess);
+
 			$('#saveCfgGuiButton').click(function(event) {
-				if (!window.activeSessionUser.saveConfig()) {
-					self.onError();
-					return;
-				}
-				if (!window.activeSessionUser.sendCfgToServer()) {
-					self.onError();
-					return;
-				}	
-				self.onSuccess();
+				window.activeSessionUser.saveConfig();
+				window.activeSessionUser.sendCfgToServer();
 			});	
 
 			$('#newCfgButton').click(function(event) {
@@ -104,6 +100,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/projectPanel.ht
 			$('#newCfgButton').unbind();
 			this.remove();
   			this.unbind();
+  			this.eventAggregator.unbind();
 		}
 	})
 

@@ -2,15 +2,43 @@
 	<span class="input-group-addon same-size-addon">Name</span>
 	<input title="name" type="text" class="form-control settval" placeholder="Name" value="<%= name %>">
 </div>
-<div class="input-group">
-	<span class="input-group-addon same-size-addon">Size</span>
-	<input title="sizex" type="text" class="form-control settval" placeholder="Width" value="<%= size[0] %>"/>
-	<input title="sizey" type="text" class="form-control settval" placeholder="Height" value="<%= size[1] %>"/>
-	<span class="input-group-addon">cells</span>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="input-group">
+			<span class="input-group-addon same-size-addon">Size</span>
+			<input title="sizex" type="text" class="form-control settval" placeholder="Width" value="<%= size[0] %>"/>
+			<input title="sizey" type="text" class="form-control settval" placeholder="Height" value="<%= size[1] %>"/>
+			<span class="input-group-addon">cells</span>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="input-group">
+			<span class="input-group-addon same-size-addon">Coords</span>
+			<input title="coordx" type="text" class="form-control settval" placeholder="X" value="<%= coords[0] %>"/>
+			<input title="coordy" type="text" class="form-control settval" placeholder="Y" value="<%= coords[1] %>"/>
+			<span class="input-group-addon">cells</span>
+		</div>
+	</div>
 </div>
-<div class="input-group">
-	<span class="input-group-addon same-size-addon">Coords</span>
-	<input title="coordx" type="text" class="form-control settval" placeholder="X" value="<%= coords[0] %>"/>
-	<input title="coordy" type="text" class="form-control settval" placeholder="Y" value="<%= coords[1] %>"/>
-	<span class="input-group-addon">cells</span>
+
+<div class="row validate-row">
+	<div class="col-md-12">
+		<span help="sizex" class="help-inline input-group-error"></span>
+	</div>
+</div>
+<div class="row validate-row">
+	<div class="col-md-12">
+		<span help="sizey" class="help-inline input-group-error"></span>
+	</div>
+</div>
+<div class="row validate-row">
+	<div class="col-md-12">
+		<span help="coordx" class="help-inline input-group-error"></span>
+	</div>
+</div>
+<div class="row validate-row">
+	<div class="col-md-12">
+		<span help="coordy" class="help-inline input-group-error"></span>
+	</div>
 </div>

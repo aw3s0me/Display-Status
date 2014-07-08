@@ -145,13 +145,15 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		saveConfig: function() {
 			var curView = this.get('cur_view');
 			if (curView === undefined) {
-				return false;
+				self.trigger('error');
+				return;
 			} 
 			var cfg = curView.saveCfg();
 			var cur_cfg = undefined;
 			var cfgToSave = "";
 			if (!cfg) {
-				return false;
+				self.trigger('error');
+				return;
 			}
 			switch(curView.metaName) {
 				case "settingsView":
@@ -178,7 +180,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					break;
 				}
 				default: {
-					return false;
+					self.trigger('error');
 					break;
 				}
 			}
@@ -199,7 +201,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var token = this.getTokenIfLogged();
 			if (!token) {
 				console.log('token ne token')
-				return false;
+				self.trigger('error');
 			}
 
 			var cfg = this.get('cur_data_cfg');
@@ -207,11 +209,11 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var confname = this.get('cur_conf')['name'];
 			if (!projname || !confname) {
 				console.log('projname and confname is not init');
-				return false;
+				self.trigger('error');
 			}
 
 			$.ajax({
-				url: '/' + projname + '/configs/' + confname,
+				url: '/' + projname + '/configs/' + confname + '/',
 				type: 'POST',
 				data: cfg,
 				headers: {
@@ -222,10 +224,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					xhr.setRequestHeader('Authorization', token);
 				},
 				error: function() {
-					return false;
+					self.trigger('error', self);
+				},
+				success: function() {
+					self.trigger('success', self);
 				}
 			});
-			return true;
 		}
 	});
 

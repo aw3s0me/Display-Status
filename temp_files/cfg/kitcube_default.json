@@ -1,0 +1,28 @@
+{
+    "screen": {
+        "fluid": false,
+        "glb_sensor_size": 3,
+        "blocksize": 50,
+        "boardsizex": 60,
+        "boardsizey": 25,
+        "sizecoeff": 3
+    },
+    "datasource": {
+        "host": "http://katrin.kit.edu/adei/",
+        "dbgroup": "0",
+        "dbname": "katrin_rep",
+        "server": "fpd"
+    },
+    "elements": {
+        "alarmlist1": {
+        	"type": "alarmlist",
+        	"target": "summary",
+        	"name": "List of alarms for: 520 Focal Plane Detector - Active",
+        	"control_group": "1",
+        	"size": [40, 21],
+        	"coords": [1, 1],
+        	"cols": ["severity", "name", "firstseen", "lastseen", "count", "description"],
+        	"sizes": [7.5, 25, 22.5, 22.5, 7.5, 15]
+        }
+    }
+}

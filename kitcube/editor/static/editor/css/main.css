@@ -742,6 +742,7 @@ body {
 
 .modal-body .validate-row {
 	margin-bottom: 5px;
+  display: none;
 }
 
 /* Modal CSS End */

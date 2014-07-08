@@ -26,6 +26,16 @@ def get_authorization_header(request):
         auth = auth.encode(HTTP_HEADER_ENCODING)
     return auth 
 
+def get_user_token(request):
+    auth = get_authorization_header(request).split()
+    if not auth or auth[0].lower() != b'token':
+        msg = 'No token header provided.'
+    if len(auth) == 1:
+        msg = 'Invalid token header. No credentials provided.'
+    if not msg:
+        return False
+    return auth[0]
+
 def is_empty(any_structure):
     if any_structure:
         print('Structure is not empty.')

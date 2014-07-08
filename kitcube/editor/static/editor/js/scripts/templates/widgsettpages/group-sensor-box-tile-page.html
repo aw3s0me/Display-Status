@@ -1,0 +1,44 @@
+	<div class="row">
+		<div class="col-md-4">
+			<div class="input-group">
+				<span class="input-group-addon">
+					Is resizable
+				</span>
+				<span class="input-group-addon">
+					<input class="settval" title="isresizable" type="checkbox" <% if(isresizable) print("checked"); %>>
+				</span>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="input-group">
+				<span class="input-group-addon">
+					Is draggable
+				</span>
+				<span class="input-group-addon">
+					<input class="settval" title="isdraggable" type="checkbox" <% if(isdraggable) print("checked"); %>>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="input-group">
+				<span class="input-group-addon">
+					Can be removed
+				</span>
+				<span class="input-group-addon">
+					<input class="settval" title="canberemoved" type="checkbox" <% if(canberemoved) print("checked"); %>>
+				</span>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="input-group">
+				<span class="input-group-addon">
+					Sortable widgets
+				</span>
+				<span class="input-group-addon">
+					<input class="settval" title="issortable" type="checkbox" <% if(issortable) print("checked"); %>>
+				</span>
+			</div>
+		</div>
+	</div>

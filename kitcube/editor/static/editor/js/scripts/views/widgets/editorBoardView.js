@@ -392,7 +392,6 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				linewidth: attr["linewidth"],
 				size: attr["size"],
 				coords: attr["coords"],
-				puredata: {},
 				range: attr["startrange"],
 				scale: grid.getScale(),
 				cfgObj: attr,

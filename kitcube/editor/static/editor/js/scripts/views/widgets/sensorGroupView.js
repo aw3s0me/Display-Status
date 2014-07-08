@@ -151,7 +151,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 callback: function(key, options) {
                     var m = "clicked: " + key;
                     var modal = new WidgetSettWindow({
-                    	type: "sensor-group"
+                    	type: "sensor-group-tile",
+                        model: self.model
                     });
                     console.log(m); 
                 },

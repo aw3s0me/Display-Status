@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, ChartTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates/widgets/chart.html', 'views/pres/widgetsSettPage'], function($, _, Backbone, ChartModel, ChartTemplate, WidgetSettWindow) {
 
 	var _allSensors = undefined;
 	var _isLegendShown = false;
@@ -93,7 +93,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				var sensorModel = _allSensors[id];
 				sensorModel.on('deleteSensor', self.removeSeries, self);
 				sensorModel.on('removing', self.onSensorRemoving, self);
-				self.model.get('link').push(sensorModel.get('id'));
+
+				if (!this.model.isLinked(id)){
+					self.model.get('link').push(sensorModel.get('id'));
+				} 
+				
 				self.model.get('models').push(sensorModel);
 				if (!sensorModel) {
 					throw "Cant add sensor";
@@ -189,11 +193,31 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				});
 			});
 
+			this.container.css('height', '100%');
+
 			this.container.find('.sensorChartList')
 			.css('margin-top', coeffScale * 26 + 'px');
 
 			this.initChartWhenStart();
+			this.initializeContextMenu();
 		},
+		initializeContextMenu: function() {
+            var self = this;
+            $.contextMenu({
+                selector: '#' + self.model.get('id'),
+                callback: function(key, options) {
+                    var m = "clicked: " + key;
+                    var modal = new WidgetSettWindow({
+                    	type: "chart",
+                    	model: self.model
+                    });
+                    console.log(m); 
+                },
+                items: {
+                    "edit": {name: "Edit"}
+                }
+            });
+        },
 		initChartWhenStart: function() {
 			var chartModel = this.model;
 			var linkArr = chartModel.get('link');

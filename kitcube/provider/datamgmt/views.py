@@ -15,8 +15,8 @@ from django.conf import settings
 
 import os
 from serializers import ProjectSerializer, ConfigSerializer
-from provider.user.userValidation import is_user_valid, is_user_valid_obj_groups
-from provider.user.helpers import get_authorization_header
+from provider.user.userValidation import is_user_valid, is_user_valid_obj_groups, is_user_valid_obj
+from provider.user.helpers import get_authorization_header, get_user_token
 import json
 #from django.middleware.gzip import GZipMiddleware
 import cStringIO, gzip
@@ -172,8 +172,9 @@ class ConfigListView(APIView):
     permission_classes = ()
     renderer_classes = (renderers.JSONRenderer,)
     def post(self, request, projname):  
-        #pdb.set_trace()
+        pdb.set_trace()
         data = json.loads(request.body)
+
     def get(self, request, projname):
         data = json.loads(request.body)
         projname = data['projname']
@@ -193,7 +194,23 @@ class ConfigDetailView(APIView):
     renderer_classes = (renderers.JSONRenderer,)
     def post(self, request, projname, confname):  
         #pdb.set_trace()
-        data = json.loads(request.body)
+        key = get_user_token(request)
+        if not key:
+            Response('Invalid token header', status=status.HTTP_400_BAD_REQUEST)
+        user = is_user_valid_obj(key, projname)
+        if not user:
+            return Response('User is not in the group', status=status.HTTP_400_BAD_REQUEST)
+        config = Config.objects.get(projects__link=projname, name=confname)
+        path = os.path.dirname(__file__)
+        file_path = os.path.join(path, 'cfgs/' + config.path)
+        file = open(file_path, "w")
+        data = request.body
+        if not data:
+            return Response('Data error', status=status.HTTP_400_BAD_REQUEST)
+        file.write(data)
+        file.close()
+        return Response('success', status=status.HTTP_200_OK)
+
     def get(self, request, projname, confname):
         #pdb.set_trace()
         if not Config.objects.filter(projects__link=projname, name=confname).exists():
@@ -206,6 +223,7 @@ class ConfigDetailView(APIView):
         file = open(file_path)
         #cfg.data['content'] = json.dumps(file.read())
         cfg.data['content'] = file.read()
+        file.close()
         print cfg.data
         #gzip_middleware = GZipMiddleware()
         #print file.read()

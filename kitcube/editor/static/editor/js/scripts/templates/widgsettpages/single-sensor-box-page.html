@@ -1,4 +1,4 @@
-<div class="widget-settings">
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="input-group">
@@ -82,7 +82,7 @@
 					Exponential
 				</span>
 				<span class="input-group-addon">
-					<input type="checkbox">
+					<input class="settval" title="exp" type="checkbox" <% if(exp) print("checked"); %>>
 				</span>
 			</div>
 		</div>
@@ -92,7 +92,7 @@
 					Can be removed
 				</span>
 				<span class="input-group-addon">
-					<input type="checkbox">
+					<input class="settval" title="canberemoved" type="checkbox" <% if(canberemoved) print("checked"); %>>
 				</span>
 			</div>
 		</div>
@@ -109,4 +109,3 @@
 			</select>
 		</div>
 	</div>
-</div>

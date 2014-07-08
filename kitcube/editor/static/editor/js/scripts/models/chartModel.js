@@ -11,9 +11,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				linewidth: 1,
 				size: [],
 				coords: [],
-				puredata: {},
 				range: "15m",
-				rangeToDate: undefined,
 				scale: 1,
 				border: 1,
 				radius: 0,
@@ -311,31 +309,36 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 		},
 		serialize: function() {
-			var cfg = this.get('cfgObj');
-			delete cfg['_id'];
-			cfg['size'] = this.get('size');
-			cfg['coords'] = this.get('coords');
+			var cfg = {};
+			var attrs = _.clone(this.attributes);
+			var defaults = this.defaults();
+			delete attrs['cfgObj'];
+			delete attrs['radius'];
+			delete attrs['models'];
+			delete attrs['id'];
+			delete attrs['scale'];
 
-			if (cfg['range'] !== this.get('range') && cfg['range'] !== undefined) {
-				cfg['range'] = this.get('range');
+			for (var attrName in attrs) {
+				var attr = attrs[attrName];
+				var defParam = defaults[attrName];
+				if (defParam !== attr && defParam !== +attr) {
+					cfg[attrName] = attrs[attrName];
+				}
 			}
 
-			if (this.get('link') !== []) {
-				cfg['link'] = this.get('link');
-			}
-
+			cfg['startrange'] = attrs['range'];
+			cfg['type'] = 'chart';
+			delete attrs['range'];
+			console.log(cfg);
 			return cfg;
 		},
 		removeModel: function(modelId) {
 			var link = this.get('link');
 			var models = this.get('models');
 
-			for (var i = 0; i < link.length; i++) {
-				if (modelId === link[i]) {
-					link.splice(i, 1);
-					break;
-				}
-			}
+			var linkIndex = link.indexOf(modelId);
+			if (linkIndex !== -1)
+				link.splice(linkIndex, 1);
 
 			for (var i = 0; i < models.length; i++) {
 				if (modelId === models[i].get('id')) {
@@ -344,20 +347,17 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				}
 			}
 
+			this.set({link: link, models: models});
+
 			return;
 		},
 		isLinked: function(modelId) {
 			var link = this.get('link');
-			for (var i = 0; i < link.length; i++) {
-				if (link[i] === modelId) {
-					return true;
-				}
-			}
-
-			return false;
+			return link.indexOf(modelId) != -1;
 		},
 		isOnTheChartById: function(id) {
 			var models = this.get('models');
+
 			for (var j = 0; j < models.length; j++) {
 				var model = models[j];
 				if (model.get('id') === id) {
@@ -365,6 +365,55 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				}	
 			}
 			return false;
+		},
+		validate: function(attrs) {
+			var errors = [];
+
+			if (!attrs) {
+				return false;
+			}
+
+			if (attrs.resolution && !$.isNumeric(attrs.resolution)) { //number 
+				errors.push({name: 'resolution', message: 'Resolution param should be number.'});
+			}
+
+			if (attrs.border && !$.isNumeric(attrs.border)) {
+				errors.push({name: 'border', message: 'Border param should be number.'});
+			}
+
+			if (!attrs.maxelementsize || !$.isNumeric(attrs.maxelementsize)) {
+				errors.push({name: 'maxelementsize', message: 'Max element capacity param should be number.'});
+			}
+
+			if (!attrs.sizex || !$.isNumeric(attrs.sizex)) {
+				errors.push({name: 'sizex', message: 'Size on x coord param error.'});
+			}
+
+			if (!attrs.sizey || !$.isNumeric(attrs.sizey)) {
+				errors.push({name: 'sizey', message: 'Size on y coord param error.'});
+			}
+
+			if (!attrs.coordx || !$.isNumeric(attrs.coordx)) {
+				errors.push({name: 'coordx', message: 'Coordinate on x param error.'});
+			}
+
+			if (!attrs.coordy || !$.isNumeric(attrs.coordy)) {
+				errors.push({name: 'coordy', message: 'Coordinate on y param error.'});
+			}
+
+			return errors.length > 0 ? errors : false;
+		},
+		addAttrs: function(attrs) {
+			attrs['size'] = [attrs['sizex'], attrs['sizey']];
+			attrs['coords'] = [attrs['coordx'], attrs['coordy']];
+			attrs['caption'] = attrs['name'];
+			delete attrs['coordx'];
+			delete attrs['coordy'];
+			delete attrs['sizex'];
+			delete attrs['sizey'];
+			delete attrs['name'];
+
+			this.set(attrs);
 		}
 	});
 

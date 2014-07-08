@@ -172,6 +172,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 					if (options['type'] !== 'group') {
 						cfg['size'] = this.get('size');
 						cfg['coords'] = this.get('coords');
+						cfg['canberemoved'] = this.get('canberemoved');
 					}
 				}
 			}
@@ -347,6 +348,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			}
 
 			return errors.length > 0 ? errors : false;
+		},
+		addAttrs: function(attrs) {
+			this.set(attrs);
 		}
 	});
 
