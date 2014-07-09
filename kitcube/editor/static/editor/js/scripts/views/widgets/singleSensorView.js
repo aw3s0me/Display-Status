@@ -22,10 +22,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.render();
 
-			this.model.on('resize', this.onresize, this);
-			this.model.on('change:valcolor', this.onchangevalcolor, this);
-			this.model.on('change:value', this.onchangevalue, this);
-			this.model.on('removedFromChart', this.onremovedfromchart, this);
+			this.listenTo(this.model, 'removedFromChart', this.onremovedfromchart, this);
+			this.listenTo(this.model, 'change:value', this.onchangevalue, this);
+			this.listenTo(this.model, 'change:valcolor', this.onchangevalcolor, this);
+			this.listenTo(this.model, 'resize', this.onresize, this);
 			this.listenTo(this.model, 'change:name', this.onchangename, this);
 			this.listenTo(this.model, 'change:unit', this.onchangeunit	, this);
 

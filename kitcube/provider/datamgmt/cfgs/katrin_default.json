@@ -1,17 +1,18 @@
 {
     "screen": {
-        "blocksize": 50,
+        "isfluid": false,
+        "isscrollable": false,
+        "sizecoeff": "3",
         "boardsize": [
-            60,
-            25
-        ],
-        "sizecoeff": 3
+            "60",
+            "25"
+        ]
     },
     "datasource": {
         "host": "http://katrin.kit.edu/adei/",
         "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd"
+        "server": "fpd",
+        "dbname": "katrin_rep"
     },
     "elements": {
         "chart1": {
@@ -407,12 +408,12 @@
         },
         "sensorgroup7": {
             "size": [
-                9,
-                7
+                "9",
+                "7"
             ],
             "coords": [
-                14,
-                1
+                "14",
+                "1"
             ],
             "sensors": [
                 {
@@ -458,7 +459,7 @@
                 }
             ],
             "type": "sensorgroup",
-            "name": "Amrel L",
+            "name": "Amrel V",
             "order": [
                 "sensid37",
                 "sensid38",
@@ -470,12 +471,12 @@
         },
         "sensorgroup20": {
             "size": [
-                9,
-                7
+                "9",
+                "7"
             ],
             "coords": [
-                24,
-                1
+                "24",
+                "1"
             ],
             "sensors": [
                 {
@@ -518,7 +519,7 @@
                 }
             ],
             "type": "sensorgroup",
-            "name": "Amrel V",
+            "name": "Amrel L",
             "order": [
                 "sensid44",
                 "sensid43",

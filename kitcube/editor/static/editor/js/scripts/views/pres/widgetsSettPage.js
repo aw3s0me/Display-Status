@@ -4,6 +4,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/modalWindow.htm
 		el: undefined,
 		type: undefined,
 		model: undefined,
+        ctx: undefined,
 		initialize: function(options) {
 			var self = this;
 			if (options && options.type) {
@@ -17,6 +18,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/modalWindow.htm
                 return;
             }
 
+            if (options && options.ctx) {
+                this.ctx = options.ctx;
+            }
+
             this.render();
 
             this.el.on('hide.bs.modal', function(e) {
@@ -26,9 +31,20 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/modalWindow.htm
 
             this.initModalElements();
 
-            this.el.find('#saveWidgetSettings').click(function(event) {
-            	self.saveChanges();
-            });
+            //if (!this.isNew) {
+                this.el.find('#saveWidgetSettings').click(function(event) {
+                    self.saveChanges();
+                });
+            //}
+            //else {
+                //this.el.find('#saveWidgetSettings').text('Add').click(function(event) {
+                    //self.addElement();
+                //});
+            //}
+
+            if (this.ctx)
+                this.el.find('#saveWidgetSettings').text('Add');
+                
 
             this.el.on('hidden.bs.modal', function() {
                 $(this).data('modal', null);
@@ -137,10 +153,14 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/modalWindow.htm
             if (this.model.addAttrs)
                 this.model.addAttrs(values);
             //console.log(this.model.attributes);
-            console.log(this.model.serialize());
-            return;
+            //console.log(this.model.serialize());
+            //return;
 
             this.el.modal('hide');
+
+            if (this.ctx && this.ctx.addNew)
+                this.ctx.addNew(this.model);
+                
         },
         showErrors: function(errors) {
 			var result = "";

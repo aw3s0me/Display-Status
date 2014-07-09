@@ -20,6 +20,35 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			tables: {}
 		},
 		cfgObj: "",
+		generateId: function(baseid, type){
+			var newId = "" + baseid;
+			var uniqId = Date.now();
+			switch(type) {
+				case "singlesensor":
+					newId = "sensor" + uniqId;
+					break;
+				case "sensorgroup":
+					newId = "sensor-group" + uniqId;
+					break;
+				case "chart":
+					newId = "chart" + uniqId;
+					break;
+				case "table":
+					newId = "table" + uniqId;
+					break;
+				case "default":
+					newId = uniqId;
+				   	break;
+			}
+
+			return newId;
+		},
+		/*generateRandomId: function(type) {
+			var uid = "";
+			switch(type) {
+				
+			}
+		},*/
 		initialize: function(options) {
 			this.resetView();
 			$('#guiEditorContainer').show();
@@ -39,7 +68,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
 			this.cfgObj = prsObj;
 			this.insertFromCfg(prsObj);
-			this.initDraggable();
+			//this.initDraggable();
 			this.initDroppable();
 		},
 		tabOfElementIndex: function(elemId) {
@@ -347,6 +376,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			var newSensorGroupView = new SensorGroupView({
 				model: newSensorGroupModel,
 				grid: grid,
+				ctx: this,
 				group: group,
 				sizecoeff: this.settings['sizecoeff']
 			});
@@ -420,14 +450,12 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 
 			return elements;
 		},
-		initDraggable: function() {
-			
-		},
 		initDroppable: function() {
 			var self = this;
 			
 			if (!this.hasTabs()) {
 				this.el.droppable({
+					accept: ':not(.drag-sensor)',
 					//accept: '.ghost',
 					//over: function(event, ui) {},
 					//out: function(event, ui) {},

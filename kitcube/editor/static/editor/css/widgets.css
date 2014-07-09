@@ -199,3 +199,7 @@
 .groupName {
     font-weight: bold;
 }
+
+.group-over {
+  border: 1px solid yellow !important;
+}
