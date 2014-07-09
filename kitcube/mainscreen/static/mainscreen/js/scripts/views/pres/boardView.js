@@ -673,7 +673,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		addSensorGroup: function(attr) {
 			var sensorArr = attr['sensors'];
 			var trendsArr = [];
-			var groupArr = [];
+			var group = [];
 			var sensorModelsArr = [];
 			var emptyCount = attr['empties'];
 			var dbname = undefined;
@@ -797,26 +797,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 				if (!sensor.get('norender')) {
 					//self.views.sensors[sensor.get('id')] = newSensorView;
-					groupArr.push(newSensorView);
-				}
-			}
-
-			var empties = undefined;
-
-			if (emptyCount > 0) {
-				empties = [];
-				while (emptyCount--) {
-					if (!size) 
-						size = [2, 2];
-
-					var newSensorView = new EmptySensorView({
-						model: new Sensor({
-							size: size,
-						}),
-						grid: grid,
-						empty: true
-					});
-					empties.push(newSensorView);
+					group[sensor.get('id')] = newSensorView;
 				}
 			}
 
@@ -836,14 +817,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					id: trendObj["id"]
 				})
 
-
 				var newTrendSensorView = new TrendSensorView({
 					model: trendModel,
 					group: true,
 					grid: grid
 				});
 
-				groupArr.push(newTrendSensorView);
+				group[sensorName] = newTrendSensorView;
 			}
 
 			var newSensorGroupModel = new SensorGroupModel({
@@ -855,7 +835,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				collection: new SensorCollection(sensorModelsArr),
 				cfgObj: attr,
 				groupname1: attr["groupname1"],
-				groupname2: attr["groupname2"]
+				groupname2: attr["groupname2"],
+				order: attr['order'],
+				empties: attr['empties']
 			});
 
 			if (attr['diffsensors'] === false) {
@@ -869,8 +851,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var newSensorGroupView = new SensorGroupView({
 				model: newSensorGroupModel,
 				grid: grid,
-				group: groupArr,
-				empties: empties
+				group: group,
+				sizecoeff: this.settings['sizecoeff']
 			});
 
 			this.views.sensorgroups[attr._id] = newSensorGroupView;

@@ -1,10 +1,10 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', 'views/widgets/emptySensorView', 'models/sensorModel'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, EmptySensorView, Sensor) {
     var SensorGroupView = Backbone.View.extend({
         container: undefined,
         grid: undefined,
         model: undefined,
         group: undefined,
-        empties: undefined,
+        sizecoeff: 2,
         initialize: function(options) { //pass it as new SensorView({model: model, options: options}) 
             var self = this;
 
@@ -20,8 +20,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 this.group = options.group;
             }
 
-            if (options.empties) {
-                this.empties = options.empties;
+            if (options.sizecoeff) {
+                this.sizecoeff = options.sizecoeff;
             }
 
             this.render();
@@ -74,30 +74,19 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 });
 
             if (this.group !== undefined) {
-                for (var i = 0; i < this.group.length; i++) {
-                    var newSensorView = this.group[i];
-                    var cont = this.setContainer(newSensorView);
-                    newSortableContainer.append(cont);
-                    if (newSensorView.isTrend) {
-                        trendChartInitArr.push(newSensorView);
-                    }
-                    newSensorView.on('removing', this.onSensorRemoving, this);
+                var order = this.model.get('order');
+                if (order) {
+                    this.addElementsByOrder(order, newSortableContainer);
+                } else {
+                    this.addElements(newSortableContainer);
                 }
-                if (this.empties) {
-                    for (var i = 0; i < this.empties.length; i++) {
-                        var newSensorView = this.empties[i];
-                        var cont = this.setContainer(newSensorView);
-                        newSortableContainer.append(cont);
-                    }
-                }
-
             } else {
                 throw "groupArray wasnt initialized";
             }
 
             this.container.append(newSortableContainer);
 
-            var grpElem = this.grid.addUnit(this.container, { 
+            var grpElem = this.grid.addUnit(this.container, {
                 draggable: newSensorGroup.get('isdraggable'),
                 resizable: newSensorGroup.get('isresizable')
             }, this.model).addClass('group');
@@ -135,9 +124,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                         $(this).find('.sortable_container').css('height', parseInt($(this).css('height')) - unitY);
                         self.model.trigger('resize', model);
                     }
-                }); 
+                });
             }
-            
+
 
             for (var i = 0; i < trendChartInitArr.length; i++) {
                 var view = trendChartInitArr[i];
@@ -146,11 +135,48 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
 
             this.container.parent().css('border', '1px solid black');
 
-            
+
             //console.log(this.container.html());
         },
-        rerender: function() {
+        addElementsByOrder: function(order, newSortableContainer) {
+            for (var i = 0; i < order.length; i++) {
+                var elemName = order[i];
+                if (elemName === "") {
+                    this.addEmptySensor(newSortableContainer);
+                    continue;
+                }
+                var newSensorView = this.group[elemName];
+                var cont = this.setContainer(newSensorView);
+                newSortableContainer.append(cont);
+                newSensorView.on('removing', this.onSensorRemoving, this);
+            }
+        },
+        addElements: function(newSortableContainer) {
+            for (var elemName in this.group) {
+                var newSensorView = this.group[elemName];
+                var cont = this.setContainer(newSensorView);
+                newSortableContainer.append(cont);
+                newSensorView.on('removing', this.onSensorRemoving, this);
+            }
+            var empties = this.model.get('empties');
+            for (var i = 0; i < empties; i++) {
+                this.addEmptySensor(newSortableContainer);
+            }
+        },
+        addEmptySensor: function(newSortableContainer) {
+            var sizecoeff = this.sizecoeff;
+            var size = [sizecoeff, sizecoeff];
 
+            var newSensorView = new EmptySensorView({
+                model: new Sensor({
+                    size: size,
+                }),
+                grid: this.grid,
+                empty: true
+            });
+
+            var cont = this.setContainer(newSensorView);
+            newSortableContainer.append(cont);
         },
         removeFromDom: function() {
             for (var i = 0; i < this.group.length; i++) {

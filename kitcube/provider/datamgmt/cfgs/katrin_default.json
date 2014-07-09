@@ -1,18 +1,17 @@
 {
     "screen": {
-        "isfluid": false,
-        "isscrollable": false,
-        "sizecoeff": "3",
+        "blocksize": 50,
         "boardsize": [
-            "60",
-            "25"
-        ]
+            60,
+            25
+        ],
+        "sizecoeff": 3
     },
     "datasource": {
         "host": "http://katrin.kit.edu/adei/",
         "dbgroup": "0",
-        "server": "fpd",
-        "dbname": "katrin_rep"
+        "dbname": "katrin_rep",
+        "server": "fpd"
     },
     "elements": {
         "chart1": {
@@ -21,12 +20,12 @@
                 "sensid25"
             ],
             "size": [
-                "25",
-                "11"
+                25,
+                11
             ],
             "coords": [
-                "34",
-                "1"
+                34,
+                1
             ],
             "startrange": "15m",
             "type": "chart"
@@ -48,15 +47,13 @@
             "type": "chart"
         },
         "sensorgroup1": {
-            "type": "sensorgroup",
-            "name": "Magnet Pinch",
             "size": [
                 9,
                 7
             ],
             "coords": [
                 24,
-                9
+                17
             ],
             "sensors": [
                 {
@@ -103,11 +100,19 @@
                     "name": "HRC Heater",
                     "precision": 2
                 }
+            ],
+            "type": "sensorgroup",
+            "name": "Magnet Pinch",
+            "order": [
+                "sensid2",
+                "sensid1",
+                "sensid3",
+                "sensid4",
+                "sensid5",
+                "sensid6"
             ]
         },
         "sensorgroup10": {
-            "type": "sensorgroup",
-            "name": "Magnet Detector",
             "size": [
                 9,
                 7
@@ -159,11 +164,19 @@
                     "name": "HRC Heater",
                     "precision": 2
                 }
+            ],
+            "type": "sensorgroup",
+            "name": "Magnet Detector",
+            "order": [
+                "sensid7",
+                "sensid9",
+                "sensid8",
+                "sensid10",
+                "sensid11",
+                "sensid12"
             ]
         },
         "sensorgroup3": {
-            "type": "sensorgroup",
-            "name": "Vacuum XHVac/HVac",
             "size": [
                 12,
                 7
@@ -237,11 +250,21 @@
                     "name": "CP Temp",
                     "precision": 2
                 }
+            ],
+            "type": "sensorgroup",
+            "name": "Vacuum XHVac/HVac",
+            "order": [
+                "sensid13",
+                "sensid14",
+                "sensid16",
+                "sensid15",
+                "sensid17",
+                "sensid19",
+                "sensid20",
+                "sensid21"
             ]
         },
         "sensorgroup5": {
-            "type": "sensorgroup",
-            "name": "Temperature",
             "size": [
                 12,
                 7
@@ -300,11 +323,21 @@
                     "name": "Detector Flange",
                     "sensortype": "valve"
                 }
+            ],
+            "type": "sensorgroup",
+            "name": "Temperature",
+            "order": [
+                "sensid22",
+                "sensid25",
+                "sensid23",
+                "sensid24",
+                "sensid26",
+                "sensid27",
+                "sensid28",
+                "sensid29"
             ]
         },
         "sensorgroup6": {
-            "type": "sensorgroup",
-            "name": "Source & HV",
             "size": [
                 12,
                 7
@@ -313,7 +346,6 @@
                 1,
                 9
             ],
-            "empties": 1,
             "sensors": [
                 {
                     "id": "sensid30",
@@ -358,11 +390,22 @@
                     "name": "Ramping",
                     "sensortype": "2-state"
                 }
-            ]
+            ],
+            "type": "sensorgroup",
+            "name": "Source & HV",
+            "order": [
+                "sensid30",
+                "sensid32",
+                "sensid31",
+                "sensid33",
+                "sensid34",
+                "sensid35",
+                "sensid36",
+                ""
+            ],
+            "empties": 1
         },
         "sensorgroup7": {
-            "type": "sensorgroup",
-            "name": "Amrel L",
             "size": [
                 9,
                 7
@@ -413,11 +456,19 @@
                     "name": "Ramping",
                     "sensortype": "2-state"
                 }
+            ],
+            "type": "sensorgroup",
+            "name": "Amrel L",
+            "order": [
+                "sensid37",
+                "sensid38",
+                "sensid39",
+                "sensid40",
+                "sensid41",
+                "sensid42"
             ]
         },
         "sensorgroup20": {
-            "type": "sensorgroup",
-            "name": "Amrel V",
             "size": [
                 9,
                 7
@@ -426,7 +477,6 @@
                 24,
                 1
             ],
-            "empties": 1,
             "sensors": [
                 {
                     "id": "sensid43",
@@ -466,11 +516,20 @@
                     "precision": 1,
                     "factor": 1000000
                 }
-            ]
+            ],
+            "type": "sensorgroup",
+            "name": "Amrel V",
+            "order": [
+                "sensid44",
+                "sensid43",
+                "sensid45",
+                "sensid46",
+                "sensid47",
+                ""
+            ],
+            "empties": 1
         },
         "sensorgroup8": {
-            "type": "sensorgroup",
-            "name": "Veto Peltier 1",
             "size": [
                 9,
                 7
@@ -522,18 +581,26 @@
                     "name": "Output",
                     "precision": 2
                 }
+            ],
+            "type": "sensorgroup",
+            "name": "Veto Peltier 1",
+            "order": [
+                "sensid48",
+                "sensid50",
+                "sensid49",
+                "sensid54",
+                "sensid55",
+                "sensid56"
             ]
         },
         "sensorgroup16": {
-            "type": "sensorgroup",
-            "name": "Veto Peltier 2",
             "size": [
                 9,
                 7
             ],
             "coords": [
                 24,
-                17
+                9
             ],
             "sensors": [
                 {
@@ -579,6 +646,16 @@
                     "name": "Output",
                     "precision": 2
                 }
+            ],
+            "type": "sensorgroup",
+            "name": "Veto Peltier 2",
+            "order": [
+                "sensid52",
+                "sensid51",
+                "sensid53",
+                "sensid57",
+                "sensid58",
+                "sensid59"
             ]
         }
     }

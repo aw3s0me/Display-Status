@@ -17,6 +17,8 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				isresizable: false,
 				isdraggable: false,
 				issortable: false,
+				order: undefined,
+				empties: 0,
 				cfgObj: null
 			}
 		},
@@ -37,7 +39,9 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			cfg['coords'] = attrs['coords'];
 			cfg['sensors'] = [];
 			cfg['type'] = "sensorgroup";
-			
+			cfg['name'] = attrs['name'];
+			cfg['order'] = attrs['order'];
+
 			if (defaults['isresizable'] !== attrs['isresizable'])
 				cfg['isresizable'] = attrs['isresizable'];
 			if (defaults['isdraggable'] !== attrs['isdraggable'])
@@ -46,6 +50,8 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				cfg['issortable'] = attrs['issortable'];
 			if (defaults['canberemoved'] !== attrs['canberemoved'])
 				cfg['canberemoved'] = attrs['canberemoved'];
+			if (defaults['empties'] !== attrs['empties'])
+				cfg['empties'] = attrs['empties'];
 
 			for (var i = 0; i < collection.length; i++) {
 				var sensor = collection[i];
@@ -59,7 +65,6 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 
 				cfg['sensors'].push(jsonSensorAttr);
 			}
-
 
 			return cfg;
 		},
@@ -109,6 +114,16 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 			delete attrs['sizey'];
 
 			this.set(attrs);
+		},
+		removeModelFromOrder: function(id) {
+			var order = this.get('order');
+			if (!order) {
+				console.log('Cannot remove from order');
+				return;
+			}
+			var index = order.indexOf(id);
+			if(index !== -1)
+				order.splice(index, 1);
 		}
 	});
 

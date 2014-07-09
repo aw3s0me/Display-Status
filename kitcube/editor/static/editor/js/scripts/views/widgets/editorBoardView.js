@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensorModel', 'models/sensorGroupModel', 'views/widgets/singleSensorView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'models/chartModel', 'views/pres/widgetsSettPage'], function($, _, Backbone, TabView, Sensor, SensorGroupModel, SingleSensorView, SensorGroupView, SensorCollection, EmptySensorView, ChartView, Chart, WidgetsSettPage){
+define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensorModel', 'models/sensorGroupModel', 'views/widgets/singleSensorView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'views/widgets/chartView', 'models/chartModel', 'views/pres/widgetsSettPage'], function($, _, Backbone, TabView, Sensor, SensorGroupModel, SingleSensorView, SensorGroupView, SensorCollection,  ChartView, Chart, WidgetsSettPage){
 	var editorBoardView = Backbone.View.extend({
 		container: $('#tabs'),
 		grid: null,
@@ -220,9 +220,8 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 		addSensorGroup: function(attr) {
 			var sensorArr = attr['sensors'];
 			var trendsArr = [];
-			var groupArr = [];
+			var group = {};
 			var sensorModelsArr = [];
-			var emptyCount = attr['empties'];
 			var dbname = undefined;
 			var server = undefined;
 			var dbgroup = undefined;
@@ -320,29 +319,9 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 
 				if (!sensor.get('norender')) {
 					//self.views.sensors[sensor.get('id')] = newSensorView;
-					groupArr.push(newSensorView);
+					group[sensor.get('id')] = newSensorView;
 				}
 			}
-
-			var empties = undefined;
-
-			if (emptyCount > 0) {
-				empties = [];
-				while (emptyCount--) {
-					if (!size) 
-						size = [2, 2];
-
-					var newSensorView = new EmptySensorView({
-						model: new Sensor({
-							size: size,
-						}),
-						grid: grid,
-						empty: true
-					});
-					empties.push(newSensorView);
-				}
-			}
-
 			var newSensorGroupModel = new SensorGroupModel({
 				id: attr._id,
 				name: attr['name'],
@@ -352,7 +331,9 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				collection: new SensorCollection(sensorModelsArr),
 				cfgObj: attr,
 				groupname1: attr["groupname1"],
-				groupname2: attr["groupname2"]
+				groupname2: attr["groupname2"],
+				order: attr['order'],
+				empties: attr['empties']
 			});
 
 			if (attr['diffsensors'] === false) {
@@ -366,8 +347,8 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			var newSensorGroupView = new SensorGroupView({
 				model: newSensorGroupModel,
 				grid: grid,
-				group: groupArr,
-				empties: empties
+				group: group,
+				sizecoeff: this.settings['sizecoeff']
 			});
 
 			this.views.sensorgroups[attr._id] = newSensorGroupView;

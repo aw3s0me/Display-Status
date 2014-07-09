@@ -1,10 +1,10 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', "contextmenu", 'views/pres/widgetsSettPage'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, contextMenu, WidgetSettWindow) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', "contextmenu", 'views/pres/widgetsSettPage', 'views/widgets/emptySensorView', 'models/sensorModel'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, contextMenu, WidgetSettWindow, EmptySensorView, Sensor) {
     var SensorGroupView = Backbone.View.extend({
         container: undefined,
         grid: undefined,
         model: undefined,
         group: undefined,
-        empties: undefined,
+        sizecoeff: 2,
         initialize: function(options) { //pass it as new SensorView({model: model, options: options}) 
             var self = this;
 
@@ -20,8 +20,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 this.group = options.group;
             }
 
-            if (options.empties) {
-                this.empties = options.empties;
+            if (options.sizecoeff) {
+                this.sizecoeff = options.sizecoeff;
             }
 
             this.render();
@@ -68,10 +68,17 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 .css('height', unitY * (dy) + 'px')
                 .css('width', unitX * dx + 'px')
                 .addClass('sortable_container')
-                .sortable();
+                .sortable({
+                    update: function(event, ui) {
+                        var order = $(this).sortable('toArray');
+                        self.model.set({order: order});
+                        console.log(order);
+                    },
+                    revert: true
+                });
 
             if (this.group !== undefined) {
-                for (var i = 0; i < this.group.length; i++) {
+                /*for (var i = 0; i < this.group.length; i++) {
                     var newSensorView = this.group[i];
                     var cont = this.setContainer(newSensorView);
                     newSortableContainer.append(cont);
@@ -79,13 +86,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                         trendChartInitArr.push(newSensorView);
                     }
                     newSensorView.on('removing', this.onSensorRemoving, this);
-                }
-                if (this.empties) {
-                    for (var i = 0; i < this.empties.length; i++) {
-                        var newSensorView = this.empties[i];
-                        var cont = this.setContainer(newSensorView);
-                        newSortableContainer.append(cont);
-                    }
+                }*/
+                var order = this.model.get('order');
+                if (order) {
+                    this.addElementsByOrder(order, newSortableContainer);
+                } else {
+                    this.addElements(newSortableContainer);
                 }
 
             } else {
@@ -161,11 +167,56 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 }
             });
         },
+        addElementsByOrder: function(order, newSortableContainer) {
+            for (var i = 0; i < order.length; i++) {
+                var elemName = order[i];
+                if (elemName === "") {
+                    this.addEmptySensor(newSortableContainer);
+                    continue;
+                }
+                var newSensorView = this.group[elemName];
+                var cont = this.setContainer(newSensorView);
+                newSortableContainer.append(cont);
+                newSensorView.on('removing', this.onSensorRemoving, this);
+            }
+        },
+        addElements: function(newSortableContainer) {
+            for (var elemName in this.group) {
+                var newSensorView = this.group[elemName];
+                var cont = this.setContainer(newSensorView);
+                newSortableContainer.append(cont);
+                newSensorView.on('removing', this.onSensorRemoving, this);
+            }
+            var empties = this.model.get('empties');
+            for (var i = 0; i < empties; i++) {
+                this.addEmptySensor(newSortableContainer);
+            }
+        },
+        addEmptySensor: function(newSortableContainer) {
+            var sizecoeff = this.sizecoeff;
+            var size = [sizecoeff, sizecoeff];
+
+            var newSensorView = new EmptySensorView({
+                model: new Sensor({
+                    size: size,
+                }),
+                grid: this.grid,
+                empty: true
+            });
+
+            var cont = this.setContainer(newSensorView);
+            newSortableContainer.append(cont);
+        },
         removeFromDom: function() {
-            for (var i = 0; i < this.group.length; i++) {
+            /*for (var i = 0; i < this.group.length; i++) {
                 var sensorView = this.group[i];
                 sensorView.removeFromDom();
+            }*/
+            for (var elemName in this.group) {
+                var elem = this.group[elemName];
+                elem.removeFromDom();
             }
+
             this.container.parent().remove();
             this.remove();
             this.unbind();
@@ -173,6 +224,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
         onSensorRemoving: function(model) {
             var collection = this.model.get('collection');
             collection.removeModel(model);
+            this.model.removeModelFromOrder(model.get('id'));
         },
         setContainer: function(sensorView) {
             var divElem = sensorView.getContainer();
