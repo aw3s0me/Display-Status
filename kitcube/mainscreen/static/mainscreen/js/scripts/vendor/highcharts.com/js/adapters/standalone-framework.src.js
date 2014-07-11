@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v4.0.1 (2014-04-24)
+ * @license @product.name@ JS v@product.version@ (@product.date@)
  *
  * Standalone Highcharts Framework
  *
@@ -88,7 +88,6 @@ function augment(obj) {
 				} else if (el.attachEvent) {
 					
 					wrappedFn = function (e) {
-						e.target = e.srcElement || window; // #2820
 						fn.call(el, e);
 					};
 
@@ -305,7 +304,7 @@ return {
 				// HTML styles
 				} else {
 					styles = {};
-					styles[this.prop] = this.now + this.unit;
+					styles[elem] = this.now + this.unit;
 					Highcharts.css(elem, styles);
 				}
 				
@@ -351,10 +350,9 @@ return {
 					ret,
 					done,
 					options = this.options,
-					elem = this.elem,
 					i;
-				
-				if (elem.stopAnimation || (elem.attr && !elem.element)) { // #2616, element including flag is destroyed
+
+				if (this.elem.stopAnimation) {
 					ret = false;
 
 				} else if (gotoEnd || t >= options.duration + this.startTime) {
@@ -373,7 +371,7 @@ return {
 
 					if (done) {
 						if (options.complete) {
-							options.complete.call(elem);
+							options.complete.call(this.elem);
 						}
 					}
 					ret = false;
@@ -451,7 +449,7 @@ return {
 	 * Internal method to return CSS value for given element and property
 	 */
 	_getStyle: function (el, prop) {
-		return window.getComputedStyle(el, undefined).getPropertyValue(prop);
+		return window.getComputedStyle(el).getPropertyValue(prop);
 	},
 
 	/**
@@ -506,16 +504,19 @@ return {
 		return results;
 	},
 
-	/**
-	 * Get the element's offset position, corrected by overflow:auto. Loosely based on jQuery's offset method.
-	 */
 	offset: function (el) {
-		var docElem = document.documentElement,
-			box = el.getBoundingClientRect();
+		var left = 0,
+			top = 0;
+
+		while (el) {
+			left += el.offsetLeft;
+			top += el.offsetTop;
+			el = el.offsetParent;
+		}
 
 		return {
-			top: box.top  + (window.pageYOffset || docElem.scrollTop)  - (docElem.clientTop  || 0),
-			left: box.left + (window.pageXOffset || docElem.scrollLeft) - (docElem.clientLeft || 0)
+			left: left,
+			top: top
 		};
 	},
 

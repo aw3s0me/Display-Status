@@ -7,7 +7,6 @@ require.config({
     "backbone": "vendor/backbone-amd/backbone",
     //Flat-ui part
     "bootstrap": "vendor/bootstrap/dist/js/bootstrap",
-    //"flatui-app": "vendor/flat-ui-official/js/application",
     //Text Editor part
     "ace": "vendor/ace/build/src-min/ace",
     //There goes my helpers
@@ -20,10 +19,7 @@ require.config({
     "highcharts": "vendor/highcharts.com/js/highcharts.src",
     //colorpicker part
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
-    //"bigtext": "vendor/bigtext/src/bigtext",
-    //"momentjs": "vendor/momentjs/min/moment.min",
     "chosen": "vendor/chosen_v1.1.0/chosen.jquery.min",
-    "tabdrop": "vendor/bootstrap-tabdrop/build/js/bootstrap-tabdrop.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
     "cookie": "vendor/jquery-cookie/jquery.cookie",
     "contextmenu": "vendor/contextmenu/jquery.contextMenu"
@@ -83,12 +79,6 @@ require.config({
         "jquery"
       ]
     },
-    tabdrop: {
-      deps: [
-        "jquery",
-        "bootstrap"
-      ]
-    },
     cookie: {
     	deps: [
     		"jquery"
@@ -97,7 +87,8 @@ require.config({
     "contextmenu": {
       deps: [
         "jqueryui"
-      ]
+      ],
+      exports: "jQuery.contextMenu"
     }
   }
 });

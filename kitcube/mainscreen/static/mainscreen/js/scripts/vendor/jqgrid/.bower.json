@@ -17,6 +17,6 @@
     "commit": "6659334f5269cc4c9adce85ad57b9ee94cd7cf2c"
   },
   "_source": "git://github.com/tonytomov/jqGrid.git",
-  "_target": "*",
+  "_target": "4.6.0",
   "_originalSource": "jqgrid"
 }

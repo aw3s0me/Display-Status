@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', "contextmenu", 'views/pres/widgetsSettPage', 'views/widgets/emptySensorView', 'models/sensorModel', 'views/widgets/singleSensorView'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, contextMenu, WidgetSettWindow, EmptySensorView, Sensor, SensorView) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', 'views/pres/widgetsSettPage', 'views/widgets/emptySensorView', 'models/sensorModel', 'views/widgets/singleSensorView'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, WidgetSettWindow, EmptySensorView, Sensor, SensorView) {
     var SensorGroupView = Backbone.View.extend({
         container: undefined,
         sortableContainer: undefined,
@@ -73,7 +73,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 .css('right', 5 * scale + 'px')
                 .css('top', 4 * scale + 'px');
 
-            this.sortableContainer = $('<span></span>')
+            this.sortableContainer = jQuery('<span></span>')
                 .css('left', 0 + 'px')
                 .css('top', unitY + 'px')
                 .css('height', unitY * (dy) + 'px')

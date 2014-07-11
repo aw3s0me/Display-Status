@@ -162,8 +162,14 @@ var sizeDetector = (function($) {
 	}
 
 	sizeDetector.prototype.detectMaxGridSizes = function() {
-		this.maxGridSizesPx.width = (this.windowSize.width - 2 * this.boardMargin.width - this.panelRightWidth - this.panelLeftWidth);
+		//var ratio =  
+
 		this.maxGridSizesPx.height = (this.windowSize.height - this.bannerSize.height - this.footerSize.height - 2 * this.boardMargin.height);
+		this.windowSize.width = (this.maxGridSizesPx.height * this.gridSize.width) / this.gridSize.height;
+		console.log(this.windowSize.width);
+		this.maxGridSizesPx.width = (this.windowSize.width - 2 * this.boardMargin.width - this.panelRightWidth - this.panelLeftWidth);
+
+
 		if (this.maxGridSizesPx.width === NaN || this.maxGridSizesPx.height === NaN) {
 			throw "Error happened while detecting size of board";
 		}

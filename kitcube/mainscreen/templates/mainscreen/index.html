@@ -33,14 +33,16 @@
 </head>
  
 <body>
+  {{ banner }}
   <div id="wrapper">
-    	{{ banner }}
+    	
       {{ userblock }}
         <div id="board-container"> <!-- there should be tabs with boards -->
         </div>
-      <div id="footer" class="shadow">
+      
+  </div>
+  <div id="footer" class="shadow">
         <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
-      </div>
   </div>
   <!-- require -->
   <script data-main="../static/mainscreen/js/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}></script> 

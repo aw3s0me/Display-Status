@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], function($, _, Backbone, LoginTemplate) {
+define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html', 'contextmenu'], function($, _, Backbone, LoginTemplate, contextMenu) {
 
 	var loginView = Backbone.View.extend({
 		container: $('#container'),

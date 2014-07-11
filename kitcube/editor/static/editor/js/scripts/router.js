@@ -37,7 +37,7 @@ define([
 					//this.views.current.hideControlPanel();
 				//}
 				//$(this.views.current.el).hide();
-				if (!(this.views.current instanceof LoginView) || !(this.views.current instanceof RegisterView)) {
+				if (!(this.views.current instanceof LoginView) && !(this.views.current instanceof RegisterView)) {
 					this.views.current.destroyView();
 				}
 
@@ -190,6 +190,7 @@ define([
 						},
 						success: function(data) {
 							user.trigger('logout');
+							window.location.href = "#login";
 						},
 						beforeSend: function(xhr, settings) {
 							xhr.setRequestHeader('Authorization', token);
@@ -210,6 +211,9 @@ define([
 			if (this.views.userPanelView !== undefined) {
 				this.views.userPanelView.onUserLogout();
 			}
+
+			$('#guiEditor').hide();
+			$('#loginButton').hide();
 
 		},
 		showUserPanelView: function() {

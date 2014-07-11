@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v4.0.1 (2014-04-24)
+ * @license @product.name@ JS v@product.version@ (@product.date@)
  * Plugin for displaying a message when there is no data visible in chart.
  *
  * (c) 2010-2014 Highsoft AS
@@ -44,9 +44,7 @@
 		return !!this.points.length; /* != 0 */
 	}
 
-	if (seriesTypes.pie) {
-		seriesTypes.pie.prototype.hasData = hasDataPie;
-	}
+	seriesTypes.pie.prototype.hasData = hasDataPie;
 
 	if (seriesTypes.gauge) {
 		seriesTypes.gauge.prototype.hasData = hasDataPie;

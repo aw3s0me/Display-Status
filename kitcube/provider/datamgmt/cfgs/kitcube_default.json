@@ -1,28 +1,124 @@
 {
     "screen": {
-        "fluid": false,
-        "glb_sensor_size": 3,
-        "blocksize": 50,
-        "boardsizex": 60,
-        "boardsizey": 25,
-        "sizecoeff": 3
+        "isfluid": false,
+        "isscrollable": false,
+        "sizecoeff": "3",
+        "boardsize": [
+            "60",
+            "25"
+        ]
     },
     "datasource": {
         "host": "http://katrin.kit.edu/adei/",
-        "dbgroup": "0",
-        "dbname": "katrin_rep",
-        "server": "fpd"
+        "SysCI_txt": {
+            "dbgroup": "Data_120_SysCI_txt",
+            "server": "kitcube",
+            "dbname": "HDCP2"
+        },
+        "EB1_DAR": {
+            "dbgroup": "Data_011_EB1_DAR",
+            "server": "kitcube",
+            "dbname": "HDCP2"
+        },
+        "EB1_DAX": {
+            "dbgroup": "Data_011_EB1_DAX",
+            "server": "kitcube",
+            "dbname": "HDCP2"
+        }
     },
     "elements": {
-        "alarmlist1": {
-        	"type": "alarmlist",
-        	"target": "summary",
-        	"name": "List of alarms for: 520 Focal Plane Detector - Active",
-        	"control_group": "1",
-        	"size": [40, 21],
-        	"coords": [1, 1],
-        	"cols": ["severity", "name", "firstseen", "lastseen", "count", "description"],
-        	"sizes": [7.5, 25, 22.5, 22.5, 7.5, 15]
-        }
+        "sensorgroup1": {
+            "size": [
+                9,
+                7
+            ],
+            "coords": [
+                24,
+                17
+            ],
+            "sensors": [
+                {
+                    "id": "sensid1",
+                    "mask": "0",
+                    "unit": "C",
+                    "name": "Server room temperature",
+                    "datasource": "SysCI_txt"
+                },
+                {
+                    "id": "sensid2",
+                    "mask": "1",
+                    "unit": "GB",
+                    "name": "Free disk space",
+                    "precision": 0,
+                    "datasource": "SysCI_txt"
+                },
+                {
+                    "id": "sensid3",
+                    "mask": "2",
+                    "unit": "%",
+                    "name": "Free disk space",
+                    "precision": 0,
+                    "datasource": "SysCI_txt"
+                }
+            ],
+            "type": "sensorgroup",
+            "name": "Computer infrastructure"
+        },
+        "sensorgroup2": {
+            "size": [
+                9,
+                7
+            ],
+            "coords": [
+                24,
+                17
+            ],
+            "sensors": [
+                {
+                    "id": "sensid4",
+                    "mask": "36",
+                    "unit": "C",
+                    "precision": 2,
+                    "name": "Temperature 3m",
+                    "datasource": "EB1_DAR"
+                },
+                {
+                    "id": "sensid5",
+                    "mask": "52",
+                    "unit": "%",
+                    "name": "Humidity 3m",
+                    "precision": 1,
+                    "datasource": "EB1_DAR"
+                },
+                {
+                    "id": "sensid6",
+                    "mask": "12",
+                    "unit": "hPa",
+                    "name": "Air pressure 0.1m",
+                    "precision": 1,
+                    "datasource": "EB1_DAR"
+                },
+                {
+                    "id": "sensid7",
+                    "mask": "1",
+                    "unit": "deg",
+                    "name": "Wind direction 4m",
+                    "precision": 0,
+                    "datasource": "EB1_DAX"
+                },
+                {
+                    "id": "sensid8",
+                    "mask": "0",
+                    "unit": "m/s",
+                    "name": "Wind speed 4m",
+                    "precision": 2,
+                    "datasource": "EB1_DAX"
+                }
+            ],
+            "type": "sensorgroup",
+            "name": "Computer infrastructure"
+        },
+
+
     }
 }

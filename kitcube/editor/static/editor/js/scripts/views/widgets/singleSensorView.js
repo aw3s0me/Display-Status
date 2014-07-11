@@ -103,7 +103,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		},
 		initializeContextMenu: function() {
             var self = this;
-            $.contextMenu({
+            jQuery.contextMenu({
                 selector: '#' + self.model.get('id'),
                 callback: function(key, options) {
                     var m = "clicked: " + key;
@@ -117,6 +117,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
                     "edit": {name: "Edit"}
                 }
             });
+            
         },
 		getHtml: function() {
 			return this.container[0];
