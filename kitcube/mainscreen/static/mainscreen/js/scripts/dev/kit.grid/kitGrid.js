@@ -111,6 +111,7 @@ var kitGrid = (function($) {
 		var scale = grid.data('scale');
 		var unitSizeX = grid.data('scaledUnitSize');
 		var unitSizeY = grid.data('scaledUnitSize');
+		console.log([unitSizeX, unitSizeY])
 		divElem.css('left', px * grid.data('scaledUnitSize') + 'px');
 		divElem.css('top', py * grid.data('scaledUnitSize') + 'px');
 		divElem.css('width', dx * grid.data('scaledUnitSize') + 'px');

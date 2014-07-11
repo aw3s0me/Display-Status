@@ -122,7 +122,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var self = this;
 			var singleSensorsToAdd = [];
 			var sensorGroupsToAdd = [];
-			var sensorTablesToAdd = [];
+			var sensorTablesToAdd = [];	
 			var alarmListsToAdd = [];
 			var chartsToAdd = [];
 

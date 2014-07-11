@@ -66,7 +66,8 @@ var sizeDetector = (function($) {
 
 		this.marginTop = 0;
 
-		this.scale = undefined;
+		this.scale = undefined; //height scale
+		this.scaleW = undefined; //width scale
 
 		this.panelLeftWidth = 0;
 		this.panelRightWidth = 0;
@@ -145,6 +146,8 @@ var sizeDetector = (function($) {
 
 		this.scale = (scaleHeight < scaleWidth) ? scaleHeight : scaleWidth;
 		this.scale = Math.floor(this.scale * 100) / 100;
+
+		console.log(this.scale);
 
 		if (this.scale === undefined || this.scale === NaN) {
 			throw "Error in detecting scale";

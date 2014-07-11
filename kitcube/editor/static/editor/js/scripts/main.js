@@ -96,7 +96,6 @@ require.config({
     },
     "contextmenu": {
       deps: [
-        "jquery",
         "jqueryui"
       ]
     }

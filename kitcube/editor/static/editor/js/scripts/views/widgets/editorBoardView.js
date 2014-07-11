@@ -63,7 +63,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 				this.settings['sizecoeff'] = prsObj['screen']['sizecoeff'] ? prsObj['screen']['sizecoeff'] : this.settings.sizecoeff;
 			}
 
-			console.log(this.settings['sizecoeff']);
+			//console.log(this.settings['sizecoeff']);
 			
 			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
 			this.cfgObj = prsObj;
@@ -178,7 +178,7 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 			/* ALL THE SAME STUPID ERROR */
 			for (var tabId in this.tabs) {
 				var tab = this.tabs[tabId];
-				console.log(tab.grid.getIdOfCanvas());
+				//console.log(tab.grid.getIdOfCanvas());
 			}
 
 			$('#tabs').tabs({
@@ -197,15 +197,14 @@ define(['jquery', 'underscore', 'backbone', 'views/pres/tabView', 'models/sensor
 
 			var self = this;
 			$('#toggleGridButton').click(function(e) {
-				console.log('toggle: ')
+				//console.log('toggle: ')
 				var id = self.getCurrentTab();
-				console.log(id);
+				//console.log(id);
 				var tab = self.tabs[id];
 				tab.grid.toggleGrid();
 			}).tooltip({});
 		},
 		establishStyle: function(canvas, options) {
-			console.log();
 			canvas.css('height', this.viewSizeDetector.boardSizePx.height + 'px')
 				.css('width', this.viewSizeDetector.boardSizePx.width + 'px')
 				.data('height', this.viewSizeDetector.boardSizePx.height)

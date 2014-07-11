@@ -338,7 +338,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			controlPanel.find('.goAdeiBtn').button()
 				.click(function(event) {
-					console.log(self.getUrlGoToAdei());
+					//console.log(self.getUrlGoToAdei());
 					window.open(self.getUrlGoToAdei(), '_blank');
 				});
 
@@ -495,7 +495,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			
 			try {
 				getDataFromAdei(url, false, function(data) {
-					console.log(data);
+					//console.log(data);
 					xmldoc = $.parseXML(data);
 					$xml = $(xmldoc);
 					$values = $xml.find('Value').each(function(index) {
@@ -648,7 +648,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					self.chart.hideLoading();
 				});
 			} catch (msg) {
-				console.log(msg);
+				//console.log(msg);
 			}
 		},
 		onChangeTimeRange: function() {

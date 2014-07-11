@@ -187,7 +187,7 @@ function requestToServ(url, callback, filetype, type) {
     var success = function(e) {
         var items = '';
         items = xhr.responseText;
-        console.log(items);
+        //console.log(items);
         /*switch(filetype) {
             case 'csv': {
                 //items = CSV2JSON(xhr.responseText); 
@@ -244,7 +244,7 @@ function sameOrigin(url) {
 
 function getSensorNumber(db_server, db_name, db_group, sensorId) {
     var url = 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + db_server + '&db_name=' + db_name + '&db_group=' + db_group + '&db_mask=' + sensorId + '&window=-1&format=csv';
-    console.log(url);
+    //console.log(url);
     var data;
     requestToServ(url, function(e) {
         data = e;
