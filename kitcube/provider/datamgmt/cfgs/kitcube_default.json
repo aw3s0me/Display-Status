@@ -9,7 +9,7 @@
         ]
     },
     "datasource": {
-        "host": "http://katrin.kit.edu/adei/",
+        "host": "http://localhost:8024/adei/",
         "SysCI_txt": {
             "dbgroup": "Data_120_SysCI_txt",
             "server": "kitcube",
@@ -27,14 +27,29 @@
         }
     },
     "elements": {
+        "chart1": {
+            "link": [
+            ],
+            "size": [
+                23
+                ,
+                10
+            ],
+            "coords": [
+                11,
+                1
+            ],
+            "startrange": "15m",
+            "type": "chart"
+        },
         "sensorgroup1": {
             "size": [
                 9,
-                7
+                4
             ],
             "coords": [
-                24,
-                17
+                1,
+                9
             ],
             "sensors": [
                 {
@@ -70,8 +85,8 @@
                 7
             ],
             "coords": [
-                24,
-                17
+                1,
+                1
             ],
             "sensors": [
                 {
@@ -116,9 +131,8 @@
                 }
             ],
             "type": "sensorgroup",
-            "name": "Computer infrastructure"
-        },
-
-
+            "name": "Energy balance station EB1",
+            "empties": 1
+        }
     }
 }

@@ -4,6 +4,7 @@ body {
   padding: 0;
   height: 100%;
   overflow-y: hidden;
+  overflow-x: hidden;
   background-color: #DCDCDC !important;
 }
 
@@ -11,6 +12,12 @@ body {
   min-height: 100%;
   position: relative;
   background-color: #DCDCDC !important;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+#scrollbar_wrapper {
+
 }
 
 #content {
@@ -31,10 +38,12 @@ body {
   background: #666;
   width: 100%;
   height: 20px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  position: fixed;
+  bottom: 15px;
+  z-index: 30;
+  //left: 0;
   text-align: center;
+  //overflow-x: scroll;
 }
 
 .shadow {
@@ -85,7 +94,8 @@ body {
       bottom: 0;
       left: 0;
       right: 0;
-      
+      //overflow-y: hidden;
+      //overflow-x: scroll;
       //margin: auto;
 
 }

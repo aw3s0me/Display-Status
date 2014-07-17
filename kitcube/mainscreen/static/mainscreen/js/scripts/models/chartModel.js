@@ -103,6 +103,42 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			return xAxis;
 		},
+		getWindow: function() {
+			var now = new Date;
+			var min = this.getRangeToDate();
+			var max = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
+			return {
+				start: min,
+				end: max
+			}
+		},
+		getWindowUrl: function() {
+			var windowObj = this.getWindow();
+			var start = parseInt(windowObj.start / 1000);
+			var end = parseInt(windowObj.end / 1000);
+			var windowUrl = start + "-" + end;
+
+			return windowUrl;
+		},
+		getResample: function() {
+			var windowObj = this.getWindow();
+			var start = parseInt(windowObj.start / 1000);
+			var end = parseInt(windowObj.end / 1000);
+			var nubmerOfPoints = this.getNumberOfPoints();
+			var resample = getResample(nubmerOfPoints, start, end);
+			return resample;
+		},
+		getMasks: function(models) {
+			var masks = [];
+			$.each(models, function(key, model) {
+				if (!this.isOnTheChartById(model.get('id'))) {
+					masks.push(model.get('mask'));
+				}
+			});
+				
+			var masksToRequest = masks.join();
+			return masksToRequest.length > 0 ? masksToRequest : false;
+		},
 		getNumberOfPoints: function() {
 			var number = undefined;
 			switch (this.get('range')) {

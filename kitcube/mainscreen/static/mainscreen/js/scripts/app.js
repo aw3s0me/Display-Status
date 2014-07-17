@@ -80,6 +80,8 @@ define([
 
 			$('body').css('min-height', height);
 
+			//console.log($('#wrapper')[0].clientHeight)
+
 			$.fn.serializeObject = function() {
 				var o = {};
 				var a = this.serializeArray();

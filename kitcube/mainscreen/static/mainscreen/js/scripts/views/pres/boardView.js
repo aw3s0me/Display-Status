@@ -104,10 +104,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				.data('scale', this.viewSizeDetector.scale)
 				.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 			if (!options || !options.portrait) {
+				console.log(this.viewSizeDetector.marginTop)
 				canvas.css('top', this.viewSizeDetector.marginTop + 'px');
-				return;
+				//return;
 			}
 
+			//$('#scrollbar_wrapper').height(this.viewSizeDetector.scale * 20 + 'px');
+			
 		},
 		getGrid: function(attr) {
 			var grid;
@@ -192,12 +195,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			if (chartsToAdd.length > 0)
 				this.getAxes();
 
-			this.addAllSingleSensors(singleSensorsToAdd);
-			this.addAllSensorGroups(sensorGroupsToAdd);
-			this.addAllTables(sensorTablesToAdd);
-			this.addAllAlarmLists(alarmListsToAdd);
-			this.addAllCharts(chartsToAdd);
-
+			this.addAllElements(sensorGroupsToAdd, this.addSensorGroup);
+			this.addAllElements(sensorTablesToAdd, this.addSensorTable);
+			this.addAllElements(alarmListsToAdd, this.addAlarmList);
+			this.addAllElements(chartsToAdd, this.addChart);
 
 			this.enableFetchingData();
 			this.updateAllSensors();
@@ -231,7 +232,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 							axis_mode: $(this).attr('axis_mode'),
 							axis_range: $(this).attr('axis_range')
 						}
-						console.log(newAxes);
 						axes[id] = newAxes;
 					});
 
@@ -254,7 +254,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				$.each(this.settings.datasources, function(name, datasource) {
 					self.updateSensorsFromDatasource(datasource);
 				});
-
 			}
 			else {
 				this.updateSensorsFromDatasource({
@@ -274,7 +273,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			var masks = [];
 
-
 			for (var sensId in source) {
 				var element = this.sensors[sensId];
 				masks.push(element.get('mask'));
@@ -284,10 +282,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			try {
 				//http://katrin.kit.edu/adei/services/getdata.php?db_server=fpd&db_name=katrin_rep&db_group=0&db_mask=102,106,107,108,149,150,103,109,110,111,151,152,74,66,68,99,12,67,69,100,2,3,4,5,6,7,8,9,59,61,75,78,80,82,145,112,113,116,117,118,146,119,120,123,124,125,186,187,188,190,191,192,190,191,192&window=-1
 				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=-1';
+				//console.log(url);
 				//window.db.httpGetCsv(url, function(data) {
 				getDataFromAdei(url, true, function(data) {
+				//createCORSRequest('GET', url, true, function(data) {
 					//var result = window.db.dataHandl.onMessageRecievedCsv(data);
 					result = parseCSVForUpdating(data, masks.length);
+					//console.log(result);
 					if (typeof(result) === "string") {
 						console.log('Error occured: ' + result);
 						var lastUpdatedTime = 'Error in getting data';
@@ -322,49 +323,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		updateSensor: function(sensorModel) {
 			sensorModel.updateModel();
 		},
-		alert: function(e) {
-			console.log(e);
-		},
-		resize: function(x, y) {
-
-		},
-		change: function(NumX, NumY) {},
 		clear: function() {
 			this.$el.empty();
-		},
-		submitTest: function() {
-			fncstring = $('#testfunction').val();
-
-			var fncname = /^[a-zA-Z0-9]+/.exec(fncstring);
-			var args = /\(([^)]+)/.exec(fncstring);
-
-			fncname = fncname[0];
-			if (args !== null)
-				args = args[1].split(/\s*,\s*/);
-
-			switch (fncname) {
-				case "drawText":
-					args[4] = /[^'"]+/.exec(args[4]);
-					//var e = drawText(args[0], args[1], args[2], args[3], args[4], args[5]);
-					break;
-				case "drawSensor":
-					//var e = drawSensor(args[0], args[1], args[2], args[3]);
-					break;
-				case "addSensor":
-					args[2] = /[^'"]+/.exec(args[2]);
-					//var e = addSensor(args[0], args[1], args[2], args[3]);
-					break;
-				case "updatePage":
-					break;
-				case "addSensorGroup":
-					//addSensorGroup.call($('.canvas'), args[0], args[1], args[2], args[3], args[4]);
-					break;
-				case "loadCfg":
-					this.loadCfg(args[0]);
-					break;
-				default:
-					alert('function "' + fncname + '" not defined');
-			}
 		},
 		loadCfg: function(filename) {
 			var self = this;
@@ -414,26 +374,56 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			});
 		},
 		initDatasources: function(datasourceObj) {
-			if (datasourceObj['dbgroup'] || !datasourceObj['dbname'] || datasourceObj['server']) {
+			window.host = datasourceObj.host;
+
+			if (this.isManyDatasources(datasourceObj)) {
 				this.settings['dbgroup'] = datasourceObj['dbgroup'];
 				this.settings['dbname'] = datasourceObj['dbname'];
 				this.settings['server'] = datasourceObj['server'];
 				return;
 			}
 
+			this.settings.datasources = {};
+
 			for (var datasourceName in datasourceObj) {
+				if (datasourceName === 'host') {
+					continue;
+				}
 				var datasource = datasourceObj[datasourceName];
 				datasource['masks'] = [];
+				datasource['sensors'] = {};
 				if (!datasource['dbgroup'] || !datasource['dbname'] || !datasource['server']) {
 					alert('Please specify fields dbgroup, dbname and server in configuration file');
 				}
 				this.settings.datasources[datasourceName] = datasource;
 
 			}
+			console.log(this.settings.datasources);
 		},
-		addSensorToDatasource: function(attr, id) {
-			if (attr['datasource'])
-				this.settings.datasources[attr['datasource']].sensors = id;
+		getDatasourcesForModels: function(models) {
+			var datasources = {};
+			if (!this.isManyDatasources) {
+				return {
+					dbgroup: this.settings['dbgroup'],
+					dbname: this.settings['dbname'],
+					server: this.settings['server'],
+					source: this.sensors
+				}
+			}
+
+			for (var i = 0; i < models.length; i++) {
+				var model = models[i];
+				var datasourceName = model.get('datasource');
+				datasources[datasourceName] = this.settings.datasources[datasourceName];
+			}
+			console.log(datasources);
+			return datasources;
+		},
+		isManyDatasources: function(datasourceObj) {
+			return datasourceObj !== undefined ? datasourceObj['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server'] : false;
+		},
+		addSensorToDatasource: function(datasource, id, model) {
+			this.settings.datasources[datasource].sensors[id] = model;
 		},
 		getCurrentTab: function() {
 			var activeTabIdx = $("#tabs").tabs('option', 'active');
@@ -689,35 +679,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var group = [];
 			var sensorModelsArr = [];
 			var emptyCount = attr['empties'];
-			var dbname = undefined;
-			var server = undefined;
-			var dbgroup = undefined;
 			//which tab will be there
 			var grid = this.getGrid(attr);
 			var size = undefined;
 
-
 			//if groups are not from diff sources
-			if (attr['diffgroups']) {
-				dbname = attr['dbname'];
-				server = attr['server'];
-				dbgroup = attr['dbgroup'];
-			} else {
-				dbname = this.settings['dbname'];
-				server = this.settings['server'];
-				dbgroup = this.settings['dbgroup'];
-			}
-
 			size = [this.settings['sizecoeff'], this.settings['sizecoeff']];
 
 			for (var i = 0; i < sensorArr.length; i++) {
 				var sensorObj = sensorArr[i];
-
-				if (attr['diffsensors']) {
-					dbname = sensorObj['dbname'];
-					server = sensorObj['server'];
-					dbgroup = sensorObj['dbgroup'];
-				}
 
 				if (sensorObj['type'] === "trend") {
 					trendsArr.push(sensorObj);
@@ -742,8 +712,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					datasource: sensorObj['datasource'],
 					device: sensorObj["device"],
 					norender: sensorObj["norender"],
-					dbname: dbname,
-					dbgroup: dbgroup,
 					mask: sensorObj["mask"],
 					size: size,
 					coords: sensorObj["coords"],
@@ -753,7 +721,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					cfgObj: sensorObj
 				});
 
-				this.addSensorToDatasource(sensorObj, sensorObj['id']);
+				if (this.settings.datasources)
+					this.addSensorToDatasource(sensorObj['datasource'], sensorObj['id'], newSensor);
 
 				if (this.sensors[sensorObj["id"]]) {
 					throw "This sensor already exists" + sensorObj["id"];
@@ -785,7 +754,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						group: false,
 						linkModel: linkModel
 					});
-
 
 					this.sensorViewLookup[linkModel.get('id')] = {
 						type: 2,
@@ -855,14 +823,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				order: attr['order'],
 				empties: attr['empties']
 			});
-
-			if (attr['diffsensors'] === false) {
-				newSensorGroupModel.set({
-					dbname: attr['dbname'],
-					dbgroup: attr['dbgroup'],
-					server: attr['server']
-				});
-			}
 
 			var newSensorGroupView = new SensorGroupView({
 				model: newSensorGroupModel,
@@ -952,41 +912,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 
 			this.views.alarms[attr._id] = newAlarmListView;
 		},
-		//need refactoring
-		addAllCharts: function(arr) {
+		addAllElements: function(arr, addMethod) {
 			for (var i = 0; i < arr.length; i++) {
 				var attr = arr[i];
-				this.addChart(attr);
-			}
-		},
-		addAllSingleSensors: function(arr) {
-			for (var i = 0; i < arr.length; i++) {
-				var attr = arr[i];
-				this.addSingleSensor(attr);
-			}
-		},
-		addAllAlarmLists: function(arr) {
-			for (var i = 0; i < arr.length; i++) {
-				var attr = arr[i];
-				this.addAlarmList(attr);
-			}
-		},
-		addAllMeasurementLists: function(attr) {
-			for (var i = 0; i < arr.length; i++) {
-				var attr = arr[i];
-				this.addMeasurementList(attr);
-			}
-		},
-		addAllSensorGroups: function(arr) {
-			for (var i = 0; i < arr.length; i++) {
-				var attr = arr[i];
-				this.addSensorGroup(attr);
-			}
-		},
-		addAllTables: function(arr) {
-			for (var i = 0; i < arr.length; i++) {
-				var attr = arr[i];
-				this.addSensorTable(attr);
+				addMethod.call(this, attr);
+				//this.addChart(attr);
 			}
 		},
 		hide: function() {

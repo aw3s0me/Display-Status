@@ -7,95 +7,102 @@ if (!String.prototype.format) {
     };
 }
 
+var createCORSRequest = function(method, url, async, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(xhr.responseText);
+            callback(xhr.responseText);
+        } else {
+            console.log('OLO');
+        }
+    }
+
+    xhr.onerror = function() {
+        console.log('error');
+    }
+
+    xhr.withCredentials = true;
+    //xhr.setRequestHeader("Content-Type", "text/plain");
+
+    xhr.open(method, url, async);
+    xhr.send(null);
+
+    /*if ("withCredentials" in xhr) {
+        // Check if the XMLHttpRequest object has a "withCredentials" property.
+        // "withCredentials" only exists on XMLHTTPRequest2 objects.
+        xhr.open(method, url, async);
+        xhr.send(null);
+    } else if (typeof XDomainRequest != "undefined") {
+
+        // Otherwise, check if XDomainRequest.
+        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+        xhr = new XDomainRequest();
+        xhr.open(method, url, async);
+        xhr.send(null);
+    } else {
+
+        // Otherwise, CORS is not supported by the browser.
+        xhr = null;
+
+    }*/
+    return xhr;
+}
+
+var formAdeiUrl = function(host, server, dbname, dbgroup, masksToRequest, windowUrl, resample) {
+    return host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
+}
+
+var formModelsUrlObj = function(models) {
+    var masks = [];
+    $.each(models, function(key, models) {
+        var model = models.get('mask');
+
+    });
+}
+
+var formModelsUrlArr = function(models) {
+
+}
+
 var getDataFromAdei = function(url, async, callback) {
     var xmlHttp = null;
 
     xmlHttp = new XMLHttpRequest();
+    //xmlHttp.setRequestHeader("Content-Type", "text/plain");
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             callback(xmlHttp.responseText);
         }
     };
+
     xmlHttp.open("GET", url, async);
     xmlHttp.send(null);
 
     return this;
 }
 
-// Changes XML to JSON
-var xmlToJson = function(xml) {
-    try {
-        // Create the return object
-    var obj = {};
-
-    if (xml.nodeType == 1) { // element
-        // do attributes
-        if (xml.attributes.length > 0) {
-        obj["@attributes"] = {};
-            for (var j = 0; j < xml.attributes.length; j++) {
-                var attribute = xml.attributes.item(j);
-                obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
-            }
-        }
-    } else if (xml.nodeType == 3) { // text
-        obj = xml.nodeValue;
+var parseTime = function(window) {
+    var Microsec = window.substr(19);
+    //window = window.substring(0, 18);
+    var year = window.substr(7, 2);
+    var month = window.substr(3, 3);
+    var day = window.substr(0, 2);
+    var hour = window.substr(10, 2);
+    var minute = window.substr(13, 2);
+    var sec = window.substr(16, 2);
+    if (year > 60) {
+        year = '19' + year;
+    } else {
+        year = '20' + year;
     }
-
-    // do children
-    if (xml.hasChildNodes()) {
-        for(var i = 0; i < xml.childNodes.length; i++) {
-            var item = xml.childNodes.item(i);
-            var nodeName = item.nodeName;
-            if (typeof(obj[nodeName]) == "undefined") {
-                obj[nodeName] = xmlToJson(item);
-            } else {
-                if (typeof(obj[nodeName].length) == "undefined") {
-                    var old = obj[nodeName];
-                    obj[nodeName] = [];
-                    obj[nodeName].push(old);
-                }
-                obj[nodeName].push(xmlToJson(item));
-            }
-        }
-    }
-    return obj;
-
-    }
-    catch(msg) {
-        console.log('error in parsing xml');
-        xml = null;
-    }
-
-    return xml;
-};
-
-var parseTime = function(window)
-    {
-        var Microsec = window.substr(19);
-        //window = window.substring(0, 18);
-        var year = window.substr(7, 2);
-        var month = window.substr(3, 3);
-        var day = window.substr(0, 2);
-        var hour = window.substr(10, 2);
-        var minute = window.substr(13, 2);
-        var sec = window.substr(16, 2);
-        if (year > 60)
-        {
-            year = '19' + year;
-        }
-        else
-        {
-            year = '20' + year;
-        }
-        var d = new Date(year, monthFormats[month], day, hour, minute, sec);
-        var buf = d.toISOString().substr(13).substring(0, 7);
-        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-        var Time = d.toISOString().substring(0, 13);
-        Time = Time + buf + Microsec;
-        return Time;
-    }
-
-
+    var d = new Date(year, monthFormats[month], day, hour, minute, sec);
+    var buf = d.toISOString().substr(13).substring(0, 7);
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    var Time = d.toISOString().substring(0, 13);
+    Time = Time + buf + Microsec;
+    return Time;
+}
 
 var getResample = function(numberOfPoints, start, end) {
     var seconds = start - end;
@@ -129,19 +136,19 @@ var parseCSVForUpdating = function(msg, masklength) {
 }
 
 var monthFormats = {
-        'Jan': 0,
-        'Feb': 1,
-        'Mar': 2,
-        'Apr': 3,
-        'May': 4,
-        'Jun': 5,
-        'Jul': 6,
-        'Aug': 7,
-        'Sep': 8,
-        'Oct': 9,
-        'Nov': 10,
-        'Dec': 11
-    };
+    'Jan': 0,
+    'Feb': 1,
+    'Mar': 2,
+    'Apr': 3,
+    'May': 4,
+    'Jun': 5,
+    'Jul': 6,
+    'Aug': 7,
+    'Sep': 8,
+    'Oct': 9,
+    'Nov': 10,
+    'Dec': 11
+};
 
 var parseCSV = function(msg) {
     var separator = ',';

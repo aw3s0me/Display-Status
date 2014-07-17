@@ -107,7 +107,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container.find('.sensorUnit')
 				.css('font-size', 12 * scale + 'px')
 				.css('right', 5 * scale + 'px')
-				.css('top', 20 * scale + 'px');
+				.css('top', 25 * scale + 'px');
 
 			if (newSensor.get('canberemoved')) {
 				this.container.find('.close').css('font-size', 12 * scale + 'px')

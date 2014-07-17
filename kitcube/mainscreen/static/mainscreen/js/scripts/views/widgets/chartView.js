@@ -194,7 +194,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				}
 				var seriesObject = sensorModel.getChartProperties();
 				var axisId = seriesObject['yAxis'];
-				
+
 				var existedAxis = self.chart.get(axisId);
 				if (!existedAxis) {
 					var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
@@ -210,7 +210,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					//})
 				}
 				var color = undefined;
-					
+
 				//console.log(JSON.stringify(axisObject));
 				self.chart.addSeries(seriesObject, false);
 				//console.log(JSON.stringify(seriesObject));
@@ -320,11 +320,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				events: {
 					//redraw: function(event) {
 					afterSetExtremes: function(e) {
-		            //load: function(event) {
-		                //When is chart ready?
-		                self.chart.hideLoading();
-		            }
-		        }     
+						//load: function(event) {
+						//When is chart ready?
+						self.chart.hideLoading();
+					}
+				}
 			});
 
 			this.chart.legendHide();
@@ -359,15 +359,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				});
 			if (model.get('canberemoved')) {
 				controlPanelTemplate.find('.close').css('font-size', coeffScale * 12 + 'px')
-				.css('right', coeffScale * 10 + 'px')
-				.css('top', coeffScale * 10 + 'px')
-				.click(function(event) {
-					self.removeFromDom();
-				});
+					.css('right', coeffScale * 10 + 'px')
+					.css('top', coeffScale * 10 + 'px')
+					.click(function(event) {
+						self.removeFromDom();
+					});
 			}
 
 			controlPanel.find('.chartBtn').css('margin-top', coeffScale * -11 + 'px');
-			
+
 			controlPanel.find('.resetChartBtn').button()
 				.click(function(event) {
 					self.resetChart();
@@ -378,33 +378,24 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			//selectElem.find('.rangeDropdown').change(function() {
 			controlPanel.find('.rangeDropdown')
-			.css('font-size', coeffScale * 16 + 'px')
-			.css('margin-top', coeffScale * 10 + 'px')
-			.change(function() {
-				var value = $(this).val();
-				self.model.set({
-					range: value
-				});
-				self.onChangeTimeRange();
+				.css('font-size', coeffScale * 16 + 'px')
+				.css('margin-top', coeffScale * 10 + 'px')
+				.change(function() {
+					var value = $(this).val();
+					self.model.set({
+						range: value
+					});
+					self.onChangeTimeRange();
 
-				//self.setExtremes();
-			});
+					//self.setExtremes();
+				});
 
 			this.chart.setSize(width, height, false);
 
 			this.initChartWhenStart();
 		},
-		getWindow: function() {
-			var now = new Date;
-			var min = this.model.getRangeToDate();
-			var max = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-			return {
-				start: min,
-				end: max
-			}
-		},
 		setExtremes: function() {
-			var windowObj = this.getWindow();
+			var windowObj = this.model.getWindow();
 			this.chart.xAxis[0].setExtremes(windowObj.start, windowObj.end);
 			//this.chart.xAxis[0].setExtremes(windowObj.start, null);
 			//this.redraw();
@@ -462,7 +453,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			var elems = this.formSensorElements();
 			this.getDataForElements(elems);
-			
+
 		},
 		getElementsMetaInfo: function(models) {
 			var isRequestNeeded = false;
@@ -475,10 +466,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					isRequestNeeded = true;
 					masks.push(model.get('mask'));
 					modelsToChange.push(model);
-				}				
+				}
 			}
 
-			if (!isRequestNeeded) 
+			if (!isRequestNeeded)
 				return;
 
 			var masksToRequest = masks.join();
@@ -490,9 +481,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var dbname = this.board.settings['dbname'];
 			var dbgroup = this.board.settings['dbgroup'];
 			var axes = this.board.axes;
-			
+
 			var url = window.host + "services/list.php?target=items&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&info=1';
-			
+
 			try {
 				getDataFromAdei(url, false, function(data) {
 					//console.log(data);
@@ -506,50 +497,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						}
 						var axis = axes[axis_id];
 						var model = modelsToChange[parseInt(id)];
-						model.set({'axisname': axis_id});
-						
+						model.set({
+							'axisname': axis_id
+						});
+
 					});
 				});
-			}
-			catch(msg) {
+			} catch (msg) {
 				alert('Error when getting axes');
 			}
-		},
-		calculateSensorsPrecision: function(models) {
-			/*for (var sensorName in models) {
-				var model = models[sensorName];
-				if (this.get('exp') !== true) {
-					if (this.get('precision') === undefined) {
-						axisObj.labels =  {
-							formatter: function() {
-								return Highcharts.numberFormat(this.value, 2);
-							}
-						}
-					}
-					else {
-						var precision = (self.get('precision') > 2 ) ? 2: self.get('precision');
-
-						axisObj.labels = {
-							formatter: function() {
-								return Highcharts.numberFormat(this.value, precision);
-							}
-						}
-					}
-				}
-				else {
-					axisObj.labels = {
-						formatter: function() {
-							return this.value.toExponential(self.get('precision'))//Highcharts.numberFormat(this.value, self.get('precision'));
-						}
-					}
-				}
-
-
-			}*/
-
-			
-
-
 		},
 		getDataForElements: function(typeObject) {
 			//console.log(model.get('id'));
@@ -559,13 +515,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				return;
 			}
 			this.chart.showLoading();
+
 			var self = this;
+
 			var masks = [];
 			var server = this.board.settings['server'];
 			var dbname = this.board.settings['dbname'];
 			var dbgroup = this.board.settings['dbgroup'];
 			var models = [];
-			var windowObj = this.getWindow();
+			var windowObj = this.model.getWindow();
 			var start = parseInt(windowObj.start / 1000);
 			var end = parseInt(windowObj.end / 1000);
 			var windowUrl = start + "-" + end;
@@ -599,16 +557,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			if (masksToRequest.length === 0) {
 				return;
 			}
-			//console.log(masksToRequest);
 
-			/* TEST CODE
-			db.getData('fpd', 'katrin_rep', '0', '0,1,2,3,4,5', '1400700000-1401409791', 800, 'mean', function(obj)
-				{
-					var data = obj.data;
-					var datetime = obj.dateTime;
-					console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
-				})	
-			*/
 			try {
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
 				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
@@ -617,6 +566,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
 				//window.db.httpGetCsv(url, function(data) {
 				getDataFromAdei(url, true, function(data) {
+					console.log(data);
+					console.log(url);
 					obj = parseCSV(data, masks.length);
 					//console.log(obj);
 					if (!obj) {
@@ -624,9 +575,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					}
 
 					var data = obj.data;
+
 					var datetime = obj.dateTime;
 					if (!data.length || !datetime.length) {
-						alert('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
+						console.log('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
 						return;
 					}
 
@@ -651,6 +603,93 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				//console.log(msg);
 			}
 		},
+		getAllDataForDatasource: function(datasource) {
+			var self = this;
+			var models = datasource.sensors;
+			var windowUrl = this.model.getWindowUrl();
+			var resampleUrl = this.model.getResample();
+			var masks = this.model.getMasks(models);
+			if (!masks)
+				return 
+			//['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server']
+			var url = formAdeiUrl(window.host, datasource.server, datasource.dbname, datasource.dbgroup, windowUrl, resampleUrl);
+			
+			getDataFromAdei(url, true, function(data) {
+				obj = parseCSV(data, models.length);
+				if (!obj) {
+					return;
+				}
+
+				var data = obj.data;
+
+				var datetime = obj.dateTime;
+				if (!data.length || !datetime.length) {
+					console.log('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
+					return;
+				}
+
+				self.getElementsMetaInfo(models, masksToRequest);
+
+				for (var i = 0; i < masks.length; i++) {
+					if (data[i].length > 0) {
+						models[i].setDataModel(data[i], datetime);
+					}
+				}
+			});
+
+		},
+		getAllData: function(typeObject) {
+			//console.log(model.get('id'));
+			this.removeExtremesInterval();
+			this.model.off('addPoint', this.addNewPoint, this);
+			if (!typeObject) {
+				return;
+			}
+			this.chart.showLoading();
+
+			var self = this;
+			var models = [];
+			var dataSources = {};
+			var windowUrl = this.model.getWindowUrl();
+			var resampleUrl = this.model.getResample();
+
+			if (typeObject["1"])
+				this.getIdsOfSensorType(typeObject["1"], models, 1);
+			if (typeObject["2"])
+				this.getIdsOfSensorType(typeObject["2"], models, 2);
+			if (typeObject["0"])
+				this.getIdsOfSensorType(typeObject["0"], models, 0);
+
+			if (models.length + this.model.get('models').length > this.model.get('maxelementsize')) {
+				alert('You can add only no more than: ' + this.model.get('maxelementsize') + ' elements');
+				this.chart.hideLoading();
+				return;
+			}
+
+			this.removeSelection();
+
+			var datasources = this.board.getDatasourcesForModels(models);
+
+			try {
+				$.each(datasources, function(datasourceName, datasource) {
+					self.getAllDataForDatasource(datasource);
+				}).promise().done(function() {
+					if (typeObject["1"])
+						self.setSensorDataInChart(typeObject["1"], 1);
+					if (typeObject["2"])
+						self.setSensorDataInChart(typeObject["2"], 2);
+					if (typeObject["0"])
+						self.setSensorDataInChart(typeObject["0"], 0);
+					self.setExtremesInterval();
+					self.chart.hideLoading();
+				});
+
+
+
+			} catch (msg) {
+				//console.log(msg);
+			}
+		},
 		onChangeTimeRange: function() {
 			var models = this.model.get('models');
 			var self = this;
@@ -658,7 +697,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var server = this.board.settings['server'];
 			var dbname = this.board.settings['dbname'];
 			var dbgroup = this.board.settings['dbgroup'];
-			var windowObj = this.getWindow();
+			var windowObj = this.model.getWindow();
 			//console.log(new Date(windowObj.start), new Date(windowObj.end));
 			var start = parseInt(windowObj.start / 1000);
 			var end = parseInt(windowObj.end / 1000);
@@ -787,7 +826,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				models[i].off('removing', this.onSensorRemoving);
 				this.model.removeModel(models[i].get('id'));
 			}
-			
+
 			while (this.chart.series.length > 0)
 				this.chart.series[0].remove();
 
@@ -796,7 +835,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 		},
 		getUrlGoToAdei: function() {
 			var adeiurl = window.host;
-			var windowObj = this.getWindow();
+			var windowObj = this.model.getWindow();
 			//console.log(new Date(windowObj.start), new Date(windowObj.end));
 			var start = parseInt(windowObj.start / 1000);
 			var end = parseInt(windowObj.end / 1000);

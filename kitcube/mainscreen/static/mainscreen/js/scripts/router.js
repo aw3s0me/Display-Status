@@ -52,7 +52,6 @@ define([
 			success: function(data) {
 				var parsed_unicode = JSON.parse(data);
 				text = JSON.parse(parsed_unicode['content']);
-				console.log(data);
 			}
 		});
 
