@@ -128,11 +128,16 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			var resample = getResample(nubmerOfPoints, start, end);
 			return resample;
 		},
-		getMasks: function(models) {
+		getMasks: function(models, isUpdate) {
 			var masks = [];
 			var self = this;
 			$.each(models, function(key, model) {
-				if (!self.isOnTheChartById(model.get('id'))) {
+				if (!isUpdate) {
+					if (!self.isOnTheChartById(model.get('id'))) {
+						masks.push(model.get('mask'));
+					}
+				}
+				else {
 					masks.push(model.get('mask'));
 				}
 			});

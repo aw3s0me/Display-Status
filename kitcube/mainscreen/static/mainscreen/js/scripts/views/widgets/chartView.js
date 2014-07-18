@@ -144,8 +144,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			if (foundSeriesObj) {
 				foundSeriesObj.addPoint(Point, true, shift);
 			}
-
-			//this.setExtremes(); 
 		},
 		getIdsOfSensorType: function(elems, models, type) {
 			for (var i = 0; i < elems.length; i++) {
@@ -205,36 +203,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					axisObject.lineColor = '#000';
 					self.chart.addAxis(axisObject);
 					var axis = self.chart.get(axisObject.id);
-					//axis.update({
-
-					//})
 				}
 				var color = undefined;
-
-				//console.log(JSON.stringify(axisObject));
 				self.chart.addSeries(seriesObject, false);
-				//console.log(JSON.stringify(seriesObject));
 				sensorModel.on('addPoint', self.addNewPoint, self);
-				/*for (var seriesName in series) {
-					var seriesObject = series[seriesName];
-					var id = seriesObject.userOptions.id;
-					if (id === sensorModel.get('id')) {
-						index = seriesObject._i;
-						color = seriesObject.color;
-						var axisId = seriesObject.yAxis.userOptions.id;
-						for (var j = 0; j < self.chart.yAxis.length; j++) {
-							var yaxis = self.chart.yAxis[j];
-							if (yaxis.userOptions.id === axisId) {
-								//yaxis.options.lineColor = color;
-								yaxis.update({
-									lineColor: color
-								});
-								break;
-							}
-						}
-						break;
-					}
-				}*/
 			}
 
 		},
@@ -345,7 +317,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			controlPanel.find('.addChartBtn').button()
 				.click(function(event) {
 					var elems = self.formSensorElements();
-					self.getDataForElements(elems);
+					self.getAllData(elems);
 				});
 			controlPanel.find('.legendChartBtn').button()
 				.click(function(event) {
@@ -386,8 +358,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						range: value
 					});
 					self.onChangeTimeRange();
-
-					//self.setExtremes();
 				});
 
 			this.chart.setSize(width, height, false);
@@ -397,8 +367,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 		setExtremes: function() {
 			var windowObj = this.model.getWindow();
 			this.chart.xAxis[0].setExtremes(windowObj.start, windowObj.end);
-			//this.chart.xAxis[0].setExtremes(windowObj.start, null);
-			//this.redraw();
 		},
 		initChartWhenStart: function() {
 			var chartModel = this.model;
@@ -452,61 +420,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			}
 
 			var elems = this.formSensorElements();
-			//this.getDataForElements(elems);
 			this.getAllData(elems);
 
-		},
-		getElementsMetaInfo: function(models) {
-			var isRequestNeeded = false;
-			var masks = [];
-			var modelsToChange = [];
-
-			for (var i = 0; i < models.length; i++) {
-				var model = models[i];
-				if (model.get('axisname') === undefined) {
-					isRequestNeeded = true;
-					masks.push(model.get('mask'));
-					modelsToChange.push(model);
-				}
-			}
-
-			if (!isRequestNeeded)
-				return;
-
-			var masksToRequest = masks.join();
-			if (masksToRequest.length === 0) {
-				return;
-			}
-
-			var server = this.board.settings['server'];
-			var dbname = this.board.settings['dbname'];
-			var dbgroup = this.board.settings['dbgroup'];
-			//var axes = this.board.axes;
-
-			var url = window.host + "services/list.php?target=items&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&info=1';
-
-			try {
-				getDataFromAdei(url, false, function(data) {
-					//console.log(data);
-					xmldoc = $.parseXML(data);
-					$xml = $(xmldoc);
-					$values = $xml.find('Value').each(function(index) {
-						var id = $(this).attr('value');
-						var axis_id = $(this).attr('axis');
-						if (!axis_id) {
-							return true; //continue equivalent in jquery
-						}
-						var axis = axes[axis_id];
-						var model = modelsToChange[parseInt(id)];
-						model.set({
-							'axisname': axis_id
-						});
-
-					});
-				});
-			} catch (msg) {
-				alert('Error when getting axes');
-			}
 		},
 		getElementsMetaInfoDatasource: function(datasource) {
 			var isRequestNeeded = false;
@@ -574,116 +489,14 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			return models;
 		},
-		getDataForElements: function(typeObject) {
-			//console.log(model.get('id'));
-			this.removeExtremesInterval();
-			this.model.off('addPoint', this.addNewPoint, this);
-			if (!typeObject) {
-				return;
-			}
-			this.chart.showLoading();
-
-			var self = this;
-
-			var masks = [];
-			var server = this.board.settings['server'];
-			var dbname = this.board.settings['dbname'];
-			var dbgroup = this.board.settings['dbgroup'];
-			var models = [];
-			var windowObj = this.model.getWindow();
-			var start = parseInt(windowObj.start / 1000);
-			var end = parseInt(windowObj.end / 1000);
-			var windowUrl = start + "-" + end;
-			//console.log(new Date(windowObj.start), new Date(windowObj.end));
-			var nubmerOfPoints = this.model.getNumberOfPoints();
-			var resample = getResample(nubmerOfPoints, start, end);
-			//console.log('resample: ' + resample)
-
-			if (typeObject["1"])
-				this.getIdsOfSensorType(typeObject["1"], models, 1);
-			if (typeObject["2"])
-				this.getIdsOfSensorType(typeObject["2"], models, 2);
-			if (typeObject["0"])
-				this.getIdsOfSensorType(typeObject["0"], models, 0);
-
-			if (models.length + this.model.get('models').length > this.model.get('maxelementsize')) {
-				alert('You can add only no more than: ' + this.model.get('maxelementsize') + ' elements');
-				this.chart.hideLoading();
-				return;
-			}
-
-			this.removeSelection();
-
-			for (var i = 0; i < models.length; i++) {
-				if (!this.model.isOnTheChartById(models[i].get('id'))) {
-					masks.push(models[i].get('mask'));
-				}
-			}
-
-			var masksToRequest = masks.join();
-			if (masksToRequest.length === 0) {
-				return;
-			}
-
-			try {
-				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
-				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
-				//window.db.getData(server, dbname, dbgroup, masksToRequest, '1400700000-1401409791', nubmerOfPoints, 'mean', function(obj) {
-				//window.db.getData('fpd', 'katrin_rep', '0', '3', '1400700000-1401409791', 800, 'mean', function(obj) {
-				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
-				//window.db.httpGetCsv(url, function(data) {
-				getDataFromAdei(url, true, function(data) {
-					console.log(data);
-					console.log(url);
-					obj = parseCSV(data, masks.length);
-					//console.log(obj);
-					if (!obj) {
-						return;
-					}
-
-					var data = obj.data;
-
-					var datetime = obj.dateTime;
-					if (!data.length || !datetime.length) {
-						console.log('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
-						return;
-					}
-
-					self.getElementsMetaInfo(models, masksToRequest);
-
-					for (var i = 0; i < masks.length; i++) {
-						if (data[i].length > 0) {
-							models[i].setDataModel(data[i], datetime);
-						}
-					}
-
-					if (typeObject["1"])
-						self.setSensorDataInChart(typeObject["1"], 1);
-					if (typeObject["2"])
-						self.setSensorDataInChart(typeObject["2"], 2);
-					if (typeObject["0"])
-						self.setSensorDataInChart(typeObject["0"], 0);
-					self.setExtremesInterval();
-					self.chart.hideLoading();
-				});
-			} catch (msg) {
-				//console.log(msg);
-			}
-		},
-		getAllDataForDatasource: function(datasource) {
+		getAllDataForDatasource: function(datasource, windowUrl, resampleUrl) {
 			var self = this;
 			var models = datasource.sensors;
-			var windowUrl = this.model.getWindowUrl();
-			var resampleUrl = this.model.getResample();
-			var masks = this.model.getMasks(models);
-
+			var masks = this.model.getMasks(models, false);
 			if (!masks)
 				return 
-			//['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server']
 			var url = formAdeiUrl(window.host, datasource.server, datasource.dbname, datasource.dbgroup, masks, windowUrl, resampleUrl);
-			
 			var elementLength = Object.keys(models).length;
-			//getDataFromAdei(url, true, function(data) {
 			deffereds.push($.ajax({
 				type: 'GET',
 				url: url,
@@ -699,7 +512,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 					var datetime = obj.dateTime;
 					if (!data.length || !datetime.length) {
-						console.log('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
+						console.log('No data for: ' + url);
 						return;
 					}
 
@@ -715,7 +528,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					alert(thrownError);
 				}
 			}));
-			//});
 		},
 		onDataLoaded: function(typeObject) {
 			var self = this;
@@ -728,9 +540,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			self.setExtremesInterval();
 			self.chart.hideLoading();
 		},
+		onDataUpdated: function() {
+
+		},
 		getAllData: function(typeObject) {
 			//console.log(model.get('id'));
-			var self = this;
 			this.removeExtremesInterval();
 			this.model.off('addPoint', this.addNewPoint, this);
 			if (!typeObject) {
@@ -756,7 +570,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			try {
 				$.each(datasources, function(datasourceName, datasource) {
-					self.getAllDataForDatasource(datasource);
+					self.getAllDataForDatasource(datasource, windowUrl, resampleUrl);
 				})
 
 				$.when.apply($, deffereds).then(function() {
@@ -772,78 +586,75 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			}
 		},
 		onChangeTimeRange: function() {
-			var models = this.model.get('models');
 			var self = this;
-			var masks = [];
-			var server = this.board.settings['server'];
-			var dbname = this.board.settings['dbname'];
-			var dbgroup = this.board.settings['dbgroup'];
-			var windowObj = this.model.getWindow();
-			//console.log(new Date(windowObj.start), new Date(windowObj.end));
-			var start = parseInt(windowObj.start / 1000);
-			var end = parseInt(windowObj.end / 1000);
-			var windowUrl = start + "-" + end;
-			var nubmerOfPoints = this.model.getNumberOfPoints();
+			var dataSources = {};
+			var windowUrl = this.model.getWindowUrl();
+			var resampleUrl = this.model.getResample();
 			var series = this.chart.series;
-			var resample = getResample(nubmerOfPoints, start, end);
-
-			if (!models || !models.length) {
-				return;
-			}
-
-			for (var i = 0; i < models.length; i++) {
-				masks.push(models[i].get('mask'));
-			}
-
-			var masksToRequest = masks.join();
-			if (masksToRequest.length === 0) {
-				return;
-			}
+			var allModels = this.model.get('models');
+			var datasources = this.board.getDatasourcesForModels(allModels);
 
 			this.chart.showLoading();
 			this.removeExtremesInterval();
 			this.stopAddPointEvent();
-			try {
-				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, nubmerOfPoints, 'mean', function(obj) {
-				//window.db.getData(server, dbname, dbgroup, masksToRequest, windowUrl, this.getNumberOfPoints(), 'mean', function(obj) {
-				//db.getData('fpd', 'katrin_rep', '0', masksToRequest, '1400700000-1401409791', 800, 'mean', function(obj) {
-				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
-				getDataFromAdei(url, true, function(data) {
-					obj = parseCSV(data, masks.length);
-					if (!obj) {
-						return;
-					}
-					var data = obj.data;
-					var datetime = obj.dateTime;
-					if (!data.length || !datetime.length) {
-						alert('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
-						return;
-					}
-					for (var i = 0; i < masks.length; i++) {
-						var model = models[i];
-						if (data[i].length > 0) {
-							model.setDataModel(data[i], datetime);
-						}
-						for (var i = 0; i < series.length; i++) {
-							var seriesObject = series[i];
-							var id = seriesObject.userOptions.id;
-							if (id === model.get('id')) {
-								seriesObject.data = [];
-								seriesObject.setData(model.get('values'));
-								break;
-							}
-						}
-						//console.log(JSON.stringify(models[i].get('values')));
-					}
 
+			try {
+				$.each(datasources, function(datasourceName, datasource) {
+					var models = datasource.sensors;
+					var masks = self.model.getMasks(models, true);
+					if (!masks)
+						return 
+
+					var url = formAdeiUrl(window.host, datasource.server, datasource.dbname, datasource.dbgroup, masks, windowUrl, resampleUrl);
+					var elementLength = Object.keys(models).length;
+
+					deffereds.push($.ajax({
+						type: 'GET',
+						url: url,
+						dataType: 'text',
+						success: function(data) {
+							obj = parseCSV(data, masks.length);
+							if (!obj) {
+								return;
+							}
+							var data = obj.data;
+							var datetime = obj.dateTime;
+							if (!data.length || !datetime.length) {
+								alert('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
+								return;
+							}
+							for (var i = 0; i < elementLength; i++) {
+								var model = models[i];
+								if (data[i].length > 0) {
+									model.setDataModel(data[i], datetime);
+									var series = self.chart.get(model.get('id'));
+									if (series) {
+										series.data = [];
+										series.setData(model.get('values'));
+									}
+								}
+							}
+						},
+						error: function(xhr, ajaxOptions, thrownError) {
+							alert(thrownError);
+						}
+					}));
+				});
+
+				$.when.apply($, deffereds).then(function() {
 					self.setExtremesInterval();
 					self.chart.hideLoading();
 					self.startAddPointEvent();
 					self.redraw();
-					//console.log(self.chart);
+
+					deffereds = [];
+					console.log('SUCCESSS UPDATE');
+				}, function() {
+					console.log('FAAAAIL UPDATE');
 				});
-			} catch (msg) {
-				//console.log(msg);
+			}
+			catch(msg) {
+				alert(msg);
 			}
 		},
 		removeSeries: function(model) {
