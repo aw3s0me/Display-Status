@@ -3,6 +3,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 	var _seriesArr = [];
 	var _allSensors = undefined;
 	var _isLegendShown = false;
+	var deffereds = [];
 
 	var ChartView = Backbone.View.extend({
 		container: undefined,
@@ -145,7 +146,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			}
 
 			//this.setExtremes(); 
-
 		},
 		getIdsOfSensorType: function(elems, models, type) {
 			for (var i = 0; i < elems.length; i++) {
@@ -199,7 +199,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				if (!existedAxis) {
 					var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
 						axislabels: self.model.get('axislabels'),
-						adeiAxisInfo: self.board.axes[axisId],
+						adeiAxisInfo: self.board.getAxis(sensorModel.get('datasource'), axisId),//self.board.axes[axisId],
 						count: series
 					});
 					axisObject.lineColor = '#000';
@@ -452,7 +452,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			}
 
 			var elems = this.formSensorElements();
-			this.getDataForElements(elems);
+			//this.getDataForElements(elems);
+			this.getAllData(elems);
 
 		},
 		getElementsMetaInfo: function(models) {
@@ -480,7 +481,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var server = this.board.settings['server'];
 			var dbname = this.board.settings['dbname'];
 			var dbgroup = this.board.settings['dbgroup'];
-			var axes = this.board.axes;
+			//var axes = this.board.axes;
 
 			var url = window.host + "services/list.php?target=items&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&info=1';
 
@@ -506,6 +507,72 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			} catch (msg) {
 				alert('Error when getting axes');
 			}
+		},
+		getElementsMetaInfoDatasource: function(datasource) {
+			var isRequestNeeded = false;
+			var self = this;
+			var models = datasource.sensors;
+			var masks = [];
+			var modelsToChange = [];
+
+			for (var i = 0; i < models.length; i++) {
+				var model = models[i];
+				if (model.get('axisname') === undefined) {
+					isRequestNeeded = true;
+					masks.push(model.get('mask'));
+					modelsToChange.push(model);
+				}
+			}
+
+			if (!isRequestNeeded)
+				return;
+
+			var masksToRequest = masks.join();
+			if (masksToRequest.length === 0) {
+				return;
+			}
+
+			var server = datasource['server'];
+			var dbname = datasource['dbname'];
+			var dbgroup = datasource['dbgroup'];
+			//var axes = this.board.axes;
+
+			var url = formAdeiUrlMeta(window.host, server, dbname, dbgroup, masksToRequest);
+
+			try {
+				getDataFromAdei(url, false, function(data) {
+					//console.log(data);
+					xmldoc = $.parseXML(data);
+					$xml = $(xmldoc);
+					$values = $xml.find('Value').each(function(index) {
+						var id = $(this).attr('value');
+						var axis_id = $(this).attr('axis');
+						if (!axis_id) {
+							return true; //continue equivalent in jquery
+						}
+						var axis = self.board.getAxis(datasource.id, axis_id);
+						var model = modelsToChange[parseInt(id)];
+						model.set({
+							'axisname': axis_id
+						});
+
+					});
+				});
+			} catch (msg) {
+				alert('Error when getting axes');
+			}
+		},
+		getElementsFromTypeObject: function(typeObject) {
+			var models = [];
+
+			if (typeObject["1"])
+				this.getIdsOfSensorType(typeObject["1"], models, 1);
+			if (typeObject["2"])
+				this.getIdsOfSensorType(typeObject["2"], models, 2);
+			if (typeObject["0"])
+				this.getIdsOfSensorType(typeObject["0"], models, 0);
+
+			return models;
 		},
 		getDataForElements: function(typeObject) {
 			//console.log(model.get('id'));
@@ -609,37 +676,61 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var windowUrl = this.model.getWindowUrl();
 			var resampleUrl = this.model.getResample();
 			var masks = this.model.getMasks(models);
+
 			if (!masks)
 				return 
 			//['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server']
-			var url = formAdeiUrl(window.host, datasource.server, datasource.dbname, datasource.dbgroup, windowUrl, resampleUrl);
+			var url = formAdeiUrl(window.host, datasource.server, datasource.dbname, datasource.dbgroup, masks, windowUrl, resampleUrl);
 			
-			getDataFromAdei(url, true, function(data) {
-				obj = parseCSV(data, models.length);
-				if (!obj) {
-					return;
-				}
-
-				var data = obj.data;
-
-				var datetime = obj.dateTime;
-				if (!data.length || !datetime.length) {
-					console.log('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
-					return;
-				}
-
-				self.getElementsMetaInfo(models, masksToRequest);
-
-				for (var i = 0; i < masks.length; i++) {
-					if (data[i].length > 0) {
-						models[i].setDataModel(data[i], datetime);
+			var elementLength = Object.keys(models).length;
+			//getDataFromAdei(url, true, function(data) {
+			deffereds.push($.ajax({
+				type: 'GET',
+				url: url,
+				dataType: 'text',
+				success: function(data) {
+					//console.log(data);
+					obj = parseCSV(data, elementLength);
+					if (!obj) {
+						return;
 					}
-				}
-			});
 
+					var data = obj.data;
+
+					var datetime = obj.dateTime;
+					if (!data.length || !datetime.length) {
+						console.log('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
+						return;
+					}
+
+					self.getElementsMetaInfoDatasource(datasource);
+
+					for (var i = 0; i < elementLength; i++) {
+						if (data[i].length > 0) {
+							models[i].setDataModel(data[i], datetime);
+						}
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError);
+				}
+			}));
+			//});
+		},
+		onDataLoaded: function(typeObject) {
+			var self = this;
+			if (typeObject["1"])
+				self.setSensorDataInChart(typeObject["1"], 1);
+			if (typeObject["2"])
+				self.setSensorDataInChart(typeObject["2"], 2);
+			if (typeObject["0"])
+				self.setSensorDataInChart(typeObject["0"], 0);
+			self.setExtremesInterval();
+			self.chart.hideLoading();
 		},
 		getAllData: function(typeObject) {
 			//console.log(model.get('id'));
+			var self = this;
 			this.removeExtremesInterval();
 			this.model.off('addPoint', this.addNewPoint, this);
 			if (!typeObject) {
@@ -648,18 +739,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			this.chart.showLoading();
 
 			var self = this;
-			var models = [];
 			var dataSources = {};
 			var windowUrl = this.model.getWindowUrl();
 			var resampleUrl = this.model.getResample();
-
-			if (typeObject["1"])
-				this.getIdsOfSensorType(typeObject["1"], models, 1);
-			if (typeObject["2"])
-				this.getIdsOfSensorType(typeObject["2"], models, 2);
-			if (typeObject["0"])
-				this.getIdsOfSensorType(typeObject["0"], models, 0);
-
+			var models = this.getElementsFromTypeObject(typeObject);
+			
 			if (models.length + this.model.get('models').length > this.model.get('maxelementsize')) {
 				alert('You can add only no more than: ' + this.model.get('maxelementsize') + ' elements');
 				this.chart.hideLoading();
@@ -673,21 +757,18 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			try {
 				$.each(datasources, function(datasourceName, datasource) {
 					self.getAllDataForDatasource(datasource);
-				}).promise().done(function() {
-					if (typeObject["1"])
-						self.setSensorDataInChart(typeObject["1"], 1);
-					if (typeObject["2"])
-						self.setSensorDataInChart(typeObject["2"], 2);
-					if (typeObject["0"])
-						self.setSensorDataInChart(typeObject["0"], 0);
-					self.setExtremesInterval();
-					self.chart.hideLoading();
+				})
+
+				$.when.apply($, deffereds).then(function() {
+					self.onDataLoaded(typeObject);
+					deffereds = [];
+					console.log('SUCCESSS SPARTAAA');
+				}, function() {
+					console.log('FAAAAIL SPARTAAA');
 				});
 
-
-
 			} catch (msg) {
-				//console.log(msg);
+				alert(msg);
 			}
 		},
 		onChangeTimeRange: function() {

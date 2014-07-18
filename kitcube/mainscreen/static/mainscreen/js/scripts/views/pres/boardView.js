@@ -213,36 +213,41 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				self.updateAllSensors();
 			}, 2000); //the only way to pass param */
 		},
+		getAxis: function(datasource, id) {
+			var datasource = this.settings.datasources[datasource];
+			return datasource['axes'][id];
+		},
 		getAxes: function() {
-			var dbname = this.settings['dbname'];
-			var dbgroup = this.settings['dbgroup'];
-			var server = this.settings['server'];
-			var axes = this.axes;
-			var url = window.host + "services/list.php?target=axes&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup;
+			//var dbname = this.settings['dbname'];
+			//var dbgroup = this.settings['dbgroup'];
+			//var server = this.settings['server'];
+			//var axes = this.axes;
+			
+			//var url = window.host + "services/list.php?target=axes&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup;
 			try {
-				getDataFromAdei(url, true, function(data) {
-					xmldoc = $.parseXML(data);
-					$xml = $(xmldoc);
-					$values = $xml.find('Value').each(function(index) {
-						var id = $(this).attr('value');
-						var newAxes = {
-							id: id,
-							axis_units: $(this).attr('axis_units'),
-							axis_name: $(this).attr('axis_name'),
-							axis_mode: $(this).attr('axis_mode'),
-							axis_range: $(this).attr('axis_range')
-						}
-						axes[id] = newAxes;
+
+				$.each(this.settings.datasources, function(key, datasource) {
+					datasource.axes = {};
+					var url = formAdeiUrlAxes(window.host, datasource['server'], datasource['dbname'], datasource['dbgroup']);
+					getDataFromAdei(url, true, function(data) {
+						xmldoc = $.parseXML(data);
+						$xml = $(xmldoc);
+						$values = $xml.find('Value').each(function(index) {
+							var id = $(this).attr('value');
+							var newAxes = {
+								id: id,
+								axis_units: $(this).attr('axis_units'),
+								axis_name: $(this).attr('axis_name'),
+								axis_mode: $(this).attr('axis_mode'),
+								axis_range: $(this).attr('axis_range')
+							}
+							datasource.axes[id] = newAxes;
+						});
 					});
-
-					//xmldoc.find('result').each(function( ) {
-					//	console.log($(this).text());
-					//})
-
-					//data = xmlToJson(data);
-
-					//console.log(data);
+					 /* iterate through array or object */
 				});
+
+				
 			} catch (msg) {
 				alert('Error when getting axes');
 			}
@@ -316,7 +321,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				//})
 
 			} catch (msg) {
-				//console.log(msg)
+				alert(msg);
 			}
 
 		},
@@ -376,10 +381,18 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		initDatasources: function(datasourceObj) {
 			window.host = datasourceObj.host;
 
-			if (this.isManyDatasources(datasourceObj)) {
+			if (!this.isManyDatasources(datasourceObj)) {
 				this.settings['dbgroup'] = datasourceObj['dbgroup'];
 				this.settings['dbname'] = datasourceObj['dbname'];
 				this.settings['server'] = datasourceObj['server'];
+				this.settings.datasources = {};
+				this.settings.datasources['default'] = {
+					dbgroup : datasourceObj['dbgroup'],
+					dbname : datasourceObj['dbname'],
+					server : datasourceObj['server']
+				}
+				this.settings.datasources['default'].sensors = {};
+				this.settings.datasources['default'].id = 'default';
 				return;
 			}
 
@@ -396,31 +409,55 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					alert('Please specify fields dbgroup, dbname and server in configuration file');
 				}
 				this.settings.datasources[datasourceName] = datasource;
-
+				this.settings.datasources[datasourceName].id = datasourceName;
 			}
 			console.log(this.settings.datasources);
 		},
 		getDatasourcesForModels: function(models) {
 			var datasources = {};
-			if (!this.isManyDatasources) {
+			if (!this.isManyDatasources()) {
 				return {
-					dbgroup: this.settings['dbgroup'],
-					dbname: this.settings['dbname'],
-					server: this.settings['server'],
-					source: this.sensors
+					'default': {
+						dbgroup: this.settings['dbgroup'],
+						dbname: this.settings['dbname'],
+						server: this.settings['server'],
+						id: 'default',
+						sensors: models
+					}
 				}
 			}
 
 			for (var i = 0; i < models.length; i++) {
 				var model = models[i];
 				var datasourceName = model.get('datasource');
-				datasources[datasourceName] = this.settings.datasources[datasourceName];
+				if (!datasources[datasourceName])
+					datasources[datasourceName] = {};
+				if (!datasources[datasourceName]['dbgroup'])
+					datasources[datasourceName]['dbgroup'] = this.settings.datasources[datasourceName]['dbgroup'];
+				if (!datasources[datasourceName]['dbname'])
+					datasources[datasourceName]['dbname'] = this.settings.datasources[datasourceName]['dbname'];
+				if (!datasources[datasourceName]['server'])
+					datasources[datasourceName]['server'] = this.settings.datasources[datasourceName]['server'];
+				if (!datasources[datasourceName]['sensors'])
+					datasources[datasourceName]['sensors'] = {
+
+					}
+
+				datasources[datasourceName]['sensors'][model.get('id')] = model;
+				//this.settings.datasources[datasourceName]
 			}
+
 			console.log(datasources);
 			return datasources;
 		},
 		isManyDatasources: function(datasourceObj) {
-			return datasourceObj !== undefined ? datasourceObj['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server'] : false;
+			if (datasourceObj === undefined)
+				datasourceObj = {
+					dbgroup: this.settings['dbgroup'],
+					dbname: this.settings['dbname'],
+					server: this.settings['server']
+				}
+			return !(datasourceObj['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server']);
 		},
 		addSensorToDatasource: function(datasource, id, model) {
 			this.settings.datasources[datasource].sensors[id] = model;
@@ -709,7 +746,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					min: sensorObj["min"],
 					precision: sensorObj["precision"],
 					exp: sensorObj["exp"],
-					datasource: sensorObj['datasource'],
+					datasource: sensorObj['datasource']? sensorObj['datasource'] : 'default',
 					device: sensorObj["device"],
 					norender: sensorObj["norender"],
 					mask: sensorObj["mask"],
@@ -722,7 +759,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				});
 
 				if (this.settings.datasources)
-					this.addSensorToDatasource(sensorObj['datasource'], sensorObj['id'], newSensor);
+					this.addSensorToDatasource(newSensor.get('datasource'), sensorObj['id'], newSensor);
 
 				if (this.sensors[sensorObj["id"]]) {
 					throw "This sensor already exists" + sensorObj["id"];

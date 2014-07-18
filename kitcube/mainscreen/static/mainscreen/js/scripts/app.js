@@ -68,10 +68,10 @@ define([
 			} */
 			var csrfToken = $('meta[name="csrf_token"]').attr('content');
 			console.log(csrfToken);
-			$(document).ajaxSend(function(event, xhr, settings) {
+			//$(document).ajaxSend(function(event, xhr, settings) {
 				/* stuff to do before an AJAX request is sent. ERROR */
-				xhr.setRequestHeader('X-CSRFToken', csrfToken);
-			});
+			//	xhr.setRequestHeader('X-CSRFToken', csrfToken);
+			//});
 
 			var body = document.body,
     		html = document.documentElement;

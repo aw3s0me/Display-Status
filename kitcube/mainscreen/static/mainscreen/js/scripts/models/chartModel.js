@@ -130,8 +130,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		},
 		getMasks: function(models) {
 			var masks = [];
+			var self = this;
 			$.each(models, function(key, model) {
-				if (!this.isOnTheChartById(model.get('id'))) {
+				if (!self.isOnTheChartById(model.get('id'))) {
 					masks.push(model.get('mask'));
 				}
 			});

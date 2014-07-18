@@ -53,6 +53,15 @@ var formAdeiUrl = function(host, server, dbname, dbgroup, masksToRequest, window
     return host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
 }
 
+var formAdeiUrlAxes = function(host, server, dbname, dbgroup) {
+    return host + "services/list.php?target=axes&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup;
+}
+
+var formAdeiUrlMeta = function(host, server, dbname, dbgroup, masksToRequest) {
+    return host + "services/list.php?target=items&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&info=1';
+
+}
+
 var formModelsUrlObj = function(models) {
     var masks = [];
     $.each(models, function(key, models) {
