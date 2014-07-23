@@ -20,7 +20,7 @@
             ]
         },
         "tab2": {
-            "name": "Temp",
+            "name": "Charts",
             "can_close": true,
             "content": [
                 "chart1", "chart2"

@@ -207,7 +207,8 @@ var sizeDetector = (function($) {
 
 	sizeDetector.prototype.detectMarginTopSize = function() {
 		if (this.boardMargin.height === 0) {
-			this.marginTop = this.bannerSize.height - this.footerSize.height;
+			//this.marginTop = this.bannerSize.height - this.footerSize.height - 20;
+			this.marginTop = this.bannerSize.height;
 			return this.marginTop;
 		}
 

@@ -9,7 +9,7 @@
         ]
     },
     "datasource": {
-        "host": "http://localhost:8024/adei/",
+        "host": "http://ipetd1.ipe.kit.edu:8024/adei/",
         "SysCI_txt": {
             "dbgroup": "Data_120_SysCI_txt",
             "server": "kitcube",
@@ -31,9 +31,8 @@
             "link": [
             ],
             "size": [
-                23
-                ,
-                10
+                36,
+                12
             ],
             "coords": [
                 11,
@@ -133,6 +132,24 @@
             "type": "sensorgroup",
             "name": "Energy balance station EB1",
             "empties": 1
+        },
+        "alarmlist1": {
+            "type": "alarms_kitcube",
+            "name": "Alarm list",
+            "size": [20, 8],
+            "coords": [1, 14]
+        },
+        "webcam1": {
+            "type": "webcam",
+            "name": "Cloud Camera",
+            "size": [12, 9],
+            "coords": [22, 14]
+        },
+        "webcam2": {
+            "type": "webcam",
+            "name": "Sky, Side View",
+            "size": [12, 9],
+            "coords": [35, 14]
         }
     }
 }

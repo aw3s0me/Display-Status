@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView) {
 
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
@@ -106,11 +106,34 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			if (!options || !options.portrait) {
 				console.log(this.viewSizeDetector.marginTop)
 				canvas.css('top', this.viewSizeDetector.marginTop + 'px');
-				//return;
+				if ($('#tabs').width() < $('#wrapper').width()) {
+					console.log('HIDE SCROLL')
+					$('#wrapper').css('overflow-x', 'hidden');
+					$('#footer').css('position', 'absolute');
+					$('#footer').css('bottom', '0');
+				}
+			}
+			else if (options && options.portrait) {
+				console.log('TOP portrait')
+				$('#tabs').css('top', this.viewSizeDetector.marginTop + 'px !important');
+				//$('#wrapper').css('overflow-y', 'scroll');
+				if ($('#tabs').width() < $('#wrapper').width()) {
+					console.log('HIDE SCROLL')
+					$('#wrapper').css('overflow-x', 'hidden');
+					//$('#footer').css('position', 'absolute');
+					$('#footer').css('bottom', '0');
+				}
+
+				$('#tabs').css('width', this.viewSizeDetector.boardSizePx.width + 8 + 'px');
+				console.log($('#wrapper').width())
+				if ($('#tabs').height() < $('#wrapper').height() - 50 - 10) {
+					$('#wrapper').css('overflow-y', 'scroll');
+				}
+
 			}
 
-			//$('#scrollbar_wrapper').height(this.viewSizeDetector.scale * 20 + 'px');
 			
+
 		},
 		getGrid: function(attr) {
 			var grid;
@@ -128,6 +151,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var sensorTablesToAdd = [];
 			var alarmListsToAdd = [];
 			var chartsToAdd = [];
+			var alarmListsKitcubeToAdd = [];
+			var webCamsToAdd = [];
 
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
@@ -135,7 +160,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					case "datasource":
 						{
 							this.initDatasources(attr);
-							console.log(this.settings);
+							//console.log(this.settings);
 							break;
 						}
 					case "tabs":
@@ -165,8 +190,14 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 									case "alarmlist":
 										alarmListsToAdd.push(elObj);
 										break;
+									case "alarms_kitcube":
+										alarmListsKitcubeToAdd.push(elObj);
+										break;
 									case "chart":
 										chartsToAdd.push(elObj);
+										break;
+									case "webcam":
+										webCamsToAdd.push(elObj);
 										break;
 									default:
 										break;
@@ -198,7 +229,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			this.addAllElements(sensorGroupsToAdd, this.addSensorGroup);
 			this.addAllElements(sensorTablesToAdd, this.addSensorTable);
 			this.addAllElements(alarmListsToAdd, this.addAlarmList);
+			this.addAllElements(alarmListsKitcubeToAdd, this.addKitcubeAlarmList);
 			this.addAllElements(chartsToAdd, this.addChart);
+			this.addAllElements(webCamsToAdd, this.addWebCam);
 
 			this.enableFetchingData();
 			this.updateAllSensors();
@@ -502,13 +535,13 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			/* ALL THE SAME STUPID ERROR */
 			for (var tabId in this.views.tabs) {
 				var tab = this.views.tabs[tabId];
-				console.log(tab.grid.getIdOfCanvas());
+				//console.log(tab.grid.getIdOfCanvas());
 			}
 
-			console.log(this.views.tabs);
+			//console.log(this.views.tabs);
 			$('#tabs').tabs({
 				collapsible: false
-			}).css('width', this.viewSizeDetector.boardSizePx.width + 8 + 'px');
+			})
 			//$('#tabs ul').css('padding', '0px !important')
 			//.css('height', 50 * this.viewSizeDetector.scale)
 			//.css('width', this.viewSizeDetector.boardSizePx.width + 'px');
@@ -882,6 +915,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		addMeasurementList: function(attr) {
 
 		},
+		addKitcubeAlarmList: function(attr) {
+			attr.id = attr._id;
+			attr.board = this;
+			attr.grid = this.getGrid(attr);
+			var alarm = new KitcubeAlarm(attr);
+		},
 		addAlarmList: function(attr) {
 			var alarmList = []; //collection of alarms
 			var newAlarmCollection = undefined;
@@ -948,6 +987,12 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			});
 
 			this.views.alarms[attr._id] = newAlarmListView;
+		},
+		addWebCam: function(attr) {
+			attr.id = attr._id;
+			attr.board = this;
+			attr.grid = this.getGrid(attr);
+			var webCam = new WebCamView(attr);
 		},
 		addAllElements: function(arr, addMethod) {
 			for (var i = 0; i < arr.length; i++) {

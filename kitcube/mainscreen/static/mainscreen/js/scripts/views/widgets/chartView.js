@@ -512,7 +512,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 					var datetime = obj.dateTime;
 					if (!data.length || !datetime.length) {
-						console.log('No data for: ' + url);
+						alert('No data for: ' + url);
 						return;
 					}
 
@@ -620,7 +620,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 							var data = obj.data;
 							var datetime = obj.dateTime;
 							if (!data.length || !datetime.length) {
-								alert('No data for: ' + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl);
+								alert('No data for: ' + url);
 								return;
 							}
 							for (var i = 0; i < elementLength; i++) {

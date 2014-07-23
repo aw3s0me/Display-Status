@@ -31,9 +31,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         initializeGrid: function() {
             if (!this.grid) {
                 this.grid = new kitGrid(this.el);
-                console.log('init grid:');
-                console.log(this.id);
-                console.log(this.grid.getIdOfCanvas());
+                //console.log('init grid:');
+                //console.log(this.id);
+                //console.log(this.grid.getIdOfCanvas());
             }
         },
         render: function() {

@@ -12,6 +12,8 @@ define([
 	//'views/pres/settingsView'
 ], function($, _, Backbone, BoardView, LoginView, RegisterView, UserPanelView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
 
+	var gl_type = 'default';
+
 	var getCfg = function() {
 		var start = new Date().getTime();
 		var text;
@@ -28,6 +30,9 @@ define([
 			cfgType = 'default';
 			//landscape orientation
 		}
+
+		gl_type = cfgType;
+
 
 		//cfgType = 'portrait';
 
@@ -117,15 +122,21 @@ define([
 			var start = new Date().getTime();
 			if (this.views.myBoardViewContainer === undefined) {
 				this.views.myBoardViewContainer = new BoardView({
-					aceText: getCfg()
+					aceText: getCfg(),
+					type: gl_type
 				});
 			}
 
 			this.showView(this.views.myBoardViewContainer);
 			this.views.myBoardViewContainer.eventAggregator.trigger('onuseratmainscreen');
-			var end = new Date().getTime();
-			var time = end - start;
-			console.log('Execution time of board loading: ' + time)
+			
+			if (gl_type === 'portrait') {
+				console.log('PORTRAIT')
+				if (this.views.userPanelView !== undefined) {
+					this.views.userPanelView.onPortrait();
+				}
+			}
+			
 		},
 		showLoginView: function() {
 			if (this.views.myLoginView === undefined) {

@@ -64,6 +64,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
             $('#goEditorButton').hide();
             $('#goMainscreenButton').hide();
+        },
+        onPortrait: function() {
+            $('#toggleGridButton').hide();
+            $('#goMainscreenButton').hide();
+            $('#loginButton').hide();
+            $('#logoutButton').hide();
+            $('#goEditorButton').hide();
         }
 
     });
