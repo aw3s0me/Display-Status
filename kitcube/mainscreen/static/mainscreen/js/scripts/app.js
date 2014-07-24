@@ -16,11 +16,12 @@ define([
 	"kit.sizeDetector",
 	"kit.parser",
 	'cookie',
-	'switch',
+	//'switch',
 	"models/userModel",
 	//'cacher',
+	//'modernizr',
 	'router' // Request router.js
-], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, Switch, UserModel, /*Cacher,*/ Router) {
+], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, /*Switch,*/ UserModel, /*Cacher,*/ /*Modernizr,*/ Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -39,6 +40,10 @@ define([
 		}
 	}
 
+	var initialize_modernizr = function() {
+		$('html').removeClass('canvas')
+	}
+
 	var initialize = function() {
 		// Pass in our Router module and call it's initialize function
 		$(document).ready(function($) {
@@ -50,6 +55,8 @@ define([
 			window.openWindow = function() {
 				window.location.href = '../editor/';
 			}
+
+			initialize_modernizr();
 			//so lazy
 			/*try
 			{

@@ -25,8 +25,9 @@ require.config({
     "momentjs": "vendor/momentjs/min/moment.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
     "cookie": "vendor/jquery-cookie/jquery.cookie",
-    "cacher": "dev/datacaching/webSockets",
-    "switch": "vendor/bootstrap-switch/dist/js/bootstrap-switch.min"
+    "modernizr": "vendor/modernizr/modernizr"
+    //"cacher": "dev/datacaching/webSockets",
+    //"switch": "vendor/bootstrap-switch/dist/js/bootstrap-switch.min"
     //"cacher": "dev/datacacher.min"
   },
   shim: {
@@ -113,7 +114,9 @@ require.config({
       deps: [
         "jquery"
       ]
-    }/*,
+    },
+    //modernizr: {deps: ["jquery"]}
+    /*,
     regression: {
       deps: [
         "highcharts"

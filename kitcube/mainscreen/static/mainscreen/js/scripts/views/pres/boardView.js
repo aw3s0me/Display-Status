@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView', 'controllers/tabController', 'controllers/widgetController'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView, TabController, WidgetController) {
 
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
@@ -9,10 +9,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		settings: {
 			size: [50, 21],
 			blocksize: 50,
-			sizecoeff: 2
-		},
-		axes: { //structure like
-
+			sizecoeff: 2,
+			isportrait: false
 		},
 		sensors: {
 
@@ -28,8 +26,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			charts: {},
 			alarms: {},
 			sensorgroups: {},
-			tables: {},
-			tabs: {}
+			tables: {}
 		},
 		elements: { //models
 			singlesensors: {},
@@ -42,6 +39,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			var textToParse = options.aceText;
+			this.settings.isportrait = (options.type === "portrait");
 			//var myParser = new cfgParser('../static/cfg.json');
 			//var prsObj = myParser.parseJson(textToParse);
 			prsObj = textToParse;
@@ -55,20 +53,17 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			}
 
 			if (prsObj['screen']) {
-				this.settings.blocksize = prsObj['screen']['blocksize'] ? prsObj['screen']['blocksize'] : this.settings.blocksize;
-				this.settings.size[0] = prsObj['screen']['boardsize'][0] ? prsObj['screen']['boardsize'][0] : this.settings.size[0];
-				this.settings.size[1] = prsObj['screen']['boardsize'][1] ? prsObj['screen']['boardsize'][1] : this.settings.size[1];
-				this.settings['sizecoeff'] = prsObj['screen']['sizecoeff'] ? prsObj['screen']['sizecoeff'] : this.settings.sizecoeff;
+				this.settings.blocksize = prsObj['screen']['blocksize'] || this.settings.blocksize;
+				this.settings.size[0] = prsObj['screen']['boardsize'][0] || this.settings.size[0];
+				this.settings.size[1] = prsObj['screen']['boardsize'][1] || this.settings.size[1];
+				this.settings['sizecoeff'] = prsObj['screen']['sizecoeff'] || this.settings.sizecoeff;
 			}
 
 			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
 
 			var data = {};
-
-			//if (!options.reinit) {
 			var compiledTemplate = _.template(boardTemplate, data);
 			this.container.append(compiledTemplate);
-			//}
 			/* board insertion part */
 			this.insertFromCfg(prsObj);
 		},
@@ -120,28 +115,28 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				if ($('#tabs').width() < $('#wrapper').width()) {
 					console.log('HIDE SCROLL')
 					$('#wrapper').css('overflow-x', 'hidden');
-					//$('#footer').css('position', 'absolute');
+					
 					$('#footer').css('bottom', '0');
 				}
 
 				$('#tabs').css('width', this.viewSizeDetector.boardSizePx.width + 8 + 'px');
 				console.log($('#wrapper').width())
-				if ($('#tabs').height() < $('#wrapper').height() - 50 - 10) {
+				if ($('#tabs').height() < $('#wrapper').height() - 60) { //50 size of banner
 					$('#wrapper').css('overflow-y', 'scroll');
 				}
 
+				$('#footer').css('position', 'absolute');
 			}
-
-			
-
 		},
 		getGrid: function(attr) {
 			var grid;
 			if (!attr._tabId) {
 				return this.grid;
 			}
-			if (this.views.tabs[attr._tabId])
-				return this.views.tabs[attr._tabId].grid;
+			var tab = TabController.getTab(attr._tabId);
+			//var tab = this.views.tabs[attr._tabId];
+			if (tab)
+				return tab.grid;
 			return this.grid;
 		},
 		insertFromCfg: function(prsObj) {
@@ -160,19 +155,21 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					case "datasource":
 						{
 							this.initDatasources(attr);
-							//console.log(this.settings);
 							break;
 						}
 					case "tabs":
 						{
-							this.initTabs(attr);
+							TabController.initializeTabs(attr, this.viewSizeDetector, this.settings.isportrait);
 							break;
 						}
 					case "elements":
 						{
-							for (var _elId in attr) {
+							WidgetController.initializeBoard(attr);
+
+							/*for (var _elId in attr) {
 								var elObj = attr[_elId];
-								var tabId = this.tabOfElementIndex(_elId);
+								//var tabId = this.tabOfElementIndex(_elId);
+								var tabId = TabController.tabOfElementIndex(_elId);
 								elObj._id = _elId;
 								if (tabId) {
 									elObj._tabId = tabId;
@@ -203,14 +200,15 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 										break;
 								}
 							}
-							break;
+							break; */
 						}
 				}
 			}
 
 			this.el = $("#tabs")
 
-			if ($.isEmptyObject(this.views.tabs)) {
+			//if ($.isEmptyObject(this.views.tabs)) {
+			if (!TabController.isInitialized) {
 				this.establishStyle(this.el);
 				this.grid = new kitGrid(this.el);
 				this.el.removeClass('canvas')
@@ -226,19 +224,19 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			if (chartsToAdd.length > 0)
 				this.getAxes();
 
-			this.addAllElements(sensorGroupsToAdd, this.addSensorGroup);
+			/*this.addAllElements(sensorGroupsToAdd, this.addSensorGroup);
 			this.addAllElements(sensorTablesToAdd, this.addSensorTable);
 			this.addAllElements(alarmListsToAdd, this.addAlarmList);
 			this.addAllElements(alarmListsKitcubeToAdd, this.addKitcubeAlarmList);
 			this.addAllElements(chartsToAdd, this.addChart);
-			this.addAllElements(webCamsToAdd, this.addWebCam);
+			this.addAllElements(webCamsToAdd, this.addWebCam);*/
 
 			this.enableFetchingData();
 			this.updateAllSensors();
 
 		},
 		disableFetchingData: function() {
-
+			this.updSensorsInterval = null;
 		},
 		enableFetchingData: function() {
 			var self = this;
@@ -250,12 +248,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			var datasource = this.settings.datasources[datasource];
 			return datasource['axes'][id];
 		},
-		getAxes: function() {
-			//var dbname = this.settings['dbname'];
-			//var dbgroup = this.settings['dbgroup'];
-			//var server = this.settings['server'];
-			//var axes = this.axes;
-			
+		getAxes: function() {		
 			//var url = window.host + "services/list.php?target=axes&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup;
 			try {
 
@@ -288,7 +281,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		updateAllSensors: function() {
 			var self = this;
 
-			if (this.settings.datasources){
+			if (this.settings.datasources){ //if multiple datasources
 				$.each(this.settings.datasources, function(name, datasource) {
 					self.updateSensorsFromDatasource(datasource);
 				});
@@ -323,11 +316,10 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				//console.log(url);
 				//window.db.httpGetCsv(url, function(data) {
 				getDataFromAdei(url, true, function(data) {
-				//createCORSRequest('GET', url, true, function(data) {
-					//var result = window.db.dataHandl.onMessageRecievedCsv(data);
+
 					result = parseCSVForUpdating(data, masks.length);
 					//console.log(result);
-					if (typeof(result) === "string") {
+					if (typeof(result) === "string") { //if res is not object
 						console.log('Error occured: ' + result);
 						var lastUpdatedTime = 'Error in getting data';
 						self.eventAggregator.trigger('loadingfinished', {
@@ -348,73 +340,18 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						element.updateModel(result.values[index++], time.valueOf());
 					}
 				});
-				//window.db.getData(this.settings['server'], this.settings['dbname'], this.settings['dbgroup'], masksToRequest, '-1', 800, 'mean', function(obj)
-				//{
-				//console.log(obj);
-				//})
-
 			} catch (msg) {
 				alert(msg);
 			}
 
 		},
-		updateSensor: function(sensorModel) {
-			sensorModel.updateModel();
-		},
 		clear: function() {
-			this.$el.empty();
-		},
-		loadCfg: function(filename) {
-			var self = this;
-			var _data = undefined;
-			this.sensors = null;
-			this.elements = null;
-
-			for (var viewSectionName in this.views) {
-				var viewSection = this.views[viewSectionName];
-				for (var elemId in viewSection) {
-					var view = viewSection[elemId];
-					view.removeFromDom();
-
-				}
-				viewSection = {};
-			}
-			this.views = null;
-
-			$.ajax({
-				url: 'static/mainscreen/tempcfg/' + filename.replace('\"', ""),
-				async: false,
-				dataType: 'text',
-				success: function(data) {
-					_data = data;
-				}
-			});
-
-			this.sensors = {};
-			this.views = {
-				singlesensors: {},
-				charts: {},
-				alarms: {},
-				sensorgroups: {},
-				tables: {}
-			};
-			this.elements = {
-				singlesensors: {},
-				charts: {},
-				alarms: {},
-				sensorgroups: {},
-				tables: {}
-			}
-
-			this.initialize({
-				aceText: _data,
-				reinit: true
-			});
+			this.$el.empty(); //clear board
 		},
 		initDatasources: function(datasourceObj) {
 			window.host = datasourceObj.host;
 
-			if (!this.isManyDatasources(datasourceObj)) {
+			if (!this.isManyDatasources(datasourceObj)) { //if there just one datasource
 				this.settings['dbgroup'] = datasourceObj['dbgroup'];
 				this.settings['dbname'] = datasourceObj['dbname'];
 				this.settings['server'] = datasourceObj['server'];
@@ -442,11 +379,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					alert('Please specify fields dbgroup, dbname and server in configuration file');
 				}
 				this.settings.datasources[datasourceName] = datasource;
-				this.settings.datasources[datasourceName].id = datasourceName;
+				this.settings.datasources[datasourceName].id = datasourceName; //meta id
 			}
 			console.log(this.settings.datasources);
 		},
-		getDatasourcesForModels: function(models) {
+		getDatasourcesForModels: function(models) { //used in charts
 			var datasources = {};
 			if (!this.isManyDatasources()) {
 				return {
@@ -473,8 +410,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					datasources[datasourceName]['server'] = this.settings.datasources[datasourceName]['server'];
 				if (!datasources[datasourceName]['sensors'])
 					datasources[datasourceName]['sensors'] = {
-
-					}
+				}
 
 				datasources[datasourceName]['sensors'][model.get('id')] = model;
 				//this.settings.datasources[datasourceName]
@@ -494,71 +430,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		},
 		addSensorToDatasource: function(datasource, id, model) {
 			this.settings.datasources[datasource].sensors[id] = model;
-		},
-		getCurrentTab: function() {
-			var activeTabIdx = $("#tabs").tabs('option', 'active');
-			var activeTabID = $('#tabs > ul > li').eq(activeTabIdx).attr('aria-controls');
-			//var activeTabID = $('div[id="tabs"] ul .ui-tabs-active a').attr("href").substring(1);
-			return activeTabID;
-		},
-		tabOfElement: function(elemId) {
-			var tabId = this.tabViewLookup[elemId]
-			var tab = this.views.tabs[tabId];
-			return tab;
-		},
-		tabOfElementIndex: function(elemId) {
-			return this.tabViewLookup[elemId];
-		},
-		initTabs: function(attr) {
-			$('#tabs').append('<ul></ul>');
-			for (var tabId in attr) {
-				var tabAttr = attr[tabId];
-				var links = tabAttr['content'];
-				var newTabProperties = {
-					name: tabAttr['name'],
-					id: tabId,
-					can_close: true,
-					links: links,
-					container: $('#tabs')
-				}
-				var newTabView = new TabView(newTabProperties);
-				this.establishStyle(newTabView.el, {
-					portrait: true
-				});
-				this.views.tabs[tabId] = newTabView;
-				// initialize tab lookup dictionary
-				for (var i = 0; i < links.length; i++) {
-					this.tabViewLookup[links[i]] = tabId;
-				}
-				newTabView.initializeGrid(tabId);
-			}
-			/* ALL THE SAME STUPID ERROR */
-			for (var tabId in this.views.tabs) {
-				var tab = this.views.tabs[tabId];
-				//console.log(tab.grid.getIdOfCanvas());
-			}
-
-			//console.log(this.views.tabs);
-			$('#tabs').tabs({
-				collapsible: false
-			})
-			//$('#tabs ul').css('padding', '0px !important')
-			//.css('height', 50 * this.viewSizeDetector.scale)
-			//.css('width', this.viewSizeDetector.boardSizePx.width + 'px');
-			$('#tabs li').css('height', 40 * this.viewSizeDetector.scale)
-				.css('font-size', 24 * this.viewSizeDetector.scale);
-
-			//var marginTop = ($(window).height() - parseInt($('#banner').css('height')) - parseInt($('#footer').css('height')) - this.viewSizeDetector.maxGridSizesPx.height) / 5.5;
-			//$('#tabs').css('margin-top', marginTop + 'px');
-
-			var self = this;
-			$('#toggleGridButton').click(function(e) {
-				console.log('toggle: ')
-				var id = self.getCurrentTab();
-				console.log(id);
-				var tab = self.views.tabs[id];
-				tab.grid.toggleGrid();
-			}).tooltip({});
 		},
 		addSingleSensor: function(attr) {
 			//which tab will be there
@@ -853,31 +724,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					//self.views.sensors[sensor.get('id')] = newSensorView;
 					group[sensor.get('id')] = newSensorView;
 				}
-			}
-
-			for (var trendName in trendsArr) {
-				var trendObj = trendsArr[trendName];
-				var sensorModelId = trendObj["sensor"];
-				var sensorModel = this.sensors[sensorModelId];
-
-				if (!sensorModel) {
-					throw "Sensor of trend: " + trendObj["id"] + " is not defined";
-				}
-
-				var trendModel = new TrendSensorModel({
-					model: sensorModel,
-					range: trendObj["range"],
-					name: trendObj["name"],
-					id: trendObj["id"]
-				})
-
-				var newTrendSensorView = new TrendSensorView({
-					model: trendModel,
-					group: true,
-					grid: grid
-				});
-
-				group[sensorName] = newTrendSensorView;
 			}
 
 			var newSensorGroupModel = new SensorGroupModel({
