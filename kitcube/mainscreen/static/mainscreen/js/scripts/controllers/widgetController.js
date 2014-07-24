@@ -1,6 +1,6 @@
-define(['jquery', 'constructors/widgetFactory'], function($, WidgetFactory) {
+define(['jquery', 'constructors/widgetFactory', 'controllers/tabController'], function($, WidgetFactory, TabController) {
     var instance = null;
-
+    
     function widgetController() {
         if (instance !== null) {
             throw new Error("Cannot instantiate more than one MySingleton, use MySingleton.getInstance()");
@@ -11,11 +11,34 @@ define(['jquery', 'constructors/widgetFactory'], function($, WidgetFactory) {
 
     widgetController.prototype = {
         sizeDetector: undefined,
+        board: undefined,
+        sizecoeff: undefined,
+        views: {},
+        sensors: {},
         construct: function() {
 
         },
-        initializeBoard: function(attr) {
+        initializeBoard: function(board, attr) {
+            this.board = board;
+            this.sizecoeff = board.settings.sizecoeff;
             WidgetFactory.createAllWidgets(attr);
+        },
+        getGrid: function(attr) {
+            var grid;
+            if (!attr._tabId) {
+                return this.board.grid;
+            }
+            var tab = TabController.getTab(attr._tabId);
+            //var tab = this.views.tabs[attr._tabId];
+            if (tab)
+                return tab.grid;
+            return this.board.grid;
+        },
+        addViewToLookup: function(type, element) {
+            this.views['type']
+        },
+        addSensorToLookup: function(element) {
+
         }
     };
 

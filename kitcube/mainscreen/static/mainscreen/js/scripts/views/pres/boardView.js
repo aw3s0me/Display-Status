@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView', 'controllers/tabController', 'controllers/widgetController'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView, TabController, WidgetController) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView', 'controllers/tabController', 'controllers/widgetController', 'controllers/datasourceController'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView, TabController, WidgetController, DatasourceController) {
 
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
@@ -154,7 +154,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				switch (_id) {
 					case "datasource":
 						{
-							this.initDatasources(attr);
+							//this.initDatasources(attr);
+							DatasourceController.initDatasources(attr);
 							break;
 						}
 					case "tabs":
@@ -164,7 +165,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						}
 					case "elements":
 						{
-							WidgetController.initializeBoard(attr);
+							WidgetController.initializeBoard(this, attr);
 
 							/*for (var _elId in attr) {
 								var elObj = attr[_elId];

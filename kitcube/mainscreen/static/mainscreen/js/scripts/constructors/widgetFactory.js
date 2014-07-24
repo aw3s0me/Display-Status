@@ -1,4 +1,4 @@
-define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView', 'controllers/tabController'], function($, PriorityQueue, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView, TabController) {
+define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView', 'controllers/tabController', 'controllers/datasourceController'], function($, PriorityQueue, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView, TabController, DatasourceController) {
 
     var instance = null;
     var priorities = { //[type -> priority]
@@ -23,6 +23,9 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
         sizeDetector: undefined,
         queue: undefined,
         construct: function() {
+
+        },
+        getWidgetTypes: function() {
 
         },
         createAllWidgets: function(attr) {
@@ -64,7 +67,7 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
 
                     break;
                 case "chart":
-                    this.addChart(attr);
+                    //this.addChart(attr);
                     break;
                 case "webcam":
 
@@ -72,47 +75,6 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 default:
                     break;
             }
-        }
-        /*,
-        addChart: function(attr) {
-            //which tab will be there
-            var grid = this.getGrid(attr);
-
-            var newChart = new Chart({
-                id: attr._id,
-                caption: attr["caption"],
-                charttype: attr["charttype"],
-                type: attr["type"],
-                link: attr["link"],
-                legend: attr["legend"],
-                linewidth: attr["width"],
-                size: attr["size"],
-
-                coords: attr["coords"],
-                puredata: {},
-                range: attr["startrange"],
-                scale: grid.getScale(),
-                cfgObj: attr,
-                axislabels: attr['axislabels'],
-                resolution: attr['resolution']
-            });
-
-            var newChartView = new ChartView({
-                model: newChart,
-                grid: grid,
-                allSensors: this.sensors,
-                board: this
-            });
-
-            newChart.on('removing', function() {
-                if (this.elements) {
-                    delete this.elements.charts[attr._id];
-                    delete this.views.charts[attr._id];
-                }
-            }, this);
-
-            this.elements.charts[attr._id] = newChart;
-            this.views.charts[attr._id] = newChartView;
         },
         addSensorGroup: function(attr) {
             var sensorArr = attr['sensors'];
@@ -121,19 +83,14 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
             var sensorModelsArr = [];
             var emptyCount = attr['empties'];
             //which tab will be there
-            var grid = this.getGrid(attr);
+            var grid = WidgetController.getGrid(attr);
             var size = undefined;
 
             //if groups are not from diff sources
-            size = [this.settings['sizecoeff'], this.settings['sizecoeff']];
+            size = [WidgetController.sizecoeff, WidgetController.sizecoeff];
 
             for (var i = 0; i < sensorArr.length; i++) {
                 var sensorObj = sensorArr[i];
-
-                if (sensorObj['type'] === "trend") {
-                    trendsArr.push(sensorObj);
-                    continue;
-                }
 
                 if (!size)
                     size = sensorObj["size"];
@@ -163,7 +120,7 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 });
 
                 if (this.settings.datasources)
-                    this.addSensorToDatasource(newSensor.get('datasource'), sensorObj['id'], newSensor);
+                    DatasourceController.addSensorToDatasource(newSensor.get('datasource'), sensorObj['id'], newSensor);
 
                 if (this.sensors[sensorObj["id"]]) {
                     throw "This sensor already exists" + sensorObj["id"];
@@ -257,6 +214,48 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
             }, this);
 
             this.elements.sensorgroups[attr._id] = newSensorGroupModel;
+        /*,
+        addChart: function(attr) {
+            //which tab will be there
+            var grid = this.getGrid(attr);
+
+            var newChart = new Chart({
+                id: attr._id,
+                caption: attr["caption"],
+                charttype: attr["charttype"],
+                type: attr["type"],
+                link: attr["link"],
+                legend: attr["legend"],
+                linewidth: attr["width"],
+                size: attr["size"],
+
+                coords: attr["coords"],
+                puredata: {},
+                range: attr["startrange"],
+                scale: grid.getScale(),
+                cfgObj: attr,
+                axislabels: attr['axislabels'],
+                resolution: attr['resolution']
+            });
+
+            var newChartView = new ChartView({
+                model: newChart,
+                grid: grid,
+                allSensors: this.sensors,
+                board: this
+            });
+
+            newChart.on('removing', function() {
+                if (this.elements) {
+                    delete this.elements.charts[attr._id];
+                    delete this.views.charts[attr._id];
+                }
+            }, this);
+
+            this.elements.charts[attr._id] = newChart;
+            this.views.charts[attr._id] = newChartView;
+        },
+        
         }*/
     };
 
