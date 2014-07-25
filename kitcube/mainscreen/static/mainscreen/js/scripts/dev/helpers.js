@@ -159,15 +159,15 @@ var monthFormats = {
     'Dec': 11
 };
 
-var parseCSV = function(msg) {
+var parseCSV = function(msg, channelCount) {
     var separator = ',';
     var lineSeparator = '\r\n';
     var rows = msg.split(lineSeparator);
-    var channelCount = rows[0].split(separator);
+    //var channelCount = rows[0].split(separator);
     var dateTime = [];
     var data = [];
 
-    for (var i = 0; i < channelCount.length; i++) {
+    for (var i = 0; i < channelCount; i++) {
         data.push([]);
     }
 

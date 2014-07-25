@@ -22,11 +22,15 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
     widgetFactory.prototype = {
         sizeDetector: undefined,
         queue: undefined,
+        widgetController: undefined,
         construct: function() {
 
         },
+        initializeFactory: function(widgetController) {
+            this.widgetController = widgetController;
+        },
         getWidgetTypes: function() {
-
+            return Object.keys(priorities);
         },
         createAllWidgets: function(attr) {
             var queue = new PriorityQueue(function(a, b) {
@@ -36,22 +40,24 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
             for (var _elId in attr) {
                 var elObj = attr[_elId];
                 var tabId = TabController.tabOfElementIndex(_elId);
-                console.log(tabId);
                 elObj._id = _elId;
                 if (tabId) {
                     elObj._tabId = tabId;
                 }
+                if (elObj["type"] === "chart" && !DatasourceController.isAxesInitialized) {
+                    DatasourceController.getAxes();
+                }
                 queue.enq({
                     priority: priorities[elObj["type"]],
-                    attrs: elObj
+                    obj: elObj
                 });
             }
             while (queue.size() > 0)
-                console.log(queue.deq().attrs['type']);
+                this.addWidget(queue.deq().obj);
 
         },
         addWidget: function(attr) {
-            switch (elObj["type"]) {
+            switch (attr["type"]) {
                 case "sensor":
 
                     break;
@@ -67,7 +73,7 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
 
                     break;
                 case "chart":
-                    //this.addChart(attr);
+                    this.addChart(attr);
                     break;
                 case "webcam":
 
@@ -77,6 +83,7 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
             }
         },
         addSensorGroup: function(attr) {
+            var WidgetController = this.widgetController;
             var sensorArr = attr['sensors'];
             var trendsArr = [];
             var group = [];
@@ -119,18 +126,16 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                     cfgObj: sensorObj
                 });
 
-                if (this.settings.datasources)
-                    DatasourceController.addSensorToDatasource(newSensor.get('datasource'), sensorObj['id'], newSensor);
+                DatasourceController.addSensorToDatasource(newSensor.get('datasource'), sensorObj['id'], newSensor);
 
-                if (this.sensors[sensorObj["id"]]) {
+                if (WidgetController.isSensorExists(sensorObj["id"])) {
                     throw "This sensor already exists" + sensorObj["id"];
                 }
 
-                this.sensors[sensorObj["id"]] = newSensor;
+                WidgetController.addSensorToLookup(newSensor);
 
                 newSensor.on('removing', function() {
-                    if (this.sensors)
-                        delete this.sensors[newSensor.get('id')];
+                    WidgetController.removeSensorFromLookup(newSensor.get('id'));
                 }, this);
 
                 sensorModelsArr.push(newSensor);
@@ -141,26 +146,27 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 var linkModel = undefined;
                 var newSensorView;
 
+                newSensorView = new SingleSensorView({
+                    model: sensor,
+                    grid: grid,
+                    group: false,
+                    linkModel: linkModel
+                });
+              
                 if (sensor.get('link') !== undefined) {
-                    linkModel = this.sensors[sensor.get('link')];
+                    linkModel = WidgetController.sensors[sensor.get('link')];
                     if (!linkModel) {
                         throw "Wrong link: " + sensor.get('link') + " at: " + sensor.get('id');
                     }
                     newSensorView = new DoubleSensorView({
                         model: sensor,
-                        grid: this.grid,
+                        grid: grid,
                         group: false,
                         linkModel: linkModel
                     });
 
-                    this.sensorViewLookup[linkModel.get('id')] = {
-                        type: 2,
-                        viewId: sensor.get('id')
-                    }
-                    this.sensorViewLookup[sensor.get('id')] = {
-                        type: 1,
-                        viewId: sensor.get('id')
-                    };
+                    WidgetController.addSensorToTypeViewLookup(1, sensor.get('id'), sensor.get('id'));
+                    WidgetController.addSensorToTypeViewLookup(2, linkModel.get('id'), sensor.get('id'));
                 } else {
                     newSensorView = new SingleSensorView({
                         model: sensor,
@@ -170,10 +176,7 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                     });
 
                     if (!sensor.get('norender')) {
-                        this.sensorViewLookup[sensor.get('id')] = {
-                            type: 0,
-                            viewId: sensor.get('id')
-                        }
+                        WidgetController.addSensorToTypeViewLookup(0, sensor.get('id'), sensor.get('id'));
                     }
                 }
 
@@ -201,34 +204,28 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 model: newSensorGroupModel,
                 grid: grid,
                 group: group,
-                sizecoeff: this.settings['sizecoeff']
+                sizecoeff: WidgetController.sizecoeff
             });
 
-            this.views.sensorgroups[attr._id] = newSensorGroupView;
+            WidgetController.addViewToLookup(newSensorGroupModel.get('type'), newSensorView);
+            //this.views.sensorgroups[attr._id] = newSensorGroupView;
+
             newSensorGroupView.on('removing', function() {
-                //delete this.elements.sensorgroups[attr._id];
-                if (this.views) {
-                    delete this.views.sensorgroups[attr._id];
-                }
-
+                WidgetController.removeViewByType(newSensorGroupModel.get('type'), newSensorGroupModel.get('id'));
             }, this);
-
-            this.elements.sensorgroups[attr._id] = newSensorGroupModel;
-        /*,
+        },
         addChart: function(attr) {
             //which tab will be there
-            var grid = this.getGrid(attr);
+            var grid = this.widgetController.getGrid(attr);
 
             var newChart = new Chart({
                 id: attr._id,
                 caption: attr["caption"],
                 charttype: attr["charttype"],
-                type: attr["type"],
                 link: attr["link"],
                 legend: attr["legend"],
                 linewidth: attr["width"],
                 size: attr["size"],
-
                 coords: attr["coords"],
                 puredata: {},
                 range: attr["startrange"],
@@ -241,23 +238,19 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
             var newChartView = new ChartView({
                 model: newChart,
                 grid: grid,
-                allSensors: this.sensors,
-                board: this
+                allSensors: this.widgetController.sensors,
+                board: this.widgetController.board
             });
 
             newChart.on('removing', function() {
-                if (this.elements) {
-                    delete this.elements.charts[attr._id];
-                    delete this.views.charts[attr._id];
-                }
+                this.widgetController.removeViewByType(newChart.get('type'), newChart.get('id'));
             }, this);
 
-            this.elements.charts[attr._id] = newChart;
-            this.views.charts[attr._id] = newChartView;
-        },
-        
-        }*/
-    };
+            //this.elements.charts[attr._id] = newChart;
+            //this.views.charts[attr._id] = newChartView;
+            this.widgetController.addViewToLookup(newChart.get('type'), newChartView);
+        }
+    }
 
     widgetFactory.getInstance = function() {
         if (instance === null) {

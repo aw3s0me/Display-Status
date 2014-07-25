@@ -11,6 +11,7 @@ define(['jquery'], function($) {
 
     datasourceController.prototype = {
         datasources: {},
+        isAxesInitialized: false,
         construct: function() {
 
         },
@@ -42,12 +43,21 @@ define(['jquery'], function($) {
                 this.datasources[datasourceName].id = datasourceName; //meta id
             }
         },
+        getDatasource: function(datasourceName) {
+            return this.datasources[datasourceName];
+        },
+        getDefaultDatasource: function() {
+            return this.datasources['default'] || false;
+        },
         getDatasourcesForModels: function(models) { //used in charts
             var datasources = {};
             if (!this.isManyDatasources()) {
                 var datasource = this.datasources['default'];
                 datasource.id = 'default';
-                return datasource;
+                datasource.sensors = models;
+                return {
+                    'default': datasource
+                }
             }
 
             for (var i = 0; i < models.length; i++) {
@@ -79,6 +89,43 @@ define(['jquery'], function($) {
         addSensorToDatasource: function(datasource, id, model) {
             this.datasources[datasource].sensors[id] = model;
         },
+        getAxis: function(datasource, id) {
+            var datasource = this.datasources[datasource];
+            return datasource['axes'][id];
+        },
+        getAxes: function() {   
+            var self = this;    
+            //var url = window.host + "services/list.php?target=axes&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup;
+            try {
+
+                $.each(this.datasources, function(key, datasource) {
+                    datasource.axes = {};
+                    var url = formAdeiUrlAxes(window.host, datasource['server'], datasource['dbname'], datasource['dbgroup']);
+                    getDataFromAdei(url, true, function(data) {
+                        xmldoc = $.parseXML(data);
+                        $xml = $(xmldoc);
+                        $values = $xml.find('Value').each(function(index) {
+                            var id = $(this).attr('value');
+                            var newAxes = {
+                                id: id,
+                                axis_units: $(this).attr('axis_units'),
+                                axis_name: $(this).attr('axis_name'),
+                                axis_mode: $(this).attr('axis_mode'),
+                                axis_range: $(this).attr('axis_range')
+                            }
+                            datasource.axes[id] = newAxes;
+                        });
+
+                        self.isAxesInitialized = true;
+                    });
+                     /* iterate through array or object */
+                });
+
+                
+            } catch (msg) {
+                alert('Error when getting axes');
+            }
+        }
     };
 
     datasourceController.getInstance = function() {

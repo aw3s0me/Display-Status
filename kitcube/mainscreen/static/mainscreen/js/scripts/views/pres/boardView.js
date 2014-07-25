@@ -35,6 +35,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			sensorgroups: {},
 			tables: {}
 		},
+		widgetController: WidgetController,
+		tabController: TabController,
+		datasourceController: DatasourceController,
 		updSensorsInterval: undefined,
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
@@ -165,6 +168,21 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 						}
 					case "elements":
 						{
+
+							this.el = $("#tabs")
+
+							if (!TabController.isInitialized) {
+								this.establishStyle(this.el);
+								this.grid = new kitGrid(this.el);
+								this.el.removeClass('canvas')
+									.addClass('tab');
+								$('#toggleGridButton').click(function(e) {
+									self.grid.toggleGrid();
+								});
+							}
+
+							//getting adei metainfo
+
 							WidgetController.initializeBoard(this, attr);
 
 							/*for (var _elId in attr) {
@@ -206,34 +224,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				}
 			}
 
-			this.el = $("#tabs")
-
-			//if ($.isEmptyObject(this.views.tabs)) {
-			if (!TabController.isInitialized) {
-				this.establishStyle(this.el);
-				this.grid = new kitGrid(this.el);
-				this.el.removeClass('canvas')
-					.addClass('tab');
-				$('#toggleGridButton').click(function(e) {
-					self.grid.toggleGrid();
-				});
-			} else {
-				//this.el.css('top', '52px');
-			}
-
-			//getting adei metainfo
-			if (chartsToAdd.length > 0)
-				this.getAxes();
-
-			/*this.addAllElements(sensorGroupsToAdd, this.addSensorGroup);
-			this.addAllElements(sensorTablesToAdd, this.addSensorTable);
-			this.addAllElements(alarmListsToAdd, this.addAlarmList);
-			this.addAllElements(alarmListsKitcubeToAdd, this.addKitcubeAlarmList);
-			this.addAllElements(chartsToAdd, this.addChart);
-			this.addAllElements(webCamsToAdd, this.addWebCam);*/
-
-			this.enableFetchingData();
-			this.updateAllSensors();
+			this.widgetController.enableFetchingData();
+			this.widgetController.updateAllSensors();
 
 		},
 		disableFetchingData: function() {
@@ -245,225 +237,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				self.updateAllSensors();
 			}, 2000); //the only way to pass param */
 		},
-		getAxis: function(datasource, id) {
-			var datasource = this.settings.datasources[datasource];
-			return datasource['axes'][id];
-		},
-		getAxes: function() {		
-			//var url = window.host + "services/list.php?target=axes&db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup;
-			try {
-
-				$.each(this.settings.datasources, function(key, datasource) {
-					datasource.axes = {};
-					var url = formAdeiUrlAxes(window.host, datasource['server'], datasource['dbname'], datasource['dbgroup']);
-					getDataFromAdei(url, true, function(data) {
-						xmldoc = $.parseXML(data);
-						$xml = $(xmldoc);
-						$values = $xml.find('Value').each(function(index) {
-							var id = $(this).attr('value');
-							var newAxes = {
-								id: id,
-								axis_units: $(this).attr('axis_units'),
-								axis_name: $(this).attr('axis_name'),
-								axis_mode: $(this).attr('axis_mode'),
-								axis_range: $(this).attr('axis_range')
-							}
-							datasource.axes[id] = newAxes;
-						});
-					});
-					 /* iterate through array or object */
-				});
-
-				
-			} catch (msg) {
-				alert('Error when getting axes');
-			}
-		},
-		updateAllSensors: function() {
-			var self = this;
-
-			if (this.settings.datasources){ //if multiple datasources
-				$.each(this.settings.datasources, function(name, datasource) {
-					self.updateSensorsFromDatasource(datasource);
-				});
-			}
-			else {
-				this.updateSensorsFromDatasource({
-					dbname: this.settings['dbname'],
-					dbgroup: this.settings['dbgroup'],
-					server: this.settings['server']
-				})
-			}
-		},
-		updateSensorsFromDatasource: function(datasource) {
-			var dbname = datasource['dbname'];
-			var dbgroup = datasource['dbgroup'];
-			var server = datasource['server'];
-			var result = undefined;
-			var self = this;
-			var source = datasource.sensors? datasource.sensors : this.sensors;
-
-			var masks = [];
-
-			for (var sensId in source) {
-				var element = this.sensors[sensId];
-				masks.push(element.get('mask'));
-			}
-			var masksToRequest = masks.join();
-	
-			try {
-				//http://katrin.kit.edu/adei/services/getdata.php?db_server=fpd&db_name=katrin_rep&db_group=0&db_mask=102,106,107,108,149,150,103,109,110,111,151,152,74,66,68,99,12,67,69,100,2,3,4,5,6,7,8,9,59,61,75,78,80,82,145,112,113,116,117,118,146,119,120,123,124,125,186,187,188,190,191,192,190,191,192&window=-1
-				var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=-1';
-				//console.log(url);
-				//window.db.httpGetCsv(url, function(data) {
-				getDataFromAdei(url, true, function(data) {
-
-					result = parseCSVForUpdating(data, masks.length);
-					//console.log(result);
-					if (typeof(result) === "string") { //if res is not object
-						console.log('Error occured: ' + result);
-						var lastUpdatedTime = 'Error in getting data';
-						self.eventAggregator.trigger('loadingfinished', {
-							lastUpdatedTime: lastUpdatedTime
-						});
-						return;
-					}
-					var time = moment(result.time[0] * 1000);
-					var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
-					//$('#lblFromNow').text();
-					self.eventAggregator.trigger('loadingfinished', {
-						lastUpdatedTime: lastUpdatedTime
-					});
-					//console.log(result)
-					var index = 0;
-					for (var sensId in source) {
-						var element = self.sensors[sensId];
-						element.updateModel(result.values[index++], time.valueOf());
-					}
-				});
-			} catch (msg) {
-				alert(msg);
-			}
-
-		},
 		clear: function() {
 			this.$el.empty(); //clear board
-		},
-		initDatasources: function(datasourceObj) {
-			window.host = datasourceObj.host;
-
-			if (!this.isManyDatasources(datasourceObj)) { //if there just one datasource
-				this.settings['dbgroup'] = datasourceObj['dbgroup'];
-				this.settings['dbname'] = datasourceObj['dbname'];
-				this.settings['server'] = datasourceObj['server'];
-				this.settings.datasources = {};
-				this.settings.datasources['default'] = {
-					dbgroup : datasourceObj['dbgroup'],
-					dbname : datasourceObj['dbname'],
-					server : datasourceObj['server']
-				}
-				this.settings.datasources['default'].sensors = {};
-				this.settings.datasources['default'].id = 'default';
-				return;
-			}
-
-			this.settings.datasources = {};
-
-			for (var datasourceName in datasourceObj) {
-				if (datasourceName === 'host') {
-					continue;
-				}
-				var datasource = datasourceObj[datasourceName];
-				datasource['masks'] = [];
-				datasource['sensors'] = {};
-				if (!datasource['dbgroup'] || !datasource['dbname'] || !datasource['server']) {
-					alert('Please specify fields dbgroup, dbname and server in configuration file');
-				}
-				this.settings.datasources[datasourceName] = datasource;
-				this.settings.datasources[datasourceName].id = datasourceName; //meta id
-			}
-			console.log(this.settings.datasources);
-		},
-		getDatasourcesForModels: function(models) { //used in charts
-			var datasources = {};
-			if (!this.isManyDatasources()) {
-				return {
-					'default': {
-						dbgroup: this.settings['dbgroup'],
-						dbname: this.settings['dbname'],
-						server: this.settings['server'],
-						id: 'default',
-						sensors: models
-					}
-				}
-			}
-
-			for (var i = 0; i < models.length; i++) {
-				var model = models[i];
-				var datasourceName = model.get('datasource');
-				if (!datasources[datasourceName])
-					datasources[datasourceName] = {};
-				if (!datasources[datasourceName]['dbgroup'])
-					datasources[datasourceName]['dbgroup'] = this.settings.datasources[datasourceName]['dbgroup'];
-				if (!datasources[datasourceName]['dbname'])
-					datasources[datasourceName]['dbname'] = this.settings.datasources[datasourceName]['dbname'];
-				if (!datasources[datasourceName]['server'])
-					datasources[datasourceName]['server'] = this.settings.datasources[datasourceName]['server'];
-				if (!datasources[datasourceName]['sensors'])
-					datasources[datasourceName]['sensors'] = {
-				}
-
-				datasources[datasourceName]['sensors'][model.get('id')] = model;
-				//this.settings.datasources[datasourceName]
-			}
-
-			console.log(datasources);
-			return datasources;
-		},
-		isManyDatasources: function(datasourceObj) {
-			if (datasourceObj === undefined)
-				datasourceObj = {
-					dbgroup: this.settings['dbgroup'],
-					dbname: this.settings['dbname'],
-					server: this.settings['server']
-				}
-			return !(datasourceObj['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server']);
-		},
-		addSensorToDatasource: function(datasource, id, model) {
-			this.settings.datasources[datasource].sensors[id] = model;
-		},
-		addSingleSensor: function(attr) {
-			//which tab will be there
-			var grid = this.getGrid(attr);
-
-			var newSensor = new Sensor({
-				id: attr._id,
-				name: attr["name"],
-				comment: attr["comment"],
-				unit: attr["unit"],
-				//value: attr[n],
-				sensorviewtype: "single",
-				max: attr["max"],
-				min: attr["min"],
-				precision: attr["precision"],
-				exp: attr["exp"],
-				datasource: attr['datasource'],
-				mask: attr["mask"],
-				size: attr["size"],
-				coords: attr["coords"],
-				values: new Array(),
-				lastTime: new Date,
-				cfgObj: attr
-			});
-			//console.log(newSensor);
-			var newSensorView = new SensorView({
-				model: newSensor,
-				grid: grid
-			});
-
-			this.elements.singlesensors[attr._id] = newSensor;
-			this.sensors[attr._id] = newSensor;
-			this.views.singlesensors[attr._id] = newSensorView;
 		},
 		addSensorTable: function(attr) {
 			var sensorgroups = attr['rows'];

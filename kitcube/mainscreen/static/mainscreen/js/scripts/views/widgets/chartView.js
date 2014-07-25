@@ -3,7 +3,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 	var _seriesArr = [];
 	var _allSensors = undefined;
 	var _isLegendShown = false;
-	var deffereds = [];
 
 	var ChartView = Backbone.View.extend({
 		container: undefined,
@@ -13,6 +12,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 		board: undefined,
 		lookDiv: undefined,
 		extremeInterval: undefined,
+		deffereds: [],
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -194,10 +194,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				var axisId = seriesObject['yAxis'];
 
 				var existedAxis = self.chart.get(axisId);
+				//console.log(this.model.get('id'), sensorModel.get('id'))
+				//console.log(axisId, sensorModel.get('id'), sensorModel.get('mask'));
 				if (!existedAxis) {
 					var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
 						axislabels: self.model.get('axislabels'),
-						adeiAxisInfo: self.board.getAxis(sensorModel.get('datasource'), axisId),//self.board.axes[axisId],
+						adeiAxisInfo: self.board.datasourceController.getAxis(sensorModel.get('datasource'), axisId),//self.board.axes[axisId],
 						count: series
 					});
 					axisObject.lineColor = '#000';
@@ -221,7 +223,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var unitWidth = this.grid.getUnitSizes().width;
 			var height = dy * unitWidth * scale;
 			var width = dx * unitHeight * scale;
-			var sizeCoeff = this.board.settings['sizecoeff'] / 2;
+			var sizeCoeff = this.board.widgetController.sizecoeff / 2;
 			var coeffScale = scale * sizeCoeff;
 
 			this.container = $('<div id= ' + this.model.get('id') + '  ></div>')
@@ -372,7 +374,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var chartModel = this.model;
 			var linkArr = chartModel.get('link');
 			var htmlElements = []; //to init html elements and change css
-			var typeLookup = this.board.sensorViewLookup;
+			var typeLookup = this.board.widgetController.sensorViewLookup;
+			//console.log(typeLookup, linkArr);
 
 			if (linkArr.length <= 0) {
 				return;
@@ -423,10 +426,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			this.getAllData(elems);
 
 		},
-		getElementsMetaInfoDatasource: function(datasource) {
+		getElementsMetaInfoDatasource: function(datasource, models) {
+			console.log('getmeta');
+			//var datasource = datasource;
+			console.log(this.model.getMasks(datasource.sensors, false));
 			var isRequestNeeded = false;
 			var self = this;
-			var models = datasource.sensors;
+			//var models = datasource.sensors;
 			var masks = [];
 			var modelsToChange = [];
 
@@ -438,6 +444,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					modelsToChange.push(model);
 				}
 			}
+
+			//console.log(modelsToChange);
+			//console.log(this.model.get('id'));
 
 			if (!isRequestNeeded)
 				return;
@@ -451,12 +460,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var dbname = datasource['dbname'];
 			var dbgroup = datasource['dbgroup'];
 			//var axes = this.board.axes;
-
+			//console.log('getmeta');
 			var url = formAdeiUrlMeta(window.host, server, dbname, dbgroup, masksToRequest);
 
-			try {
+			//try {
 				getDataFromAdei(url, false, function(data) {
-					//console.log(data);
+					//console.log('setmeta');
 					xmldoc = $.parseXML(data);
 					$xml = $(xmldoc);
 					$values = $xml.find('Value').each(function(index) {
@@ -465,17 +474,17 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						if (!axis_id) {
 							return true; //continue equivalent in jquery
 						}
-						var axis = self.board.getAxis(datasource.id, axis_id);
+						var axis = self.board.datasourceController.getAxis(datasource.id, axis_id);
 						var model = modelsToChange[parseInt(id)];
 						model.set({
 							'axisname': axis_id
 						});
-
+						//console.log(model.get('id'), model.get('mask'), model.get('axisname'));
 					});
 				});
-			} catch (msg) {
-				alert('Error when getting axes');
-			}
+			//} catch (msg) {
+				//alert('Error when getting axes');
+			//}
 		},
 		getElementsFromTypeObject: function(typeObject) {
 			var models = [];
@@ -486,18 +495,21 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				this.getIdsOfSensorType(typeObject["2"], models, 2);
 			if (typeObject["0"])
 				this.getIdsOfSensorType(typeObject["0"], models, 0);
-
+			//console.log('TYPEOBJECT');
+			//console.log(models);
 			return models;
 		},
 		getAllDataForDatasource: function(datasource, windowUrl, resampleUrl) {
 			var self = this;
 			var models = datasource.sensors;
 			var masks = this.model.getMasks(models, false);
+			console.log('inside getAllDataForDatasource')
+			console.log(masks);
 			if (!masks)
 				return 
 			var url = formAdeiUrl(window.host, datasource.server, datasource.dbname, datasource.dbgroup, masks, windowUrl, resampleUrl);
 			var elementLength = Object.keys(models).length;
-			deffereds.push($.ajax({
+			this.deffereds.push($.ajax({
 				type: 'GET',
 				url: url,
 				dataType: 'text',
@@ -515,9 +527,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						alert('No data for: ' + url);
 						return;
 					}
-
-					self.getElementsMetaInfoDatasource(datasource);
-
+					console.log('inside deferer');
+					console.log(models);
+					//metachka
+					self.getElementsMetaInfoDatasource(datasource, models);
+					//console.log('setdatainmodel');
 					for (var i = 0; i < elementLength; i++) {
 						if (data[i].length > 0) {
 							models[i].setDataModel(data[i], datetime);
@@ -566,24 +580,28 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			this.removeSelection();
 
-			var datasources = this.board.getDatasourcesForModels(models);
+			var datasources = this.board.datasourceController.getDatasourcesForModels(models);
 
-			try {
+			//try {
 				$.each(datasources, function(datasourceName, datasource) {
+					console.log('getall')
+					console.log(datasource.sensors);
 					self.getAllDataForDatasource(datasource, windowUrl, resampleUrl);
-				})
+				});
 
-				$.when.apply($, deffereds).then(function() {
+				$.when.apply($, self.deffereds).then(function() {
+					//console.log('deffered ready');
+					//console.log(self.model.get('id'));
+					//console.log(typeObject)
 					self.onDataLoaded(typeObject);
-					deffereds = [];
-					console.log('SUCCESSS SPARTAAA');
+					self.deffereds = [];
 				}, function() {
 					console.log('FAAAAIL SPARTAAA');
 				});
 
-			} catch (msg) {
-				alert(msg);
-			}
+			//} catch (msg) {
+				//alert(msg);
+			//}
 		},
 		onChangeTimeRange: function() {
 			var self = this;
@@ -592,13 +610,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var resampleUrl = this.model.getResample();
 			var series = this.chart.series;
 			var allModels = this.model.get('models');
-			var datasources = this.board.getDatasourcesForModels(allModels);
+			var datasources = this.board.datasourceController.getDatasourcesForModels(allModels);
 
 			this.chart.showLoading();
 			this.removeExtremesInterval();
 			this.stopAddPointEvent();
 
-			try {
+			//try {
 				$.each(datasources, function(datasourceName, datasource) {
 					var models = datasource.sensors;
 					var masks = self.model.getMasks(models, true);
@@ -608,7 +626,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					var url = formAdeiUrl(window.host, datasource.server, datasource.dbname, datasource.dbgroup, masks, windowUrl, resampleUrl);
 					var elementLength = Object.keys(models).length;
 
-					deffereds.push($.ajax({
+					self.deffereds.push($.ajax({
 						type: 'GET',
 						url: url,
 						dataType: 'text',
@@ -641,21 +659,20 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					}));
 				});
 
-				$.when.apply($, deffereds).then(function() {
+				$.when.apply($, self.deffereds).then(function() {
 					self.setExtremesInterval();
 					self.chart.hideLoading();
 					self.startAddPointEvent();
 					self.redraw();
 
-					deffereds = [];
-					console.log('SUCCESSS UPDATE');
+					self.deffereds = [];
 				}, function() {
 					console.log('FAAAAIL UPDATE');
 				});
-			}
-			catch(msg) {
-				alert(msg);
-			}
+			//}
+			//catch(msg) {
+				//alert(msg);
+			//}
 		},
 		removeSeries: function(model) {
 			var chart = this.chart;
