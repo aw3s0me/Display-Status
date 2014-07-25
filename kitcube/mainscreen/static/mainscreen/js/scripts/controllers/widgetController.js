@@ -43,7 +43,6 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
                 return this.board.grid;
             }
             var tab = TabController.getTab(attr._tabId);
-            //var tab = this.views.tabs[attr._tabId];
             if (tab)
                 return tab.grid;
             return this.board.grid;

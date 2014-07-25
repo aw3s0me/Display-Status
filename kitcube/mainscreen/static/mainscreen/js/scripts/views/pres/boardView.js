@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView', 'controllers/tabController', 'controllers/widgetController', 'controllers/datasourceController'], function($, _, Backbone, ui, boardTemplate, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView, TabController, WidgetController, DatasourceController) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'controllers/tabController', 'controllers/widgetController', 'controllers/datasourceController'], function($, _, Backbone, ui, boardTemplate, TabController, WidgetController, DatasourceController) {
 
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),
@@ -12,33 +12,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			sizecoeff: 2,
 			isportrait: false
 		},
-		sensors: {
-
-		},
-		sensorViewLookup: { //lookup for initializing chart
-
-		},
-		tabViewLookup: { //dictionary for tabs
-
-		},
-		views: {
-			singlesensors: {},
-			charts: {},
-			alarms: {},
-			sensorgroups: {},
-			tables: {}
-		},
-		elements: { //models
-			singlesensors: {},
-			charts: {},
-			alarms: {},
-			sensorgroups: {},
-			tables: {}
-		},
 		widgetController: WidgetController,
 		tabController: TabController,
 		datasourceController: DatasourceController,
-		updSensorsInterval: undefined,
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			var textToParse = options.aceText;
@@ -131,44 +107,24 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				$('#footer').css('position', 'absolute');
 			}
 		},
-		getGrid: function(attr) {
-			var grid;
-			if (!attr._tabId) {
-				return this.grid;
-			}
-			var tab = TabController.getTab(attr._tabId);
-			//var tab = this.views.tabs[attr._tabId];
-			if (tab)
-				return tab.grid;
-			return this.grid;
-		},
 		insertFromCfg: function(prsObj) {
 			var self = this;
-			var singleSensorsToAdd = [];
-			var sensorGroupsToAdd = [];
-			var sensorTablesToAdd = [];
-			var alarmListsToAdd = [];
-			var chartsToAdd = [];
-			var alarmListsKitcubeToAdd = [];
-			var webCamsToAdd = [];
 
 			for (var _id in prsObj) {
 				var attr = prsObj[_id];
 				switch (_id) {
 					case "datasource":
 						{
-							//this.initDatasources(attr);
-							DatasourceController.initDatasources(attr);
+							this.datasourceController.initDatasources(attr);
 							break;
 						}
 					case "tabs":
 						{
-							TabController.initializeTabs(attr, this.viewSizeDetector, this.settings.isportrait);
+							this.tabController.initializeTabs(attr, this.viewSizeDetector, this.settings.isportrait);
 							break;
 						}
 					case "elements":
 						{
-
 							this.el = $("#tabs")
 
 							if (!TabController.isInitialized) {
@@ -181,447 +137,16 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 								});
 							}
 
-							//getting adei metainfo
-
 							WidgetController.initializeBoard(this, attr);
-
-							/*for (var _elId in attr) {
-								var elObj = attr[_elId];
-								//var tabId = this.tabOfElementIndex(_elId);
-								var tabId = TabController.tabOfElementIndex(_elId);
-								elObj._id = _elId;
-								if (tabId) {
-									elObj._tabId = tabId;
-								}
-								switch (elObj["type"]) {
-									case "sensor":
-										singleSensorsToAdd.push(elObj);
-										break;
-									case "sensortable":
-										sensorTablesToAdd.push(elObj);
-										break;
-									case "sensorgroup":
-										sensorGroupsToAdd.push(elObj);
-										break;
-									case "alarmlist":
-										alarmListsToAdd.push(elObj);
-										break;
-									case "alarms_kitcube":
-										alarmListsKitcubeToAdd.push(elObj);
-										break;
-									case "chart":
-										chartsToAdd.push(elObj);
-										break;
-									case "webcam":
-										webCamsToAdd.push(elObj);
-										break;
-									default:
-										break;
-								}
-							}
-							break; */
 						}
 				}
 			}
 
 			this.widgetController.enableFetchingData();
 			this.widgetController.updateAllSensors();
-
-		},
-		disableFetchingData: function() {
-			this.updSensorsInterval = null;
-		},
-		enableFetchingData: function() {
-			var self = this;
-			this.updSensorsInterval = setInterval(function() {
-				self.updateAllSensors();
-			}, 2000); //the only way to pass param */
 		},
 		clear: function() {
 			this.$el.empty(); //clear board
-		},
-		addSensorTable: function(attr) {
-			var sensorgroups = attr['rows'];
-			var collectionGroups = [];
-			var dbname = undefined;
-			var server = undefined;
-			var dbgroup = undefined;
-			var grid = this.getGrid(attr);
-			var isheader = false;
-
-			if (attr['diffgroups']) {
-				dbname = attr['dbname'];
-				server = attr['server'];
-				dbgroup = attr['dbgroup'];
-			} else {
-				dbname = this.settings['dbname'];
-				server = this.settings['server'];
-				dbgroup = this.settings['dbgroup'];
-			}
-
-			for (var i = 0; i < sensorgroups.length; i++) {
-				var sensors = sensorgroups[i]['columns'];
-				if (sensorgroups[i]['header']) {
-					isheader = true;
-				}
-				//which tab will be there
-
-				var newSensorCollection = undefined;
-				var sensorModelArr = [];
-
-				for (var j = 0; j < sensors.length; j++) {
-					var sensorInfoObj = sensors[j];
-
-					var newSensor = new Sensor({
-						id: sensorInfoObj["id"],
-						name: sensorInfoObj["name"],
-						unit: sensorInfoObj["unit"],
-						max: sensorInfoObj["max"],
-						min: sensorInfoObj["min"],
-						sensortype: sensorInfoObj["sensortype"],
-						precision: sensorInfoObj["precision"],
-						exp: sensorInfoObj["exp"],
-						sibling: sensorInfoObj["sibling"],
-						server: server,
-						dbname: dbname,
-						dbgroup: dbgroup,
-						mask: sensorInfoObj["mask"],
-						values: new Array(),
-						lastTime: new Date
-					});
-
-					if (sensorInfoObj["id"] === undefined) {
-						throw "id hasnt been specified at table: " + attr._id + " at sensor with id: " + sensorInfoObj["id"];
-					}
-
-					sensorModelArr.push(newSensor);
-					this.sensors[sensorInfoObj["id"]] = newSensor;
-
-					newSensor.on('removing', function() {
-						if (this.sensors) {
-							delete this.sensors[sensorInfoObj["id"]];
-						}
-					}, this);
-				}
-
-				newSensorCollection = new SensorCollection(sensorModelArr, {
-					group: attr['rows'][i]['header']
-				});
-
-				collectionGroups.push(newSensorCollection);
-			}
-
-			var newSensorTableModel = new SensorTableModel({
-				id: attr._id,
-				size: attr['size'],
-				coords: attr['coords'],
-				groups: collectionGroups,
-				colnames: attr['colnames'],
-				name: attr['name'],
-				render: attr['render'],
-				cfgObj: attr,
-				isheader: isheader
-			});
-
-			this.elements.tables[attr._id] = newSensorTableModel;
-
-
-			var newSensorTableView = undefined;
-
-			if (attr['render'] === 'table') {
-				newSensorTableView = new SensorCustomTableView({
-					grid: grid,
-					model: newSensorTableModel
-				});
-			} else {
-				newSensorTableView = new SensorJqGridTableView({
-					grid: grid,
-					model: newSensorTableModel
-				});
-			}
-
-			this.views.tables[attr._id] = newSensorTableView;
-
-			newSensorTableModel.on('removing', function() {
-				if (this.elements) {
-					this.elements.tables[attr._id] = null;
-					this.views.tables[attr._id] = null;
-				}
-			}, this);
-
-		},
-		addChart: function(attr) {
-			//which tab will be there
-			var grid = this.getGrid(attr);
-
-			var newChart = new Chart({
-				id: attr._id,
-				caption: attr["caption"],
-				charttype: attr["charttype"],
-				type: attr["type"],
-				link: attr["link"],
-				legend: attr["legend"],
-				linewidth: attr["width"],
-				size: attr["size"],
-
-				coords: attr["coords"],
-				puredata: {},
-				range: attr["startrange"],
-				scale: grid.getScale(),
-				cfgObj: attr,
-				axislabels: attr['axislabels'],
-				resolution: attr['resolution']
-			});
-
-			var newChartView = new ChartView({
-				model: newChart,
-				grid: grid,
-				allSensors: this.sensors,
-				board: this
-			});
-
-			newChart.on('removing', function() {
-				if (this.elements) {
-					delete this.elements.charts[attr._id];
-					delete this.views.charts[attr._id];
-				}
-			}, this);
-
-			this.elements.charts[attr._id] = newChart;
-			this.views.charts[attr._id] = newChartView;
-		},
-		addSensorGroup: function(attr) {
-			var sensorArr = attr['sensors'];
-			var trendsArr = [];
-			var group = [];
-			var sensorModelsArr = [];
-			var emptyCount = attr['empties'];
-			//which tab will be there
-			var grid = this.getGrid(attr);
-			var size = undefined;
-
-			//if groups are not from diff sources
-			size = [this.settings['sizecoeff'], this.settings['sizecoeff']];
-
-			for (var i = 0; i < sensorArr.length; i++) {
-				var sensorObj = sensorArr[i];
-
-				if (sensorObj['type'] === "trend") {
-					trendsArr.push(sensorObj);
-					continue;
-				}
-
-				if (!size)
-					size = sensorObj["size"];
-
-				var newSensor = new Sensor({
-					id: sensorObj["id"],
-					name: sensorObj["name"],
-					comment: sensorObj["comment"],
-					sensortype: sensorObj["sensortype"],
-					link: sensorObj["link"],
-					sensorviewtype: "group",
-					unit: sensorObj["unit"],
-					max: sensorObj["max"],
-					min: sensorObj["min"],
-					precision: sensorObj["precision"],
-					exp: sensorObj["exp"],
-					datasource: sensorObj['datasource']? sensorObj['datasource'] : 'default',
-					device: sensorObj["device"],
-					norender: sensorObj["norender"],
-					mask: sensorObj["mask"],
-					size: size,
-					coords: sensorObj["coords"],
-					values: new Array(),
-					lastTime: new Date,
-					factor: sensorObj["factor"],
-					cfgObj: sensorObj
-				});
-
-				if (this.settings.datasources)
-					this.addSensorToDatasource(newSensor.get('datasource'), sensorObj['id'], newSensor);
-
-				if (this.sensors[sensorObj["id"]]) {
-					throw "This sensor already exists" + sensorObj["id"];
-				}
-
-				this.sensors[sensorObj["id"]] = newSensor;
-
-				newSensor.on('removing', function() {
-					if (this.sensors)
-						delete this.sensors[newSensor.get('id')];
-				}, this);
-
-				sensorModelsArr.push(newSensor);
-			}
-
-			for (var sensorName in sensorModelsArr) {
-				var sensor = sensorModelsArr[sensorName];
-				var linkModel = undefined;
-				var newSensorView;
-
-				if (sensor.get('link') !== undefined) {
-					linkModel = this.sensors[sensor.get('link')];
-					if (!linkModel) {
-						throw "Wrong link: " + sensor.get('link') + " at: " + sensor.get('id');
-					}
-					newSensorView = new DoubleSensorView({
-						model: sensor,
-						grid: this.grid,
-						group: false,
-						linkModel: linkModel
-					});
-
-					this.sensorViewLookup[linkModel.get('id')] = {
-						type: 2,
-						viewId: sensor.get('id')
-					}
-					this.sensorViewLookup[sensor.get('id')] = {
-						type: 1,
-						viewId: sensor.get('id')
-					};
-				} else {
-					newSensorView = new SingleSensorView({
-						model: sensor,
-						grid: grid,
-						group: false,
-						linkModel: linkModel
-					});
-
-					if (!sensor.get('norender')) {
-						this.sensorViewLookup[sensor.get('id')] = {
-							type: 0,
-							viewId: sensor.get('id')
-						}
-					}
-				}
-
-				if (!sensor.get('norender')) {
-					//self.views.sensors[sensor.get('id')] = newSensorView;
-					group[sensor.get('id')] = newSensorView;
-				}
-			}
-
-			var newSensorGroupModel = new SensorGroupModel({
-				id: attr._id,
-				name: attr['name'],
-				size: attr['size'],
-				coords: attr['coords'],
-				diffsensors: attr['diffsensors'],
-				collection: new SensorCollection(sensorModelsArr),
-				cfgObj: attr,
-				groupname1: attr["groupname1"],
-				groupname2: attr["groupname2"],
-				order: attr['order'],
-				empties: attr['empties']
-			});
-
-			var newSensorGroupView = new SensorGroupView({
-				model: newSensorGroupModel,
-				grid: grid,
-				group: group,
-				sizecoeff: this.settings['sizecoeff']
-			});
-
-			this.views.sensorgroups[attr._id] = newSensorGroupView;
-			newSensorGroupView.on('removing', function() {
-				//delete this.elements.sensorgroups[attr._id];
-				if (this.views) {
-					delete this.views.sensorgroups[attr._id];
-				}
-
-			}, this);
-
-			this.elements.sensorgroups[attr._id] = newSensorGroupModel;
-		},
-		addMeasurementList: function(attr) {
-
-		},
-		addKitcubeAlarmList: function(attr) {
-			attr.id = attr._id;
-			attr.board = this;
-			attr.grid = this.getGrid(attr);
-			var alarm = new KitcubeAlarm(attr);
-		},
-		addAlarmList: function(attr) {
-			var alarmList = []; //collection of alarms
-			var newAlarmCollection = undefined;
-			var dbname = undefined;
-			var server = undefined;
-			var control_group = attr['control_group'] ? attr['control_group'] : undefined;
-			//which tab will be there
-			var grid = this.getGrid(attr);
-
-			if (attr['diffgroups']) {
-				dbname = attr['dbname'];
-				server = attr['server'];
-			} else {
-				dbname = this.settings['dbname'];
-				server = this.settings['server'];
-			}
-
-			if (attr['masks'] && (attr['masks'] instanceof Array)) {
-				for (var alarmKey in attr['masks']) { //going from alarmlist object through elems
-					//console.log(alarmKey);
-					if (!$.isNumeric(alarmKey)) {
-						var alarmAttr = attr['masks'][alarmKey];
-						var newAlarm = new Alarm({
-							id: alarmKey,
-							module: alarmAttr["module"],
-							group: alarmAttr["group"],
-							app: alarmAttr["app"],
-							dbname: alarmAttr["dbname"],
-							mask: alarmAttr["mask"],
-							cfgObj: alarmAttr
-						});
-					} else {
-						var newAlarm = new Alarm({
-							id: "alarm_" + alarmKey,
-							mask: alarmAttr["mask"]
-						});
-					}
-
-
-					alarmList.push(newAlarm); //push to collection
-				};
-				newAlarmCollection = new MyAlarmCollection(alarmList);
-			}
-
-			var newAlarmListModel = new AlarmListModel({
-				id: attr._id,
-				collection: newAlarmCollection,
-				size: attr['size'],
-				name: attr['name'],
-				coords: attr['coords'],
-				target: attr['target'] ? attr['target'] : "all",
-				server: server,
-				dbname: dbname,
-				control_group: control_group,
-				cfgObj: attr
-			});
-
-			//console.log(newAlarmCollection.id);
-			this.elements.alarms[attr._id] = newAlarmListModel;
-			var newAlarmListView = new AlarmListView({
-				model: newAlarmListModel,
-				grid: grid,
-				board: this
-			});
-
-			this.views.alarms[attr._id] = newAlarmListView;
-		},
-		addWebCam: function(attr) {
-			attr.id = attr._id;
-			attr.board = this;
-			attr.grid = this.getGrid(attr);
-			var webCam = new WebCamView(attr);
-		},
-		addAllElements: function(arr, addMethod) {
-			for (var i = 0; i < arr.length; i++) {
-				var attr = arr[i];
-				addMethod.call(this, attr);
-				//this.addChart(attr);
-			}
 		},
 		hide: function() {
 			this.disableFetchingData();

@@ -70,13 +70,13 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 case "alarmlist":
                     break;
                 case "alarms_kitcube":
-
+                    this.addKitcubeAlarmList(attr);
                     break;
                 case "chart":
                     this.addChart(attr);
                     break;
                 case "webcam":
-
+                    this.addWebCam(attr);
                     break;
                 default:
                     break;
@@ -249,6 +249,77 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
             //this.elements.charts[attr._id] = newChart;
             //this.views.charts[attr._id] = newChartView;
             this.widgetController.addViewToLookup(newChart.get('type'), newChartView);
+        },
+        addWebCam: function(attr) {
+            attr.id = attr._id;
+            attr.board = this.widgetController.board;
+            attr.grid = this.widgetController.getGrid(attr);
+            var webCam = new WebCamView(attr);
+            this.widgetController.addViewToLookup(attr['type'], webCam);
+        },
+        addAlarmList: function(attr) {
+            var alarmList = []; //collection of alarms
+            var newAlarmCollection = undefined;
+            var dbname = undefined;
+            var server = undefined;
+            var control_group = attr['control_group'] ? attr['control_group'] : undefined;
+            //which tab will be there
+            var grid = this.widgetController.getGrid(attr);
+
+            if (attr['masks'] && (attr['masks'] instanceof Array)) {
+                for (var alarmKey in attr['masks']) { //going from alarmlist object through elems
+                    //console.log(alarmKey);
+                    if (!$.isNumeric(alarmKey)) {
+                        var alarmAttr = attr['masks'][alarmKey];
+                        var newAlarm = new Alarm({
+                            id: alarmKey,
+                            module: alarmAttr["module"],
+                            group: alarmAttr["group"],
+                            app: alarmAttr["app"],
+                            dbname: alarmAttr["dbname"],
+                            mask: alarmAttr["mask"],
+                            cfgObj: alarmAttr
+                        });
+                    } else {
+                        var newAlarm = new Alarm({
+                            id: "alarm_" + alarmKey,
+                            mask: alarmAttr["mask"]
+                        });
+                    }
+
+                    alarmList.push(newAlarm); //push to collection
+                };
+                newAlarmCollection = new MyAlarmCollection(alarmList);
+            }
+
+            var newAlarmListModel = new AlarmListModel({
+                id: attr._id,
+                collection: newAlarmCollection,
+                size: attr['size'],
+                name: attr['name'],
+                coords: attr['coords'],
+                target: attr['target'] ? attr['target'] : "all",
+                server: server,
+                dbname: dbname,
+                control_group: control_group,
+                cfgObj: attr
+            });
+
+            //console.log(newAlarmCollection.id);
+            //this.elements.alarms[attr._id] = newAlarmListModel;
+            var newAlarmListView = new AlarmListView({
+                model: newAlarmListModel,
+                grid: grid,
+                board: this.widgetController.board
+            });
+            this.widgetController.addViewToLookup(newAlarmListModel.get('type'), newAlarmListView);
+        },
+        addKitcubeAlarmList: function(attr) {
+            attr.id = attr._id;
+            attr.board = this.widgetController.board;
+            attr.grid = this.widgetController.getGrid(attr);
+            var alarm = new KitcubeAlarm(attr);
+            this.widgetController.addViewToLookup(attr['type'], alarm);
         }
     }
 

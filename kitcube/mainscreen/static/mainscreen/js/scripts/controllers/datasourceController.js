@@ -84,7 +84,7 @@ define(['jquery'], function($) {
         isManyDatasources: function(datasourceObj) {
             if (datasourceObj === undefined)
                 datasourceObj = this.datasources['default'];
-            return !(datasourceObj['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server']);
+            return !datasourceObj || !(datasourceObj['dbgroup'] && datasourceObj['dbname'] && datasourceObj['server']);
         },
         addSensorToDatasource: function(datasource, id, model) {
             this.datasources[datasource].sensors[id] = model;
