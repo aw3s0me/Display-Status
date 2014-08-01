@@ -92,7 +92,6 @@ var kitGrid = (function($) {
 		scale = typeof scale !== 'undefined' ? scale : holder.data('scale');
 		e.dataset.scale = scale;
 
-		//e.className = 'tile';
 		e.style.left = px * holder.data('scaledUnitSize') + 'px';
 		e.style.top = py * holder.data('scaledUnitSize') + 'px';
 		e.style.width = dx * holder.data('scaledUnitSize') + 'px';
@@ -111,15 +110,12 @@ var kitGrid = (function($) {
 		var scale = grid.data('scale');
 		var unitSizeX = grid.data('scaledUnitSize');
 		var unitSizeY = grid.data('scaledUnitSize');
-		//console.log([unitSizeX, unitSizeY])
+
 		divElem.css('left', px * grid.data('scaledUnitSize') + 'px');
 		divElem.css('top', py * grid.data('scaledUnitSize') + 'px');
 		divElem.css('width', dx * grid.data('scaledUnitSize') + 'px');
 		divElem.css('height', dy * grid.data('scaledUnitSize') + 'px');
 		divElem.data('id', model.get('id'));
-		//console.log(grid.data('scaledUnitSize'));
-		//console.log('kitgrid dxdy true: ' + dx + ": " + dy + ": " + posx + ": " + posy);
-		//console.log('kitgrid dxdy true px: ' + dx * grid.data('scaledUnitSize') + ": " + dy * grid.data('scaledUnitSize') + ": " + posx * grid.data('scaledUnitSize') + ": " + posy * grid.data('scaledUnitSize'));
 
 		divElem.addClass('tile');
 		if (options) {
@@ -146,11 +142,6 @@ var kitGrid = (function($) {
 
 		grid.append(divElem);
 
-		// this.gridObjects[model.get('id')] = {
-		// 	html: divElem,
-		// 	model: model
-		// }
-
 		var self = this;
 
 		divElem.addClass('widget');
@@ -174,9 +165,7 @@ var kitGrid = (function($) {
 
 		element.resizable({
 				grid: grid.data('scaledUnitSize'),
-				//containment: 'parent',
 				handles: 'se',
-				//helper: 'ui-resizable-helper',
 				start: function(event, ui) {
 
 				},
@@ -223,7 +212,6 @@ var kitGrid = (function($) {
 
 		element.draggable({
 				grid: [grid.data('scaledUnitSize'), grid.data('scaledUnitSize')],
-				//containment:  [containmentX1, containmentY1, containmentX2, containmentY2],
 				drag: function(e, ui) {
 					var scale = grid.data('scale');
 					var unitSizeX = grid.data('scaledUnitSize');
@@ -240,14 +228,9 @@ var kitGrid = (function($) {
 						ui.position.left = ui.position.left_old
       					ui.position.top = ui.position.top_old
 						return true;
-						//divElem.trigger('mouseup');
-						//divElem.draggable( 'option',  'revert', true ).trigger( 'mouseup' );
-						//ui.position.left = oldPosLeft;
-						//ui.position.top = oldPosTop;
 					} 
 
 				},
-				//containment: "parent",
 				stop: function() {
 					var scale = grid.data('scale');
 					var unitSizeX = grid.data('scaledUnitSize');
@@ -258,7 +241,6 @@ var kitGrid = (function($) {
 					model.set({
 						coords: [newCoordX, newCoordY]
 					});
-					//console.log(newCoordX, newCoordY);
 				}
 			});
 	}
@@ -295,30 +277,17 @@ var kitGrid = (function($) {
 		}
 
 		this.getGrid().append(divElem);
-		//console.log(this.getGrid());
+
 		divElem.draggable({
 			containment: "parent",
 			grid: [unitSizeX, unitSizeY]
 		});
 
 		var self = this;
-		/*divElem.find(".close").click(function(event) {
-			self.removeUnit(divElem);
-		});; */
+
 		return divElem;
 	}
 
-
-
-	/*kitGrid.prototype.removeUnit = function(elem) {
-		if (elem) {
-			elem.remove();
-		}
-
-
-	} */
-
-
-
 	return kitGrid;
+
 })(jQuery);

@@ -1,4 +1,7 @@
 define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', 'views/widgets/emptySensorView', 'models/sensorModel'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, EmptySensorView, Sensor) {
+    
+    var _denominator = 0.2;
+
     var SensorGroupView = Backbone.View.extend({
         container: undefined,
         grid: undefined,
@@ -205,8 +208,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             var unitSizeY = this.grid.getUnitSizes().height * scale;
             divElem.css('left', posx * unitSizeX + 'px');
             divElem.css('top', posy * unitSizeY + 'px');
-            divElem.css('width', dx * unitSizeX - 0.4 + 'px');
-            divElem.css('height', dy * unitSizeY - 0.4 + 'px');
+            divElem.css('width', dx * unitSizeX - _denominator + 'px');
+            divElem.css('height', dy * unitSizeY - _denominator + 'px');
 
             divElem.data('id', model.get('id'));
 

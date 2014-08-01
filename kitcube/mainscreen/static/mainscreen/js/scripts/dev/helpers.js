@@ -7,48 +7,6 @@ if (!String.prototype.format) {
     };
 }
 
-var createCORSRequest = function(method, url, async, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            console.log(xhr.responseText);
-            callback(xhr.responseText);
-        } else {
-            console.log('OLO');
-        }
-    }
-
-    xhr.onerror = function() {
-        console.log('error');
-    }
-
-    xhr.withCredentials = true;
-    //xhr.setRequestHeader("Content-Type", "text/plain");
-
-    xhr.open(method, url, async);
-    xhr.send(null);
-
-    /*if ("withCredentials" in xhr) {
-        // Check if the XMLHttpRequest object has a "withCredentials" property.
-        // "withCredentials" only exists on XMLHTTPRequest2 objects.
-        xhr.open(method, url, async);
-        xhr.send(null);
-    } else if (typeof XDomainRequest != "undefined") {
-
-        // Otherwise, check if XDomainRequest.
-        // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
-        xhr = new XDomainRequest();
-        xhr.open(method, url, async);
-        xhr.send(null);
-    } else {
-
-        // Otherwise, CORS is not supported by the browser.
-        xhr = null;
-
-    }*/
-    return xhr;
-}
-
 var formAdeiUrl = function(host, server, dbname, dbgroup, masksToRequest, windowUrl, resample) {
     return host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=' + windowUrl + '&resample=' + resample;
 }
@@ -128,11 +86,9 @@ var parseCSVForUpdating = function(msg, masklength) {
 
     for (var i = 1; i < rows.length - 1; i++) {
         var rowdata = rows[i].split(separator);
-        //var time = window.db.dateHelper.splitTimeFromAny(rowdata[0]); //jest
         var time = parseTime(rowdata[0]);
         time = (new Date(time)).getTime() / 1000;
         dateTime.push(time);
-        //for (var j = 0; j < rowdata.length - 1; j++)
         for (var j = 0; j < masklength; j++) {
             data.push(parseFloat(rowdata[j + 1]));
         }
@@ -258,15 +214,48 @@ function sameOrigin(url) {
 }
 
 
-function getSensorNumber(db_server, db_name, db_group, sensorId) {
-    var url = 'http://katrin.kit.edu/adei/services/getdata.php?db_server=' + db_server + '&db_name=' + db_name + '&db_group=' + db_group + '&db_mask=' + sensorId + '&window=-1&format=csv';
-    //console.log(url);
-    var data;
-    requestToServ(url, function(e) {
-        data = e;
-    }, '');
-    //console.log(data);
-    var sensorNumber = (data.match(/.*\n{1}.*\,{1}\s{0,1}(.*)/))[1];
-    //console.log(sensorNumber);
-    return sensorNumber;
-}
+var BrowserDetect = {
+    minVersion: undefined,
+    init: function () 
+    {
+        this.browser = this.searchString(this.dataBrowser) || "Other";
+        this.version = this.searchVersion(navigator.userAgent) ||       this.searchVersion(navigator.appVersion) || "Unknown";
+    },
+    searchString: function (data) 
+    {
+        for (var i = 0; i < data.length ; i++)   
+        {
+            var dataString = data[i].string;
+            this.versionSearchString = data[i].subString;
+
+            if (dataString.indexOf(data[i].subString) != -1)
+            {
+                this.minVersion = data[i].min_ver;
+                return data[i].identity;
+            }
+        }
+    },
+    isUpdateNeeded: function() {
+        var browser = this.browser;
+        var version = +this.version;
+        var minVersion = +this.minVersion;
+        if (browser === "Other" || version === "Unknown" || !version || !minVersion)
+            return false;
+        return minVersion >= version;
+    },
+    searchVersion: function (dataString) 
+    {
+        var index = dataString.indexOf(this.versionSearchString);
+        if (index == -1) return;
+        return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+    },
+    dataBrowser: 
+    [
+        { string: navigator.userAgent, subString: "Chrome",  identity: "Chrome", min_ver: "10"},
+        { string: navigator.userAgent, subString: "MSIE",    identity: "Explorer", min_ver: "10"},
+        { string: navigator.userAgent, subString: "Firefox", identity: "Firefox", min_ver: "10"},
+        { string: navigator.userAgent, subString: "Safari",  identity: "Safari", min_ver: "5"},
+        { string: navigator.userAgent, subString: "Opera",   identity: "Opera", min_ver: "12"}
+    ]
+
+};

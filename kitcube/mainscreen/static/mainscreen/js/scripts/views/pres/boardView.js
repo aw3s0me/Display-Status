@@ -4,8 +4,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		container: $('#board-container'),
 		el: undefined,
 		grid: null,
-		viewSizeDetector: null,
-		curTab: null,
 		settings: {
 			size: [50, 21],
 			blocksize: 50,
@@ -15,12 +13,11 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		widgetController: WidgetController,
 		tabController: TabController,
 		datasourceController: DatasourceController,
+		viewSizeDetector: null,
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
 			var textToParse = options.aceText;
 			this.settings.isportrait = (options.type === "portrait");
-			//var myParser = new cfgParser('../static/cfg.json');
-			//var prsObj = myParser.parseJson(textToParse);
 			prsObj = textToParse;
 
 			if (prsObj['screen']['nofooter']) {
@@ -49,7 +46,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		detectSizes: function(blockSize, xBlocks, yBlocks, bannerId, footerId, options) {
 			try {
 				this.viewSizeDetector = new sizeDetector(blockSize, xBlocks, yBlocks, bannerId, footerId, {
-					//marginUDFactor: 0.01
+					//there goes options
 				});
 				if (options) {
 					if (options.fluid) {
@@ -62,7 +59,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				}
 
 			} catch (err) {
-				alert(err.message);
+				throw new Error('Error in size detection');
 			}
 		},
 		establishStyle: function(canvas, options) {
@@ -78,23 +75,18 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				.data('scale', this.viewSizeDetector.scale)
 				.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 			if (!options || !options.portrait) {
-				console.log(this.viewSizeDetector.marginTop)
 				canvas.css('top', this.viewSizeDetector.marginTop + 'px');
 				if ($('#tabs').width() < $('#wrapper').width()) {
-					console.log('HIDE SCROLL')
 					$('#wrapper').css('overflow-x', 'hidden');
 					$('#footer').css('position', 'absolute');
 					$('#footer').css('bottom', '0');
 				}
 			}
 			else if (options && options.portrait) {
-				console.log('TOP portrait')
 				$('#tabs').css('top', this.viewSizeDetector.marginTop + 'px !important');
 				//$('#wrapper').css('overflow-y', 'scroll');
 				if ($('#tabs').width() < $('#wrapper').width()) {
-					console.log('HIDE SCROLL')
 					$('#wrapper').css('overflow-x', 'hidden');
-					
 					$('#footer').css('bottom', '0');
 				}
 
@@ -103,7 +95,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				if ($('#tabs').height() < $('#wrapper').height() - 60) { //50 size of banner
 					$('#wrapper').css('overflow-y', 'scroll');
 				}
-
 				$('#footer').css('position', 'absolute');
 			}
 		},
@@ -149,7 +140,6 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			this.$el.empty(); //clear board
 		},
 		hide: function() {
-			this.disableFetchingData();
 			this.el.hide();
 		}
 	});

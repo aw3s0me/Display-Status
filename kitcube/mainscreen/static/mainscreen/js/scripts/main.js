@@ -21,14 +21,10 @@ require.config({
     "highcharts-legend": "vendor/highcharts-legend",
     //colorpicker
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
-    //"bigtext": "vendor/bigtext/src/bigtext",
     "momentjs": "vendor/momentjs/min/moment.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
     "cookie": "vendor/jquery-cookie/jquery.cookie",
     "modernizr": "vendor/modernizr/modernizr"
-    //"cacher": "dev/datacaching/webSockets",
-    //"switch": "vendor/bootstrap-switch/dist/js/bootstrap-switch.min"
-    //"cacher": "dev/datacacher.min"
   },
   shim: {
     //jqueryui: "jquery",
@@ -45,20 +41,11 @@ require.config({
         "vendor/jquery-ui/ui/jquery-ui"
       ]
     },
-    /*jquerysort : {
-      deps: [
-        'jquery',
-        'jqueryui'
-      ]
-    },*/
     jqgrid: {
       deps: [
         'jquery',
         'vendor/jqgrid/js/i18n/grid.locale-en'
       ]
-    },
-    "switch": {
-    	deps: ['bootstrap']
     },
     bootstrap: {
       deps: ["jquery"]
@@ -79,20 +66,12 @@ require.config({
     },
     kitgrid: {
       deps: [
-        "jquery"//,
-       // "dev/kit.grid/widget"
+        "jquery"
       ]
     },
-    /*highcharts: {
-      deps: [
-        "jquery"
-        //"vendor/Highcharts-3.0.10/js/highcharts"
-      ]
-    }, */
     highcharts: {
       deps: [
         "jquery"
-        //"vendor/Highcharts-3.0.10/js/highcharts"
       ]
     },
     "highcharts-legend": {
@@ -114,14 +93,7 @@ require.config({
       deps: [
         "jquery"
       ]
-    },
-    //modernizr: {deps: ["jquery"]}
-    /*,
-    regression: {
-      deps: [
-        "highcharts"
-      ]
-    } */
+    }
   }
 });
 

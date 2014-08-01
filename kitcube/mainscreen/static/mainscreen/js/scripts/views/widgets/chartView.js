@@ -61,19 +61,16 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			for (var i = 0; i < elems1Val.length; i++) {
 				var jqElement = elems1Val[i];
-				//$(jqElement).removeClass('activeSensor1');
-				//$(jqElement).addClass('chartAdded1');
+
 			}
 
 			for (var i = 0; i < elems2Val.length; i++) {
 				var jqElement = elems2Val[i];
-				//$(jqElement).removeClass('activeSensor2');
-				//(jqElement).addClass('chartAdded2');
+
 			}
 
 			for (var i = 0; i < elemsVal.length; i++) {
 				var jqElement = elemsVal[i];
-				//$(jqElement).removeClass('activeSensor');
 
 			}
 
@@ -112,10 +109,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			var chart = this.chart;
 			var series = this.chart.series;
-			//console.log(chart);
 			var index = undefined; //index of series
 			var shift = false;
-			//console.log(model.get('id'));
 			var sensorValue = model.get('value');
 			var foundSeriesObj = null;
 
@@ -164,7 +159,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var chart = this.chart;
 
 			var series = this.chart.series;
-			//console.log(chart);
 			var index = undefined; //index of series
 			var shift = false;
 			var self = this;
@@ -182,7 +176,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				}
 
 				var sensorModel = _allSensors[id];
-				//sensorModel.on('addPoint', self.addNewPoint, self);
+
 				sensorModel.on('deleteSensor', self.removeSeries, self);
 				sensorModel.on('removing', self.onSensorRemoving, self);
 				self.model.get('link').push(sensorModel.get('id'));
@@ -194,8 +188,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				var axisId = seriesObject['yAxis'];
 
 				var existedAxis = self.chart.get(axisId);
-				//console.log(this.model.get('id'), sensorModel.get('id'))
-				//console.log(axisId, sensorModel.get('id'), sensorModel.get('mask'));
+
 				if (!existedAxis) {
 					var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
 						axislabels: self.model.get('axislabels'),
@@ -231,7 +224,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var controlPanelTemplate = $(_.template(ChartTemplate, {
 				canberemoved: model.get('canberemoved')
 			}));
-			//this.container = $(_.template(ChartTemplate, { id: model.get('id') }));
 
 			this.grid.addUnit(this.container, {
 				border: 0,
@@ -249,7 +241,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var chart = model.getChartOptions();
 			chart.marginTop = 47 * coeffScale;
 			this.chart = new Highcharts.Chart({
-				//this.chart = new Highcharts.StockChart({
 				chart: chart,
 				title: {
 					text: model.get('caption'),
@@ -312,7 +303,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			controlPanel.find('.goAdeiBtn').button()
 				.click(function(event) {
-					//console.log(self.getUrlGoToAdei());
 					window.open(self.getUrlGoToAdei(), '_blank');
 				});
 
@@ -375,7 +365,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var linkArr = chartModel.get('link');
 			var htmlElements = []; //to init html elements and change css
 			var typeLookup = this.board.widgetController.sensorViewLookup;
-			//console.log(typeLookup, linkArr);
 
 			if (linkArr.length <= 0) {
 				return;
@@ -385,7 +374,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				var model = _allSensors[linkArr[i]];
 				var div = undefined;
 				model.on('addPoint', this.addNewPoint, this);
-				//chartModel.get('models').push(model);
 
 				if (typeLookup[linkArr[i]]) {
 					switch (typeLookup[linkArr[i]].type) {
@@ -427,12 +415,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 		},
 		getElementsMetaInfoDatasource: function(datasource, models) {
-			console.log('getmeta');
-			//var datasource = datasource;
-			console.log(this.model.getMasks(datasource.sensors, false));
 			var isRequestNeeded = false;
 			var self = this;
-			//var models = datasource.sensors;
 			var masks = [];
 			var modelsToChange = [];
 
@@ -445,9 +429,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				}
 			}
 
-			//console.log(modelsToChange);
-			//console.log(this.model.get('id'));
-
 			if (!isRequestNeeded)
 				return;
 
@@ -459,13 +440,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var server = datasource['server'];
 			var dbname = datasource['dbname'];
 			var dbgroup = datasource['dbgroup'];
-			//var axes = this.board.axes;
-			//console.log('getmeta');
 			var url = formAdeiUrlMeta(window.host, server, dbname, dbgroup, masksToRequest);
 
-			//try {
+			try {
 				getDataFromAdei(url, false, function(data) {
-					//console.log('setmeta');
 					xmldoc = $.parseXML(data);
 					$xml = $(xmldoc);
 					$values = $xml.find('Value').each(function(index) {
@@ -479,12 +457,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						model.set({
 							'axisname': axis_id
 						});
-						//console.log(model.get('id'), model.get('mask'), model.get('axisname'));
 					});
+			
 				});
-			//} catch (msg) {
-				//alert('Error when getting axes');
-			//}
+			}
+			catch(e) {
+				throw new Error('Can\'t get data from ' + url);
+			}
 		},
 		getElementsFromTypeObject: function(typeObject) {
 			var models = [];
@@ -495,16 +474,12 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				this.getIdsOfSensorType(typeObject["2"], models, 2);
 			if (typeObject["0"])
 				this.getIdsOfSensorType(typeObject["0"], models, 0);
-			//console.log('TYPEOBJECT');
-			//console.log(models);
 			return models;
 		},
 		getAllDataForDatasource: function(datasource, windowUrl, resampleUrl) {
 			var self = this;
 			var models = datasource.sensors;
 			var masks = this.model.getMasks(models, false);
-			console.log('inside getAllDataForDatasource')
-			console.log(masks);
 			if (!masks)
 				return 
 			var url = formAdeiUrl(window.host, datasource.server, datasource.dbname, datasource.dbgroup, masks, windowUrl, resampleUrl);
@@ -514,7 +489,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				url: url,
 				dataType: 'text',
 				success: function(data) {
-					//console.log(data);
 					obj = parseCSV(data, elementLength);
 					if (!obj) {
 						return;
@@ -527,11 +501,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						alert('No data for: ' + url);
 						return;
 					}
-					console.log('inside deferer');
-					console.log(models);
-					//metachka
+
 					self.getElementsMetaInfoDatasource(datasource, models);
-					//console.log('setdatainmodel');
+
 					for (var i = 0; i < elementLength; i++) {
 						if (data[i].length > 0) {
 							models[i].setDataModel(data[i], datetime);
@@ -539,7 +511,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					}
 				},
 				error: function(xhr, ajaxOptions, thrownError) {
-					alert(thrownError);
+					throw new Error('Can\'t get data from ' + url);
 				}
 			}));
 		},
@@ -558,7 +530,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 		},
 		getAllData: function(typeObject) {
-			//console.log(model.get('id'));
 			this.removeExtremesInterval();
 			this.model.off('addPoint', this.addNewPoint, this);
 			if (!typeObject) {
@@ -582,26 +553,17 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			var datasources = this.board.datasourceController.getDatasourcesForModels(models);
 
-			//try {
-				$.each(datasources, function(datasourceName, datasource) {
-					console.log('getall')
-					console.log(datasource.sensors);
-					self.getAllDataForDatasource(datasource, windowUrl, resampleUrl);
-				});
+			$.each(datasources, function(datasourceName, datasource) {
+				self.getAllDataForDatasource(datasource, windowUrl, resampleUrl);
+			});
 
-				$.when.apply($, self.deffereds).then(function() {
-					//console.log('deffered ready');
-					//console.log(self.model.get('id'));
-					//console.log(typeObject)
-					self.onDataLoaded(typeObject);
-					self.deffereds = [];
-				}, function() {
-					console.log('FAAAAIL SPARTAAA');
-				});
+			$.when.apply($, self.deffereds).then(function() {
+				self.onDataLoaded(typeObject);
+				self.deffereds = [];
+			}, function() {
+				throw new Error('Can\'t get data from ' + url);
+			});
 
-			//} catch (msg) {
-				//alert(msg);
-			//}
 		},
 		onChangeTimeRange: function() {
 			var self = this;
@@ -616,7 +578,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			this.removeExtremesInterval();
 			this.stopAddPointEvent();
 
-			//try {
 				$.each(datasources, function(datasourceName, datasource) {
 					var models = datasource.sensors;
 					var masks = self.model.getMasks(models, true);
@@ -654,7 +615,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 							}
 						},
 						error: function(xhr, ajaxOptions, thrownError) {
-							alert(thrownError);
+							throw new Error('Can\'t get data from ' + url);
 						}
 					}));
 				});
@@ -667,12 +628,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 					self.deffereds = [];
 				}, function() {
-					console.log('FAAAAIL UPDATE');
+					throw new Error('Can\'t get data from ' + url);
 				});
-			//}
-			//catch(msg) {
-				//alert(msg);
-			//}
 		},
 		removeSeries: function(model) {
 			var chart = this.chart;
@@ -745,7 +702,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 		getUrlGoToAdei: function() {
 			var adeiurl = window.host;
 			var windowObj = this.model.getWindow();
-			//console.log(new Date(windowObj.start), new Date(windowObj.end));
+
 			var start = parseInt(windowObj.start / 1000);
 			var end = parseInt(windowObj.end / 1000);
 			var windowUrl = start + "-" + end;

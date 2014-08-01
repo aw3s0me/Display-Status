@@ -9,19 +9,13 @@ define([
 	'jqgrid',
 	'oauthio',
 	'highcharts-legend',
-	//'regression',
-	//'vendor/momentjs/min/moment.min',
-	//'momentjs',
-	//'fittext',
 	"kit.sizeDetector",
 	"kit.parser",
 	'cookie',
-	//'switch',
 	"models/userModel",
-	//'cacher',
-	//'modernizr',
+	"dev/helpers",
 	'router' // Request router.js
-], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, /* momentJS,*/ sizeDet, parser, JqCookie, /*Switch,*/ UserModel, /*Cacher,*/ /*Modernizr,*/ Router) {
+], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, sizeDet, parser, JqCookie, UserModel, Helpers, Router) {
 	var initialize_user = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -44,13 +38,22 @@ define([
 		$('html').removeClass('canvas')
 	}
 
+	var checkBrowserCompatibility = function() {
+		BrowserDetect.init();
+		var isUpdateNeeded = BrowserDetect.isUpdateNeeded();
+
+		if (isUpdateNeeded) {
+			alert('Please, update your browser, it doesn\'t support needed features');
+			throw new Error('Update needed');
+		}
+	}
+
+
 	var initialize = function() {
 		// Pass in our Router module and call it's initialize function
 		$(document).ready(function($) {
+			checkBrowserCompatibility();
 
-			//window.db = new dataCacher('httpgetcsv', true, false, false, false);
-			//window.host = "http://katrin.kit.edu/adei-detector/";
-			window.host = "http://katrin.kit.edu/adei/";
 			window.lastUpdateTime = moment.utc();
 			window.openWindow = function() {
 				window.location.href = '../editor/';
@@ -58,27 +61,8 @@ define([
 
 			initialize_modernizr();
 			//so lazy
-			/*try
-			{
-				console.log(new Date(1400700000 * 1000), new Date(1401409791 * 1000));
-
-				db.getData('fpd', 'katrin_rep', '0', '2', '1400700000-1401409791', 800, 'mean', function(obj)
-				{
-					var data = obj.data;
-					var datetime = obj.dateTime;
-					console.log(new Date(datetime[0] * 1000), new Date(datetime[datetime.length - 1] * 1000));
-				})
-	
-			}
-			catch(msg) {
-				console.log(msg)
-			} */
 			var csrfToken = $('meta[name="csrf_token"]').attr('content');
 			console.log(csrfToken);
-			//$(document).ajaxSend(function(event, xhr, settings) {
-				/* stuff to do before an AJAX request is sent. ERROR */
-			//	xhr.setRequestHeader('X-CSRFToken', csrfToken);
-			//});
 
 			var body = document.body,
     		html = document.documentElement;
@@ -86,8 +70,6 @@ define([
 			var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
 
 			$('body').css('min-height', height);
-
-			//console.log($('#wrapper')[0].clientHeight)
 
 			$.fn.serializeObject = function() {
 				var o = {};

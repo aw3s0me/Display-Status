@@ -11,7 +11,8 @@ body {
 #wrapper {
   min-height: 100%;
   position: relative;
-  background-color: #DCDCDC !important;
+  //background-color: #DCDCDC !important;
+  background-color: white !important;
   overflow-x: scroll;
   overflow-y: hidden;
 }

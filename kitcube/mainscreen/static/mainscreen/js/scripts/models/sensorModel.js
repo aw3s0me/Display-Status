@@ -64,7 +64,6 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			}
 		},
 		initialize: function() {
-			//console.log("model created");
 			_defvalcolor = this.get('valcolor');
 			
 			switch (this.get('sensortype')) {
@@ -281,13 +280,6 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 							var val = this.get('value') * this.get('factor');
 							var valueToInsert = "NaN";
 							var exp = this.get('exp');
-
-							if (this.get('name') === "XHV CP Jacket") {
-								var a = 1;
-								//console.log(val);
-								//console.log(this.get('value'));
-								//console.log(_isNumber(val));
-							}
 							
 							var type = this.get('sensorviewtype');
 							if (type === "table") {
@@ -346,85 +338,6 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			//this.updateModel();
 
 		},
-		getAdeiDataRange: function(range) {
-			if (!_isNumber(range)){
-				throw "range value should be timestamp";
-			} 
-			var now = new Date;
-			var self = this;
-			var tmpStampNow = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds(), now.getUTCMilliseconds());
-			tmpStampNow = Math.floor(tmpStampNow/1000);
-			range = Math.floor(range/1000);
-
-			var url = this.getDbUrl().replace("window=-1", "window=" + range + "-" + tmpStampNow);
-			//var url = this.getDbUrl().replace("window=-1", "window=" + from + "-" + to);
-			console.log(url);
-			$.ajax({
-				type: "GET",
-				url: url,
-				async: false,
-				success: function(data) {
-					console.log(data);
-					var arrayOfData = data.split('\n');
-					arrayOfData.shift();
-					console.log(arrayOfData)
-					for (var i = 0; i < arrayOfData.length; i++) {
-						if (arrayOfData[i] === "") {
-							continue;
-						}
-
-						var values = arrayOfData[i].split(', ');
-						var mom = moment.utc(values[0], "DD-MMM-YY HH:mm:ss.SSS");
-						console.log(mom.valueOf());
-						var x = mom.valueOf();
-						console.log(x);
-
-						/*var time = values[0].replace(/-/g,'/').replace(/\.\d*$/,'');
-						//var time = values[0].replace(/-/g,'/');
-						//console.log(time);
-						//console.log((new Date()).getTime());
-						var darr = values[0].split('.');
-						var dat = new Date(darr[0]);
-						var datestr = '';
-						dat.setMilliseconds(Math.round(darr[1]/1000));
-						//datestr = [ [dat.getFullYear(),dat.getMonth()+1,dat.getDate()].join('-') ,' ', [dat.getHours(),dat.getMinutes(),dat.getSeconds()].join(':') ,'.',dat.getMilliseconds()].join('');
-						console.log(darr);
-						//var parsed = _.clone(Date.UTC(dat.getFullYear(), dat.getMonth()+1, dat.getDate(), dat.getHours(), dat.getMinutes(), dat.getSeconds(), dat.getMilliseconds()));
-						//console.log(parseInt(parsed));
-						//var x = parseInt(parsed); */
-
-						//var dateObj = new Date(parsed); //WRONG BEHAVIOUR
-						var dateObj = new Date(values[0]);
-
-						//console.log(Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds());
-						//var x = Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours() + 2, dateObj.getUTCMinutes(), dateObj.getUTCSeconds(), dateObj.getUTCMilliseconds()); 
-						console.log("x: " + x);
-						var y = +parseFloat(values[1]).toFixed(7);
-						console.log("y: " + y);
-						self.get('values').push([x, y]);
-					}
-
-					var value = self.get('values')[self.get('values').length - 1][1];
-					var lastTime = self.get('values')[self.get('values').length - 1][0];
-
-					self.set({
-						'value': value,
-						'lastTime': lastTime
-					});
-
-				},
-				error: function(jqXHR,error, errorThrown) {  
-               		if(jqXHR.status && jqXHR.status == 400){
-                    	console.log(jqXHR.responseText); 
-               		} else {
-                   		console.log("Error at getting data from adei at: " + self.get('id'));
-                   		throw "Error at getting data from adei at: " + self.get('id');
-               		}
-         		}
-			})
-
-			console.log(self.get('values'))
-		},
 		updateModel: function(value, time) {
 			if (time === this.get('lastTime')) {
 				return;
@@ -466,45 +379,6 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			});
 
 		},
-		/*updateModel: function() {
-			var data = {};
-			var self = this;
-
-			$.ajax({
-				type: "GET",
-				url: self.getDbUrl(),
-				success: function(data) {
-					var values = data.split(',');
-					if (values === "") {
-						return;
-					}
-					var mom = moment.utc();
-					var x = mom.valueOf();
-					var y = parseFloat(values[values.length - 1]);
-					//if (self.get('values').length > 10) {self.get('values').shift();}
-
-					//var array = self.get('values').slice(0); //cloning of array, because backbone works with only one instance
-					var valToPush = [x, y];
-					var array = self.get('values');
-					array.push(valToPush);
-					self.set({
-						'value': y,
-						'lastTime': x,
-						'values': array
-					});
-
-					self.trigger('addPoint', self);
-				},
-				error: function(jqXHR,error, errorThrown) {  
-               		if(jqXHR.status && jqXHR.status == 400){
-                    	console.log(jqXHR.responseText); 
-               		} else {
-                   		console.log("Error at getting data from adei at: " + self.get('id'));
-                   		throw "Error at getting data from adei at: " + self.get('id');
-               		}
-         		}
-			})
-		}, */
 		getChartProperties: function() {
 			var seriesName = this.get('name');
 			var id = this.get('axisname') === undefined ? this.get('id') + '-axis' : this.get('axisname');
@@ -512,11 +386,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				"data": this.get('values'),
 				//"type": 'scatter',
 				"id": this.get('id'),
-				"yAxis": id /*,
-				marker: {
-					radius: 4
-				},
-				lineWidth: 3 */
+				"yAxis": id
 			}
 
 			if (this.get('unit') !== "") {
@@ -533,20 +403,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			var id = this.get('axisname') === undefined ? this.get('id') + '-axis' : this.get('axisname');
 			var axisObj = {
 				id: id,
-				//offset: -17 * scale,
-				//title: {
-					//text: ""//this.get('name')
-					//align: 'middle',
-					//offset: 35
-					//y: -10
-					/*,
-					useHtml: true,
-					formatter: function() {
-						return ("<span class='datalabels'>" + this.y + "</span>");
-					}*/
-				//},
 				lineWidth: 2
-				//lineColor: this.get('valcolor')
 			};
 
 			if (axislabels === false) {
@@ -586,13 +443,6 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					}
 				}
 			}
-
-			console.log(options.count.length);
-			//axisObj.labels.x = options.count.length * -10 * scale;
-			//axisObj.offset = options.count.length * 80 * scale;
-			//axisObj.labels.align = 'right';
-			//axisObj.labels.x = 5;
-			//axisObj.labels.align = 'left';
 
 			return axisObj;
 			

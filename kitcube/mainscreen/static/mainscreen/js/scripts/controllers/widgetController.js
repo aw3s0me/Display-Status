@@ -129,39 +129,31 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
             var masksToRequest = masks.join();
     
             try {
-                //http://katrin.kit.edu/adei/services/getdata.php?db_server=fpd&db_name=katrin_rep&db_group=0&db_mask=102,106,107,108,149,150,103,109,110,111,151,152,74,66,68,99,12,67,69,100,2,3,4,5,6,7,8,9,59,61,75,78,80,82,145,112,113,116,117,118,146,119,120,123,124,125,186,187,188,190,191,192,190,191,192&window=-1
                 var url = window.host + "services/getdata.php?db_server=" + server + '&db_name=' + dbname + '&db_group=' + dbgroup + '&db_mask=' + masksToRequest + '&window=-1';
-                //console.log(url);
-                //window.db.httpGetCsv(url, function(data) {
-                getDataFromAdei(url, true, function(data) {
 
+                getDataFromAdei(url, true, function(data) {
                     result = parseCSVForUpdating(data, masks.length);
-                    //console.log(result);
                     if (typeof(result) === "string") { //if res is not object
-                        console.log('Error occured: ' + result);
                         var lastUpdatedTime = 'Error in getting data';
                         self.eventAggregator.trigger('loadingfinished', {
                             lastUpdatedTime: lastUpdatedTime
                         });
-                        return;
+                        throw new Error('Can\'t get latest data');
                     }
-                    //var time = moment(result.time[0] * 1000);
                     var time = moment();
-                    var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + updateElapse(result.time[0]);//+ time.fromNow();
-                    //$('#lblFromNow').text();
+                    var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + updateElapse(result.time[0]);
+
                     self.board.eventAggregator.trigger('loadingfinished', {
                         lastUpdatedTime: lastUpdatedTime
                     });
-                    //console.log(result)
                     var index = 0;
                     for (var sensId in source) {
                         var element = self.sensors[sensId];
-                        //element.updateModel(result.values[index++], time.valueOf());
                         element.updateModel(result.values[index++], result.time[0] * 1000);
                     }
                 });
             } catch (msg) {
-                alert(msg);
+                throw new Error('Can\'t get latest data');
             }
 
         },
