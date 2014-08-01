@@ -110,10 +110,21 @@
 			if( !this.options.slidingIn ) {
 				this.opts
 					.eq( this.optsCount - 1 )
-					.css( { top : this.options.stack ? 9 : 0, left : this.options.stack ? 4 : 0, width : this.options.stack ? this.size.width - 8 : this.size.width, transform : 'none' } )
+					.css( { 
+						top : this.options.stack ? 9 : 0, 
+						left : this.options.stack ? 4 : 0, 
+						width : this.options.stack ? this.size.width - 8 : this.size.width, 
+						transform : 'none' 
+					} )
 					.end()
 					.eq( this.optsCount - 2 )
-					.css( { top : this.options.stack ? 6 : 0, left : this.options.stack ? 2 : 0, width : this.options.stack ? this.size.width - 4 : this.size.width, transform : 'none' } )
+					.css( 
+						{ 
+							top : this.options.stack ? 6 : 0, 
+							left : this.options.stack ? 2 : 0, 
+							width : this.options.stack ? this.size.width - 4 : this.size.width, 
+							transform : 'none' 
+						} )
 					.end()
 					.eq( this.optsCount - 3 )
 					.css( { top : this.options.stack ? 3 : 0, left : 0, transform : 'none' } );
@@ -139,6 +150,65 @@
 					self.close();
 				}
 			} );
+
+			$(window).resize(function(event) {
+				self.size.width = $('.cd-dropdown').width();
+				$('.cd-dropdown > ul > li').css('width', $('.cd-dropdown').width());
+			});
+
+			function doOnOrientationChange()
+			{
+			    switch(window.orientation) 
+			    {  
+			      case -90:
+			      case 90:
+						$('.cd-dropdown').css('width', '350px');
+				        $('.cd-select').css('width', '350px');
+				        $('#dropDownDiv').css('font-size', '25px');
+				        $('.cd-dropdown > span').css({
+					        'height': '60px',
+					        'line-height': '60px'
+					    });
+					   	$('.cd-dropdown ul li span').css('line-height', '60px');
+					   	$('#dropRow').css('font-size', '50pt');
+					   	self.size.height = 60;
+					   	self.size.width = $('.cd-dropdown').width();
+			        break; 
+			      default:
+				   		if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+						    $('.cd-dropdown').css('width', '350px');
+					        $('.cd-select').css('width', '350px');
+					        $('#dropDownDiv').css('font-size', '25px');
+					        $('.cd-dropdown > span').css({
+						        'height': '60px',
+						        'line-height': '60px'
+						    });
+						   	$('.cd-dropdown ul li span').css('line-height', '60px');
+						   	$('#dropRow').css('font-size', '50pt');
+						   	self.size.height = 60;
+						}
+						else {
+							$('.cd-dropdown').css('width', '600px');
+					        $('.cd-select').css('width', '600px');
+					        $('#dropDownDiv').css('font-size', '52px');
+					        $('.cd-dropdown > span').css({
+						        'height': '150px',
+						        'line-height': '150px'
+						    });
+						   	$('.cd-dropdown ul li span').css('line-height', '150px');
+						   	$('#dropRow').css('font-size', '90pt');
+						   	self.size.height = 150;
+						}
+						self.size.width = $('.cd-dropdown').width();
+				   	
+			        break; 
+			    }
+			}
+
+			window.addEventListener('orientationchange', doOnOrientationChange);
+
+			// Initial execution if needed
+			doOnOrientationChange();
 
 		},
 		open : function() {

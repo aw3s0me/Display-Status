@@ -53,7 +53,7 @@ h1 {
 }
 
 #dropDownDiv {
-	font-size: 22px;
+	font-size: 25px;
 }
 
 /*#dropRow div {
@@ -227,9 +227,30 @@ h1 {
 
 /* dropdown end */
 
-/* button go start */
+@media only screen and (max-device-width: 480px) {
+    .cd-dropdown,
+    .cd-select {
+        width: 600px;
+    }
+
+    #dropDownDiv {
+        font-size: 52px;
+    }
+
+    .cd-dropdown > span {
+        width: 100%;
+        height: 150px;
+        line-height: 150px;
+    }
+
+    .cd-dropdown ul li span {
+        line-height: 150px;
+    }
+
+    #dropRow {
+        font-size: 90pt;
+    }
+
+}
 
 
-
-
-/* button go end */

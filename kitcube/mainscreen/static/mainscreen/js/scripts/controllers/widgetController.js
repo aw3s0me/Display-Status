@@ -1,5 +1,6 @@
 define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'controllers/datasourceController'], function($, WidgetFactory, TabController, DatasourceController) {
     var instance = null;
+    var _updateTime = 3000;
 
     function widgetController() {
         if (instance !== null) {
@@ -7,6 +8,16 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
         }
 
         this.construct();
+    }
+
+    function updateElapse(updateTimestamp) {
+        var now = new Date();
+        var elapse = Math.floor(now.getTime()/1000) - updateTimestamp;
+        if (updateTimestamp > 0) {
+            return '' + elapse + '~' + (elapse + Math.floor(_updateTime/1000)) + ' sec ago';
+        }
+
+        return elapse;
     }
 
     widgetController.prototype = {
@@ -99,7 +110,7 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
             var self = this;
             this.updSensorsInterval = setInterval(function() {
                 self.updateAllSensors();
-            }, 2000); //the only way to pass param */
+            }, 1000); //the only way to pass param */
         },
         updateSensorsFromDatasource: function(datasource) {
             var dbname = datasource['dbname'];
@@ -134,8 +145,9 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
                         });
                         return;
                     }
-                    var time = moment(result.time[0] * 1000);
-                    var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + time.fromNow();
+                    //var time = moment(result.time[0] * 1000);
+                    var time = moment();
+                    var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + updateElapse(result.time[0]);//+ time.fromNow();
                     //$('#lblFromNow').text();
                     self.board.eventAggregator.trigger('loadingfinished', {
                         lastUpdatedTime: lastUpdatedTime
@@ -144,7 +156,8 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
                     var index = 0;
                     for (var sensId in source) {
                         var element = self.sensors[sensId];
-                        element.updateModel(result.values[index++], time.valueOf());
+                        //element.updateModel(result.values[index++], time.valueOf());
+                        element.updateModel(result.values[index++], result.time[0] * 1000);
                     }
                 });
             } catch (msg) {
