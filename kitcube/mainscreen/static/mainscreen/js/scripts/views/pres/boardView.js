@@ -75,7 +75,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				.data('scale', this.viewSizeDetector.scale)
 				.data('scaledUnitSize', this.viewSizeDetector.scaledUnitSize);
 			if (!options || !options.portrait) {
-				canvas.css('top', this.viewSizeDetector.marginTop + 'px');
+				//canvas.css('top', this.viewSizeDetector.marginTop + 'px');
 				if ($('#tabs').width() < $('#wrapper').width()) {
 					$('#wrapper').css('overflow-x', 'hidden');
 					$('#footer').css('position', 'absolute');
@@ -83,7 +83,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				}
 			}
 			else if (options && options.portrait) {
-				$('#tabs').css('top', this.viewSizeDetector.marginTop + 'px !important');
+				//$('#tabs').css('top', this.viewSizeDetector.marginTop + 'px !important');
 				//$('#wrapper').css('overflow-y', 'scroll');
 				if ($('#tabs').width() < $('#wrapper').width()) {
 					$('#wrapper').css('overflow-x', 'hidden');
@@ -121,8 +121,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 							if (!TabController.isInitialized) {
 								this.establishStyle(this.el);
 								this.grid = new kitGrid(this.el);
-								this.el.removeClass('canvas')
-									.addClass('tab');
+								//this.el.removeClass('canvas').addClass('tab');
 								$('#toggleGridButton').click(function(e) {
 									self.grid.toggleGrid();
 								});

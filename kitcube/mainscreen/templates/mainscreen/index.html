@@ -10,20 +10,8 @@
           content="{{ description }}">
   <meta name="project" content="{{project}}">
   <meta name="csrf_token" content="{{csrf_token}}">
-  <link href={% static "mainscreen/css/bootstrap.min.css" %} rel="stylesheet">
   <link href={% static "mainscreen/css/main.css" %} rel="stylesheet">
-  <link href={% static "mainscreen/css/widgets.css" %} rel="stylesheet">
-  <link href={% static "mainscreen/js/scripts/vendor/jqgrid/css/ui.jqgrid.css" %} rel="stylesheet">
-  <link href={% static "mainscreen/js/scripts/vendor/jquery-ui/themes/smoothness/jquery-ui.css" %} rel="stylesheet">
-  <link href={% static "mainscreen/js/scripts/vendor/jquery-ui/themes/smoothness/jquery.ui.theme.css" %} rel="stylesheet"> 
-  <!-- <link href={% static "mainscreen/js/scripts/vendor/jquery-ui/themes/ui-lightness/jquery-ui.css" %} rel="stylesheet">
-  <link href={% static "mainscreen/js/scripts/vendor/jquery-ui/themes/ui-lightness/jquery.ui.theme.css" %} rel="stylesheet"> -->
 
-
-  <!-- <link href={% static "mainscreen/css/style.min.css" %} rel="stylesheet"> -->
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-   
-<!--   <link href={% static "mainscreen/css/grid.css" %} rel="stylesheet"> -->
   <!--[if IE]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
@@ -35,15 +23,9 @@
 <body>
   {{ banner }}
   <div id="wrapper">
-    	
-      {{ userblock }}
-        <div id="board-container"> <!-- there should be tabs with boards -->
 
-        <!-- <div id="scrollbar_wrapper"></div>
-          <div id="scrollbar_content"></div>
-        </div> -->
-      
-      </div>
+      {{ userblock }}
+      <div id="board-container"></div>
       <div id="footer" class="shadow">
         <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
         <!-- <div id="scrollbar_content"></div> -->
