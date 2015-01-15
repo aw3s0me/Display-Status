@@ -6,6 +6,7 @@ body {
   overflow-y: hidden;
   overflow-x: hidden;
   background-color: #DCDCDC !important;
+    font-family: "Helvetica Neue", HelveticaRegular , Arial , sans-serif;
 }
 
 #board-container {
@@ -15,8 +16,9 @@ body {
 #wrapper {
   min-height: 100%;
   position: relative;
+    background: url('../') center repeat;
   //background-color: #DCDCDC !important;
-  background-color: white !important;
+  //background-color: white !important;
   overflow-x: scroll;
   overflow-y: hidden;
 
@@ -40,17 +42,20 @@ body {
 }
 
 .logo-container {
-    width: 70px;
-    text-align: center;
+    //width: 120px;
+    height: 100%;
+    //text-align: center;
     float: left;
     padding: 0px 19px 0px 19px;
+    line-height: 0;
 }
 
 .logo {
     color: #fff;
-    font-size: 34px !important;
     vertical-align: middle;
     text-decoration: none;
+    font-size: 29px;
+    //background-image: url('../images/icons/science.svg');
 }
 
 .logo:hover {
@@ -63,16 +68,96 @@ body {
     text-decoration: none;
 }
 
-.time-container {
+.ico {
+    height: 100%;
     width: 40px;
+}
+
+.logo-text {
+    font-family: DessauPro;
+    font-size: 41px;
+    text-decoration: none;
+}
+
+.auth-container {
+    float: right    ;
+    height: 100%;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 47px;
+    padding-right: 14px;
+}
+
+.auth-button {
+    background-color: transparent;
+    border: none;
+}
+
+.auth-button:active {
+    border: none;
+    outline: 0;
+    outline-style: 0;
+}
+
+.auth-button:focus {
+    outline: 0;
+    outline-style: 0;
+}
+
+
+.auth-menu {
+    display: none;
+    position: absolute;
+    background-color: #222;
+    z-index: 9999 !important;
+    width: 150px;
+    font-size: 13px;
+    line-height: 21px;
+    font-weight: normal;
+    overflow-x: hidden;
+    list-style: none;
+    padding: 0px 0px 6px 17px;
+    margin-top: -1px;
+    border-top: 0;
+    border-bottom: 0;
+    border-radius: 0 0 3px 3px;
+    box-shadow: rgba(0,0,0,0.5) 0 2px 2px;
+    font-family: 'HelveticaThin', Arial, sans-serif;
+}
+
+.menu-elem a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.menu-elem a:hover {
+    text-decoration: none;
+    color: #027f3d;
+}
+
+.menu-elem a:visited {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.time-container {
     color: #fff;
     position: relative;
     float: left;
     vertical-align: middle;
+    padding-top: 9px;
 }
 
 .timelapse {
-
+    padding: 2px 20px;
+    -moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    border: 4px solid #009966;
+    background-color: transparent;
+    line-height: 16px;
 }
 
 #footer {
@@ -109,7 +194,6 @@ body {
 
 .tab {
   //position: relative;
-  font-family: 'Open Sans', sans-serif !important;
   background: #DCDCDC !important;
   margin: 0 auto;
   /*border: 5px solid #bbbbbb; */
@@ -119,7 +203,6 @@ body {
 .canvas {
   //position: relative;
   position: absolute;
-  font-family: 'Open Sans', sans-serif !important;
   //background: #DCDCDC !important;
   /*border: 5px solid #bbbbbb; */
   margin: 0 auto !important;
@@ -138,7 +221,6 @@ body {
 
 .gridTab {
   margin: 0 auto;
-  font-family: 'Open Sans', sans-serif;
   background: #cccccc;
 }
 

@@ -1,15 +1,17 @@
+@import url("fonts.css");
 @import url("bootstrap.min.css");
-@import url("site.css");
-@import url("widgets.css");
 @import url("/static/mainscreen/js/scripts/vendor/jqgrid/css/ui.jqgrid.css");
 @import url("/static/mainscreen/js/scripts/vendor/jquery-ui/themes/smoothness/jquery-ui.css");
 @import url("/static/mainscreen/js/scripts/vendor/jquery-ui/themes/smoothness/jquery.ui.theme.css");
 @import url("font-awesome.min.css");
+@import url("site.css");
+@import url("widgets.css");
+
 
 /*
 @import url("mainscreen/js/scripts/vendor/jquery-ui/themes/ui-lightness/jquery-ui.css");
 @import url("mainscreen/js/scripts/vendor/jquery-ui/themes/ui-lightness/jquery.ui.theme.css");
 
 
-<!-- <link href={% static "mainscreen/css/style.min.css" %} rel="stylesheet"> --> */
-@import url("http://fonts.googleapis.com/css?family=Open+Sans:400,700');
+<!-- <link href={% static "mainscreen/css/style.min.css" %} rel="stylesheet"> -->
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:400,700');*/
