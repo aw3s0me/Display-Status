@@ -19,6 +19,7 @@ require.config({
     //chart part
     "highcharts": "vendor/highcharts.com/js/highcharts.src",
     "highcharts-legend": "vendor/highcharts-legend",
+    "highcharts-theme": "vendor/highcharts.com/js/themes/dark-unica",
     //colorpicker
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
     "momentjs": "vendor/momentjs/min/moment.min",
@@ -77,6 +78,11 @@ require.config({
     "highcharts-legend": {
       deps: [
         "highcharts"
+      ]
+    },
+    "highcharts-theme": {
+      deps: [
+          "highcharts"
       ]
     },
     momentjs: {

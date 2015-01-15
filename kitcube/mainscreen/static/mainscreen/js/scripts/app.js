@@ -9,13 +9,14 @@ define([
 	'jqgrid',
 	'oauthio',
 	'highcharts-legend',
+	'highcharts-theme',
 	"kit.sizeDetector",
 	"kit.parser",
 	'cookie',
 	"models/userModel",
 	"dev/helpers",
 	'router' // Request router.js
-], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, sizeDet, parser, JqCookie, UserModel, Helpers, Router) {
+], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, HighchartsTheme, sizeDet, parser, JqCookie, UserModel, Helpers, Router) {
 	var initializeUser = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -137,7 +138,7 @@ define([
 
 			//Adding to all views triggering event function
 			Backbone.View.prototype.eventAggregator = _.extend({}, Backbone.Events);
-			//Router.initialize();
+			Router.initialize();
 
 		});
 	}

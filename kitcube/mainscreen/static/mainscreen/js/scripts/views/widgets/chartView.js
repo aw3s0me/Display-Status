@@ -301,17 +301,17 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			controlPanel.css('font-size', coeffScale * 12 + 'px');
 
-			controlPanel.find('.goAdeiBtn').button()
+			controlPanel.find('.goAdeiBtn')
 				.click(function(event) {
 					window.open(self.getUrlGoToAdei(), '_blank');
 				});
 
-			controlPanel.find('.addChartBtn').button()
+			controlPanel.find('.addChartBtn')
 				.click(function(event) {
 					var elems = self.formSensorElements();
 					self.getAllData(elems);
 				});
-			controlPanel.find('.legendChartBtn').button()
+			controlPanel.find('.legendChartBtn')
 				.click(function(event) {
 					if (!_isLegendShown) {
 						self.chart.legendShow();
@@ -330,9 +330,9 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					});
 			}
 
-			controlPanel.find('.chartBtn').css('margin-top', coeffScale * -11 + 'px');
+			controlPanel.find('.chartBtn').css('margin-top', coeffScale * 8 + 'px');
 
-			controlPanel.find('.resetChartBtn').button()
+			controlPanel.find('.resetChartBtn')
 				.click(function(event) {
 					self.resetChart();
 				});

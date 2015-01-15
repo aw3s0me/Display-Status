@@ -119,19 +119,31 @@
   //outline: 2px solid white;
 }
 
-.addChartBtn {
-  //width: 5%; 
-  //height: 10%;
-  color: black;
+.chartBtn {
+    display: inline-block;
+    //width: 200px;
+    padding: 5px;
+    color: #fff;
+    background-color: transparent;
+    border: 1px solid rgb(69, 114, 167);
+    text-align: center;
+    outline: none;
+    text-decoration: none;
+    -webkit-transition: background-color 0.2s ease-out, color 0.2s ease-out;
+    transition: background-color 0.2s ease-out, color 0.2s ease-out;
+}
+
+.chartBtn:hover,
+.chartBtn:active {
+    background-color: rgb(69, 114, 167);
+    color: #000;
+    -webkit-transition: background-color 0.3s ease-in, color 0.3s ease-in;
+    transition: background-color 0.3s ease-in,
+    color 0.3s ease-in;
 }
 
 .chartControlPanel {
     position: absolute;
-}
-
-.legendChartBtn {
-  //height: 10%;
-  color: black;
 }
 
 .datalabels {
