@@ -330,7 +330,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					});
 			}
 
-			controlPanel.find('.chartBtn').css('margin-top', coeffScale * 8 + 'px');
+			controlPanel.find('.chartBtn').css('margin-top', coeffScale * -1 + 'px');
 
 			controlPanel.find('.resetChartBtn')
 				.click(function(event) {

@@ -142,6 +142,8 @@
     color 0.3s ease-in;
 }
 
+
+
 .chartControlPanel {
     position: absolute;
 }
@@ -176,11 +178,22 @@
 }
 
 .rangeDropdown {
-  //width: 100px;
-  //height: 20px;
-  //position: absolute;
-  color: black;
-  //z-index: 10;
+    color: white;
+    padding: 3px;
+    background-color: transparent;
+    border: 1px solid rgb(69, 114, 167);
+    text-align: center;
+    outline: none;
+    text-decoration: none;
+}
+
+.rangeDropdown option {
+    color: #fff;
+    background-color: #2d2d2b;
+}
+
+.rangeDropdown option:focus {
+    background-color: rgb(69, 114, 167);
 }
 
 .cntr {
