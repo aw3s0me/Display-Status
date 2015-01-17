@@ -94,7 +94,9 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
             var size = undefined;
 
             //if groups are not from diff sources
-            size = [WidgetController.sizecoeff, WidgetController.sizecoeff];
+            //size = [WidgetController.sizecoeff, WidgetController.sizecoeff];
+            size = [3, 3];
+
 
             for (var i = 0; i < sensorArr.length; i++) {
                 var sensorObj = sensorArr[i];

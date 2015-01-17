@@ -1,9 +1,18 @@
 <div id="<%= sensor_id %>">
-      <div class="sensorName"><%= name %></div>
-      <div id="val_<%= sensor_id %>" class="sensorVal bigtext">
-            <div id="b<%= sensor_id %>"><%= val %></div> 
+      <div class="sensor-title">
+            <span class="sensor-title-data">
+                  <div class="sensor-name"><%= name %></div>
+                  <div class="sensor-led"></div>
+            </span>
       </div>
-      <div class="sensorUnit"><%= unit %></div>
+      <div class="sensor-info">
+            <span class="sensor-info-data">
+                  <span id="val_<%= sensor_id %>" class="sensor-val">
+                        <i class="sensor-loading fa fa-refresh fa-spin"></i><i class="sensor-error fa fa-minus"></i><span id="b<%= sensor_id %>"><%= val %></span>
+                  </span>
+                  <span class="sensor-unit"><%= unit %></span>
+            </span>
+      </div>
       <% if (canberemoved) { %>
         <div class="close"><b>x</b></div>
       <% } %>

@@ -136,7 +136,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 view.trigger('chartInit');
             }
 
-            this.container.parent().css('border', '1px solid black');
+            //this.container.parent().css('border', '1px solid black');
 
 
             //console.log(this.container.html());

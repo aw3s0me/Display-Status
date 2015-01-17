@@ -60,10 +60,15 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 		},
 		events: {
-			'click': 'onClick'
+			'click': 'onClick',
+			'error': 'onError'
 		},
 		onClick: function(event) {
 			console.log('clicked');
+		},
+		onError: function (event) {
+			this.container.find('.sensor-loading').hide();
+			this.container.find('.sensor-error').show();
 		},
 		render: function() {
 			var newSensor = this.model;
@@ -74,7 +79,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			var snglSensorTemplate = $(_.template(SensorTemplate, {
 				sensor_id: newSensor.get('id'),
-				val: (newSensor.get('value') === undefined) ? 'NAN' : (newSensor.get('value')).toFixed(1),
+				val: (newSensor.get('value') === undefined) ? '' : (newSensor.get('value')).toFixed(1),
 				name: newSensor.get('name'),
 				unit: newSensor.get('unit'),
 				canberemoved: newSensor.get('canberemoved')
@@ -82,19 +87,19 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 			this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));
 
-			this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
-			.css('left', 5 * scale + 'px')
-			.css('line-height', 15 * scale + 'px')
+			//this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
+			//.css('left', 5 * scale + 'px')
+			//.css('line-height', 15 * scale + 'px')
 
 			var main_val = this.container.find('#val_' + newSensor.get('id'));
 			//.css('height', 40 * scale + 'px'); //nested div because of big text
 			var main_val_child = main_val.children('#b' + newSensor.get('id'));
 			//.css('height', main_val.css('height') + '!important');
 
-			main_val.css('bottom', 2 * scale + 'px')
+			/*main_val.css('bottom', 2 * scale + 'px')
 				.css('padding-right', 7 * scale + 'px')
 				.css('padding-left', 7 * scale + 'px')
-				.css('font-size', 23 * scale + 'px');
+				.css('font-size', 23 * scale + 'px'); */
 				/*.bigtext({
 					maxfontsize: 26 * scale,
 					minfontsize: 16 * scale
@@ -104,10 +109,10 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				//.css('height', main_val.height());
 
 
-			this.container.find('.sensorUnit')
-				.css('font-size', 12 * scale + 'px')
-				.css('right', 5 * scale + 'px')
-				.css('top', 25 * scale + 'px');
+			//this.container.find('.sensorUnit')
+				//.css('font-size', 12 * scale + 'px')
+				//.css('right', 5 * scale + 'px')
+				//.css('top', 25 * scale + 'px');
 
 			if (newSensor.get('canberemoved')) {
 				this.container.find('.close').css('font-size', 12 * scale + 'px')
@@ -120,10 +125,15 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				});
 			}
 
-			
+			this.setIfOkAfterLoading(newSensor.get('value'));
 
-			this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
+			//this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
 
+		},
+		setIfOkAfterLoading: function (value) {
+			if (value !== undefined) {
+				this.container.find('.sensor-loading').hide();
+			}
 		},
 		getHtml: function() {
 			return this.container[0];
@@ -161,7 +171,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var valToInsert = model.get('valUnit');
 			var name = this.model.get('name');
 			var scale = this.grid.getScale();
-			var valDiv = this.container.find('.sensorVal');
+			var valDiv = this.container.find('.sensor-val');
 			$('#b' + model.get('id')).text(valToInsert);
 		},
 		onchangevaluelink: function(model) {

@@ -164,3 +164,15 @@
     font-style: normal;
     font-weight: normal;
 }
+
+@font-face {
+    font-family: "Carlito";
+    src: url("../fonts/carlito/Carlito-Regular.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "TechniSans";
+    src: url("../fonts/Techni_Sans/Techni_Sans.ttf") format("truetype");
+}

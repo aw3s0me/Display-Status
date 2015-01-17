@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a8dddb97-114b-4d0b-9edc-476b99c9772f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/site.css" afterPath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/site.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/fonts.css" afterPath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/fonts.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/sensorGroupView.js" afterPath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/sensorGroupView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/models/sensorModel.js" afterPath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/models/sensorModel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/templates/widgets/sensorSingle.html" afterPath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/templates/widgets/sensorSingle.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/singleSensorView.js" afterPath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/singleSensorView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/constructors/widgetFactory.js" afterPath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/constructors/widgetFactory.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/widgets.css" afterPath="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/widgets.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Display-Status.iws" />
@@ -26,64 +32,64 @@
     <favorites_list name="Display-Status" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.19593346">
+    <splitter split-orientation="horizontal" split-proportion="0.5696721">
       <split-first>
         <leaf>
-          <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/index.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-17.923077" vertical-offset="214" max-vertical-offset="782">
-                  <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="katrin_banner.html" pinned="false" current-in-tab="true">
+          <file leaf-file-name="katrin_banner.html" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/katrin_banner.html">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7605634" vertical-offset="27" max-vertical-offset="731">
-                  <caret line="27" column="82" selection-start-line="27" selection-start-column="82" selection-end-line="27" selection-end-column="82" />
+                <state vertical-scroll-proportion="-8.115385" vertical-offset="163" max-vertical-offset="833">
+                  <caret line="22" column="38" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="userMainscreenPanel.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/userMainscreenPanel.html">
+          <file leaf-file-name="singleSensorView.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/singleSensorView.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-15.038462" vertical-offset="0" max-vertical-offset="561">
-                  <caret line="23" column="8" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="24" />
+                <state vertical-scroll-proportion="0.030088495" vertical-offset="17" max-vertical-offset="3672">
+                  <caret line="0" column="158" selection-start-line="0" selection-start-column="158" selection-end-line="0" selection-end-column="158" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="boardView.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/pres/boardView.js">
+          <file leaf-file-name="sensorGroupView.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/sensorGroupView.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-6.4827585" vertical-offset="509" max-vertical-offset="2618">
-                  <caret line="41" column="22" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="22" />
+                <state vertical-scroll-proportion="1.1724138" vertical-offset="1683" max-vertical-offset="4403">
+                  <caret line="97" column="64" selection-start-line="97" selection-start-column="64" selection-end-line="97" selection-end-column="64" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/app.js">
+          <file leaf-file-name="widgetFactory.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/constructors/widgetFactory.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="1990" max-vertical-offset="2584">
-                  <caret line="139" column="14" selection-start-line="139" selection-start-column="14" selection-end-line="139" selection-end-column="14" />
+                <state vertical-scroll-proportion="12.310345" vertical-offset="1139" max-vertical-offset="6579">
+                  <caret line="46" column="49" selection-start-line="46" selection-start-column="49" selection-end-line="46" selection-end-column="49" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="kitGrid.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/dev/kit.grid/kitGrid.js">
+          <file leaf-file-name="sensorModel.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/models/sensorModel.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-1.7586207" vertical-offset="0" max-vertical-offset="5066">
-                  <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+                <state vertical-scroll-proportion="-6.034483" vertical-offset="216" max-vertical-offset="11135">
+                  <caret line="23" column="54" selection-start-line="23" selection-start-column="53" selection-end-line="23" selection-end-column="54" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="sensorSingle.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/templates/widgets/sensorSingle.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-6.5384617" vertical-offset="0" max-vertical-offset="459">
+                  <caret line="10" column="162" selection-start-line="10" selection-start-column="162" selection-end-line="10" selection-end-column="162" />
                   <folding />
                 </state>
               </provider>
@@ -93,11 +99,11 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="site.css" pinned="false" current-in-tab="true">
+          <file leaf-file-name="site.css" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/site.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.7292035" vertical-offset="13" max-vertical-offset="10642">
-                  <caret line="25" column="6" selection-start-line="25" selection-start-column="6" selection-end-line="27" selection-end-column="34" />
+                <state vertical-scroll-proportion="-6.4827585" vertical-offset="101" max-vertical-offset="10744">
+                  <caret line="17" column="7" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="7" />
                   <folding />
                 </state>
               </provider>
@@ -106,7 +112,7 @@
           <file leaf-file-name="media.css" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/media.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1003">
+                <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="1003">
                   <caret line="18" column="44" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
                   <folding />
                 </state>
@@ -116,18 +122,18 @@
           <file leaf-file-name="fonts.css" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/fonts.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2907">
-                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="4030" max-vertical-offset="4692">
+                  <caret line="176" column="59" selection-start-line="176" selection-start-column="59" selection-end-line="176" selection-end-column="59" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="widgets.css" pinned="false" current-in-tab="false">
+          <file leaf-file-name="widgets.css" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/widgets.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-6.62069" vertical-offset="1559" max-vertical-offset="3315">
-                  <caret line="103" column="10" selection-start-line="103" selection-start-column="9" selection-end-line="103" selection-end-column="10" />
+                <state vertical-scroll-proportion="0.7522124" vertical-offset="1564" max-vertical-offset="4539">
+                  <caret line="111" column="18" selection-start-line="111" selection-start-column="18" selection-end-line="111" selection-end-column="18" />
                   <folding />
                 </state>
               </provider>
@@ -136,7 +142,7 @@
           <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/main.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="391">
+                <state vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="391">
                   <caret line="16" column="74" selection-start-line="16" selection-start-column="74" selection-end-line="16" selection-end-column="74" />
                   <folding />
                 </state>
@@ -156,14 +162,22 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/media.css" />
-        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/pres/boardView.js" />
         <option value="$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/index.html" />
-        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/app.js" />
-        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/fonts.css" />
         <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/main.css" />
         <option value="$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/userMainscreenPanel.html" />
         <option value="$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/katrin_banner.html" />
         <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/site.css" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/main.js" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/app.js" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/chartView.js" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/fonts.css" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/pres/boardView.js" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/sensorGroupView.js" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/constructors/widgetFactory.js" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/models/sensorModel.js" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/templates/widgets/sensorSingle.html" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/widgets.css" />
+        <option value="$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/singleSensorView.js" />
       </list>
     </option>
   </component>
@@ -456,6 +470,284 @@
               <option name="myItemId" value="mainscreen" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="widgets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kitcube" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pres" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kitcube" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="widgets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kitcube" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kitcube" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kitcube" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kitcube" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="constructors" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Display-Status" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="kitcube" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mainscreen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -496,7 +788,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
-    <property name="options.lastSelected" value="vcs.Git" />
+    <property name="options.lastSelected" value="preferences.editor" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="FullScreen" value="false" />
@@ -560,7 +852,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32913387" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20790629" sideWeight="0.5" order="0" side_tool="true" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28550512" sideWeight="0.5" order="0" side_tool="true" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -603,14 +895,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1887">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/ui.jqgrid.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3009">
@@ -627,42 +911,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/dev/kit.grid/kitGrid.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.7586207" vertical-offset="0" max-vertical-offset="5066">
-          <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/pres/boardView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.4827585" vertical-offset="509" max-vertical-offset="2618">
-          <caret line="41" column="22" selection-start-line="41" selection-start-column="12" selection-end-line="41" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/media.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1003">
           <caret line="18" column="44" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/widgets.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.62069" vertical-offset="1559" max-vertical-offset="3315">
-          <caret line="103" column="10" selection-start-line="103" selection-start-column="9" selection-end-line="103" selection-end-column="10" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1990" max-vertical-offset="2584">
-          <caret line="139" column="14" selection-start-line="139" selection-start-column="14" selection-end-line="139" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -675,25 +927,97 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30769232" vertical-offset="688" max-vertical-offset="782">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31034482" vertical-offset="1369" max-vertical-offset="1989">
+          <caret line="80" column="7" selection-start-line="80" selection-start-column="7" selection-end-line="80" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.94276094" vertical-offset="18" max-vertical-offset="2737">
+          <caret line="31" column="32" selection-start-line="31" selection-start-column="32" selection-end-line="31" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/site.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.4827585" vertical-offset="101" max-vertical-offset="10744">
+          <caret line="17" column="7" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/templates/widgets/chart.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.346153" vertical-offset="0" max-vertical-offset="544">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/dev/kit.grid/kitGrid.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.5517242" vertical-offset="1954" max-vertical-offset="5474">
+          <caret line="121" column="30" selection-start-line="121" selection-start-column="24" selection-end-line="121" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/fonts.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2907">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4030" max-vertical-offset="4692">
+          <caret line="176" column="59" selection-start-line="176" selection-start-column="59" selection-end-line="176" selection-end-column="59" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/models/sensorGroupModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1836">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/index.html">
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/controllers/widgetController.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-17.923077" vertical-offset="214" max-vertical-offset="782">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.33217993" vertical-offset="318" max-vertical-offset="3315">
+          <caret line="25" column="15" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/chartView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.7931035" vertical-offset="3654" max-vertical-offset="13226">
+          <caret line="218" column="25" selection-start-line="218" selection-start-column="16" selection-end-line="218" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/pres/boardView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33217993" vertical-offset="46" max-vertical-offset="3196">
+          <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/userMainscreenPanel.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.038462" vertical-offset="0" max-vertical-offset="561">
+        <state vertical-scroll-proportion="0.9577465" vertical-offset="0" max-vertical-offset="765">
           <caret line="23" column="8" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="24" />
           <folding />
         </state>
@@ -701,16 +1025,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/templates/mainscreen/katrin_banner.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7605634" vertical-offset="27" max-vertical-offset="731">
-          <caret line="27" column="82" selection-start-line="27" selection-start-column="82" selection-end-line="27" selection-end-column="82" />
+        <state vertical-scroll-proportion="-8.115385" vertical-offset="163" max-vertical-offset="833">
+          <caret line="22" column="38" selection-start-line="22" selection-start-column="38" selection-end-line="22" selection-end-column="38" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/site.css">
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/constructors/widgetFactory.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7292035" vertical-offset="13" max-vertical-offset="10642">
-          <caret line="25" column="6" selection-start-line="25" selection-start-column="6" selection-end-line="27" selection-end-column="34" />
+        <state vertical-scroll-proportion="12.310345" vertical-offset="1139" max-vertical-offset="6579">
+          <caret line="46" column="49" selection-start-line="46" selection-start-column="49" selection-end-line="46" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/models/sensorModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.034483" vertical-offset="216" max-vertical-offset="11135">
+          <caret line="23" column="54" selection-start-line="23" selection-start-column="53" selection-end-line="23" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/sensorGroupView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.1724138" vertical-offset="1683" max-vertical-offset="4403">
+          <caret line="97" column="64" selection-start-line="97" selection-start-column="64" selection-end-line="97" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/templates/widgets/sensorSingle.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.5384617" vertical-offset="0" max-vertical-offset="459">
+          <caret line="10" column="162" selection-start-line="10" selection-start-column="162" selection-end-line="10" selection-end-column="162" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/css/widgets.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7522124" vertical-offset="1564" max-vertical-offset="4539">
+          <caret line="111" column="18" selection-start-line="111" selection-start-column="18" selection-end-line="111" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kitcube/mainscreen/static/mainscreen/js/scripts/views/widgets/singleSensorView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.030088495" vertical-offset="17" max-vertical-offset="3672">
+          <caret line="0" column="158" selection-start-line="0" selection-start-column="158" selection-end-line="0" selection-end-column="158" />
           <folding />
         </state>
       </provider>

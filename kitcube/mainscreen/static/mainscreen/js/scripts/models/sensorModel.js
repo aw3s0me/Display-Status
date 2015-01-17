@@ -14,6 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 	//var _defmiddlecolor = '#1bb2e2';
 	//var _defmiddlecolor = '#FFD700';
 	//var _defmiddlecolor = '#75c6ef';
+	var DEFAULT_ERROR = '-';
 
 	function _isNumber(n) {
   		return !isNaN(parseFloat(n)) && isFinite(n);
@@ -46,12 +47,12 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				mask: undefined,
 				values: [],
 				exp: false,
-				size: [2, 2],
+				size: [3, 3],
 				coords: [0, 0],
 				valcolor: '#20c62e',
 				//bgcolor: '#1bb2e2',
 				bgcolor: '#ffffff',
-				valUnit: "NaN",
+				valUnit: DEFAULT_ERROR,
 				link: undefined,
 				factor: 1,
 				linecolor: undefined,
@@ -278,7 +279,7 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 					default:
 						{
 							var val = this.get('value') * this.get('factor');
-							var valueToInsert = "NaN";
+							var valueToInsert = DEFAULT_ERROR;
 							var exp = this.get('exp');
 							
 							var type = this.get('sensorviewtype');
