@@ -1,12 +1,12 @@
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
     var userPanelView = Backbone.View.extend({
         el: undefined,
-        timeLabel: $('#lblFromNow'),
-        userPanel: $('#btnUserPanel'),
+        timeBlock: $('#time-container'),
+        menu: $('#auth-menu'),
         initialize: function() {
             var self = this;
             this.eventAggregator.on('loadingfinished', function(data) {
-                self.timeLabel.text(data.lastUpdatedTime);
+                self.timeBlock.text(data.lastUpdatedTime);
             }, this);
             this.eventAggregator.on('userloggedin', this.onUserLoggedIn, this);
             this.eventAggregator.on('onuseratloginscreen', this.onUserAtLoginScreen, this);
@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             this.render();
         },
         render: function() {
-            this.el = $('#userPanel');
+            this.el = $('#auth-menu');
             this.ifLoggedIn();
             $('#toggleGridButton').show();
             

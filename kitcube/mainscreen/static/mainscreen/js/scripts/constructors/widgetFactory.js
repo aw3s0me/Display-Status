@@ -44,7 +44,8 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 if (tabId) {
                     elObj._tabId = tabId;
                 }
-                if (elObj["type"] === "chart" && !DatasourceController.isAxesInitialized) {
+                if (elObj["type"] === "chart" && !DatasourceController.isAxesInitialized && !this.widgetController.issimulation) {
+                    console.log('GETAXES', this.widgetController.issimulation);
                     DatasourceController.getAxes();
                 }
                 queue.enq({

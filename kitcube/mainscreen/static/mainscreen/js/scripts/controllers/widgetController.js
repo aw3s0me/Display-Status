@@ -20,6 +20,10 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
         return elapse;
     }
 
+    function getRandomValue() {
+        return Math.floor((Math.random()* 10 ) + 1) + Math.random();
+    }
+
     widgetController.prototype = {
         sizeDetector: undefined,
         board: undefined,
@@ -28,6 +32,7 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
         sensors: {},
         sensorViewLookup: {},
         updSensorsInterval: undefined,
+        issimulation: false,
         construct: function() {
             var types = WidgetFactory.getWidgetTypes();
             var self = this;
@@ -38,6 +43,7 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
         },
         initializeBoard: function(board, attr) {
             this.board = board;
+            if (this.board.settings.issimulation) this.issimulation = true;
             this.sizecoeff = board.settings.sizecoeff;
             WidgetFactory.initializeFactory(this);
             WidgetFactory.createAllWidgets(attr);
@@ -155,8 +161,39 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
             } catch (msg) {
                 throw new Error('Can\'t get latest data');
             }
-
         },
+        simulateDataFetching: function () {
+            var self = this;
+            self.issimulation = true;
+            //self.updateSimulation();
+
+            self.initFirstLoading();
+
+            this.updSensorsInterval = setInterval(function() {
+                self.updateSimulation();
+            }, 1000);
+        },
+        initFirstLoading: function () {
+            var timeNow = moment();
+            var sensors = this.sensors;
+            for (var sensId in sensors) {
+                var sensor = sensors[sensId];
+                //sensor.updateModel(getRandomValue(), timeNow * 1000);
+                sensor.updateModel(getRandomValue(), timeNow);
+                sensor.trigger('firstLoading');
+            }
+        },
+        updateSimulation: function () {
+            var sensors = this.sensors;
+            var timeNow = moment();
+            var lastUpdatedTime = timeNow.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + timeNow.format('Z') + ', updateElapse';
+
+            for (var sensId in sensors) {
+                var sensor = sensors[sensId];
+                //sensor.updateModel(getRandomValue(), timeNow * 1000);
+                sensor.updateModel(getRandomValue(), timeNow);
+            }
+        }
     };
 
     widgetController.getInstance = function() {

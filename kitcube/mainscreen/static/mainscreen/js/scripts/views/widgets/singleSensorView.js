@@ -30,6 +30,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('change:valcolor', this.onchangevalcolor, this);
 			this.model.on('change:value', this.onchangevalue, this);
 			this.model.on('removedFromChart', this.onremovedfromchart, this);
+			this.model.on('firstLoading', this.onfinishfirstloading, this);
 
 			this.model.updateModel();
 
@@ -60,15 +61,18 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 
 		},
 		events: {
-			'click': 'onClick',
-			'error': 'onError'
+			'click': 'onclick',
+			'error': 'onerror'
 		},
-		onClick: function(event) {
+		onclick: function(event) {
 			console.log('clicked');
 		},
-		onError: function (event) {
+		onerror: function (event) {
 			this.container.find('.sensor-loading').hide();
 			this.container.find('.sensor-error').show();
+		},
+		onfinishfirstloading: function(event) {
+			this.container.find('.sensor-loading').hide();
 		},
 		render: function() {
 			var newSensor = this.model;

@@ -8,7 +8,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			size: [50, 21],
 			blocksize: 50,
 			sizecoeff: 2,
-			isportrait: false
+			isportrait: false,
+			issimulation: false
 		},
 		widgetController: WidgetController,
 		tabController: TabController,
@@ -16,32 +17,49 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		viewSizeDetector: null,
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
-			var textToParse = options.aceText;
-			this.settings.isportrait = (options.type === "portrait");
-			prsObj = textToParse;
+			var prsObj = options.aceText;
 
-			if (prsObj['screen']['nofooter']) {
-				$('#banner').css('height', '0');
-			}
+			this.setOrientation(options);
 
-			if (prsObj['screen']['nobanner']) {
-				$('#footer').css('height', '0');
-			}
-
-			if (prsObj['screen']) {
-				this.settings.blocksize = prsObj['screen']['blocksize'] || this.settings.blocksize;
-				this.settings.size[0] = prsObj['screen']['boardsize'][0] || this.settings.size[0];
-				this.settings.size[1] = prsObj['screen']['boardsize'][1] || this.settings.size[1];
-				this.settings['sizecoeff'] = prsObj['screen']['sizecoeff'] || this.settings.sizecoeff;
-			}
+			this.checkScreenField(prsObj);
+			this.checkMainField(prsObj);
 
 			this.detectSizes(this.settings.blocksize, this.settings.size[0], this.settings.size[1], '#banner', '#footer', prsObj['screen']);
-
-			var data = {};
-			var compiledTemplate = _.template(boardTemplate, data);
+			this.compileBoardTemplate(prsObj);
+		},
+		compileBoardTemplate: function (prsObj) {
+			var compiledTemplate = _.template(boardTemplate, {});
 			this.container.append(compiledTemplate);
 			/* board insertion part */
-			this.insertFromCfg(prsObj);
+			this.deserialize(prsObj);
+		},
+		setOrientation: function (options) {
+			this.settings.isportrait = (options.type === "portrait");
+		},
+		checkScreenField: function (prsObj) {
+			if (prsObj['screen']) {
+
+				this.settings.blocksize = prsObj['screen']['blocksize'] || this.settings.blocksize;
+
+				this.settings.size[0] = prsObj['screen']['boardsize'][0] || this.settings.size[0];
+
+				this.settings.size[1] = prsObj['screen']['boardsize'][1] || this.settings.size[1];
+
+				this.settings['sizecoeff'] = prsObj['screen']['sizecoeff'] || this.settings.sizecoeff;
+
+				if (prsObj['screen']['nofooter']) {
+					$('#banner').css('height', '0');
+				}
+
+				if (prsObj['screen']['nobanner']) {
+					$('#footer').css('height', '0');
+				}
+			}
+		},
+		checkMainField: function (prsObj) {
+			if (prsObj['main']) {
+				this.settings.issimulation = prsObj['main']['issimulation'] || this.settings.issimulation;
+			}
 		},
 		detectSizes: function(blockSize, xBlocks, yBlocks, bannerId, footerId, options) {
 			try {
@@ -98,7 +116,14 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				$('#footer').css('position', 'absolute');
 			}
 		},
-		insertFromCfg: function(prsObj) {
+		start: function () {
+			this.widgetController.enableFetchingData();
+			this.widgetController.updateAllSensors();
+		},
+		startSimulation: function() {
+			this.widgetController.simulateDataFetching();
+		},
+		deserialize: function(prsObj) {
 			var self = this;
 
 			for (var _id in prsObj) {
@@ -132,8 +157,14 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 				}
 			}
 
-			this.widgetController.enableFetchingData();
-			this.widgetController.updateAllSensors();
+			if (prsObj["main"] && prsObj["main"]["issimulation"]) {
+				console.log('OLOLO');
+				this.startSimulation();
+			}
+			else {
+				this.start();
+			}
+
 		},
 		clear: function() {
 			this.$el.empty(); //clear board

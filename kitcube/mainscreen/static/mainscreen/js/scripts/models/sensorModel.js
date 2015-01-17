@@ -340,6 +340,8 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 
 		},
 		updateModel: function(value, time) {
+			if (value === undefined || time === undefined)
+				return;
 			if (time === this.get('lastTime')) {
 				return;
 			}

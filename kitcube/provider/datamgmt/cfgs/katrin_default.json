@@ -1,4 +1,7 @@
 {
+    "main": {
+        "issimulation": true
+    },
     "screen": {
         "isfluid": false,
         "isscrollable": false,

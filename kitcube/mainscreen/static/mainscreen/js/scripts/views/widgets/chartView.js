@@ -411,7 +411,13 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			}
 
 			var elems = this.formSensorElements();
-			this.getAllData(elems);
+			if (this.board.settings.issimulation) {
+				this.getAllDataForSimulation(elems);
+			}
+			else {
+				this.getAllData(elems);
+			}
+
 
 		},
 		getElementsMetaInfoDatasource: function(datasource, models) {
@@ -436,6 +442,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			if (masksToRequest.length === 0) {
 				return;
 			}
+
 
 			var server = datasource['server'];
 			var dbname = datasource['dbname'];
@@ -527,6 +534,68 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			self.chart.hideLoading();
 		},
 		onDataUpdated: function() {
+
+		},
+		getAllDataForSimulation: function (typeObj) {
+			//not finished
+			this.removeSelection();
+			var sensors = this.model.get('models');
+			var seriesArr = this.model.get('seriesArr');
+			var linkArr = this.model.get('link');
+
+			console.log(sensors, seriesArr, linkArr);
+			for (var i = 0; i < linkArr.length; i++) {
+				var model = _allSensors[linkArr[i]];
+				//AHUET
+			}
+
+			var chart = this.chart;
+
+			var series = this.chart.series;
+			var index = undefined; //index of series
+			var shift = false;
+			var self = this;
+			var elems = typeObj[0];
+			for (var i = 0; i < elems.length; i++) {
+				var jqElement = elems[i];
+				var id;
+				id = jqElement.getAttribute('id');
+
+
+				if (this.model.isOnTheChartById(id)) {
+					continue;
+				}
+
+				var sensorModel = _allSensors[id];
+
+				sensorModel.on('deleteSensor', self.removeSeries, self);
+				sensorModel.on('removing', self.onSensorRemoving, self);
+				self.model.get('link').push(sensorModel.get('id'));
+				self.model.get('models').push(sensorModel);
+				if (!sensorModel) {
+					throw "Cant add sensor";
+				}
+				var seriesObject = sensorModel.getChartProperties();
+///				var axisId = seriesObject['yAxis'];
+
+				delete seriesObject['yAxis'];
+
+				//var existedAxis = self.chart.get(axisId);
+
+				//if (!existedAxis) {
+				//	var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
+				//		axislabels: self.model.get('axislabels'),
+				//		adeiAxisInfo: self.board.datasourceController.getAxis(sensorModel.get('datasource'), axisId),//self.board.axes[axisId],
+				//		count: series
+				//	});
+				//	axisObject.lineColor = '#000';
+				//	self.chart.addAxis(axisObject);
+				//	var axis = self.chart.get(axisObject.id);
+				//}
+				var color = undefined;
+				self.chart.addSeries(seriesObject, false);
+				sensorModel.on('addPoint', self.addNewPoint, self);
+			}
 
 		},
 		getAllData: function(typeObject) {
