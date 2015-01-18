@@ -13,11 +13,19 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
     function updateElapse(updateTimestamp) {
         var now = new Date();
         var elapse = Math.floor(now.getTime()/1000) - updateTimestamp;
+        //if (Math.floor(elapse) < 0)
+            //elapse = -elapse;
         if (updateTimestamp > 0) {
-            return '' + elapse + '~' + (elapse + Math.floor(_updateTime/1000)) + ' sec ago';
+            return '' + Math.floor(elapse > 0? elapse: -elapse) + '~' + Math.floor(elapse + Math.floor(_updateTime/1000)) + ' sec ago';
         }
 
         return elapse;
+    }
+
+    function avgElapse(updateTimestamp){
+        var now = new Date();
+        var elapse = Math.floor(now.getTime()/1000) - updateTimestamp;
+        return Math.floor(((elapse > 0? elapse: -elapse) + (elapse + Math.floor(_updateTime/1000)))/2);
     }
 
     function getRandomValue() {
@@ -171,28 +179,42 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
 
             this.updSensorsInterval = setInterval(function() {
                 self.updateSimulation();
-            }, 1000);
+            }, 4000);
         },
         initFirstLoading: function () {
             var timeNow = moment();
             var sensors = this.sensors;
+
             for (var sensId in sensors) {
                 var sensor = sensors[sensId];
                 //sensor.updateModel(getRandomValue(), timeNow * 1000);
                 sensor.updateModel(getRandomValue(), timeNow);
                 sensor.trigger('firstLoading');
+
             }
+
+            this.updateTimeContainer(timeNow);
         },
         updateSimulation: function () {
             var sensors = this.sensors;
             var timeNow = moment();
-            var lastUpdatedTime = timeNow.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + timeNow.format('Z') + ', updateElapse';
 
             for (var sensId in sensors) {
                 var sensor = sensors[sensId];
                 //sensor.updateModel(getRandomValue(), timeNow * 1000);
                 sensor.updateModel(getRandomValue(), timeNow);
             }
+
+            this.updateTimeContainer(timeNow);
+        },
+        updateTimeContainer: function(time) {
+            var utc = time.valueOf();
+            var lastUpdatedTime = time.format('ddd MMM D YYYY HH:mm:ss') + ' GMT' + time.format('Z') + ', ' + updateElapse(utc/1000);
+            this.board.eventAggregator.trigger('loadingfinished', {
+                lastUpdatedTime: lastUpdatedTime,
+                format: 's',
+                number: avgElapse(utc/1000)
+            });
         }
     };
 

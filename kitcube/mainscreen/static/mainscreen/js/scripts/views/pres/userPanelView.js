@@ -3,11 +3,28 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         el: undefined,
         timeBlock: $('#time-container'),
         menu: $('#auth-menu'),
+        latestInfo: "",
         initialize: function() {
             var self = this;
+
+
             this.eventAggregator.on('loadingfinished', function(data) {
-                self.timeBlock.text(data.lastUpdatedTime);
+                self.timeBlock.find('.timelapse-loading').hide();
+                self.timeBlock.find('.short-info').text(data['number'] + ' ' + data['format']);
+                self.timeBlock.find('.full-info').text(data['lastUpdatedTime']);
+                self.latestInfo = data;
             }, this);
+
+            this.timeBlock.on("mouseenter", function () {
+                $(this).find('.short-info').hide();
+                $(this).find('.full-info').fadeIn();
+            });
+
+            this.timeBlock.on("mouseleave", function () {
+                $(this).find('.short-info').fadeIn();
+                $(this).find('.full-info').hide();
+            });
+
             this.eventAggregator.on('userloggedin', this.onUserLoggedIn, this);
             this.eventAggregator.on('onuseratloginscreen', this.onUserAtLoginScreen, this);
             this.eventAggregator.on('onuseratmainscreen', this.onUserAtMainScreen, this);
