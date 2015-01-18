@@ -1,4 +1,38 @@
-<div id="registerWrapper" style="display: none;">
+<div id="register-container">
+	<!-- <h2 class="login-title">
+
+	</h2> -->
+	<div id="register" class="centered auth-form-container">
+		<!-- {% csrf_token %} -->
+		<form id="register-form" class="auth-form" method="post">
+			<fieldset class="clearfix">
+				<p>
+					<span class="fa fa-user"></span>
+					<input id="login-form-username" type="text" value="Username" onBlur="if(this.value == '') this.value = 'Username'" onFocus="if(this.value == 'Username') this.value = ''" required>
+				</p>
+				<p>
+					<span class="fa fa-lock"></span>
+					<input id="register-form-password" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required>
+				</p>
+				<p>
+					<span class="fa fa-repeat"></span>
+					<input id="register-form-confirm-password" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required>
+				</p>
+				<p>
+					<span class="fa fa-envelope"></span>
+					<input id="register-form-email" type="text" value="Email" onBlur="if(this.value == '') this.value = 'Email'" onFocus="if(this.value == 'Email') this.value = ''" required>
+				</p>
+				<p>
+					<input type="submit" value="Sign Up">
+				</p>
+			</fieldset>
+		</form>
+		<p>Already a member? <a href="#">Sign in</a><span class="fa fa-arrow-right"></span></p>
+	</div>
+
+</div>
+
+<!-- <div id="registerWrapper" style="display: none;">
 <div id="registerFormDiv" >
 	<h2>Register</h2>
 	<form id="registerForm" method="post">
@@ -8,13 +42,7 @@
 		<input type="text" class="email" name="email" placeholder="Email" />
 		<input type="submit" id="regBtn" name="Reg" value="Register"/>
 	</form>
-	<!-- <form id="mailForm" method="post">
-		<input type="text" class="email" name="email" placeholder="Email" value="fugeem90@gmail.com" />
-		<input type="submit" id="regBtn" name="Reg" value="Register"/>
-	</form>
-	<input type="button" id="registerFacebook" name="submit" value="Facebook"/>
-	<input type="button" id="registerGoogle" name="submit" value="Google"/> -->
 </div>
 <div id="registerValidationDiv" class="registerValidation"></div>
 
-</div>
+</div> -->

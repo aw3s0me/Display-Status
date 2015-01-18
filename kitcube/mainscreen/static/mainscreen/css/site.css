@@ -433,7 +433,7 @@ body {
 /* LoginView CSS TEMPLATE BEGIN */
 
 
-#login-container {
+#login-container, #register-container {
     //background-color: #2b3238;
 background-image: url('../images/patterns/diagmonds/diagmonds.png');
     //width: 420px;
@@ -445,24 +445,31 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
 }
 
 #login {
-
+    height: 61%;
+    padding-top: 15px;
     //background-color: ;
 }
 
-#login p {
+#register {
+    //height: 120%;
+    padding-top: 50px;
+    //margin-top: 150px;
+}
+
+.auth-form-container p {
     color: #525453;
 }
 
-#login p a{
+.auth-form-container p a{
     color: #eee;
 }
 
-#login p a {
+.auth-form-container p a {
     color: #eee;
     text-decoration: none;
 }
 
-#login-form p input {
+.auth-form p input {
     border: none;
     font-family: 'Open Sans', Arial, sans-serif;
     font-size: 14px;
@@ -471,13 +478,12 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
     -webkit-appearance: none;
 }
 
-#login p a:hover {
+.auth-form-container p a:hover {
     text-decoration: underline;
 }
 
 .centered {
     width: 50%;
-    height: 61%;
     overflow: auto;
     margin: auto;
     position: absolute;
@@ -485,13 +491,13 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
 }
 
 /* ---------- LOGIN ---------- */
-#login {
+.auth-form-container {
     width: 280px;
     margin: auto;
-    padding-top: 15px;
+
 }
 
-#login form span {
+.auth-form-container form span {
     background-color: #363b41;
     border-radius: 3px 0px 0px 3px;
     color: #606468;
@@ -503,11 +509,11 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
     width: 50px;
 }
 
-#login form input {
+.auth-form-container form input {
     height: 50px;
 }
 
-#login form input[type="text"], input[type="password"] {
+.auth-form-container form input[type="text"], input[type="password"] {
     background-color: #3b4148;
     border-radius: 0px 3px 3px 0px;
     color: #606468;
@@ -516,7 +522,7 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
     width: 230px;
 }
 
-#login form input[type="submit"] {
+.auth-form-container form input[type="submit"] {
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
@@ -528,15 +534,15 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
     width: 280px;
 }
 
-#login form input[type="submit"]:hover {
+.auth-form-container form input[type="submit"]:hover {
     background-color: #d44179;
 }
 
-#login > p {
+.auth-form-container > p {
     text-align: center;
 }
 
-#login > p span {
+.auth-form-container > p span {
     padding-left: 5px;
 }
 

@@ -103,7 +103,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 				});
 			}); */
 
-
 		},
 		render: function() {
 			var compiledTemplate = _.template(RegisterTemplate, {});
