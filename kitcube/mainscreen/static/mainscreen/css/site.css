@@ -8,12 +8,24 @@ body {
     font-family: "Helvetica Neue", HelveticaRegular , Arial , sans-serif;
 }
 
+.clearfix {
+    *zoom: 1;
+}
+.clearfix:before, .clearfix:after {
+    content: ' ';
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+
 #board-container {
     //position: absolute;
+    height: 100%;
 }
 
 #wrapper {
-  min-height: 100%;
+  height: 100%;
   position: relative;
   //background-color: #DCDCDC !important;
   //background-color: white !important;
@@ -44,6 +56,7 @@ body {
   height: 50px;
   //overflow: visible;
     background-color: #222222;
+    z-index: 50;
 }
 
 .logo-container {
@@ -170,17 +183,6 @@ body {
     display: none;
 }
 
-.full-time-info {
-    padding: 2px 11px;
-    -moz-border-radius: 25px;
-    -webkit-border-radius: 25px;
-    border-radius: 6px;
-    border: 3px solid #009966;
-    background-color: transparent;
-    line-height: 19px;
-    font-weight: bold;
-}
-
 #footer {
   background: #666;
   width: 100%;
@@ -292,50 +294,6 @@ body {
 #navBarContainer {
   text-align:center; 
   vertical-align: middle;
-}
-
-/*@media (max-width: 768px) {
-  .btn-responsive {
-    //padding:2px 4px;
-    font-size:60%;
-    line-height: 1;
-  }
-  .input-responsive {
-    font-size: 70%;
-    line-height: 1;
-  }
-  .demo-logo {
-    font-size: 90%;
-  }
-  #navBarKitcube {
-    width: 80%;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 992px) {
-  .btn-responsive {
-    //padding:4px 9px;
-    font-size:70%;
-    line-height: 1.2;
-  }
-  .input-responsive {
-    font-size: 80%;
-    line-height: 1.2;
-  }
-  .demo-logo {
-    font-size: 95%;
-  }
-  #navBarKitcube {
-    width: 80%;
-  }
-} */
-
-.kitcube_banner {
-	background: url(../images/banner/kitcube.jpg) #466f9d no-repeat;
-}
-
-.katrin_banner {
-	background: url(../images/banner/katrin.png) #005D57 no-repeat;
 }
 
 /* Register Form Begin */
@@ -463,12 +421,140 @@ body {
   position: absolute;
 }
 
-
+.text-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
 
 /* Login form */
 
 /* LoginView CSS TEMPLATE BEGIN */
 
+
+#login-container {
+    //background-color: #2b3238;
+background-image: url('../images/patterns/diagmonds/diagmonds.png');
+    //width: 420px;
+    //height: 350px;
+    width: 100%;
+    height: 100%;
+    background-repeat:repeat;
+    background-position: top left;
+}
+
+#login {
+
+    //background-color: ;
+}
+
+#login p {
+    color: #525453;
+}
+
+#login p a{
+    color: #eee;
+}
+
+#login p a {
+    color: #eee;
+    text-decoration: none;
+}
+
+#login-form p input {
+    border: none;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5em;
+    padding: 16px;
+    -webkit-appearance: none;
+}
+
+#login p a:hover {
+    text-decoration: underline;
+}
+
+.centered {
+    width: 50%;
+    height: 61%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
+
+/* ---------- LOGIN ---------- */
+#login {
+    width: 280px;
+    margin: auto;
+    padding-top: 15px;
+}
+
+#login form span {
+    background-color: #363b41;
+    border-radius: 3px 0px 0px 3px;
+    color: #606468;
+    display: block;
+    float: left;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    width: 50px;
+}
+
+#login form input {
+    height: 50px;
+}
+
+#login form input[type="text"], input[type="password"] {
+    background-color: #3b4148;
+    border-radius: 0px 3px 3px 0px;
+    color: #606468;
+    margin-bottom: 1em;
+    padding: 0 16px;
+    width: 230px;
+}
+
+#login form input[type="submit"] {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    background-color: #009966;
+    color: #eee;
+    font-weight: bold;
+    margin-bottom: 2em;
+    text-transform: uppercase;
+    width: 280px;
+}
+
+#login form input[type="submit"]:hover {
+    background-color: #d44179;
+}
+
+#login > p {
+    text-align: center;
+}
+
+#login > p span {
+    padding-left: 5px;
+}
+
+#login .social-buttons .fa-google, .fa-facebook {
+    color: black;
+    font-size: 24px;
+}
+
+#login .social-buttons a:hover {
+    text-decoration: none;
+    color: #027f3d;
+}
+
+#login .social-buttons a:visited {
+    text-decoration: none;
+}
+
+/*
 .loginlbl {
   padding-top: 10px;
 }
@@ -477,6 +563,7 @@ body {
   color: grey;
   text-decoration: none;
 }
+
 
 #loginFormDiv {
     width: 27%;
@@ -498,7 +585,6 @@ body {
     //margin-bottom: .6em;
     margin-bottom: 3%;
     border-bottom: 2px solid #2ecc71;
-    /*box-shadow*/
     -webkit-box-shadow: 0 1px 0 #27ae60;
     -moz-box-shadow: 0 1px 0 #27ae60;
     box-shadow: 0 1px 0 #27ae60;
@@ -595,7 +681,7 @@ body {
   background-image: url(../images/icons/validation.png);
   color: #ff0000;
   background-color: #FFBABA;
-}
+} */
 
 .invalid_input {
   //background-color: ;
@@ -609,29 +695,3 @@ body {
   background-color: #DFF2BF !important;
 }
 
-/* LoginView CSS TEMPLATE END */
-
-@media only screen and (min-width : 1224px)  { 
-
-} 
-
-/* portrait and landscape */
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px)  { 
-
-
-}
-
-/*  landscape  */
-@media only screen and (min-width : 321px)  { 
-
-}
-
-/*  portrait */
-@media only screen and (max-width : 320px)  { 
-
-}
-
-/* iPhone 4 and high pixel devices  */
-@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5)  { 
-
-}

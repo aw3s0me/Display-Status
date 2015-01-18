@@ -1,16 +1,58 @@
-<div id="loginFormDiv">
-	<!-- {% csrf_token %} -->
+<div id="login-container">
+	<!-- <h2 class="login-title">
+
+	</h2> -->
+	<div id="login" class="centered">
+		<!-- {% csrf_token %} -->
+		<form id="login-form" method="post">
+			<fieldset class="clearfix">
+				<p>
+					<span class="fa fa-user"></span>
+					<input id="login-form-username" type="text" value="Username" onBlur="if(this.value == '') this.value = 'Username'" onFocus="if(this.value == 'Username') this.value = ''" required></p>
+				<p>
+					<span class="fa fa-lock"></span>
+					<input id="login-form-password" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required>
+				</p>
+				<p>
+					<input type="submit" value="Sign In">
+				</p>
+			</fieldset>
+		</form>
+		<p>Not a member? <a href="#">Sign up now</a><span class="fa fa-arrow-right"></span></p>
+
+		<p class="social-buttons">
+			Or use
+			<a class="google-btn" href="#">
+				<span class="fa-stack fa-lg">
+				  <i class="fa fa-square fa-stack-2x"></i>
+				  <i class="fa fa-google fa-stack-1x"></i>
+				</span>
+			</a>
+			<a class="facebook-btn" href="#">
+				<span class="fa-stack fa-lg">
+				  <i class="fa fa-square fa-stack-2x"></i>
+				  <i class="fa fa-facebook fa-stack-1x"></i>
+				</span>
+			</a>
+		</p>
+	</div>
+
+</div>
+
+
+
+<!-- <div id="loginFormDiv">
+
 	<h2>Log-in</h2>
 	<form id="loginForm" method="post">
 		<input type="text" id="username" name="username" placeholder="Username"/>
 		<input type="password" id="password" name="password"  placeholder="Password" />
 		<input type="submit" id="loginBtn" name="LogIn" value="Log in"/>
 	</form>
-	<!-- <input type="button" id="loginFacebook" name="loginFacebook" value='Facebook'/>
-	<input type="button" id="loginGoogle" name="loginGoogle" value='Google'/> -->
+
 	<a class="socialButtons" id="loginFacebook"/>
 	<a class="socialButtons" id="loginGoogle"/>
 	<p class="reglbl"><a href="#register">Register</a></p>
 	<p class="forgetlbl"><a href="">Forgot the password?</a></p>
 </div>
-<div id="loginValidation"></div>
+<div id="loginValidation"></div> -->

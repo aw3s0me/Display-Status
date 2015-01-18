@@ -1,0 +1,23 @@
+<div class="auth-container">
+    <button class="auth-button">
+            <span class="auth-text">
+                {% if user.username %}
+                    {{ user.username }}
+                {% else %}
+                    Not logged
+                {% endif %}
+            </span>
+        <i class="fa fa-bars"></i>
+    </button>
+    <ul id="auth-menu" class="auth-menu">
+        <li class="menu-elem"><a href="#login"><i class="fa fa-sign-in"></i>
+            Sign in</a></li>
+        <li class="menu-elem"><a href="#logout"><i class="fa fa-sign-out"></i>
+            Sign out</a></li>
+        <li class="menu-elem"><a href="#grid"><i class="fa fa-th"></i>&nbsp;Show grid</a></li>
+        <li class="menu-elem"><a href="../editor"><i class="fa fa-pencil-square-o"></i>
+            Editor</a></li>
+        <li class="menu-elem"><a href="#board"><i class="fa fa-desktop"></i>
+            Main screen</a></li>
+    </ul>
+</div>

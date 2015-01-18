@@ -64,10 +64,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 								xhr.setRequestHeader('Authorization', token);
 							}
 						})
-
 					}
-
-
 				});
 			});
 			$('#loginGoogle').click(function(event) {
@@ -113,8 +110,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 		render: function() {
 			var compiledTemplate = _.template(LoginTemplate, {});
 			this.container.append(compiledTemplate);
-			this.el = $('#loginFormDiv');
-			this.form = this.el.find('#loginForm');
+			this.el = $('#login');
+			this.form = this.el.find('#login-form');
 		},
 		logout: function() {
 			var user = window.activeSessionUser;
@@ -135,10 +132,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				},
 				success: function(data) {
 					user.trigger('logout');
-					self.form.find('#username').removeClass('valid_input');
-					self.form.find('#username').removeClass('invalid_input');
-					self.form.find('#password').removeClass('invalid_input');
-					self.form.find('#password').removeClass('valid_input');
+					self.form.find('#login-form-username').removeClass('valid_input');
+					self.form.find('#login-form-username').removeClass('invalid_input');
+					self.form.find('#login-form-password').removeClass('invalid_input');
+					self.form.find('#login-form-password').removeClass('valid_input');
 				},
 				beforeSend: function(xhr, settings) {
 					xhr.setRequestHeader('Authorization', token);
