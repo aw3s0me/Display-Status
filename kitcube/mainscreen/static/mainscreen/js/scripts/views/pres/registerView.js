@@ -9,7 +9,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			var self = this;
 			this.render();
 
-			$('#registerForm').on('submit', function(event) {
+			$('#register-form').on('submit', function(event) {
 				event.preventDefault();
 				//var dataToSend = self.form.serialize();
 				var dataToSend = $(this).serializeObject();
@@ -17,7 +17,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 				dataToSend = JSON.stringify(dataToSend);
 
 				var csrfToken = $('meta[name="csrf_token"]').attr('content');
-				console.log(csrfToken);
+				//console.log(csrfToken);
 				$(document).ajaxSend(function(event, xhr, settings) {
 					/* stuff to do before an AJAX request is sent */
 					xhr.setRequestHeader('X-CSRFToken', csrfToken);
@@ -107,8 +107,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 		render: function() {
 			var compiledTemplate = _.template(RegisterTemplate, {});
 			this.container.append(compiledTemplate);
-			this.el = $('#registerWrapper');
-			this.form = this.el.find('#registerForm');
+			this.el = $('#register-container');
+			this.form = this.el.find('#register-form');
 			this.mailOAuthForm = this.el.find('#mailForm');
 		},
 		onSuccessRegistration: function(data) {
@@ -125,11 +125,11 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.form.find('.username').addClass('valid_input');
 			this.form.find('.email').addClass('valid_input');
 			this.form.find('.password').addClass('valid_input');
-			this.form.find('.confPassword').addClass('valid_input');
+			this.form.find('.conf-password').addClass('valid_input');
 			this.form.find('.username').addClass('invalid_input');
 			this.form.find('.email').addClass('invalid_input');
 			this.form.find('.password').addClass('invalid_input');
-			this.form.find('.confPassword').addClass('invalid_input');
+			this.form.find('.conf-password').addClass('invalid_input');
 		},
 		onError: function(errorInfo) {
 			var div = $('#registerValidationDiv');
@@ -169,16 +169,17 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			}
 		},
 		clear: function() {
-			this.form.find('.username').removeClass('valid_input');
-			this.form.find('.email').removeClass('valid_input');
-			this.form.find('.password').removeClass('valid_input');
-			this.form.find('.confPassword').removeClass('valid_input');
-			this.form.find('.username').removeClass('invalid_input');
-			this.form.find('.email').removeClass('invalid_input');
-			this.form.find('.password').removeClass('invalid_input');
-			this.form.find('.confPassword').removeClass('invalid_input');
-			$('#registerValidationDiv').empty();
-			$('#registerValidationDiv').hide();
+			//this.form.find('.username').removeClass('valid_input');
+			//this.form.find('.email').removeClass('valid_input');
+			//this.form.find('.password').removeClass('valid_input');
+			//this.form.find('.confPassword').removeClass('valid_input');
+			//this.form.find('.username').removeClass('invalid_input');
+			//this.form.find('.email').removeClass('invalid_input');
+			//this.form.find('.password').removeClass('invalid_input');
+			//this.form.find('.confPassword').removeClass('invalid_input');
+			//$('#registerValidationDiv').empty();
+			//$('#registerValidationDiv').hide();
+			this.el.remove();
 		}
 
 /*

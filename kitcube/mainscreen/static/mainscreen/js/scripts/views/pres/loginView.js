@@ -11,15 +11,15 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			this.form.on('submit', function(event) {
 				event.preventDefault();
 				var credential = {
-					username: $(this).find('#password').val(),
-					password: $(this).find('#username').val()
-				}
+					username: $(this).find('.password').val(),
+					password: $(this).find('.username').val()
+				};
+
 				var dataToSend = $(this).serializeObject();
 				dataToSend['group'] = $('meta[name="project"]').attr('content');
 				dataToSend = JSON.stringify(dataToSend);
 
 				var csrfToken = $('meta[name="csrf_token"]').attr('content');
-				console.log(csrfToken);
 				$(document).ajaxSend(function(event, xhr, settings) {
 					/* stuff to do before an AJAX request is sent */
 					xhr.setRequestHeader('X-CSRFToken', csrfToken);
@@ -30,17 +30,17 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 					url: '/api-token/login_reg/',
 					data: dataToSend,
 					success: function(data) {
-						console.log(data);
 						if (data.name !== undefined && data.id !== undefined)
 							self.onSuccessLogin(data);
 						else {
 							self.onError(data);
 						}
 					}
-				})
+				});
 				return false;
 			});
-			$('#loginFacebook').click(function(event) {
+
+			this.el.find('.facebook-btn').click(function(event) {
 				OAuth.popup('facebook', function(err, success) {
 					if (err) {
 
@@ -50,7 +50,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 						var dataToSend = {
 							'Authorization': token,
 							'group': group
-						}
+						};
 						dataToSend = JSON.stringify(dataToSend);
 						$.ajax({
 							url: '/api-token/login/facebook/',
@@ -67,7 +67,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 					}
 				});
 			});
-			$('#loginGoogle').click(function(event) {
+
+			this.el.find('.google-btn').click(function(event) {
 				OAuth.popup('google', function(err, success) {
 					if (err) {
 
@@ -86,7 +87,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 							method: 'POST',
 							data: dataToSend,
 							headers: {
-								'Authorization': token,
+								'Authorization': token
 							},
 							success: function(data) {
 								console.log(data);
@@ -106,11 +107,12 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				self.clear();
 			});
 
+			this.eventAggregator.trigger('onuseratloginscreen');
 		},
 		render: function() {
 			var compiledTemplate = _.template(LoginTemplate, {});
 			this.container.append(compiledTemplate);
-			this.el = $('#login');
+			this.el = $('#login-container');
 			this.form = this.el.find('#login-form');
 		},
 		logout: function() {
@@ -128,7 +130,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				method: 'GET',
 				//data: dataToSend,
 				headers: {
-					'Authorization': token,
+					'Authorization': token
 				},
 				success: function(data) {
 					user.trigger('logout');
@@ -190,19 +192,20 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 
 		},
 		clear: function() {
-			this.form.find('#username').removeClass('valid_input');
-			this.form.find('#password').removeClass('valid_input');
-			this.form.find('#username').removeClass('invalid_input');
-			this.form.find('#password').removeClass('invalid_input');
-			this.form.find('#username').val('');
-			this.form.find('#password').val('');
-			$('#loginValidation').empty();
-			$('#loginValidation').hide();
+			this.el.remove();
+			//this.form.find('#username').removeClass('valid_input');
+			//this.form.find('#password').removeClass('valid_input');
+			//this.form.find('#username').removeClass('invalid_input');
+			//this.form.find('#password').removeClass('invalid_input');
+			//this.form.find('#username').val('');
+			//this.form.find('#password').val('');
+			//$('#loginValidation').empty();
+			//$('#loginValidation').hide();
 
 		}
 
 
-	})
+	});
 
 	return loginView;
 });

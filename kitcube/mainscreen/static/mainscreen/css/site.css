@@ -129,7 +129,7 @@ body {
     position: absolute;
     background-color: #222;
     z-index: 9999 !important;
-    width: 150px;
+    width: 129px;
     font-size: 13px;
     line-height: 21px;
     font-weight: normal;
@@ -298,81 +298,81 @@ body {
 
 /* Register Form Begin */
 
-#registerWrapper {
-  width: 30%;
-  margin: 0 auto;
-  margin-top: 150px;
-}
+/*#registerWrapper {*/
+  /*width: 30%;*/
+  /*margin: 0 auto;*/
+  /*margin-top: 150px;*/
+/*}*/
 
-#registerFormDiv {
-    //width: 30%;
-    height: 295px;
-    
-}
+/*#registerFormDiv {*/
+    /*//width: 30%;*/
+    /*height: 295px;*/
+    /**/
+/*}*/
 
-#registerFormDiv h2 {
-    text-shadow: 0 1px 0 #27ae60;
-    font-size: 45px;
-    //color: #2ecc71;
-    color: black;
-    display: block;
-    width: 100%;
-    padding-bottom: .4em;
-    margin-bottom: .6em;
-    border-bottom: 2px solid #2ecc71;
+/*#registerFormDiv h2 {*/
+    /*text-shadow: 0 1px 0 #27ae60;*/
+    /*font-size: 45px;*/
+    /*//color: #2ecc71;*/
+    /*color: black;*/
+    /*display: block;*/
+    /*width: 100%;*/
+    /*padding-bottom: .4em;*/
+    /*margin-bottom: .6em;*/
+    /*border-bottom: 2px solid #2ecc71;*/
     /*box-shadow*/
-    -webkit-box-shadow: 0 1px 0 #27ae60;
-    -moz-box-shadow: 0 1px 0 #27ae60;
-    box-shadow: 0 1px 0 #27ae60;
-}
+    /*-webkit-box-shadow: 0 1px 0 #27ae60;*/
+    /*-moz-box-shadow: 0 1px 0 #27ae60;*/
+    /*box-shadow: 0 1px 0 #27ae60;*/
+/*}*/
 
-#registerFormDiv a {
-    color: black;
-}
+/*#registerFormDiv a {*/
+    /*color: black;*/
+/*}*/
 
-#registerFormDiv input[type="text"],
-#registerFormDiv input[type="submit"],
-#registerFormDiv input[type="password"]
-{
-    clear: both;
-    float: left;
-    display: block;
-    border: 1px solid #ccc;
-    background: #ebebeb;
-    margin: 6px 0;
-    padding: 4px 10px;
-    width: 100%;
-    height: 50px;
-    outline: 0;
-    color: #34495e;
-    font-size: 25px;
-}
+/*#registerFormDiv input[type="text"],*/
+/*#registerFormDiv input[type="submit"],*/
+/*#registerFormDiv input[type="password"]*/
+/*{*/
+    /*clear: both;*/
+    /*float: left;*/
+    /*display: block;*/
+    /*border: 1px solid #ccc;*/
+    /*background: #ebebeb;*/
+    /*margin: 6px 0;*/
+    /*padding: 4px 10px;*/
+    /*width: 100%;*/
+    /*height: 50px;*/
+    /*outline: 0;*/
+    /*color: #34495e;*/
+    /*font-size: 25px;*/
+/*}*/
 
-#registerFormDiv input[type=submit] {
-    background: #27ae60;
-    //background: #e5e5e5;
-    color: #ecf0f1;
-    border: 0;
-    height: 52px;
-    border-bottom: 2px solid #2ecc71;
-    margin: 25px 0 0;
-}
+/*#registerFormDiv input[type=submit] {*/
+    /*background: #27ae60;*/
+    /*//background: #e5e5e5;*/
+    /*color: #ecf0f1;*/
+    /*border: 0;*/
+    /*height: 52px;*/
+    /*border-bottom: 2px solid #2ecc71;*/
+    /*margin: 25px 0 0;*/
+/*}*/
 
-#mailForm {
-  display: none;
-}
+/*#mailForm {*/
+  /*display: none;*/
+/*}*/
 
-.registerValidation {
-  display: none;
-  border: 1px solid;
-  margin: 0 auto;
-  padding:15px 10px 15px 50px;
-  background-repeat: no-repeat;
-  background-position: 10px center;
-  background-image: url(../images/icons/validation.png);
-  color: #ff0000;
-  background-color: #FFBABA;
-}
+/*.registerValidation {*/
+  /*display: none;*/
+  /*border: 1px solid;*/
+  /*margin: 0 auto;*/
+  /*padding:15px 10px 15px 50px;*/
+  /*background-repeat: no-repeat;*/
+  /*background-position: 10px center;*/
+  /*background-image: url(../images/icons/validation.png);*/
+  /*color: #ff0000;*/
+  /*background-color: #FFBABA;*/
+/*}*/
 
 .activationCompletedDiv {
   display: none;
@@ -457,6 +457,7 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
 }
 
 .auth-form-container p {
+    //position: relative;
     color: #525453;
 }
 
@@ -467,6 +468,11 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
 .auth-form-container p a {
     color: #eee;
     text-decoration: none;
+}
+
+.auth-form fieldset p {
+    position: relative;
+    //overflow: hidden;
 }
 
 .auth-form p input {
@@ -484,7 +490,7 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
 
 .centered {
     width: 50%;
-    overflow: auto;
+    overflow: visible;
     margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
@@ -497,7 +503,7 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
 
 }
 
-.auth-form-container form span {
+.auth-form-container form .prelogo {
     background-color: #363b41;
     border-radius: 3px 0px 0px 3px;
     color: #606468;
@@ -689,15 +695,68 @@ background-image: url('../images/patterns/diagmonds/diagmonds.png');
   background-color: #FFBABA;
 } */
 
-.invalid_input {
-  //background-color: ;
-  border: 2px solid #f08080 !important;
-  background-color: #FFBABA !important;
+.input-sm {
+    position: absolute;
+    font-family: FontAwesome;
+    right: 10px;
+    top: 14px;
+    font-size: 15px;
+    display: none;
 }
 
-.valid_input {
-  //background-color: #adff2f;
-  border-color: #adff2f !important;
-  background-color: #DFF2BF !important;
+.input-msg{
+    position: absolute;
+    z-index: 10;
+    height: 40px;
+    //width: 100px;
+    border-radius: 4px;
+    background-color: #d9534f;
+    text-align: right;
+    vertical-align: middle;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    right: -145px;
+    top: 4px;
+    display: none;
 }
+
+.input-msg:before {
+    content: "";
+    position: absolute;
+    right: 100%;
+    top: 8px;
+    width: 0;
+    height: 0;
+    border-top: 13px solid transparent;
+    border-right: 13px solid #d9534f;
+    border-bottom: 13px solid transparent;
+}
+
+.invalid-sm:before {
+    color: #d9534f;
+    content: "\f071";
+}
+
+.valid-sm:before {
+    color: #46a285;
+    content: "\f058";
+}
+
+/*.invalid_input {*/
+  /*//background-color: ;*/
+  /*//border: 2px solid #f08080 !important;*/
+  /*//background-color: #FFBABA !important;*/
+    /*background-color: #f5eaec;*/
+    /*border: 1px solid #e08691;*/
+
+/*}*/
+
+/*.valid_input {*/
+  /*//background-color: #adff2f;*/
+  /*border-color: #adff2f !important;*/
+  /*background-color: #DFF2BF !important;*/
+    /*box-shadow: 0 0 5px #5cd053;*/
+    /*border-color: #28921f;*/
+/*}*/
 

@@ -15,11 +15,39 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 		tabController: TabController,
 		datasourceController: DatasourceController,
 		viewSizeDetector: null,
+		getCfgType: function() {
+			return window.innerHeight > window.innerWidth ? cfgType = 'portrait' : cfgType = 'default';
+		},
+		getCfg: function() {
+			var text;
+			var cfgType = this.getCfgType();
+
+			$.ajax({
+				url: 'configs/' + cfgType + '/',
+				method: 'GET',
+				//url: '../static/mainscreen/tempcfg/empty.json',
+				//url: '../static/mainscreen/tempcfg/katrin_final.json',
+				//url: '../static/mainscreen/tempcfg/katrin_final_nodouble.json',
+				//url: '../static/mainscreen/tempcfg/tabs.json',
+				async: false,
+				dataType: 'text', //explicitly requesting the xml as text, rather than an xml document
+				success: function(data) {
+					var parsed_unicode = JSON.parse(data);
+					text = JSON.parse(parsed_unicode['content']);
+				}
+			});
+
+			return text;
+		},
 		initialize: function(options) {
 			var self = this; //for refering to this in jquery
-			var prsObj = options.aceText;
 
-			this.setOrientation(options);
+			this.eventAggregator.trigger('onuseratmainscreen');
+
+			var prsObj = this.getCfg();
+			var type = this.getCfgType();
+
+			this.setOrientation(type);
 
 			this.checkScreenField(prsObj);
 			this.checkMainField(prsObj);
@@ -33,8 +61,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			/* board insertion part */
 			this.deserialize(prsObj);
 		},
-		setOrientation: function (options) {
-			this.settings.isportrait = (options.type === "portrait");
+		setOrientation: function (type) {
+			this.settings.isportrait = (type === "portrait");
 		},
 		checkScreenField: function (prsObj) {
 			if (prsObj['screen']) {
@@ -62,7 +90,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			}
 		},
 		detectSizes: function(blockSize, xBlocks, yBlocks, bannerId, footerId, options) {
-			try {
+			//try {
 				this.viewSizeDetector = new sizeDetector(blockSize, xBlocks, yBlocks, bannerId, footerId, {
 					//there goes options
 				});
@@ -76,9 +104,9 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 					this.viewSizeDetector.detectSizesForFixedCanvas();
 				}
 
-			} catch (err) {
-				throw new Error('Error in size detection');
-			}
+			//} catch (err) {
+			//	throw new Error('Error in size detection');
+			//}
 		},
 		establishStyle: function(canvas, options) {
 			console.log();

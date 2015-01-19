@@ -7,18 +7,22 @@
 		<form id="login-form" class="auth-form" method="post">
 			<fieldset class="clearfix">
 				<p>
-					<span class="fa fa-user"></span>
-					<input id="login-form-username" type="text" value="Username" onBlur="if(this.value == '') this.value = 'Username'" onFocus="if(this.value == 'Username') this.value = ''" required></p>
+					<span class="prelogo fa fa-user"></span>
+					<span class="input-sm"></span>
+					<span class="input-msg"></span>
+					<input id="login-form-username" class="username" type="text" value="Username" onBlur="if(this.value == '') this.value = 'Username'" onFocus="if(this.value == 'Username') this.value = ''" required></p>
 				<p>
-					<span class="fa fa-lock"></span>
-					<input id="login-form-password" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required>
+					<span class="prelogo fa fa-lock"></span>
+					<span class="input-sm"></span>
+					<span class="input-msg"></span>
+					<input id="login-form-password" class="password" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required>
 				</p>
 				<p>
 					<input type="submit" value="Sign In">
 				</p>
 			</fieldset>
 		</form>
-		<p>Not a member? <a href="#">Sign up now</a><span class="fa fa-arrow-right"></span></p>
+		<p>Not a member? <a href="#register">Sign up now</a><span class="fa fa-arrow-right"></span></p>
 
 		<p class="social-buttons">
 			Or use

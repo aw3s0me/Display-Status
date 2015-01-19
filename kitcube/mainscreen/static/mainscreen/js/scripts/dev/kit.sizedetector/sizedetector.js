@@ -119,7 +119,7 @@ var sizeDetector = (function($) {
 	};
 
 	sizeDetector.prototype.detectBasicSizes = function() {
-		this.detectFooterSize();
+		//this.detectFooterSize();
 		this.detectBannerSize();
 		this.detectMaxGridSizes();
 		this.detectScale();
@@ -164,7 +164,7 @@ var sizeDetector = (function($) {
 	sizeDetector.prototype.detectMaxGridSizes = function() {
 		//var ratio =  
 
-		this.maxGridSizesPx.height = (this.windowSize.height - this.bannerSize.height - this.footerSize.height - 2 * this.boardMargin.height);
+		this.maxGridSizesPx.height = (this.windowSize.height - this.bannerSize.height /*- this.footerSize.height*/ - 2 * this.boardMargin.height);
 		this.windowSize.width = (this.maxGridSizesPx.height * this.gridSize.width) / this.gridSize.height;
 		console.log(this.windowSize.width);
 		this.maxGridSizesPx.width = (this.windowSize.width - 2 * this.boardMargin.width - this.panelRightWidth - this.panelLeftWidth);
@@ -212,7 +212,7 @@ var sizeDetector = (function($) {
 			return this.marginTop;
 		}
 
-		this.marginTop = this.windowSize.height - this.bannerSize.height - this.footerSize.height - this.maxGridSizesPx.height;
+		this.marginTop = this.windowSize.height - this.bannerSize.height /*- this.footerSize.height*/ - this.maxGridSizesPx.height;
 		this.marginTop = this.marginTop / 2;
 		return this.marginTop;
 	}
@@ -247,7 +247,7 @@ var sizeDetector = (function($) {
 
 	sizeDetector.prototype.setScreen = function(wrapper, content, kicubeCanv) {
 
-	}
+	};
 
 	return sizeDetector;
 
