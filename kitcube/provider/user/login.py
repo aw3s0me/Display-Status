@@ -22,7 +22,11 @@ import pdb
 def validate_user_by_group(data):
     errors = {}
     groupname = data['group']
-    group = Group.objects.get(name=groupname).user_set.all()
+    #pdb.set_trace()
+    try:
+        group = Group.objects.get(name=groupname).user_set.all()
+    except Group.DoesNotExist:
+        raise 'Group hasnt been specified correctly'
     if not User.objects.filter(username=data['username']).exists(): 
         errors['username'] = 'User doesnt exist'
         #errros['password'] = 'Wrong password'
@@ -34,7 +38,8 @@ def validate_user_by_group(data):
             raise 'Group hasnt been specified correctly'
             #errors['group'] = 'Group hasnt been specified correctly'
         if not user in group:
-            errors['group'] = 'User is not in this group'
+            errors['username'] = 'User is not in this group'
+            #errors['group'] = 'User is not in this group'
     if len(data['password']) < 5:
         errors['password'] = 'Password length should be more than 5'
     if len(data['username']) < 5:
@@ -68,7 +73,7 @@ class LoginView(APIView):
     userSerializer_class = UserSerializer
     model = Token
     def post(self, request):
-        #pdb.set_trace()
+        pdb.set_trace()
         data = json.loads(request.body)
         if 'group' in data:
             errors = validate_user_by_group(data)

@@ -38,7 +38,7 @@ def validate_user(data):
         errors['password'] = 'Password length should be more than 5'
     if len(data['username']) < 5:
         errors['username'] = 'Username length should be more than 5'
-    if data['password'] != data['confPassword']:
+    if data['password'] != data['match']:
         errors['match'] = 'Passwords don\'t match'
     if User.objects.filter(username=data['username']).exists(): 
         errors['username'] = 'User is already exists'

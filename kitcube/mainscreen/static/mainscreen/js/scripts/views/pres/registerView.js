@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html', 'models/userModel'], function($, _, Backbone, RegisterTemplate, UserModel) {
+define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html', 'text!templates/pres/register_completed.html', 'models/userModel'], function($, _, Backbone, RegisterTemplate, RegisterComplatedTemplate, UserModel) {
 
 	var registerView = Backbone.View.extend({
 		container: $('#board-container'),
@@ -11,8 +11,20 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 
 			$('#register-form').on('submit', function(event) {
 				event.preventDefault();
-				//var dataToSend = self.form.serialize();
-				var dataToSend = $(this).serializeObject();
+				var pswdVal = $(this).find('.password').val();
+				var usrVal = $(this).find('.username').val();
+				var matchVal = $(this).find('.match').val();
+				var emailVal = $(this).find('.email').val();
+
+				var credential = {
+					username: usrVal === 'Username'? "" : usrVal,
+					password: pswdVal === 'Password'? "": pswdVal,
+					match: matchVal === 'Password'? "": matchVal,
+					email: emailVal === 'Email'? "": emailVal
+				};
+
+				var dataToSend = credential;
+
 				dataToSend['group'] = $('meta[name="project"]').attr('content');
 				dataToSend = JSON.stringify(dataToSend);
 
@@ -110,75 +122,39 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.el = $('#register-container');
 			this.form = this.el.find('#register-form');
 			this.mailOAuthForm = this.el.find('#mailForm');
+			this.onSuccessRegistration();
 		},
 		onSuccessRegistration: function(data) {
-			var div = $('#registerValidationDiv');
-			//this.form.hide();
-			div.empty();
-			div.text('Activation link sent to your mail!');
-			div.removeClass('registerValidation');
-			div.addClass('activationCompletedDiv');
-			div.show();
+			this.el.empty();
+			this.el.append('<div class="reg-msg">' +
+			'<h1 class="reg-title">An email has been sent to </h1>' +
+			'<h3 class="reg-completed"></h3>' +
+			'</div>')
+
 			this.makeAllValid();
 		},
 		makeAllValid: function() {
-			this.form.find('.username').addClass('valid_input');
-			this.form.find('.email').addClass('valid_input');
-			this.form.find('.password').addClass('valid_input');
-			this.form.find('.conf-password').addClass('valid_input');
-			this.form.find('.username').addClass('invalid_input');
-			this.form.find('.email').addClass('invalid_input');
-			this.form.find('.password').addClass('invalid_input');
-			this.form.find('.conf-password').addClass('invalid_input');
+			this.form.find('.input-sm').addClass('valid-sm').show();
 		},
 		onError: function(errorInfo) {
-			var div = $('#registerValidationDiv');
-			div.show();
-			div.empty();
-			for (var errorName in errorInfo) {
-				var error = errorInfo[errorName];
-				var errorLi = $('<li></li>');
-				errorLi.text(error);
-				div.append(errorLi);
-			}
-			div.addClass('registerValidation');
-			div.removeClass('activationCompletedDiv');
-			if (errorInfo.username !== undefined) {
-				this.form.find('.username').addClass('invalid_input');
-				this.form.find('.username').removeClass('valid_input');
-			}
-			else {
-				this.form.find('.username').addClass('valid_input');
-				this.form.find('.username').removeClass('invalid_input');
-			}
-
-			if (errorInfo.email !== undefined) {
-				this.form.find('.email').addClass('invalid_input');
-			}
-			else {
-				this.form.find('.email').addClass('valid_input');
-			}
-
-			if (errorInfo.password !== undefined || errorInfo.match !== undefined) {
-				this.form.find('.password').addClass('invalid_input');
-				this.form.find('.confPassword').addClass('invalid_input');
-			}
-			else {
-				this.form.find('.password').addClass('valid_input');
-				this.form.find('.confPassword').addClass('valid_input');
+			for (var errorType in errorInfo) {
+				var errorMsg = errorInfo[errorType];
+				this.setError(errorMsg, errorType);
 			}
 		},
+		setError: function(errorMsg, errorType) {
+			var elem = this.form.find('#error-msg-' + errorType);
+			elem.text(errorMsg).css({'right': -elem.width() - 20}).show();
+			elem.siblings('.input-sm').addClass('invalid-sm').show();
+		},
+		cleanAllErrors: function () {
+			var msgEl = this.form.find('.input-msg').each(function (index) {
+				$(this).text('').hide();
+			});
+
+			var errorEl = this.form.find('.input-sm').removeClass('invalid-sm').removeClass('valid-sm').hide();
+		},
 		clear: function() {
-			//this.form.find('.username').removeClass('valid_input');
-			//this.form.find('.email').removeClass('valid_input');
-			//this.form.find('.password').removeClass('valid_input');
-			//this.form.find('.confPassword').removeClass('valid_input');
-			//this.form.find('.username').removeClass('invalid_input');
-			//this.form.find('.email').removeClass('invalid_input');
-			//this.form.find('.password').removeClass('invalid_input');
-			//this.form.find('.confPassword').removeClass('invalid_input');
-			//$('#registerValidationDiv').empty();
-			//$('#registerValidationDiv').hide();
 			this.el.remove();
 		}
 

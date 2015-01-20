@@ -10,12 +10,15 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 
 			this.form.on('submit', function(event) {
 				event.preventDefault();
+				self.cleanAllErrors();
+				var pswdVal = $(this).find('.password').val();
+				var usrVal = $(this).find('.username').val();
 				var credential = {
-					username: $(this).find('.password').val(),
-					password: $(this).find('.username').val()
+					username: usrVal === 'Username'? "" : usrVal,
+					password: pswdVal === 'Password'? "": pswdVal
 				};
 
-				var dataToSend = $(this).serializeObject();
+				var dataToSend = credential;
 				dataToSend['group'] = $('meta[name="project"]').attr('content');
 				dataToSend = JSON.stringify(dataToSend);
 
@@ -134,10 +137,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 				},
 				success: function(data) {
 					user.trigger('logout');
-					self.form.find('#login-form-username').removeClass('valid_input');
-					self.form.find('#login-form-username').removeClass('invalid_input');
-					self.form.find('#login-form-password').removeClass('invalid_input');
-					self.form.find('#login-form-password').removeClass('valid_input');
 				},
 				beforeSend: function(xhr, settings) {
 					xhr.setRequestHeader('Authorization', token);
@@ -145,8 +144,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			})
 		},
 		onSuccessLogin: function(loginInfo) {
-			$('#loginValidation').empty();
-			$('#loginValidation').hide();
+			this.cleanAllErrors();
+
 			user = window.activeSessionUser;
 			user.set({
 				username: loginInfo.name,
@@ -162,46 +161,25 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			window.location.href = "#board";
 		},
 		onError: function(errorInfo) {
-			var div = $('#loginValidation');
-			div.show();
-			div.empty();
-			for (var errorName in errorInfo) {
-				var error = errorInfo[errorName];
-				var errorLi = $('<li></li>');
-				errorLi.text(error);
-				div.append(errorLi);
+			for (var errorType in errorInfo) {
+				var errorMsg = errorInfo[errorType];
+				this.setError(errorMsg, errorType);
 			}
+		},
+		setError: function(errorMsg, errorType) {
+			var elem = this.form.find('#error-msg-' + errorType);
+			elem.text(errorMsg).css({'right': -elem.width() - 20}).show();
+			elem.siblings('.input-sm').addClass('invalid-sm').show();
+		},
+		cleanAllErrors: function () {
+			var msgEl = this.form.find('.input-msg').each(function (index) {
+				$(this).text('').hide();
+			});
 
-			if (errorInfo.username !== undefined || errorInfo.group !== undefined) {
-				this.form.find('#username').addClass('invalid_input');
-				this.form.find('#password').addClass('invalid_input');
-				return;
-			}
-			else {
-				this.form.find('#username').addClass('valid_input');
-			}
-
-			if (errorInfo.password !== undefined) {
-				this.form.find('#password').addClass('invalid_input');
-			}
-			else {
-				this.form.find('#password').addClass('valid_input');
-			}
-
-			$('#goEditorButton').remove();
-
+			var errorEl = this.form.find('.input-sm').removeClass('invalid-sm').hide();
 		},
 		clear: function() {
 			this.el.remove();
-			//this.form.find('#username').removeClass('valid_input');
-			//this.form.find('#password').removeClass('valid_input');
-			//this.form.find('#username').removeClass('invalid_input');
-			//this.form.find('#password').removeClass('invalid_input');
-			//this.form.find('#username').val('');
-			//this.form.find('#password').val('');
-			//$('#loginValidation').empty();
-			//$('#loginValidation').hide();
-
 		}
 
 

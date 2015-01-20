@@ -8,23 +8,26 @@
 			<fieldset class="clearfix">
 				<p>
 					<span class="prelogo fa fa-user"></span>
-					<span class="input_sm"></span>
+					<span class="input-sm"></span>
+					<span id="error-msg-username" class="input-msg"></span>
 					<input id="login-form-username" class="username" type="text" value="Username" onBlur="if(this.value == '') this.value = 'Username'" onFocus="if(this.value == 'Username') this.value = ''" required>
 				</p>
 				<p>
 					<span class="prelogo fa fa-lock"></span>
-					<span class="input_sm"></span>
-
+					<span class="input-sm"></span>
+					<span id="error-msg-password" class="input-msg"></span>
 					<input id="register-form-password" class="password" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required>
 				</p>
 				<p>
 					<span class="prelogo fa fa-repeat"></span>
-					<span class="input_sm"></span>
-					<input id="register-form-confirm-password" class="conf-password" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required>
+					<span class="input-sm"></span>
+					<span id="error-msg-match" class="input-msg"></span>
+					<input id="register-form-confirm-password" class="match" type="password"  value="Password" onBlur="if(this.value == '') this.value = 'Password'" onFocus="if(this.value == 'Password') this.value = ''" required>
 				</p>
 				<p>
 					<span class="prelogo fa fa-envelope"></span>
-					<span class="input_sm"></span>
+					<span class="input-sm"></span>
+					<span id="error-msg-email" class="input-msg"></span>
 					<input id="register-form-email" class="email" type="text" value="Email" onBlur="if(this.value == '') this.value = 'Email'" onFocus="if(this.value == 'Email') this.value = ''" required>
 				</p>
 				<p>
