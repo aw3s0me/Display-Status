@@ -42,7 +42,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 					success: function(data){
 						console.log(data);
 						if (data === "Please activate user via mail") {
-							self.onSuccessRegistration(data);
+							self.onSuccessRegistration(data, dataToSend);
 						}
 						else {
 							self.onError(data);
@@ -122,14 +122,14 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.el = $('#register-container');
 			this.form = this.el.find('#register-form');
 			this.mailOAuthForm = this.el.find('#mailForm');
-			this.onSuccessRegistration();
+			//this.onSuccessRegistration({}, {email: 'akorovin00@gmail.com'});
 		},
-		onSuccessRegistration: function(data) {
+		onSuccessRegistration: function(data, dataToSend) {
 			this.el.empty();
-			this.el.append('<div class="reg-msg">' +
-			'<h1 class="reg-title">An email has been sent to </h1>' +
-			'<h3 class="reg-completed"></h3>' +
-			'</div>')
+			var compiledTemplate = _.template(RegisterComplatedTemplate, {
+				email: dataToSend['email']
+			});
+			this.el.append(compiledTemplate);
 
 			this.makeAllValid();
 		},
