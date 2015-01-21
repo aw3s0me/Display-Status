@@ -42,7 +42,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 					success: function(data){
 						console.log(data);
 						if (data === "Please activate user via mail") {
-							self.onSuccessRegistration(data, dataToSend);
+							self.onSuccessRegistration(data, emailVal);
 						}
 						else {
 							self.onError(data);
@@ -55,6 +55,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.on('hide', function(event) {
 				self.clear();
 			});
+
+			this.eventAggregator.trigger('onuseratregscreen');
 /*
 			$('#registerFacebook').click(function(event) {
 				OAuth.popup('facebook', function(err, success) {
@@ -124,17 +126,13 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 			this.mailOAuthForm = this.el.find('#mailForm');
 			//this.onSuccessRegistration({}, {email: 'akorovin00@gmail.com'});
 		},
-		onSuccessRegistration: function(data, dataToSend) {
+		onSuccessRegistration: function(data, email) {
 			this.el.empty();
 			var compiledTemplate = _.template(RegisterComplatedTemplate, {
-				email: dataToSend['email']
+				email: email
 			});
 			this.el.append(compiledTemplate);
 
-			this.makeAllValid();
-		},
-		makeAllValid: function() {
-			this.form.find('.input-sm').addClass('valid-sm').show();
 		},
 		onError: function(errorInfo) {
 			for (var errorType in errorInfo) {
@@ -157,25 +155,6 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/register.html',
 		clear: function() {
 			this.el.remove();
 		}
-
-/*
-if not Group.objects.filter(name=groupname).exists(): 
-        raise 'Group hasnt been specified correctly'
-    if len(data['password']) < 5:
-        errors['password'] = 'Password length should be more than 5'
-    if len(data['username']) < 5:
-        errors['username'] = 'Username length should be more than 5'
-    if data['password'] != data['confPassword']:
-        errors['match'] = 'Passwords don\'t match'
-    if User.objects.filter(username=data['username']).exists(): 
-        errors['username'] = 'User is already exists'
-    if not EMAIL_REGEX.match(data['email']):
-        errors['email'] = 'Email should be similar to pattern <foo@example.com>'
-    if User.objects.filter(email=data['email']).exists():
-        errors['email'] = 'Email exists'
-
-*/
-
 	})
 
 	return registerView;

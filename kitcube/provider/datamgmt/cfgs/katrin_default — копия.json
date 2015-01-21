@@ -1,4 +1,7 @@
 {
+    "main": {
+        "issimulation": true
+    },
     "screen": {
         "isfluid": false,
         "isscrollable": false,
@@ -515,7 +518,7 @@
                     "unit": "uA",
                     "name": "Bias",
                     "precision": 1,
-                    "factor": 1000000
+                    "factor": 1
                 }
             ],
             "type": "sensorgroup",

@@ -175,7 +175,7 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 								this.establishStyle(this.el);
 								this.grid = new kitGrid(this.el);
 								//this.el.removeClass('canvas').addClass('tab');
-								$('#toggleGridButton').click(function(e) {
+								$('#on-grid').click(function(e) {
 									self.grid.toggleGrid();
 								});
 							}
@@ -192,6 +192,8 @@ define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/boa
 			else {
 				this.start();
 			}
+
+			$('.loader').hide();
 
 		},
 		clear: function() {

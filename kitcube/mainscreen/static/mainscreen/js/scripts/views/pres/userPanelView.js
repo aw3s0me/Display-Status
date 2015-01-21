@@ -4,9 +4,18 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         timeBlock: $('#time-container'),
         menu: $('#auth-menu'),
         latestInfo: "",
+        userNameCont: undefined,
+        btns: {
+            loginBtn: undefined,
+            logoutBtn: undefined,
+            editorBtn: undefined,
+            boardBtn: undefined,
+            gridBtn: undefined,
+            regBtn: undefined
+        },
+        isInit: false,
         initialize: function() {
             var self = this;
-
 
             this.eventAggregator.on('loadingfinished', function(data) {
                 self.timeBlock.find('.timelapse-loading').hide();
@@ -28,26 +37,31 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             this.eventAggregator.on('userloggedin', this.onUserLoggedIn, this);
             this.eventAggregator.on('onuseratloginscreen', this.onUserAtLoginScreen, this);
             this.eventAggregator.on('onuseratmainscreen', this.onUserAtMainScreen, this);
+            this.eventAggregator.on('onuseratregscreen', this.onUserAtRegScreen, this);
+            this.eventAggregator.on('logout', this.onUserLogout());
             this.render();
+            this.initializeBtns();
+            this.ifLoggedIn();
+            this.isInit = true;
+        },
+        initializeBtns: function () {
+            this.userNameCont = $('#auth-username');
+            this.btns.editorBtn = this.el.find('.editor-btn');
+            this.btns.boardBtn = this.el.find('.board-btn');
+            this.btns.loginBtn = this.el.find('.login-btn');
+            this.btns.logoutBtn = this.el.find('.logout-btn');
+            this.btns.gridBtn = this.el.find('.grid-btn');
+            this.btns.regBtn = this.el.find('.reg-btn');
         },
         render: function() {
             this.el = $('#auth-menu');
-            this.ifLoggedIn();
-            $('#toggleGridButton').show();
-            
-            $('#loginButton').tooltip({});;
-            $('#logoutButton').tooltip({});;
-            $('#goEditorButton').tooltip({});;
-            $('#goMainscreenButton').tooltip({});;
-            //$('#toggleGridButton').tooltip({});;
-            
         },
         ifLoggedIn: function() {
             if (window.activeSessionUser.get('logged_in'))  {
                this.onUserLoggedIn();
             }
             else {
-                $('#loginButton').show();
+                this.btns.loginBtn.show();
             }
         },
         onUserLoggedIn: function() {
@@ -55,39 +69,46 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                 return;
             }
             var userName = window.activeSessionUser.get('username');
-            $('#lblUserInfo').html("Welcome, <span id='userName'>" + userName + "</span> !");
+            this.userNameCont.text(userName);
 
-            $('#loginButton').hide();
-            $('#logoutButton').show();
-            $('#goEditorButton').show();
-            $('#goMainscreenButton').hide();
+            this.btns.loginBtn.hide();
+            this.btns.logoutBtn.show();
+            this.btns.editorBtn.show();
+            this.btns.boardBtn.hide();
+            this.btns.regBtn.hide();
             //$('#toggleGridButton').show();
         },
         onUserAtLoginScreen: function() {
-            $('#loginButton').hide();
-            $('#logoutButton').hide();
-            $('#goMainscreenButton').show();
-            //$('#toggleGridButton').hide();
+            this.btns.loginBtn.hide();
+            this.btns.logoutBtn.hide();
+            this.btns.regBtn.show();
+            this.btns.boardBtn.show();
+            this.btns.gridBtn.hide();
+        },
+        onUserAtRegScreen: function () {
+            this.btns.regBtn.hide();
+            this.btns.loginBtn.show();
+            this.btns.logoutBtn.hide();
+            this.btns.boardBtn.show();
+            this.btns.gridBtn.hide();
         },
         onUserAtMainScreen: function() {
             this.ifLoggedIn();
-            $('#goMainscreenButton').hide();
-            $('#toggleGridButton').show();
+            this.btns.boardBtn.hide();
+            this.btns.gridBtn.show();
         },
         onUserLogout: function() {
-            $('#loginButton').show();
-            $('#logoutButton').hide();
-            $('#lblUserInfo').text("No user authorized");
+            if (!this.isInit) return;
 
-            $('#goEditorButton').hide();
-            $('#goMainscreenButton').hide();
+            this.userNameCont.text("Not logged");
+            this.btns.loginBtn.show();
+            this.btns.regBtn.show();
+            this.btns.logoutBtn.hide();
+            this.btns.editorBtn.hide();
+            this.btns.boardBtn.hide();
         },
         onPortrait: function() {
-            $('#toggleGridButton').hide();
-            $('#goMainscreenButton').hide();
-            $('#loginButton').hide();
-            $('#logoutButton').hide();
-            $('#goEditorButton').hide();
+            //hide all btns
         }
 
     });

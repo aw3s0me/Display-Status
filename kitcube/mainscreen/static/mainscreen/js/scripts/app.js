@@ -21,9 +21,9 @@ define([
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
 		if (token && token.length > 0) {
-			var username = $('#userName').text();
+			var username = $('#auth-username').text().trim();
 			var group = $('meta[name="project"]').attr('content');
-			if (!username.length || !group.length) {
+			if (!username.length || username === 'Not logged' || !group.length) {
 				return;
 			}
 			window.activeSessionUser.set({
@@ -33,20 +33,24 @@ define([
 				group: group
 			})
 		}
-	}
+	};
 
 	var initializeModernizr = function() {
 		$('html').removeClass('canvas')
-	}
+	};
 
 	var initializeHeight = function () {
 		var body = document.body,
 			html = document.documentElement;
 
 		var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
+		initLoader(height);
+		//$('body').css('min-height', height);
+	};
 
-		$('body').css('min-height', height);
-	}
+	var initLoader = function (scrHeight) {
+		//$('.loader').css({'top': scrHeight / 2 - 50}).show();
+	};
 
 	var checkBrowserCompatibility = function() {
 		BrowserDetect.init();

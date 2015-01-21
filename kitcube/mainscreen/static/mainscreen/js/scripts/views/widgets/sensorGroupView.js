@@ -172,10 +172,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
 
             var newSensorView = new EmptySensorView({
                 model: new Sensor({
-                    size: size,
+                    size: size
                 }),
-                grid: this.grid,
-                empty: true
+                grid: this.grid
             });
 
             var cont = this.setContainer(newSensorView);

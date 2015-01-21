@@ -27,13 +27,13 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.render();
 
 			this.model.on('resize', this.onresize, this);
-			this.model.on('change:valcolor', this.onchangevalcolor, this);
+			this.model.on('change:status', this.onchangestatus, this);
 			this.model.on('change:value', this.onchangevalue, this);
 			this.model.on('removedFromChart', this.onremovedfromchart, this);
 			this.model.on('firstLoading', this.onfinishfirstloading, this);
 
 			this.model.updateModel();
-
+			this.setStatus(this.container.find('.sensor-led a'), this.model);
 			//this.container.mousedown(function(event) {
 			this.container.dblclick(function(event) {
 				//if (event.ctrlKey || event.shiftKey) {
@@ -43,7 +43,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 				        var sel = window.getSelection();
 				        sel.removeAllRanges();
 				    }
-					
+
 					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
 						self.container.addClass('activeSensor');
 						return;
@@ -79,7 +79,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//console.log(this.model);
 			var sizeCoeff = this.model.get('size')[0] / 2;
 			var scale = sizeCoeff * this.grid.getScale();
-			
+
 
 			var snglSensorTemplate = $(_.template(SensorTemplate, {
 				sensor_id: newSensor.get('id'),
@@ -92,31 +92,9 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));
 
 			//this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
-			//.css('left', 5 * scale + 'px')
-			//.css('line-height', 15 * scale + 'px')
-
-			var main_val = this.container.find('#val_' + newSensor.get('id'));
-			//.css('height', 40 * scale + 'px'); //nested div because of big text
-			var main_val_child = main_val.children('#b' + newSensor.get('id'));
-			//.css('height', main_val.css('height') + '!important');
-
-			/*main_val.css('bottom', 2 * scale + 'px')
-				.css('padding-right', 7 * scale + 'px')
-				.css('padding-left', 7 * scale + 'px')
-				.css('font-size', 23 * scale + 'px'); */
-				/*.bigtext({
-					maxfontsize: 26 * scale,
-					minfontsize: 16 * scale
-				});*/
-			//main_val_child
-				//.css('width', 15 * scale + 'px')
-				//.css('height', main_val.height());
-
 
 			//this.container.find('.sensorUnit')
-				//.css('font-size', 12 * scale + 'px')
-				//.css('right', 5 * scale + 'px')
-				//.css('top', 25 * scale + 'px');
+				//.css('font-size', 12 * scale + 'px');
 
 			if (newSensor.get('canberemoved')) {
 				this.container.find('.close').css('font-size', 12 * scale + 'px')
@@ -130,9 +108,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			}
 
 			this.setIfOkAfterLoading(newSensor.get('value'));
-
-			//this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
-
 		},
 		setIfOkAfterLoading: function (value) {
 			if (value !== undefined) {
@@ -163,11 +138,16 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var min = (height < width) ? height : width;
 			var ratio = min / max;
 		},
-		onchangevalcolor: function(model) {
+		onchangestatus: function(model) {
 			var sensorDiv = this.container;
-			var sensorModel = model;
-			sensorDiv.find('#val_' + this.model.get('id')).css('color', this.model.get('valcolor'));
+			var led = sensorDiv.find('.sensor-led a');
+			this.setStatus(led, model);
+			//sensorDiv.find('#val_' + this.model.get('id')).css('color', this.model.get('valcolor'));
 			//sensorDiv.css('background-color', this.model.get('valcolor'));
+		},
+		setStatus: function (led, model) {
+			led.removeClass();
+			led.addClass('sensor-led-' + model.get('status'));
 		},
 		onchangevalue: function(model) {
 			var sensorDiv = this.container;

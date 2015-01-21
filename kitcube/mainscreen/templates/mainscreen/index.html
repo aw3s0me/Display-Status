@@ -22,19 +22,26 @@
  
 <body>
   {{ banner }}
+  <div class="loader">
+    <div class="loader-image"></div>
+  </div>
   <div id="wrapper">
 
-      {{ userblock }}
-      <div id="board-container"></div>
+
+      <div id="board-container">
+
+      </div>
     <!--
       <div id="footer" class="shadow">
         <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p> -->
   </div>
-  </div>
+  <!-- <footer>
+
+  </footer> -->
   
   <!-- require -->
   <script data-main="../static/mainscreen/js/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}></script> 
-  <!-- <script data-main="../static/mainscreen/js/dist/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}></script>-->
+  <!-- <script data-main="../static/mainscreen/js/dist/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}></script> -->
 </body>
 </html>
 

@@ -73,7 +73,7 @@
 .sensor-info {
     position: relative;
     height: 62%;
-    width: 100%;
+    width: 120%;
     font-family: Helvetica, Arial, sans-serif;
     //background-color: #101214;
     background-color: #2a2a2a;
@@ -91,8 +91,8 @@
 
 .sensor-unit {
     color: #9A9A9A;
-    font-size: 1.8vh;
-    text-transform: capitalize;
+    font-size: 1.4vh;
+    //text-transform: capitalize;
 }
 
 .sensor-title {
@@ -105,7 +105,6 @@
     padding: 5% 5%;
     color: #9A9A9A;
     background-color: #272727;
-    
 }
 
 .sensor-loading {
@@ -121,15 +120,44 @@
     vertical-align: middle;
 }
 
+.sensor-name {
+    float: left;
+}
+
 .sensor-led {
-    width: 100%;
+    position: absolute;
+    top: 5%;
+    right: 3%;
+    padding: 0 !important;
+    text-decoration: none;
+}
+
+.sensor-led a {
+    background-color: #272727;
+    border-radius: 50%;
+    display: block;
+    //background-color: white;
+    width: 5px;
+    height: 5px;
+}
+
+.sensor-led-ok {
+    background-color: #86b423 !important;
+}
+
+.sensor-led-warning {
+    background-color: #e79134 !important;
+}
+
+.sensor-led-error {
+    background-color: #d03939 !important;
 }
 
 .sensor-val {
     width: 100%;
     height: 34%;
     color: #e0e0e0;
-    font-size: 2.3vh;
+    font-size: 2.1vh;
 }
 
 .chartCircle {

@@ -75,7 +75,7 @@ class SendMailView(APIView):
     permission_classes = ()
     renderer_classes = (renderers.JSONRenderer,)
     def post(self, request, format=None):  
-        pdb.set_trace()
+        #pdb.set_trace()
         data = json.loads(request.body)
         errors = validate_user(data)
         if not is_empty(errors):
