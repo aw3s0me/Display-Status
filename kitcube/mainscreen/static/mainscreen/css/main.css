@@ -1,8 +1,8 @@
 @import url("fonts.css");
 @import url("bootstrap.min.css");
 @import url("/static/mainscreen/js/scripts/vendor/jqgrid/css/ui.jqgrid.css");
-@import url("/static/mainscreen/js/scripts/vendor/jquery-ui/themes/smoothness/jquery-ui.css");
-@import url("/static/mainscreen/js/scripts/vendor/jquery-ui/themes/smoothness/jquery.ui.theme.css");
+@import url("/static/mainscreen/js/scripts/vendor/jquery-ui/themes/dark-hive/jquery-ui.css");
+@import url("/static/mainscreen/js/scripts/vendor/jquery-ui/themes/dark-hive/jquery.ui.theme.css");
 @import url("font-awesome.min.css");
 @import url("site.css");
 @import url("widgets.css");
