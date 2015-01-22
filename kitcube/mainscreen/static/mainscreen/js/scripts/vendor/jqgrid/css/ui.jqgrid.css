@@ -66,7 +66,13 @@ tr.ui-search-toolbar select {margin: 1px 0 0 0}
 .ui-jqgrid .ui-pg-button span { display: block; margin: 1px; float:left;}
 .ui-jqgrid .ui-pg-button:hover { padding: 0; }
 .ui-jqgrid .ui-state-disabled:hover {padding:1px;}
-.ui-jqgrid .ui-pg-input { height:13px;font-size:.8em; margin: 0;}
+.ui-jqgrid .ui-pg-input {
+    height:13px;font-size:.8em; margin: 0;
+    border-radius: 4px;
+    color: #505358;
+    border: 1px solid #d0d0d0;
+    background-color: #fcfcfc;
+}
 .ui-jqgrid .ui-pg-selbox {font-size:.8em; line-height:18px; display:block; height:18px; margin: 0;}
 .ui-jqgrid .ui-separator {height: 18px; border-left: 1px solid #ccc ; border-right: 1px solid #ccc ; margin: 1px; float: right;}
 .ui-jqgrid .ui-paging-info {font-weight: normal;height:19px; margin-top:3px;margin-right:4px;}
@@ -174,7 +180,16 @@ a.g-menu-item, a.soptclass, a.clearsearchclass { cursor: pointer; }
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    border-radius: 4px;
+    color: #505358;
+    border: 1px solid #d0d0d0;
+    background-color: #fcfcfc;
 } 
+
+.ui-search-input {
+    //background-color: #222;
+}
+
 .ui-jqgrid .ui-jqgrid-view input,
 .ui-jqgrid .ui-jqgrid-view select,
 .ui-jqgrid .ui-jqgrid-view textarea,
