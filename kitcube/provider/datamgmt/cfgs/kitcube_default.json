@@ -32,6 +32,8 @@
     "elements": {
         "chart1": {
             "link": [
+                "sensid1",
+                "sensid4"
             ],
             "size": [
                 36,

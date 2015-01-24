@@ -119,23 +119,23 @@ var kitGrid = (function($) {
 
 		divElem.addClass('tile');
 		if (options) {
-			if (options.border === 0) {
-				divElem.css('border', 0);
-				divElem.css('width', dx * grid.data('scaledUnitSize') + 'px');
-			}
-			if (options.border > 0) {
-				divElem.css('border', 0);
-				//divElem.css('border', options.border);
-				divElem.css('width', dx * grid.data('scaledUnitSize') + options.border - 1 + 'px');
-			}
+			//if (options.border === 0) {
+			//	divElem.css('border', 0);
+			//	divElem.css('width', dx * grid.data('scaledUnitSize') + 'px');
+			//}
+			//if (options.border > 0) {
+			//	divElem.css('border', 0);
+			//	//divElem.css('border', options.border);
+			//	divElem.css('width', dx * grid.data('scaledUnitSize') + options.border - 1 + 'px');
+			//}
 
 			if (options.absolute) {
 				divElem.css('left', px * scale + 'px');
 				divElem.css('top', py * scale + 'px');
 			}
-			if (options.transparent) {
-				divElem.css('background-color', 'rgba(204,204,204,0)')
-			}
+			//if (options.transparent) {
+			//	divElem.css('background-color', 'rgba(204,204,204,0)')
+			//}
 		}
 
 		divElem.append(content);

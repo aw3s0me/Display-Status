@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridList.html'], function($, _, Backbone, TableTemplate) {
+define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridList.html', 'views/widgets/baseWidgetView'], function($, _, Backbone, TableTemplate, BaseWidgetView) {
     var Alarm = Backbone.Model.extend({
         defaults: function() {
             return {
@@ -44,10 +44,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridL
         }
     });
 
-    var AlarmListView = Backbone.View.extend({
-        container: undefined,
-        grid: undefined,
-        model: undefined,
+    var AlarmListView = BaseWidgetView.extend({
         board: undefined,
         updateInterval: undefined,
         lookuptable: {},
@@ -55,13 +52,10 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridL
         initialize: function(attr) {
             var self = this;
             var data = undefined;
-            if (attr.grid) {
-                this.grid = attr.grid;
-            }
-            if (attr.board) {
-                this.board = attr.board;
-            }
-            
+            this.widgetController = attr.wc;
+			this.grid = this.widgetController.getGrid(attr);
+            this.board = this.widgetController.board;
+
             $.getJSON('/static/mainscreen/data/alarmkitcubetest.json', function(data) { //should be .cgi
                 self.model = new AlarmList({
                     id: attr['id'],
@@ -73,9 +67,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridL
                 self.model.formDataToTable(data);
 
                 self.render();
-            })
 
-            
+                self.widgetController.addViewToLookup(attr['type'], self);
+            });
         },
         setUpdateInterval: function() {
         },
@@ -174,17 +168,16 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridL
         },
         render: function() {
             var self = this;
-            var model = this.model;
-            var colNames = model.get('colnames');
+            var colNames = this.model.get('colnames');
             var scale = this.grid.getScale();
             var sizeCoeff = this.board.settings['sizecoeff'] / 2;
             var coeffScale = scale * sizeCoeff;
             
             this.container = $(_.template(TableTemplate, {
-                canberemoved: model.get('canberemoved'),
-                id: model.get('id'),
-                table_id: 'table_' + model.get('id'),
-                pager_id: 'pager_' + model.get('id')
+                canberemoved: this.model.get('canberemoved'),
+                id: this.model.get('id'),
+                table_id: 'table_' + this.model.get('id'),
+                pager_id: 'pager_' + this.model.get('id')
             }));
 
             /*SETTING DATA COLS/ROWS */
@@ -192,7 +185,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridL
 
             this.grid.addUnit(this.container, {
                 border: 0,
-                transparent: true,
+                transparent: true
                 //draggable: model.get('isdraggable'),
                 //resizable: model.get('isresizable')
             }, this.model);
@@ -216,7 +209,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridL
                 hidegrid: false,
                 colModel: colModel,
                 scrollOffset: 0,
-                pager: '#' + 'pager_' + model.get('id'),
+                pager: '#' + 'pager_' + this.model.get('id'),
                 //rowNum: cols,
                 caption: this.model.get('name'),
                 afterShowSearch: function() {
@@ -237,7 +230,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/widgets/alarmjQGridL
 
             //this.formLookupTable();
 
-            this.setCss(model);
+            this.setCss(this.model);
 
             //this.setUpdateInterval();
         },

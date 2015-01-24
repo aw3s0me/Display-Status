@@ -1,4 +1,4 @@
-define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/chartModel', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'models/sensorTableModel', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView', 'controllers/tabController', 'controllers/datasourceController'], function($, PriorityQueue, Sensor, Alarm, MyAlarmCollection, Chart, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorTableModel, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView, TabController, DatasourceController) {
+define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/alarmModel', 'collections/alarmCollection', 'models/sensorGroupModel', 'models/alarmListModel', 'views/widgets/singleSensorView', 'views/widgets/doubleSensorView', 'views/widgets/emptySensorView', 'views/widgets/chartView', 'views/widgets/alarmListView', 'views/widgets/sensorGroupView', 'collections/sensorCollection', 'views/widgets/sensorJqGridTableView', 'views/widgets/sensorCustomTableView', 'views/widgets/trendSensorView', 'models/trendSensorModel', 'views/pres/tabView', 'views/widgets/alarmListViewKitcube', 'views/widgets/webCamView', 'controllers/tabController', 'controllers/datasourceController'], function($, PriorityQueue, Sensor, Alarm, MyAlarmCollection, SensorGroupModel, AlarmListModel, SingleSensorView, DoubleSensorView, EmptySensorView, ChartView, AlarmListView, SensorGroupView, SensorCollection, SensorJqGridTableView, SensorCustomTableView, TrendSensorView, TrendSensorModel, TabView, KitcubeAlarm, WebCamView, TabController, DatasourceController) {
 
     var instance = null;
     var priorities = { //[type -> priority]
@@ -9,7 +9,10 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
         'alarms_kitcube': 2,
         'webcam': 2,
         'chart': 1
-    }
+    };
+
+
+
 
     function widgetFactory() {
         if (instance !== null) {
@@ -58,12 +61,13 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
 
         },
         addWidget: function(attr) {
+            attr.wc = this.widgetController;
             switch (attr["type"]) {
                 case "sensor":
-
+                    //222
                     break;
                 case "sensortable":
-
+                    void(new SensorJqGridTableView(attr));
                     break;
                 case "sensorgroup":
                     this.addSensorGroup(attr);
@@ -71,13 +75,13 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 case "alarmlist":
                     break;
                 case "alarms_kitcube":
-                    this.addKitcubeAlarmList(attr);
+                    void(new KitcubeAlarm(attr));
                     break;
                 case "chart":
-                    this.addChart(attr);
+                    void(new ChartView(attr));
                     break;
                 case "webcam":
-                    this.addWebCam(attr);
+                    void(new WebCamView(attr));
                     break;
                 default:
                     break;
@@ -217,49 +221,6 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 WidgetController.removeViewByType(newSensorGroupModel.get('type'), newSensorGroupModel.get('id'));
             }, this);
         },
-        addChart: function(attr) {
-            //which tab will be there
-            var grid = this.widgetController.getGrid(attr);
-
-            var newChart = new Chart({
-                id: attr._id,
-                caption: attr["caption"],
-                charttype: attr["charttype"],
-                link: attr["link"],
-                legend: attr["legend"],
-                linewidth: attr["width"],
-                size: attr["size"],
-                coords: attr["coords"],
-                puredata: {},
-                range: attr["startrange"],
-                scale: grid.getScale(),
-                cfgObj: attr,
-                axislabels: attr['axislabels'],
-                resolution: attr['resolution']
-            });
-
-            var newChartView = new ChartView({
-                model: newChart,
-                grid: grid,
-                allSensors: this.widgetController.sensors,
-                board: this.widgetController.board
-            });
-
-            newChart.on('removing', function() {
-                this.widgetController.removeViewByType(newChart.get('type'), newChart.get('id'));
-            }, this);
-
-            //this.elements.charts[attr._id] = newChart;
-            //this.views.charts[attr._id] = newChartView;
-            this.widgetController.addViewToLookup(newChart.get('type'), newChartView);
-        },
-        addWebCam: function(attr) {
-            attr.id = attr._id;
-            attr.board = this.widgetController.board;
-            attr.grid = this.widgetController.getGrid(attr);
-            var webCam = new WebCamView(attr);
-            this.widgetController.addViewToLookup(attr['type'], webCam);
-        },
         addAlarmList: function(attr) {
             var alarmList = []; //collection of alarms
             var newAlarmCollection = undefined;
@@ -316,15 +277,8 @@ define(['jquery', 'dev/helpers/priorityqueue', 'models/sensorModel', 'models/ala
                 board: this.widgetController.board
             });
             this.widgetController.addViewToLookup(newAlarmListModel.get('type'), newAlarmListView);
-        },
-        addKitcubeAlarmList: function(attr) {
-            attr.id = attr._id;
-            attr.board = this.widgetController.board;
-            attr.grid = this.widgetController.getGrid(attr);
-            var alarm = new KitcubeAlarm(attr);
-            this.widgetController.addViewToLookup(attr['type'], alarm);
         }
-    }
+    };
 
     widgetFactory.getInstance = function() {
         if (instance === null) {

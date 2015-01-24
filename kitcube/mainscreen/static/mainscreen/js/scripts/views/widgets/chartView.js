@@ -1,38 +1,37 @@
-define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates/widgets/chart.html'], function($, _, Backbone, ChartModel, ChartTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates/widgets/chart.html', 'views/widgets/baseWidgetView'], function($, _, Backbone, ChartModel, ChartTemplate, BaseWidgetView) {
 
 	var _seriesArr = [];
 	var _allSensors = undefined;
 	var _isLegendShown = false;
 
-	var ChartView = Backbone.View.extend({
-		container: undefined,
-		grid: undefined,
+	var ChartView = BaseWidgetView.extend({
 		chart: undefined,
-		model: undefined,
 		board: undefined,
 		lookDiv: undefined,
 		extremeInterval: undefined,
 		deffereds: [],
-		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
+		initialize: function(attr) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
-			if (options.grid) {
-				this.grid = options.grid;
-			}
-			if (options.model) {
-				this.model = options.model;
-			}
-			if (options.allSensors) {
-				_allSensors = options.allSensors;
-			}
-			if (options.board) {
-				this.board = options.board;
-				this.lookDiv = this.board.el;
-			}
+
+			this.widgetController = attr.wc;
+			this.grid = this.widgetController.getGrid(attr);
+
+			this.model = new ChartModel(attr);
+
+			_allSensors = this.widgetController.sensors;
+
+			this.board = this.widgetController.board;
+			this.lookDiv = this.board.el;
 
 			this.model.on('resize', this.onresize, this);
+			this.model.on('removing', function() {
+                this.widgetController.removeViewByType(newChart.get('type'), this.model.get('id'));
+            }, this);
+
 			this.render();
 
+			this.widgetController.addViewToLookup(this.model.get('type'), this);
 		},
 		setExtremesInterval: function() {
 			this.removeExtremesInterval();
@@ -216,7 +215,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var unitWidth = this.grid.getUnitSizes().width;
 			var height = dy * unitWidth * scale;
 			var width = dx * unitHeight * scale;
-			var sizeCoeff = this.board.widgetController.sizecoeff / 2;
+			var sizeCoeff = this.widgetController.sizecoeff / 2;
 			var coeffScale = scale * sizeCoeff;
 
 			this.container = $('<div id= ' + this.model.get('id') + '  ></div>')
@@ -299,7 +298,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			controlPanel.css('right', 35 * scale + 'px');
 			//.css('top', 10 * scale + 'px');
 
-			controlPanel.css('font-size', coeffScale * 12 + 'px');
+			//controlPanel.css('font-size', coeffScale * 12 + 'px');
 
 			controlPanel.find('.goAdeiBtn')
 				.click(function(event) {
@@ -330,7 +329,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 					});
 			}
 
-			controlPanel.find('.chartBtn').css('margin-top', coeffScale * -1 + 'px');
+			controlPanel.find('.chart-btn').css('margin-top', coeffScale * -1 + 'px');
 
 			controlPanel.find('.resetChartBtn')
 				.click(function(event) {
@@ -342,7 +341,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			//selectElem.find('.rangeDropdown').change(function() {
 			controlPanel.find('.rangeDropdown')
-				.css('font-size', coeffScale * 16 + 'px')
+				//.css('font-size', coeffScale * 16 + 'px')
 				.css('margin-top', coeffScale * 10 + 'px')
 				.change(function() {
 					var value = $(this).val();

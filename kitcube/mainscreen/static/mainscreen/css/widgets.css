@@ -11,6 +11,13 @@
     /*background-color: rgba(51, 143, 255, 0.6); */
 }
 
+#tabs {
+    background-image: url('../images/patterns/footer_lodyas/footer_lodyas.png');
+    position: relative;
+    background-repeat:repeat;
+    background-position: top left;
+}
+
 .widget {
     position: absolute;
     z-index: 3;
@@ -188,9 +195,10 @@
   //outline: 2px solid white;
 }
 
-.chartBtn {
+.chart-btn {
     display: inline-block;
     //width: 200px;
+    font-size: 1.4vh;
     padding: 5px;
     color: #fff;
     background-color: transparent;
@@ -202,8 +210,8 @@
     transition: background-color 0.2s ease-out, color 0.2s ease-out;
 }
 
-.chartBtn:hover,
-.chartBtn:active {
+.chart-btn:hover,
+.chart-btn:active {
     background-color: rgb(69, 114, 167);
     color: #000;
     -webkit-transition: background-color 0.3s ease-in, color 0.3s ease-in;
@@ -211,10 +219,40 @@
     color 0.3s ease-in;
 }
 
+.chart-widget {
+    border: 1px solid #4572A7 !important;
+    background-color: #2D2D2E !important;
+}
 
+.chart-id-info {
+    display: inline-block;
+    border: 1px solid #4572A7;
+    padding: 1%;
+    margin: 1%;
+    font-family: Technisans;
+    color: #fff;
+    font-size: 1.8vh;
+    float: left;
+}
 
-.chartControlPanel {
-    position: absolute;
+.chart-control-panel {
+    float: right;
+    margin-top: 2%;
+}
+
+.chart-control-panel .close {
+    color: white;
+    padding: 4px;
+    //opacity: .7;
+}
+
+.chart-sensor-list {
+    color: #fff;
+}
+
+.chart-sensor-list ul {
+    font-family: HelveticaHeavy;
+    list-style: none;
 }
 
 .datalabels {
@@ -265,15 +303,9 @@
     background-color: rgb(69, 114, 167);
 }
 
-.cntr {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-} 
 
-.groupNameDiv {
-    position: absolute;
+.group-name {
+    //position: absolute;
     font-weight: bold;
     width: 100%;
     color: white;
@@ -281,6 +313,25 @@
     font-family: TechniSans;
 }
 
+.group-name .close {
+    color: gray;
+}
+
+.sensor-title .close {
+    font-size: 1.4vh;
+    position: absolute;
+    top: 5%;
+    right: 3%;
+    padding: 0 !important;
+    text-decoration: none;
+}
+
 .groupName {
     font-weight: bold;
+}
+
+.chart-cntrl-container {
+    position: absolute;
+    top: 0;
+    right: 5px;
 }

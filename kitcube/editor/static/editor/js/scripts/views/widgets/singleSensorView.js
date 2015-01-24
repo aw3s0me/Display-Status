@@ -51,55 +51,87 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			//console.log(this.model);
 			var sizeCoeff = this.model.get('size')[0] / 2;
 			var scale = sizeCoeff * this.grid.getScale();
-			var self = this;
+
 
 			var snglSensorTemplate = $(_.template(SensorTemplate, {
 				sensor_id: newSensor.get('id'),
-				val: 'VAL',
+				//val: (newSensor.get('value') === undefined) ? '' : (newSensor.get('value')).toFixed(1),
 				name: newSensor.get('name'),
-				unit: newSensor.get('unit')
+				unit: newSensor.get('unit') === undefined ? '' : newSensor.get('unit'),
+				canberemoved: newSensor.get('canberemoved')
 			}));
 
 			this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));
 
-			this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
-			.css('left', 5 * scale + 'px')
-			.css('line-height', 15 * scale + 'px')
+			//this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
 
-			var main_val = this.container.find('#val_' + newSensor.get('id'));
-			//.css('height', 40 * scale + 'px'); //nested div because of big text
-			var main_val_child = main_val.children('#b' + newSensor.get('id'));
-			//.css('height', main_val.css('height') + '!important');
+			//this.container.find('.sensorUnit')
+				//.css('font-size', 12 * scale + 'px');
 
-			main_val_child
-				.css('width', main_val.width())
-				.css('height', main_val.height());
-	
-			main_val.css('bottom', 2 * scale + 'px')
-				.css('padding-right', 7 * scale + 'px')
-				.css('padding-left', 7 * scale + 'px')
-				.css('font-size', 23 * scale + 'px');
-				/*.bigtext({
-					maxfontsize: 26 * scale,
-					minfontsize: 16 * scale
-				});*/
-
-			this.container.find('.sensorUnit')
-				.css('font-size', 12 * scale + 'px')
+			if (newSensor.get('canberemoved')) {
+				this.container.find('.close').css('font-size', 12 * scale + 'px')
 				.css('right', 5 * scale + 'px')
-				.css('top', 20 * scale + 'px');
+				.css('top', 4 * scale + 'px')
+				.click(function(event) {
+					event.stopImmediatePropagation();
+					self.removeFromDom();
+					return;
+				});
+			}
 
-			this.container.find('.close').css('font-size', 14 * scale + 'px')
-			.css('right', 5 * scale + 'px')
-			.css('top', 3 * scale + 'px')
-			.click(function(event) {
-				event.stopImmediatePropagation();
-				self.removeFromDom();
-				return;
-			});
-
-			this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
-			this.initializeContextMenu();
+			//var newSensor = this.model;
+			////console.log(this.model);
+			//var sizeCoeff = this.model.get('size')[0] / 2;
+			//var scale = sizeCoeff * this.grid.getScale();
+			//var self = this;
+            //
+			//var snglSensorTemplate = $(_.template(SensorTemplate, {
+			//	sensor_id: newSensor.get('id'),
+			//	val: 'VAL',
+			//	name: newSensor.get('name'),
+			//	unit: newSensor.get('unit')
+			//}));
+            //
+			//this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));
+            //
+			//this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
+			//.css('left', 5 * scale + 'px')
+			//.css('line-height', 15 * scale + 'px')
+            //
+			//var main_val = this.container.find('#val_' + newSensor.get('id'));
+			////.css('height', 40 * scale + 'px'); //nested div because of big text
+			//var main_val_child = main_val.children('#b' + newSensor.get('id'));
+			////.css('height', main_val.css('height') + '!important');
+            //
+			//main_val_child
+			//	.css('width', main_val.width())
+			//	.css('height', main_val.height());
+            //
+			//main_val.css('bottom', 2 * scale + 'px')
+			//	.css('padding-right', 7 * scale + 'px')
+			//	.css('padding-left', 7 * scale + 'px')
+			//	.css('font-size', 23 * scale + 'px');
+			//	/*.bigtext({
+			//		maxfontsize: 26 * scale,
+			//		minfontsize: 16 * scale
+			//	});*/
+            //
+			//this.container.find('.sensorUnit')
+			//	.css('font-size', 12 * scale + 'px')
+			//	.css('right', 5 * scale + 'px')
+			//	.css('top', 20 * scale + 'px');
+            //
+			//this.container.find('.close').css('font-size', 14 * scale + 'px')
+			//.css('right', 5 * scale + 'px')
+			//.css('top', 3 * scale + 'px')
+			//.click(function(event) {
+			//	event.stopImmediatePropagation();
+			//	self.removeFromDom();
+			//	return;
+			//});
+            //
+			//this.container.find('#val_' + this.model.get('id')).css('color', newSensor.get('valcolor'))
+			//this.initializeContextMenu();
 		},
 		initializeContextMenu: function() {
             var self = this;

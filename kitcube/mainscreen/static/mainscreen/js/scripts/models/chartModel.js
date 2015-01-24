@@ -28,11 +28,27 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				maxelementsize: 6
 			}
 		},
-		initialize: function() {
-			this.on('change: module', function() {
-				//do smth
-			});
+		initialize: function(attr) {
+			this.validate(attr);
 
+			this.set({
+				id: attr._id,
+                caption: attr["caption"],
+                charttype: attr["charttype"],
+                link: attr["link"],
+                legend: attr["legend"],
+                linewidth: attr["width"],
+                size: attr["size"],
+                coords: attr["coords"],
+                puredata: {},
+                range: attr["startrange"],
+                cfgObj: attr,
+                axislabels: attr['axislabels'],
+                resolution: attr['resolution']
+			});
+		},
+		validate: function () {
+			//need to write validation func
 		},
 		getXAxisObj: function() {
 			var xAxis = {};

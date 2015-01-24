@@ -10,17 +10,7 @@
   <meta name="csrf_token" content="{{ csrf_token }}">
   <meta name="projects" content="{{ projects }}"> <!-- initializing user project to user model -->
   <meta name="project" content="{{ project }}"> <!-- editor project -->
-  <link href={% static "editor/css/bootstrap.min.css" %} rel="stylesheet">
   <link href={% static "editor/css/main.css" %} rel="stylesheet">
-  <link href={% static "editor/css/widgets.css" %} rel="stylesheet">
-  <link href={% static "editor/css/bootstrap.submenu.css" %} rel="stylesheet">
-  <link href={% static "editor/css/guieditor.css" %} rel="stylesheet">
-  <link href={% static "editor/css/jquery.contextMenu.css" %} rel="stylesheet">
-  <link href={% static "editor/js/scripts/vendor/jqgrid/css/ui.jqgrid.css" %} rel="stylesheet"> 
-  <link href={% static "editor/js/scripts/vendor/jquery-ui/themes/smoothness/jquery-ui.css" %} rel="stylesheet">
-  <link href={% static "editor/js/scripts/vendor/jquery-ui/themes/smoothness/jquery.ui.theme.css" %} rel="stylesheet">
-  <link href={% static "editor/js/scripts/vendor/jquery-minicolors/jquery.minicolors.css" %} rel="stylesheet">
-  <link href={% static "editor/js/scripts/vendor/chosen_v1.1.0/chosen.min.css" %} rel="stylesheet">
   <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'> -->
   <!--   <link href={% static "mainscreen/css/grid.css" %} rel="stylesheet"> -->
   <!--[if IE]>
@@ -35,7 +25,9 @@
   <div id="wrapper">
       <div id="banner" class="demo-headline">
         <h1 class="demo-logo">
-          <div class="logo"></div>
+          <div class="logo">
+            <img id="logo-ico" class="ico svg" src=/static/editor/images/icons/robot.svg alt=""/>
+          </div>
           Display Status
           <small>template editor</small>
         </h1>
@@ -49,7 +41,7 @@
   <footer id="footer">
     <p>Karlsruhe Institute of Technology | Institute for Data Processing and Electronics</p>
   </footer>
-  <script data-main="../static/editor/js/scripts/main.js" src={% static "editor/js/scripts/vendor/requirejs/require.js" %}></script> 
+  <script data-main="../static/editor/js/scripts/main.js" src={% static "mainscreen/js/scripts/vendor/requirejs/require.js" %}></script>
 </body>
 </html>
 

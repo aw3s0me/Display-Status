@@ -1,20 +1,16 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel', 'text!templates/widgets/sensorjQGridTable.html'], function($, _, Backbone, SensorTableModel, TableTemplate) {
+define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel', 'text!templates/widgets/sensorjQGridTable.html', 'models/sensorModel', 'collections/sensorCollection', 'views/widgets/baseWidgetView'], function($, _, Backbone, SensorTableModel, TableTemplate, Sensor, SensorCollection, BaseWidgetView) {
 
-	var sensorJqGridTableView = Backbone.View.extend({
-		container: undefined,
-		grid: undefined,
-		model: undefined,
-		//dataToTable: undefined,
+	var sensorJqGridTableView = BaseWidgetView.extend({
 		colAccess: undefined,
 		groups: undefined,
 		lookuptable: {},
-		initialize: function(options) {
-			if (options.grid) {
-				this.grid = options.grid;
-			}
-			if (options.model) {
-				this.model = options.model;
-			}
+		initialize: function(attr) {
+			this.widgetController = attr.wc;
+			this.grid = this.widgetController.getGrid(attr);
+
+			this.model = new SensorTableModel(attr);
+			this.initSensorGroups(attr['rows']);
+
 			this.groups = this.model.get('groups');
 
 			for (var i = 0; i < this.groups.length; i++) {
@@ -26,7 +22,48 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorTableModel', 'text!tem
 			}
 
 			this.render();
+
+			this.widgetController.addViewToLookup(this.model.get('type'), this);
+
+			this.on('removing', function () {
+				this.widgetController.removeViewByType(this.model.get('type'), this.model.get('id'));
+			});
+
 			this.model.on('resize', this.onresize, this);
+		},
+		initSensorGroups: function (sensorgroups) {
+			var sensorGroups = [];
+			var self = this;
+
+			for (var i =0; i < sensorgroups.length; i++) {
+				var newSensorCollection = undefined;
+				var sensorModelArr = [];
+				var sensors = sensorgroups[i]['columns'];
+				var header = sensorgroups[i]['header'];
+
+				if (header) this.model.set({'isheader': true});
+
+				for (var j = 0; j < sensors.length; j++) {
+					var sensorInfoObj = sensors[j];
+					var newSensor = new Sensor(sensorInfoObj);
+
+					sensorModelArr.push(newSensor);
+					this.widgetController.addSensorToLookup(newSensor);
+					newSensor.on('removing', function () {
+						self.widgetController.removeSensorFromLookup(newSensor.get('id'));
+					});
+				}
+
+				newSensorCollection = new SensorCollection(sensorModelArr, {
+					group: header
+				});
+
+				sensorGroups.push(newSensorCollection);
+			}
+
+			this.model.set({
+				groups: sensorGroups
+			})
 		},
 		formHeaders: function() {
 			var colModel = [];

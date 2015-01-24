@@ -1,3 +1,7 @@
+.sensor-group {
+    background-color: #2a2a2a !important;
+}
+
 .tile {
     /*position: relative; */
     position: absolute !important; 
@@ -118,6 +122,11 @@
   border-bottom: 2px dotted white;
   border-left: 2px dotted white;
   //outline: 2px solid white;
+}
+
+.chart-widget {
+    border: 1px solid #4572A7 !important;
+    background-color: #222 !important;
 }
 
 .addChartBtn {

@@ -74,8 +74,8 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 .css('top', 4 * scale + 'px');
 
             this.sortableContainer = jQuery('<span></span>')
-                .css('left', 0 + 'px')
-                .css('top', unitY + 'px')
+                //.css('left', 0 + 'px')
+                //.css('top', unitY + 'px')
                 .css('height', unitY * (dy) + 'px')
                 .css('width', unitX * dx + 'px')
                 .addClass('sortable_container')
@@ -148,7 +148,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             }
 
             this.container.parent().css('border', '1px solid black');
-            this.initializeContextMenu();
+            //this.initializeContextMenu();
         
             //console.log(this.container.html());
         },
@@ -281,7 +281,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
             var unitSizeX = this.grid.getUnitSizes().width * scale;
             var unitSizeY = this.grid.getUnitSizes().height * scale;
             divElem.css('left', posx * unitSizeX + 'px');
-            divElem.css('top', posy * unitSizeY + 'px');
+            //divElem.css('top', posy * unitSizeY + 'px');
             divElem.css('width', dx * unitSizeX - 0.4 + 'px');
             divElem.css('height', dy * unitSizeY - 0.4 + 'px');
 

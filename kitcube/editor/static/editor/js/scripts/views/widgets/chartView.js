@@ -104,7 +104,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				}
 
 				//addchart logic
-				this.container.find('.sensorChartList').append('<li id="lblChart_' + id + '"><label>' + id + ': ' + sensorModel.get('name') + '</label></li>');
+				this.container.find('.chart-sensor-list ul').append(
+				'<li id="lblChart_' + id + '"><i class="fa fa-plus-circle"></i>&nbsp;' + id + ': ' + sensorModel.get('name') + '</li>');
 			}
 		},
 		render: function() {
@@ -126,9 +127,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				transparent: true,
 				draggable: true,
 				resizable: true
-			}, this.model)
-			.css('background-color', 'rgb(255, 255, 255)')
-			.css('border', '1px solid black');
+			}, this.model).addClass('chart-widget');
 
 			if (!model) {
 				throw "Please, init model";
@@ -139,14 +138,11 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				.css('font-size', coeffScale * 20 + 'px')
 				.css('margin-left', coeffScale * 14 + 'px');
 
-			var controlPanel = this.container.find('.chartControlPanel');
-			//controlPanelHeight = controlPanel.height();
-			//controlPanel.css('height', controlPanelHeight);
-			//controlPanel.css('top', 14 * scale + 'px')
-			controlPanel.css('right', 35 * scale + 'px');
-			//.css('top', 10 * scale + 'px');
-
-			controlPanel.css('font-size', coeffScale * 12 + 'px');
+			var controlPanel = this.container.find('.chart-control-panel');
+            //
+			//controlPanel.css('right', 35 * scale + 'px');
+            //
+			//controlPanel.css('font-size', coeffScale * 12 + 'px');
 
 			controlPanel.find('.goAdeiBtn').button()
 				.click(function(event) {
@@ -169,9 +165,10 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 						_isLegendShown = false;
 					}
 				});
-			this.container.find('.close').css('font-size', coeffScale * 15 + 'px')
-				.css('right', coeffScale * 10 + 'px')
-				.css('top', coeffScale * 10 + 'px')
+			this.container.find('.close')
+				//.css('font-size', coeffScale * 15 + 'px')
+				//.css('right', coeffScale * 10 + 'px')
+				//.css('top', coeffScale * 10 + 'px')
 				.click(function(event) {
 					self.removeFromDom();
 				});
@@ -184,8 +181,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				});
 
 			controlPanel.find('.rangeDropdown')
-			.css('font-size', coeffScale * 16 + 'px')
-			.css('margin-top', coeffScale * 10 + 'px')
+			//.css('font-size', coeffScale * 16 + 'px')
+			//.css('margin-top', coeffScale * 10 + 'px')
 			.change(function() {
 				var value = $(this).val();
 				self.model.set({
@@ -195,8 +192,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 
 			this.container.css('height', '100%');
 
-			this.container.find('.sensorChartList')
-			.css('margin-top', coeffScale * 26 + 'px');
+			this.container.find('.chart-sensor-list');
+			//.css('margin-top', coeffScale * 26 + 'px');
 
 			this.initChartWhenStart();
 			this.initializeContextMenu();
@@ -276,7 +273,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			this.removeSensorFromChartList(model.get('id'));
 		},
 		removeSensorFromChartList: function(id) {
-			this.container.find('.sensorChartList #lblChart_' + id).remove();
+			this.container.find('.chart-sensor-list ul #lblChart_' + id).remove();
 		},
 		removeFromDom: function() {
 			this.container.parent().remove();

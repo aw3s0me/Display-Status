@@ -44,22 +44,9 @@ body {
     background-image: url('../images/loading/loader.gif');
 }
 
-
-#tabs {
-    background-image: url('../images/patterns/footer_lodyas/footer_lodyas.png');
-}
-
 #wrapper {
-  //height: 100%;
-  position: relative;
-  //background-color: #DCDCDC !important;
-  //background-color: white !important;
-  //overflow-x: scroll;
-  //overflow-y: hidden;
-    background-repeat:repeat;
-    background-position: top left;
+    position: relative;
 }
-
 
 #scrollbar_wrapper {
 

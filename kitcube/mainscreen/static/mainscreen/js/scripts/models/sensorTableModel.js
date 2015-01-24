@@ -17,8 +17,28 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				cfgObj: null
 			}
 		},
-		initialize: function() {
-			//options || (options = {});
+		initialize: function(options) {
+			this.validate(options);
+
+			this.set({
+				id: options._id,
+				size: options['size'],
+				coords: options['coords'],
+				colnames: options['colnames'],
+				name: options['name'],
+				render: options['render'],
+				cfgObj: options
+			});
+		},
+		validate: function (options) {
+			if (!options._id)
+				throw "Please specify id of sensortable";
+			if (!options.size)
+				throw "Please specify size of sensortable";
+			if (!options.coords)
+				throw "Please specify coords of sensortable";
+			if (!options.name)
+				throw "Please specify name of sensortable";
 		},
 		serToJSON: function() {
 			var cfg = this.get('cfgObj');
@@ -40,7 +60,7 @@ define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], fun
 				size: this.get('size'),
 				coords: this.get('coords'),
 				cols: this.get('cols')
-			}
+			};
 
 			/*var collModels = this.get('groups').models;
 
