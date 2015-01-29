@@ -9,7 +9,8 @@ require.config({
     "bootstrap": "vendor/bootstrap/dist/js/bootstrap",
     //There goes my helpers
     "kit.sizeDetector": "dev/kit.sizedetector/sizedetector",
-    "kit.parser": "dev/kit.parser/kit.cfgParser",
+    "parser": "dev/parser",
+    'detect': 'dev/detect',
     //my grid part
     "kitgrid": "dev/kit.grid/kitGrid",
     "text" : "vendor/requirejs-text/text",
@@ -51,18 +52,20 @@ require.config({
     bootstrap: {
       deps: ["jquery"]
     },
-    "kit.sizeDetector": {
+    'detect': {
       deps: [
-        "jquery",
-        "dev/helpers"
+          'jquery'
       ]
     },
-    "kit.parser": {
+    "kit.sizeDetector": {
+      deps: [
+        "jquery"
+      ]
+    },
+    "parser": {
       deps: [
         "jquery",
-        "dev/kit.parser/prshelpers",
-        "yaml",
-        "dev/helpers"
+        "yaml"
       ]
     },
     kitgrid: {

@@ -80,7 +80,7 @@
 .sensor-info {
     position: relative;
     height: 62%;
-    width: 120%;
+    width: 100%;
     font-family: Helvetica, Arial, sans-serif;
     //background-color: #101214;
     background-color: #2a2a2a;
@@ -94,6 +94,7 @@
     display: inline-block;
     vertical-align: middle;
     padding: 8% 5%;
+    width: 120%;
 }
 
 .sensor-unit {

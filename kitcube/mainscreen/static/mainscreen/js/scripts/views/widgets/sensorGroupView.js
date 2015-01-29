@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', 'views/widgets/emptySensorView', 'models/sensorModel'], function($, _, Backbone, SensorGroupModel, SensorGroupTemplate, EmptySensorView, Sensor) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'models/sensorGroupModel', 'text!templates/widgets/sensorGroup.html', 'views/widgets/emptySensorView', 'models/sensorModel'], function($, _, Backbone, JqueryUi, SensorGroupModel, SensorGroupTemplate, EmptySensorView, Sensor) {
     
     var _denominator = 0.2;
 
@@ -151,15 +151,43 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorGroupModel', 'text!tem
                 var newSensorView = this.group[elemName];
                 var cont = this.setContainer(newSensorView);
                 newSortableContainer.append(cont);
-                newSensorView.on('removing', this.onSensorRemoving, this);
+                this.initSensorAfterAdding(newSensorView);
             }
+        },
+        initSensorAfterAdding: function (newSensorView) {
+            newSensorView.on('removing', this.onSensorRemoving, this);
+            //$(newSensorView.el).find('.sensor-info').draggable({
+//            $(newSensorView.el).draggable({
+//		    	cursor: "move",
+//		    	cursorAt: { top: 4, left: 4},
+//		    	helper: function() {
+//		    		//return $(this)[0];
+//                    return '<div class="" style="overflow: hidden; width: 523px; height: 229px;">' +
+//	'<img style="width: 100%; height: 100%;" src="/static/editor/images/templates/chart-box.png" />' +
+//'</div>';
+//		    	},
+//		    	handle: ".sensor-info",
+//		    	revert: "invalid",
+//		    	start: function(event, ui) {
+//                    console.log(event);
+//		    	},
+//		    	drag: function(e, t) {
+//                    console.log(e);
+//
+//
+//		    	},
+//		    	stop: function() {
+//		    		//$(this).append(ui.helper);
+//		    		//add to board
+//		    	}
+//		    });
         },
         addElements: function(newSortableContainer) {
             for (var elemName in this.group) {
                 var newSensorView = this.group[elemName];
                 var cont = this.setContainer(newSensorView);
                 newSortableContainer.append(cont);
-                newSensorView.on('removing', this.onSensorRemoving, this);
+                this.initSensorAfterAdding(newSensorView);
             }
             var empties = this.model.get('empties');
             for (var i = 0; i < empties; i++) {

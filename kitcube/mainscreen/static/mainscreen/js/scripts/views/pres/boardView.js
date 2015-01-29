@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'jqueryui', 'text!templates/pres/board.html', 'controllers/tabController', 'controllers/widgetController', 'controllers/datasourceController'], function($, _, Backbone, ui, boardTemplate, TabController, WidgetController, DatasourceController) {
+define(['jquery', 'underscore', 'backbone', 'jqueryui', 'kitgrid', "kit.sizeDetector", 'text!templates/pres/board.html', 'controllers/tabController', 'controllers/widgetController', 'controllers/datasourceController'], function($, _, Backbone, ui, kitgrid, sizeDet, boardTemplate, TabController, WidgetController, DatasourceController) {
 
 	var BoardView = Backbone.View.extend({
 		container: $('#board-container'),

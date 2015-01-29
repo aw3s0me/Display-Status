@@ -188,7 +188,7 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
             for (var sensId in sensors) {
                 var sensor = sensors[sensId];
                 //sensor.updateModel(getRandomValue(), timeNow * 1000);
-                sensor.updateModel(getRandomValue(), timeNow);
+                sensor.updateModel(getRandomValue(), timeNow.valueOf());
                 sensor.trigger('firstLoading');
 
             }
@@ -202,7 +202,7 @@ define(['jquery', 'constructors/widgetFactory', 'controllers/tabController', 'co
             for (var sensId in sensors) {
                 var sensor = sensors[sensId];
                 //sensor.updateModel(getRandomValue(), timeNow * 1000);
-                sensor.updateModel(getRandomValue(), timeNow);
+                sensor.updateModel(getRandomValue(), timeNow.valueOf());
             }
 
             this.updateTimeContainer(timeNow);

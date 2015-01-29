@@ -7,18 +7,11 @@ define([
 	'views/pres/loginView',
 	'views/pres/registerView',
 	'views/pres/userPanelView'
-	//'views/pres/controlPanelView',
-	//'views/pres/txtEditorView',
-	//'views/pres/settingsView'
-], function($, _, Backbone, BoardView, LoginView, RegisterView, UserPanelView /*ControlPanelView,TextEditorView, SettingsView*/ ) {
+], function($, _, Backbone, BoardView, LoginView, RegisterView, UserPanelView) {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
-			// Define some URL routes
-			//'editor': 'showTextEditorView',
 			'board': 'showBoard',
 			'': 'showBoard',
-			//'settings': 'showSettingsView',
-			//'control': 'showControlPanelView',
 			'login': 'showLogin',
 			'logout': 'doLogout',
 			'register': 'showRegister',
@@ -67,15 +60,11 @@ define([
 			if (this.views.current != undefined) {
 				this.views.current.clear();
 				this.views.current = null;
-				//$(this.views.current.el).hide();
-				//$(this.views.current.el).remove();
-				//this.views.current.trigger('hide');
 			}
 			this.views.current = view;
 			$('.loader').hide();
 			$(this.views.current.el).show();
 		},
-
 		doLogout: function() {
 			if (this.views.current == undefined) {
 				this.showLogin();

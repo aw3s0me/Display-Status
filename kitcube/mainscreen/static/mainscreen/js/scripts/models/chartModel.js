@@ -44,7 +44,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                 range: attr["startrange"],
                 cfgObj: attr,
                 axislabels: attr['axislabels'],
-                resolution: attr['resolution']
+                resolution: attr['resolution'] ? attr['resolution']: this.get('resolution')
 			});
 		},
 		validate: function () {
@@ -513,6 +513,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				}	
 			}
 			return false;
+		},
+		getNumberOfPoints: function(chartWidth) {
+			var resolution = this.get('resolution');
+			return parseInt((chartWidth * resolution)/2);
 		}
 	});
 

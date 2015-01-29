@@ -58,7 +58,12 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 					}
 				//}
 			});
-
+			this.container.bind("dragstart", _.bind(this._onDragStart, this))
+		},
+		_onDragStart: function (e) {
+			if (e.originalEvent) e = e.originalEvent;
+			e.dataTransfer.setData('text/html', this.model.get('id'));
+			console.log('DRAG START');
 		},
 		events: {
 			'click': 'onclick',

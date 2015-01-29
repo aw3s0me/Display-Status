@@ -102,7 +102,7 @@ var deps = {
 
             var subDir = "lib/coffee-script/";
             var deps = [
-                "helpers.js",
+                "detect.js",
                 "lexer.js",
                 "nodes.js",
                 "parser.js",

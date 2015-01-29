@@ -349,10 +349,10 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			}
 			var array = this.get('values');
 			var valToPush = [time, value];
-			var valToPush = {
-				x: time,
-				y: value
-			}
+			//var valToPush = {
+			//	x: time,
+			//	y: value
+			//}
 			array.push(valToPush);
 			this.set({
 				'value': value,
@@ -369,12 +369,6 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 			var x = mom.valueOf();
 			for (var i = 0; i < values.length; i++) {
 				var valToPush = [datetime[i] * 1000, values[i]];
-				/*var timeToInsert = datetime[i] * 1000;
-				var valToPush = {
-					x: timeToInsert,
-					//y: 0
-					y: values[i]
-				} */
 				array.push(valToPush);
 			}
 			self.set({

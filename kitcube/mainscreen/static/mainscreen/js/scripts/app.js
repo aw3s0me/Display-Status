@@ -4,19 +4,12 @@ define([
 	'underscore',
 	'backbone',
 	'jqueryui',
-	'kitgrid',
-	'yaml',
-	'jqgrid',
 	'oauthio',
-	'highcharts-legend',
-	'highcharts-theme',
-	"kit.sizeDetector",
-	"kit.parser",
 	'cookie',
 	"models/userModel",
-	"dev/helpers",
+	'detect',
 	'router' // Request router.js
-], function($, _, Backbone, jQueryUI, kitgrid, YAML, jqGrid, OAuthio, HighchartsLeg, HighchartsTheme, sizeDet, parser, JqCookie, UserModel, Helpers, Router) {
+], function($, _, Backbone, jQueryUI, OAuthio, JqCookie, UserModel, BrowserDetect, Router) {
 	var initializeUser = function() {
 		var token = $.cookie('access_token');
 		window.activeSessionUser = new UserModel();
@@ -80,45 +73,15 @@ define([
 		};
 	};
 
-	var addSvg = function () {
-		/*
-		 * Replace all SVG images with inline SVG
-		 */
-		$('img.svg').each(function(){
-			var $img = jQuery(this);
-			var imgID = $img.attr('id');
-			var imgClass = $img.attr('class');
-			var imgURL = $img.attr('src');
-
-			$.get(imgURL, function(data) {
-				// Get the SVG tag, ignore the rest
-				var $svg = jQuery(data).find('svg');
-				// Add replaced image's ID to the new SVG
-				if(typeof imgID !== 'undefined') {
-					$svg = $svg.attr('id', imgID);
-				}
-				// Add replaced image's classes to the new SVG
-				if(typeof imgClass !== 'undefined') {
-					$svg = $svg.attr('class', imgClass+' replaced-svg');
-				}
-				// Remove any invalid XML tags as per http://validator.w3.org
-				$svg = $svg.removeAttr('xmlns:a');
-				// Replace image with new SVG
-				$img.replaceWith($svg);
-			}, 'xml');
-		});
-	}
-
 	var addMenuHandler = function () {
 		$('.auth-button').click(function () {
 			$(this).next('.auth-menu').slideToggle();
 		});
-	}
+	};
 
 	var initialize = function() {
 		// Pass in our Router module and call it's initialize function
 		$(document).ready(function($) {
-			//addSvg();
 			checkBrowserCompatibility();
 
 			window.lastUpdateTime = moment.utc();

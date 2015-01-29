@@ -1,4 +1,5 @@
-define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates/widgets/chart.html', 'views/widgets/baseWidgetView'], function($, _, Backbone, ChartModel, ChartTemplate, BaseWidgetView) {
+define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-legend',
+	'highcharts-theme', 'text!templates/widgets/chart.html', 'views/widgets/baseWidgetView'], function($, _, Backbone, ChartModel, HighchartsLeg, HighchartsTheme, ChartTemplate, BaseWidgetView) {
 
 	var _seriesArr = [];
 	var _allSensors = undefined;
@@ -10,6 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 		lookDiv: undefined,
 		extremeInterval: undefined,
 		deffereds: [],
+		_draghoverClassAdded: false,
 		initialize: function(attr) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
 			var self = this;
@@ -32,6 +34,61 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			this.render();
 
 			this.widgetController.addViewToLookup(this.model.get('type'), this);
+			this.container.bind('drop dragdrop', _.bind(this._onDrop, this));
+			this.container.bind("dragover", _.bind(this._onDragOver, this))
+			this.container.bind("dragenter", _.bind(this._onDragEnter, this))
+			this.container.bind("dragleave", _.bind(this._onDragLeave, this))
+
+		},
+		//events: {
+		//	'drop .dropable': '_onDrop'
+		//},
+		_onDrop: function (e) {
+			console.log('DROP!');
+			if (e.originalEvent) e = e.originalEvent;
+
+			var id = e.dataTransfer.getData('text/html');
+
+			if (e.preventDefault) e.preventDefault();
+			if (e.stopPropagation) e.stopPropagation();
+			this.container.css({'opacity': 1});
+
+			var sensorModel = _allSensors[id];
+
+			sensorModel.on('deleteSensor', this.removeSeries, this);
+				sensorModel.on('removing', this.onSensorRemoving, this);
+				this.model.get('link').push(sensorModel.get('id'));
+				this.model.get('models').push(sensorModel);
+
+				var seriesObject = sensorModel.getChartProperties();
+				delete seriesObject['yAxis'];
+
+				//seriesObject.data = [];
+				var data = this.board.datasourceController.simulateDataForSensor(this.model.getWindow(), this.model.getNumberOfPoints(this.chart.chartWidth));
+				console.log(data);
+				sensorModel.setDataModel(data[0], data[1]);
+				console.log(sensorModel.get('values'));
+				//seriesObject.setData(model.get('values'));
+				seriesObject.data = sensorModel.get('values');
+				this.chart.addSeries(seriesObject, true);
+				sensorModel.on('addPoint', this.addNewPoint, this);
+		},
+		_onDragEnter: function () {
+			//console.log('DRAGENTER');
+			if (event.originalEvent) event = event.originalEvent;
+			if (event.preventDefault) event = event.preventDefault();
+			this.container.css({'opacity': 0.6});
+
+		},
+		_onDragOver: function () {
+			//console.log('DRAGOVER!');
+			this.container.css({'opacity': 0.6});
+			event.preventDefault();
+		},
+		_onDragLeave: function () {
+			console.log('DRAGLEAVE!');
+			if (event.originalEvent) event = event.originalEvent;
+			this.container.css({'opacity': 1});
 		},
 		setExtremesInterval: function() {
 			this.removeExtremesInterval();
@@ -542,7 +599,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			var seriesArr = this.model.get('seriesArr');
 			var linkArr = this.model.get('link');
 
-			console.log(sensors, seriesArr, linkArr);
 			for (var i = 0; i < linkArr.length; i++) {
 				var model = _allSensors[linkArr[i]];
 				//AHUET
@@ -559,43 +615,32 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 				var jqElement = elems[i];
 				var id;
 				id = jqElement.getAttribute('id');
-
-
 				if (this.model.isOnTheChartById(id)) {
 					continue;
 				}
-
 				var sensorModel = _allSensors[id];
+				if (!sensorModel) {
+					throw "Cant add sensor";
+				}
 
 				sensorModel.on('deleteSensor', self.removeSeries, self);
 				sensorModel.on('removing', self.onSensorRemoving, self);
 				self.model.get('link').push(sensorModel.get('id'));
 				self.model.get('models').push(sensorModel);
-				if (!sensorModel) {
-					throw "Cant add sensor";
-				}
-				var seriesObject = sensorModel.getChartProperties();
-///				var axisId = seriesObject['yAxis'];
 
+				var seriesObject = sensorModel.getChartProperties();
 				delete seriesObject['yAxis'];
 
-				//var existedAxis = self.chart.get(axisId);
-
-				//if (!existedAxis) {
-				//	var axisObject = sensorModel.getChartAxisInfo(this.grid.getScale(), {
-				//		axislabels: self.model.get('axislabels'),
-				//		adeiAxisInfo: self.board.datasourceController.getAxis(sensorModel.get('datasource'), axisId),//self.board.axes[axisId],
-				//		count: series
-				//	});
-				//	axisObject.lineColor = '#000';
-				//	self.chart.addAxis(axisObject);
-				//	var axis = self.chart.get(axisObject.id);
-				//}
-				var color = undefined;
+				//seriesObject.data = [];
+				var data = self.board.datasourceController.simulateDataForSensor(this.model.getWindow(), this.model.getNumberOfPoints(this.chart.chartWidth));
+				console.log(data);
+				sensorModel.setDataModel(data[0], data[1]);
+				console.log(sensorModel.get('values'));
+				//seriesObject.setData(model.get('values'));
+				seriesObject.data = sensorModel.get('values');
 				self.chart.addSeries(seriesObject, false);
 				sensorModel.on('addPoint', self.addNewPoint, self);
 			}
-
 		},
 		getAllData: function(typeObject) {
 			this.removeExtremesInterval();
@@ -781,11 +826,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'text!templates
 			adeiurl += "&module=graph&virtual=srctree&srctree=" + srctree;
 
 			return adeiurl;
-		},
-		getNumberOfPoints: function() {
-			var width = this.chart.chartWidth;
-			var resolution = this.model.get('resolution');
-			return parseInt(width * resolution);
 		}
 	});
 
