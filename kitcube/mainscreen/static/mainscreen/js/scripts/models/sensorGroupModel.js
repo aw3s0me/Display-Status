@@ -1,30 +1,34 @@
-define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection'], function($, _, Backbone, SensorCollection) {
-	var SensorGroupModel = Backbone.Model.extend({
+define(['jquery', 'underscore', 'backbone', 'collections/sensorCollection', 'models/baseWidgetModel'], function($, _, Backbone, SensorCollection, BaseModel) {
+	var SensorGroupModel = BaseModel.extend({
 		defaults: function(){
 			return {
-				id: undefined,
-				name: undefined,
 				type: "sensorgroup",
-				size: [],
-				coords: [],
 				bgcolor: undefined,
 				collection: undefined,
 				diffsensors: true,
-				dbgroup: undefined,
-				dbname: undefined,
-				server: undefined,
-				canberemoved: false,
-				isresizable: false,
-				isdraggable: false,
-				issortable: false,
-				cfgObj: null
+				issortable: false
 			}	
 		},
-		initialize: function() {
-			//console.log("model created");
+		initialize: function(attr) {
+			this.set({
+				id: attr._id,
+                name: attr['name'],
+                size: attr['size'],
+                coords: attr['coords'],
+                diffsensors: attr['diffsensors'],
+                cfgObj: attr,
+                groupname1: attr["groupname1"],
+                groupname2: attr["groupname2"],
+                order: attr['order'],
+                empties: attr['empties']
+			});
+
 			this.on('change: value', function() {
 				//do smth
 			});
+		},
+		setSensors: function (arr) {
+			this.set({collection: new SensorCollection(arr)});
 		},
 		serToJSON: function() {
 			var collection = this.get('collection').models;

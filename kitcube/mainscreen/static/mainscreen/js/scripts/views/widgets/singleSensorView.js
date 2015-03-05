@@ -1,9 +1,5 @@
-define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/widgets/sensorSingle.html'], function($, _, Backbone, SensorModel, SensorTemplate) {
-	var SensorView = Backbone.View.extend({
-		container: undefined,
-		grid: undefined,
-		model: undefined,
-		linkModel: undefined,
+define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!templates/widgets/sensorSingle.html', 'views/widgets/baseWidgetView'], function($, _, Backbone, SensorModel, SensorTemplate, BaseWidgetView) {
+	var SensorView = BaseWidgetView.extend({
 		isGrouped: false,
 		initialize: function(options) { //pass it as new SensorView({model: model, options: options})
 			//this.model.on("change", this.render);
@@ -16,10 +12,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			} else {
 				throw "SensorView needs model";
 			}
-			if (options.linkModel) {
-				this.linkModel = options.linkModel;
-				this.linkModel.on('change:value', this.onchangevaluelink, this);
-			}
 			if (options.group === true) {
 				this.isGrouped = true;
 			}
@@ -29,35 +21,11 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.model.on('resize', this.onresize, this);
 			this.model.on('change:status', this.onchangestatus, this);
 			this.model.on('change:value', this.onchangevalue, this);
-			this.model.on('removedFromChart', this.onremovedfromchart, this);
 			this.model.on('firstLoading', this.onfinishfirstloading, this);
 
 			this.model.updateModel();
 			this.setStatus(this.container.find('.sensor-led a'), this.model);
-			//this.container.mousedown(function(event) {
-			this.container.dblclick(function(event) {
-				//if (event.ctrlKey || event.shiftKey) {
-					if(document.selection && document.selection.empty) {
-				        document.selection.empty();
-				    } else if(window.getSelection) {
-				        var sel = window.getSelection();
-				        sel.removeAllRanges();
-				    }
 
-					if (!self.container.hasClass('activeSensor') && !self.container.hasClass('chartAdded')) {
-						self.container.addClass('activeSensor');
-						return;
-					}
-					if (self.container.hasClass('activeSensor')) {
-						self.container.removeClass('activeSensor');
-					}
-					if (self.container.hasClass('chartAdded')) {
-						//self.container.find('.chartCircle').css('background-color', 'grey');
-						self.container.removeClass('chartAdded');
-						self.model.trigger('deleteSensor', self.model);
-					}
-				//}
-			});
 			this.container.bind("dragstart", _.bind(this._onDragStart, this))
 		},
 		_onDragStart: function (e) {
@@ -66,11 +34,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			console.log('DRAG START');
 		},
 		events: {
-			'click': 'onclick',
 			'error': 'onerror'
-		},
-		onclick: function(event) {
-			console.log('clicked');
 		},
 		onerror: function (event) {
 			this.container.find('.sensor-loading').hide();
@@ -95,11 +59,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			}));
 
 			this.container = $(snglSensorTemplate).css('background-color', newSensor.get('bgcolor'));
-
-			//this.container.find('.sensorName').css('font-size', 14 * scale + 'px')
-
-			//this.container.find('.sensorUnit')
-				//.css('font-size', 12 * scale + 'px');
 
 			if (newSensor.get('canberemoved')) {
 				this.container.find('.close').css('font-size', 12 * scale + 'px')
@@ -129,7 +88,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			this.trigger('removing', this.model);
 			this.container.remove();
 			this.model.trigger('removing', this.model);
-			//this.linkModel.trigger('removing', this.linkModel);
 			this.remove();
 			this.unbind();
 		},
@@ -147,8 +105,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var sensorDiv = this.container;
 			var led = sensorDiv.find('.sensor-led a');
 			this.setStatus(led, model);
-			//sensorDiv.find('#val_' + this.model.get('id')).css('color', this.model.get('valcolor'));
-			//sensorDiv.css('background-color', this.model.get('valcolor'));
 		},
 		setStatus: function (led, model) {
 			led.removeClass();
@@ -158,6 +114,7 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 			var sensorDiv = this.container;
 			var sensortype = model.get('sensortype');
 			var valToInsert = model.get('valUnit');
+			//var valToInsert = model.get('value');
 			var name = this.model.get('name');
 			var scale = this.grid.getScale();
 			var valDiv = this.container.find('.sensor-val');
@@ -166,12 +123,6 @@ define(['jquery', 'underscore', 'backbone', 'models/sensorModel', 'text!template
 		onchangevaluelink: function(model) {
 			var valToInsert = model.get('valUnit');
 			$('#c' + this.model.get('id')).text(valToInsert);
-		},
-		onremovedfromchart: function() {
-			//this.container.find('.chartCircle').css('background-color', 'grey');
-			this.container.removeClass('chartAdded1');
-			this.container.removeClass('chartAdded2');
-			this.container.removeClass('chartAdded');
 		}
 	});
 

@@ -1,8 +1,7 @@
-define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
-	var Chart = Backbone.Model.extend({
+define(['jquery', 'underscore', 'backbone', 'models/baseWidgetModel'], function($, _, Backbone, BaseModel) {
+	var Chart = BaseModel.extend({
 		defaults: function() {
 			return {
-				id: undefined,
 				caption: "",
 				type: "chart",
 				charttype: undefined,
@@ -11,19 +10,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 				seriesArr: [],
 				legend: undefined,
 				linewidth: undefined,
-				size: [],
-				coords: [],
 				puredata: {},
 				range: "2-min",
 				rangeToDate: undefined,
 				scale: 1,
 				border: 1,
 				radius: 0,
-				cfgObj: null,
 				axislabels: true,
-				canberemoved: false,
-				isresizable: false,
-				isdraggable: false,
 				resolution: 0.4,
 				maxelementsize: 6
 			}

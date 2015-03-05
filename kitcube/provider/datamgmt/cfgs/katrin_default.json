@@ -35,10 +35,6 @@
             "type": "chart"
         },
         "chart2": {
-            "link": [
-                "sensid41",
-                "sensid37"
-            ],
             "size": [
                 25,
                 11
@@ -47,8 +43,7 @@
                 34,
                 13
             ],
-            "startrange": "15m",
-            "type": "chart"
+            "type": "heatmap"
         },
         "sensorgroup1": {
             "size": [

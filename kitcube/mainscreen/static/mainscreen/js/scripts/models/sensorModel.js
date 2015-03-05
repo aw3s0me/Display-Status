@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone, momentw) {
+define(['jquery', 'underscore', 'backbone', 'momentjs', 'models/baseWidgetModel'], function($, _, Backbone, momentw, BaseModel) {
 	var _minValve = -199.5;
 	var _maxValve = 849.5;
 	var _min2State = 0.5;
@@ -27,17 +27,14 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 		return (n.toString().indexOf('e') !== -1);
 	}
 
-	var Sensor = Backbone.Model.extend({
+	var Sensor = BaseModel.extend({
 		defaults: function() {
 			return {
-				id: undefined,
-				name: "",
 				type: "sensor",
 				sensortype: "default",
 				sensorviewtype: undefined,
-				comment: undefined,
 				unit: "",
-				precision: undefined,
+				precision: 2,
 				value: undefined,
 				lastTime: undefined,
 				max: undefined,
@@ -59,16 +56,35 @@ define(['jquery', 'underscore', 'backbone', 'momentjs'], function($, _, Backbone
 				factor: 1,
 				linecolor: undefined,
 				label: undefined,
-				canberemoved: false,
-				isdraggable: false,
-				isresizable: false,
-				axisname: undefined, //if not undefined, means adei sensor contains info about axis otherwise use temp axis
-				cfgObj: null
+				axisname: undefined //if not undefined, means adei sensor contains info about axis otherwise use temp axis
 			}
 		},
-		initialize: function() {
+		initialize: function(attr) {
 			_defvalcolor = this.get('valcolor');
-			
+
+			this.set({
+				id: attr["id"] ? attr["id"]: attr["_id"],
+				name: attr["name"],
+				comment: attr["comment"],
+                sensortype: attr["sensortype"],
+                link: attr["link"],
+                sensorviewtype: "group",
+                unit: attr["unit"],
+                max: attr["max"],
+                min: attr["min"],
+                precision: attr["precision"],
+                exp: attr["exp"],
+                datasource: attr['datasource']? attr['datasource'] : 'default',
+                device: attr["device"],
+                norender: attr["norender"],
+                mask: attr["mask"],
+                coords: attr["coords"],
+                values: new Array(),
+                lastTime: new Date,
+                factor: attr["factor"] == undefined? this.get('factor') : attr['factor'],
+                cfgObj: attr
+			});
+
 			switch (this.get('sensortype')) {
 				case "2-state":
 					{

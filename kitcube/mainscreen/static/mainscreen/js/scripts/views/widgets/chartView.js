@@ -74,19 +74,15 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 				sensorModel.on('addPoint', this.addNewPoint, this);
 		},
 		_onDragEnter: function () {
-			//console.log('DRAGENTER');
 			if (event.originalEvent) event = event.originalEvent;
 			if (event.preventDefault) event = event.preventDefault();
 			this.container.css({'opacity': 0.6});
-
 		},
 		_onDragOver: function () {
-			//console.log('DRAGOVER!');
 			this.container.css({'opacity': 0.6});
 			event.preventDefault();
 		},
 		_onDragLeave: function () {
-			console.log('DRAGLEAVE!');
 			if (event.originalEvent) event = event.originalEvent;
 			this.container.css({'opacity': 1});
 		},
@@ -103,63 +99,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 			this.extremeInterval = null;
 		},
 		formSensorElements: function() {
-			var elems1Val = this.lookDiv.find('.activeSensor1');
-			var elems2Val = this.lookDiv.find('.activeSensor2');
-			var elemsVal = this.lookDiv.find('.activeSensor');
-			elems = {};
-
-			if (elemsVal)
-				elems["0"] = elemsVal;
-			if (elems2Val)
-				elems["2"] = elems2Val;
-			if (elems1Val)
-				elems["1"] = elems1Val;
-
-			for (var i = 0; i < elems1Val.length; i++) {
-				var jqElement = elems1Val[i];
-
-			}
-
-			for (var i = 0; i < elems2Val.length; i++) {
-				var jqElement = elems2Val[i];
-
-			}
-
-			for (var i = 0; i < elemsVal.length; i++) {
-				var jqElement = elemsVal[i];
-
-			}
-
-			/* OPTION 1
-			for (var i = 0; i < elemsVal.length; i++) {
-				var jqElement = elemsVal[i];
-				$(jqElement).removeClass('activeSensor');
-				$(jqElement).addClass('chartAdded');
-			}*/
-
-			return elems;
-		},
-		removeSelection: function() {
-			var elems1Val = this.lookDiv.find('.activeSensor1');
-			var elems2Val = this.lookDiv.find('.activeSensor2');
-			var elemsVal = this.lookDiv.find('.activeSensor');
-
-			for (var i = 0; i < elems1Val.length; i++) {
-				$(jqElement).removeClass('activeSensor1');
-				$(jqElement).addClass('chartAdded1');
-			}
-
-			for (var i = 0; i < elems2Val.length; i++) {
-				var jqElement = elems2Val[i];
-				$(jqElement).removeClass('activeSensor2');
-				$(jqElement).addClass('chartAdded2');
-			}
-
-			for (var i = 0; i < elemsVal.length; i++) {
-				var jqElement = elemsVal[i];
-				$(jqElement).removeClass('activeSensor');
-
-			}
+			return this.lookDiv.find('.activeSensor');
 		},
 		addNewPoint: function(model) {
 
@@ -196,22 +136,17 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 				foundSeriesObj.addPoint(Point, true, shift);
 			}
 		},
-		getIdsOfSensorType: function(elems, models, type) {
+		getIdsOfSensorType: function(elems, models) {
 			for (var i = 0; i < elems.length; i++) {
 				var jqElement = elems[i];
-				var id;
+				var id = jqElement.getAttribute('id');
 
-				if (type === 2) {
-					id = jqElement.getAttribute('id2');
-				} else {
-					id = jqElement.getAttribute('id');
-				}
 				if (!this.model.isOnTheChartById(id)) {
 					models.push(_allSensors[id]);
 				}
 			}
 		},
-		setSensorDataInChart: function(elems, type) {
+		setSensorDataInChart: function(elems) {
 			var chart = this.chart;
 
 			var series = this.chart.series;
@@ -220,12 +155,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 			var self = this;
 			for (var i = 0; i < elems.length; i++) {
 				var jqElement = elems[i];
-				var id;
-				if (type === 2) {
-					id = jqElement.getAttribute('id2');
-				} else {
-					id = jqElement.getAttribute('id');
-				}
+				var id = jqElement.getAttribute('id');
 
 				if (this.model.isOnTheChartById(id)) {
 					continue;
@@ -275,7 +205,7 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 			var sizeCoeff = this.widgetController.sizecoeff / 2;
 			var coeffScale = scale * sizeCoeff;
 
-			this.container = $('<div id= ' + this.model.get('id') + '  ></div>')
+			this.container = $('<div id= ' + this.model.get('id') + '  ></div>');
 
 			var controlPanelTemplate = $(_.template(ChartTemplate, {
 				canberemoved: model.get('canberemoved')
@@ -419,7 +349,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 		initChartWhenStart: function() {
 			var chartModel = this.model;
 			var linkArr = chartModel.get('link');
-			var htmlElements = []; //to init html elements and change css
 			var typeLookup = this.board.widgetController.sensorViewLookup;
 
 			if (linkArr.length <= 0) {
@@ -428,42 +357,14 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 
 			for (var i = 0; i < linkArr.length; i++) {
 				var model = _allSensors[linkArr[i]];
-				var div = undefined;
 				model.on('addPoint', this.addNewPoint, this);
 
-				if (typeLookup[linkArr[i]]) {
-					switch (typeLookup[linkArr[i]].type) {
-						case 0:
-							{ //not double
-								div = $('#' + typeLookup[linkArr[i]].viewId);
-								if (div) {
-									div.addClass('activeSensor');
-								}
-								break;
-							}
-						case 1:
-							{ //first value of double
-								div = $('#' + typeLookup[linkArr[i]].viewId);
-								if (div) {
-									div.addClass('activeSensor1');
-								}
-								break;
-							}
-						case 2:
-							{ //second value of double
-								div = $('#' + typeLookup[linkArr[i]].viewId);
-								if (div) {
-									div.addClass('activeSensor2');
-								}
-								break;
-							}
-						default: //error
-							throw "chart error";
-					}
-				} else {
+				if (!typeLookup[linkArr[i]]) {
 					return;
 				}
 
+				var div = $('#' + typeLookup[linkArr[i]].viewId);
+				div.addClass('activeSensor');
 			}
 
 			var elems = this.formSensorElements();
@@ -473,8 +374,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 			else {
 				this.getAllData(elems);
 			}
-
-
 		},
 		getElementsMetaInfoDatasource: function(datasource, models) {
 			var isRequestNeeded = false;
@@ -531,12 +430,8 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 		getElementsFromTypeObject: function(typeObject) {
 			var models = [];
 
-			if (typeObject["1"])
-				this.getIdsOfSensorType(typeObject["1"], models, 1);
-			if (typeObject["2"])
-				this.getIdsOfSensorType(typeObject["2"], models, 2);
-			if (typeObject["0"])
-				this.getIdsOfSensorType(typeObject["0"], models, 0);
+			this.getIdsOfSensorType(typeObject, models);
+
 			return models;
 		},
 		getAllDataForDatasource: function(datasource, windowUrl, resampleUrl) {
@@ -578,30 +473,24 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 				}
 			}));
 		},
-		onDataLoaded: function(typeObject) {
+		onDataLoaded: function(elems) {
 			var self = this;
-			if (typeObject["1"])
-				self.setSensorDataInChart(typeObject["1"], 1);
-			if (typeObject["2"])
-				self.setSensorDataInChart(typeObject["2"], 2);
-			if (typeObject["0"])
-				self.setSensorDataInChart(typeObject["0"], 0);
+			if (elems)
+				self.setSensorDataInChart(elems);
 			self.setExtremesInterval();
 			self.chart.hideLoading();
 		},
 		onDataUpdated: function() {
 
 		},
-		getAllDataForSimulation: function (typeObj) {
+		getAllDataForSimulation: function (elems) {
 			//not finished
-			this.removeSelection();
 			var sensors = this.model.get('models');
 			var seriesArr = this.model.get('seriesArr');
 			var linkArr = this.model.get('link');
 
 			for (var i = 0; i < linkArr.length; i++) {
 				var model = _allSensors[linkArr[i]];
-				//AHUET
 			}
 
 			var chart = this.chart;
@@ -610,7 +499,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 			var index = undefined; //index of series
 			var shift = false;
 			var self = this;
-			var elems = typeObj[0];
 			for (var i = 0; i < elems.length; i++) {
 				var jqElement = elems[i];
 				var id;
@@ -661,8 +549,6 @@ define(['jquery', 'underscore', 'backbone', 'models/chartModel', 'highcharts-leg
 				this.chart.hideLoading();
 				return;
 			}
-
-			this.removeSelection();
 
 			var datasources = this.board.datasourceController.getDatasourcesForModels(models);
 

@@ -117,6 +117,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/pres/login.html'], f
 			this.container.append(compiledTemplate);
 			this.el = $('#login-container');
 			this.form = this.el.find('#login-form');
+			$('#tabs').hide();
+			$('body').css({'background-image': 'url("/mainscreen/css/images/patterns/diagmonds/diagmonds.png")'});
 		},
 		logout: function() {
 			var user = window.activeSessionUser;

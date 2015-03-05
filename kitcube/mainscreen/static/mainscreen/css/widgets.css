@@ -181,21 +181,6 @@
   background-color: 'yellow';
 }
 
-.activeSensor {
-  border: 2px dotted #CC5400;
-}
-
-.activeSensor1 {
-  border-top: 2px dotted #CC5400;
-  border-right: 2px dotted #CC5400;
-}
-
-.activeSensor2 {
-  border-bottom: 2px dotted white;
-  border-left: 2px dotted white;
-  //outline: 2px solid white;
-}
-
 .chart-btn {
     display: inline-block;
     //width: 200px;

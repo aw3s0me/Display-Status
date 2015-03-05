@@ -1,0 +1,14 @@
+{
+  "name": "d3-circularheat",
+  "homepage": "https://github.com/prcweb/d3-circularheat",
+  "_release": "dbb0eabbbc",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "dbb0eabbbcccd63fad4d2a08a9861c61c92a71a7"
+  },
+  "_source": "https://github.com/prcweb/d3-circularheat.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/prcweb/d3-circularheat.git",
+  "_direct": true
+}

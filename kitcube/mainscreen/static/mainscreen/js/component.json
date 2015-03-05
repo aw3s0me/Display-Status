@@ -19,6 +19,8 @@
 		"oauth.io": "0.2.0",
 		"jquery-cookie": null,
 		"bootstrap-switch": "3.0.1",
-		"modernizr": "2.8.3"
+		"modernizr": "2.8.3",
+	  	"d3": "3.5.5",
+	  	"d3-circularheat": "https://github.com/prcweb/d3-circularheat.git"
 	} 
 }		

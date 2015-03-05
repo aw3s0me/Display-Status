@@ -18,15 +18,18 @@ require.config({
     "yaml": "vendor/js-yaml/js-yaml.min",
     "jqgrid": "vendor/jqgrid/js/minified/jquery.jqGrid.min",
     //chart part
-    "highcharts": "vendor/highcharts.com/js/highcharts.src",
+    //"highcharts": "vendor/highcharts.com/js/highcharts.src",
+    "highcharts": "vendor/highcharts",
     "highcharts-legend": "vendor/highcharts-legend",
     "highcharts-theme": "vendor/highcharts.com/js/themes/dark-unica",
+    "heatmap": "vendor/heatmap",
     //colorpicker
     "minicolors": "vendor/jquery-minicolors/jquery.minicolors.min",
     "momentjs": "vendor/momentjs/min/moment.min",
     "oauthio": "vendor/oauth.io/dist/oauth.min",
     "cookie": "vendor/jquery-cookie/jquery.cookie",
-    "modernizr": "vendor/modernizr/modernizr"
+    "modernizr": "vendor/modernizr/modernizr",
+    "d3heat": "vendor/d3-circularheat/js/circularHeatChart"
   },
   shim: {
     //jqueryui: "jquery",
@@ -101,6 +104,18 @@ require.config({
     cookie: {
       deps: [
         "jquery"
+      ]
+    },
+    d3heat: {
+      deps: [
+          "vendor/d3/d3.min"
+      ]
+    },
+    heatmap: {
+      deps: [
+          "highcharts-theme",
+          "highcharts-legend"
+
       ]
     }
   }
